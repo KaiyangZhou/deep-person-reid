@@ -8,6 +8,7 @@ import os.path as osp
 import numpy as np
 
 import torch
+import torch.nn as nn
 import torch.backends.cudnn as cudnn
 from torch.utils.data import DataLoader
 from torch.autograd import Variable
