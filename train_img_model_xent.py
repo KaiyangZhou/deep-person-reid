@@ -176,7 +176,7 @@ def train(model, criterion, optimizer, trainloader, use_gpu):
         if (batch_idx+1) % args.print_freq == 0:
             print("Batch {}/{}\t Loss {:.6f} ({:.6f})".format(batch_idx+1, len(trainloader), losses.val, losses.avg))
 
-def test(model, queryloader, galleryloader, use_gpu):
+def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20]):
     model.eval()
     qf = [] # query features
     gf = [] # gallery features
@@ -233,8 +233,10 @@ def test(model, queryloader, galleryloader, use_gpu):
     print("Computing CMC and mAP")
     cmc, mAP = evaluate(distmat, q_pids, g_pids, q_camids, g_camids)
 
-    print("Results: CMC Rank-1/5/10/20 {:.1%}/{:.1%}/{:.1%}/{:.1%}\t mAP {:.1%}" \
-          .format(cmc[0], cmc[4], cmc[9], cmc[19], mAP))
+    print("==> Results: CMC curve")
+    for r in ranks:
+        print("Rank-{} {:.1%}".format(r, cmc[r-1]))
+    print("mAP: {:.1%}".format(mAP))
 
     return cmc[0]
 
