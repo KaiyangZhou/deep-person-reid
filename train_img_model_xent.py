@@ -133,7 +133,7 @@ def main():
         test(model, queryloader, galleryloader, use_gpu)
         elapsed = time.time() - start_time
         elapsed = str(datetime.timedelta(seconds=elapsed))
-        print("Finished.\t Total elapsed time: {}".format(elapsed))
+        print("Finished. Total elapsed time: {}".format(elapsed))
         return
 
     start_time = time.time()
@@ -156,7 +156,7 @@ def main():
 
     elapsed = time.time() - start_time
     elapsed = str(datetime.timedelta(seconds=elapsed))
-    print("Finished.\t Total elapsed time: {}".format(elapsed))
+    print("Finished. Total elapsed time: {}".format(elapsed))
 
 def train(model, criterion, optimizer, trainloader, use_gpu):
     model.train()
@@ -210,6 +210,11 @@ def test(model, queryloader, galleryloader, use_gpu):
               torch.pow(gf, 2).sum(dim=1, keepdim=True).expand(n, m).t()
     distmat.addmm_(1, -2, qf, gf.t())
     distmat = distmat.numpy()
+
+    import h5py
+    h5file = h5py.File('data/features.h5', 'w')
+    h5file.create_dataset('distmat', data=distmat)
+    h5file.close()
     
     q_pids, q_camids = [], []
     for _, pids, camids in queryloader:
