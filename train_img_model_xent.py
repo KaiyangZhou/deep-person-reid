@@ -217,10 +217,12 @@ def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20]):
     print("Computing CMC and mAP")
     cmc, mAP = evaluate(distmat, q_pids, g_pids, q_camids, g_camids)
 
-    print("==> CMC curve")
+    print("Results ----------")
+    print("mAP: {:.1%}".format(mAP))
+    print("CMC curve")
     for r in ranks:
         print("Rank-{:<3}: {:.1%}".format(r, cmc[r-1]))
-    print("==> mAP: {:.1%}".format(mAP))
+    print("------------------")
 
     return cmc[0]
 

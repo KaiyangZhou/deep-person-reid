@@ -6,6 +6,7 @@ from .DenseNet import *
 __factory = {
     'resnet50': ResNet50,
     'densenet121': DenseNet121,
+    'resnet50m': ResNet50M,
 }
 
 def get_names():
