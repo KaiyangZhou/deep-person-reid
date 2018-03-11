@@ -18,7 +18,7 @@ def evaluate(distmat, q_pids, g_pids, q_camids, g_camids):
 
         # remove gallery samples that have the same pid and camid with query
         order = indices[q_idx]
-        remove = (g_pids[order] == q_pid) and (g_camids[order] == q_camid)
+        remove = (g_pids[order] == q_pid) & (g_camids[order] == q_camid)
         keep = np.invert(remove)
 
         # compute cmc curve

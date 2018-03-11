@@ -64,6 +64,8 @@ def main():
     use_gpu = torch.cuda.is_available()
     if args.use_cpu: use_gpu = False
 
+    print("==========\nArgs:{}\n==========".format(locals.copy()))
+
     if use_gpu:
         print("Currently using GPU")
         cudnn.benchmark = True
