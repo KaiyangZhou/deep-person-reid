@@ -19,7 +19,7 @@ from dataset_loader import ImageDataset
 import transforms as T
 import models
 from losses import CrossEntropyLabelSmooth
-from utils import AverageMeter, Logger
+from utils import AverageMeter, Logger, save_checkpoint
 from eval_metrics import evaluate
 
 parser = argparse.ArgumentParser(description='Train image model with cross entropy loss')
@@ -40,22 +40,23 @@ parser.add_argument('--start-epoch', default=0, type=int,
 parser.add_argument('--train-batch', default=32, type=int,
                     help="train batch size")
 parser.add_argument('--test-batch', default=100, type=int, help="test batch size")
-parser.add_argument('--lr', '--learning-rate', default=3e-04, type=float,
+parser.add_argument('--lr', '--learning-rate', default=0.0003, type=float,
                     help="initial learning rate")
-parser.add_argument('--stepsize', default=0, type=int,
+parser.add_argument('--stepsize', default=20, type=int,
                     help="stepsize to decay learning rate (>0 means this is enabled)")
 parser.add_argument('--gamma', default=0.1, type=float,
                     help="learning rate decay")
-parser.add_argument('--weight-decay', '--wd', default=5e-04, type=float,
+parser.add_argument('--weight-decay', default=5e-04, type=float,
                     help="weight decay (default: 5e-04)")
 # Architecture
 parser.add_argument('-a', '--arch', type=str, default='resnet50', choices=models.get_names())
 # Miscs
-parser.add_argument('--print-freq', type=int, default=5, help="print frequency")
+parser.add_argument('--print-freq', type=int, default=10, help="print frequency")
 parser.add_argument('--seed', type=int, default=1, help="manual seed")
 parser.add_argument('--resume', type=str, default='', metavar='PATH')
 parser.add_argument('--evaluate', action='store_true', help="evaluation only")
-parser.add_argument('--eval-step', type=int, default=50, help="run evaluation for every N epochs")
+parser.add_argument('--eval-step', type=int, default=-1,
+                    help="run evaluation for every N epochs (set to -1 to test after training)")
 parser.add_argument('--save-dir', type=str, default='log')
 parser.add_argument('--use-cpu', action='store_true', help="use cpu")
 parser.add_argument('--gpu-devices', default='0', type=str, help='gpu device ids for CUDA_VISIBLE_DEVICES')
@@ -149,7 +150,7 @@ def main():
         
         if args.stepsize > 0: scheduler.step()
         
-        if (epoch+1) % args.eval_step == 0 or (epoch+1) == args.max_epoch:
+        if args.eval_step > 0 and (epoch+1) % args.eval_step == 0 or (epoch+1) == args.max_epoch:
             print("==> Test")
             rank1 = test(model, queryloader, galleryloader, use_gpu)
             is_best = rank1 > best_rank1
