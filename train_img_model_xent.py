@@ -119,7 +119,7 @@ def main():
     start_epoch = args.start_epoch
 
     if args.resume:
-        print("Loading checkpoint from {}".format(args.resume))
+        print("Loading checkpoint from '{}'".format(args.resume))
         checkpoint = torch.load(args.resume)
         model.load_state_dict(checkpoint['state_dict'])
         start_epoch = checkpoint['epoch']
@@ -129,11 +129,7 @@ def main():
 
     if args.evaluate:
         print("Evaluate only")
-        start_time = time.time()
         test(model, queryloader, galleryloader, use_gpu)
-        elapsed = time.time() - start_time
-        elapsed = str(datetime.timedelta(seconds=elapsed))
-        print("Finished. Total elapsed time: {}".format(elapsed))
         return
 
     start_time = time.time()
@@ -154,9 +150,9 @@ def main():
                 'epoch': epoch,
             }, is_best, osp.join(args.save_dir, 'checkpoint_ep' + str(epoch+1) + '.pth.tar'))
 
-    elapsed = time.time() - start_time
+    elapsed = round(time.time() - start_time)
     elapsed = str(datetime.timedelta(seconds=elapsed))
-    print("Finished. Total elapsed time: {}".format(elapsed))
+    print("Finished. Total elapsed time (h:m:s): {}".format(elapsed))
 
 def train(model, criterion, optimizer, trainloader, use_gpu):
     model.train()
@@ -178,66 +174,53 @@ def train(model, criterion, optimizer, trainloader, use_gpu):
 
 def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20]):
     model.eval()
-    qf = [] # query features
-    gf = [] # gallery features
 
-    """for batch_idx, (imgs, _, _) in enumerate(queryloader):
+    qf, q_pids, q_camids = [], [], []
+    for batch_idx, (imgs, pids, camids) in enumerate(queryloader):
         if use_gpu:
             imgs = imgs.cuda()
         imgs = Variable(imgs)
         features = model(imgs)
         features = features.data.cpu()
         qf.append(features)
+        q_pids.extend(pids)
+        q_camids.extend(camids)
     qf = torch.cat(qf, 0)
+    q_pids = np.asarray(q_pids)
+    q_camids = np.asarray(q_camids)
 
     print("Extracted features for query set, obtained {}-by-{} matrix".format(qf.size(0), qf.size(1)))
 
-    for batch_idx, (imgs, _, _) in enumerate(galleryloader):
+    gf, g_pids, g_camids = [], [], []
+    for batch_idx, (imgs, pids, camids) in enumerate(galleryloader):
         if use_gpu:
             imgs = imgs.cuda()
         imgs = Variable(imgs)
         features = model(imgs)
         features = features.data.cpu()
         gf.append(features)
+        g_pids.extend(pids)
+        g_camids.extend(camids)
     gf = torch.cat(gf, 0)
+    g_pids = np.asarray(g_pids)
+    g_camids = np.asarray(g_camids)
 
     print("Extracted features for gallery set, obtained {}-by-{} matrix".format(gf.size(0), gf.size(1)))
-
     print("Computing distance matrix")
 
     m, n = qf.size(0), gf.size(0)
     distmat = torch.pow(qf, 2).sum(dim=1, keepdim=True).expand(m, n) + \
               torch.pow(gf, 2).sum(dim=1, keepdim=True).expand(n, m).t()
     distmat.addmm_(1, -2, qf, gf.t())
-    distmat = distmat.numpy()"""
-
-    import h5py
-    print("Reading features from h5 file")
-    h5file = h5py.File('data/features.h5', 'r')
-    distmat = h5file['distmat'][...]
-    h5file.close()
-    
-    q_pids, q_camids = [], []
-    for _, pids, camids in queryloader:
-        q_pids.extend(pids)
-        q_camids.extend(camids)
-    q_pids = np.asarray(q_pids)
-    q_camids = np.asarray(q_camids)
-
-    g_pids, g_camids = [], []
-    for _, pids, camids in galleryloader:
-        g_pids.extend(pids)
-        g_camids.extend(camids)
-    g_pids = np.asarray(g_pids)
-    g_camids = np.asarray(g_camids)
+    distmat = distmat.numpy()
 
     print("Computing CMC and mAP")
     cmc, mAP = evaluate(distmat, q_pids, g_pids, q_camids, g_camids)
 
-    print("==> Results: CMC curve")
+    print("==> CMC curve")
     for r in ranks:
         print("Rank-{:<3}: {:.1%}".format(r, cmc[r-1]))
-    print("mAP: {:.1%}".format(mAP))
+    print("==> mAP: {:.1%}".format(mAP))
 
     return cmc[0]
 
