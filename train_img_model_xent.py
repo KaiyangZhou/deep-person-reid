@@ -18,7 +18,7 @@ from dataset_loader import ImageDataset
 import transforms as T
 import models
 from losses import CrossEntropyLabelSmooth
-from utils import AverageMeter
+from utils import AverageMeter, Logger
 from eval_metrics import evaluate
 
 parser = argparse.ArgumentParser(description='Train image model with cross entropy loss')
@@ -54,7 +54,6 @@ parser.add_argument('--eval-step', type=int, default=50, help="run evaluation fo
 parser.add_argument('--save-dir', type=str, default='log')
 parser.add_argument('--use-cpu', action='store_true', help="use cpu")
 parser.add_argument('--gpu-devices', default='0', type=str, help='gpu device ids for CUDA_VISIBLE_DEVICES')
-#parser.add_argument('--eval-metric', type=str, default='market1501', help="evaluation metric")
 
 args = parser.parse_args()
 
@@ -64,6 +63,10 @@ def main():
     use_gpu = torch.cuda.is_available()
     if args.use_cpu: use_gpu = False
 
+    if not args.evaluate:
+        sys.stdout = Logger(osp.join(args.save_dir, 'log_train.txt'))
+    else:
+        sys.stdout = Logger(osp.join(args.save_dir, 'log_test.txt'))
     print("==========\nArgs:{}\n==========".format(args))
 
     if use_gpu:
