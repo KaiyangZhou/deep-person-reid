@@ -25,12 +25,12 @@ def evaluate(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50):
         keep = np.invert(remove)
 
         # compute cmc curve
-        cmc = matches[q_idx][keep]
-        if not np.any(cmc):
+        orig_cmc = matches[q_idx][keep] # binary vector, positions with value 1 are correct matches
+        if not np.any(orig_cmc):
             # this condition is true when query identity does not appear in gallery
             continue
 
-        cmc = cmc.cumsum()
+        cmc = orig_cmc.cumsum()
         cmc[cmc > 1] = 1
 
         all_cmc.append(cmc[:max_rank])
@@ -38,10 +38,10 @@ def evaluate(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50):
 
         # compute average precision
         # reference: https://en.wikipedia.org/wiki/Evaluation_measures_(information_retrieval)#Average_precision
-        num_rel = cmc.sum()
-        tmp_cmc = cmc.cumsum()
+        num_rel = orig_cmc.sum()
+        tmp_cmc = orig_cmc.cumsum()
         tmp_cmc = [x / (i+1.) for i, x in enumerate(tmp_cmc)]
-        tmp_cmc = np.asarray(tmp_cmc) * cmc
+        tmp_cmc = np.asarray(tmp_cmc) * orig_cmc
         AP = tmp_cmc.sum() / num_rel
         all_AP.append(AP)
 

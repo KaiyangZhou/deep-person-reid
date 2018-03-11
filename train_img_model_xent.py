@@ -212,6 +212,7 @@ def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20]):
     distmat = distmat.numpy()"""
 
     import h5py
+    print("Reading features from h5 file")
     h5file = h5py.File('data/features.h5', 'r')
     distmat = h5file['distmat'][...]
     h5file.close()
@@ -235,7 +236,7 @@ def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20]):
 
     print("==> Results: CMC curve")
     for r in ranks:
-        print("Rank-{} {:.1%}".format(r, cmc[r-1]))
+        print("Rank-{:<3}: {:.1%}".format(r, cmc[r-1]))
     print("mAP: {:.1%}".format(mAP))
 
     return cmc[0]
