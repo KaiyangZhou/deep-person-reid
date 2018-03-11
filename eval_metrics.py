@@ -1,0 +1,51 @@
+from __future__ import absolute_import
+import numpy as np
+import copy
+
+def evaluate(distmat, q_pids, g_pids, q_camids, g_camids):
+    num_q = distmat.shape[0]
+    indices = np.argsort(distmat, axis=1)
+    matches = (g_pids[indices] == q_pids[:, np.newaxis]).astype(np.int32)
+
+    # compute cmc curve for each query, maximum rank is fixed to _MAX_RANK
+    all_cmc = []
+    all_AP = []
+    num_valid_q = 0.
+    for q_idx in range(num_q):
+        # get query pid and camid
+        q_pid = q_pids[q_idx]
+        q_camid = q_camids[q_idx]
+
+        # remove gallery samples that have the same pid and camid with query
+        order = indices[q_idx]
+        remove = (g_pids[order] == q_pid) and (g_camids[order] == q_camid)
+        keep = np.invert(remove)
+
+        # compute cmc curve
+        cmc = matches[q_idx][keep]
+        if not np.any(cmc):
+            # this condition is true when query identity does not appear in gallery
+            continue
+
+        cmc = cmc.cumsum()
+        cmc[cmc > 1] = 1
+
+        all_cmc.append(cmc)
+        num_valid_q += 1.
+
+        num_rel = cmc.sum()
+        tmp_cmc = cmc.cumsum()
+        tmp_cmc = [x / (i+1.) for i, x enumerate(tmp_cmc)]
+        tmp_cmc = np.asarray(tmp_cmc)
+        AP = tmp_cmc.sum() / num_rel
+        all_AP.append(AP)
+
+    assert num_valid_q > 0, "Error: All query identities do not appear in gallery"
+
+    all_cmc = np.asarray(all_cmc).astype(np.float32)
+    all_cmc = all_cmc.sum(0) / num_valid_q
+    mAP = np.mean(all_AP)
+
+    return all_cmc, mAP
+
+
