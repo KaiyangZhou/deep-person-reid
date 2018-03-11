@@ -50,7 +50,7 @@ parser.add_argument('--print-freq', type=int, default=5, help="print frequency")
 parser.add_argument('--seed', type=int, default=1, help="manual seed")
 parser.add_argument('--resume', type=str, default='', metavar='PATH')
 parser.add_argument('--evaluate', action='store_true', help="evaluation only")
-parser.add_argument('--eval-step', type=int, default=50, help="every N epochs to test")
+parser.add_argument('--eval-step', type=int, default=50, help="run evaluation for every N epochs")
 parser.add_argument('--save-dir', type=str, default='log')
 parser.add_argument('--use-cpu', action='store_true', help="use cpu")
 parser.add_argument('--gpu-devices', default='0', type=str, help='gpu device ids for CUDA_VISIBLE_DEVICES')
@@ -64,7 +64,7 @@ def main():
     use_gpu = torch.cuda.is_available()
     if args.use_cpu: use_gpu = False
 
-    print("==========\nArgs:{}\n==========".format(locals().copy()))
+    print("==========\nArgs:{}\n==========".format(args))
 
     if use_gpu:
         print("Currently using GPU")
