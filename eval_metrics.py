@@ -36,14 +36,16 @@ def evaluate(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50):
         all_cmc.append(cmc[:max_rank])
         num_valid_q += 1.
 
+        # compute average precision
+        # reference: https://en.wikipedia.org/wiki/Evaluation_measures_(information_retrieval)#Average_precision
         num_rel = cmc.sum()
         tmp_cmc = cmc.cumsum()
         tmp_cmc = [x / (i+1.) for i, x in enumerate(tmp_cmc)]
-        tmp_cmc = np.asarray(tmp_cmc)
+        tmp_cmc = np.asarray(tmp_cmc) * cmc
         AP = tmp_cmc.sum() / num_rel
         all_AP.append(AP)
 
-    assert num_valid_q > 0, "Error: All query identities do not appear in gallery"
+    assert num_valid_q > 0, "Error: all query identities do not appear in gallery"
 
     all_cmc = np.asarray(all_cmc).astype(np.float32)
     all_cmc = all_cmc.sum(0) / num_valid_q

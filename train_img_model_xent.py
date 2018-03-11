@@ -181,7 +181,7 @@ def test(model, queryloader, galleryloader, use_gpu):
     qf = [] # query features
     gf = [] # gallery features
 
-    for batch_idx, (imgs, _, _) in enumerate(queryloader):
+    """for batch_idx, (imgs, _, _) in enumerate(queryloader):
         if use_gpu:
             imgs = imgs.cuda()
         imgs = Variable(imgs)
@@ -209,11 +209,11 @@ def test(model, queryloader, galleryloader, use_gpu):
     distmat = torch.pow(qf, 2).sum(dim=1, keepdim=True).expand(m, n) + \
               torch.pow(gf, 2).sum(dim=1, keepdim=True).expand(n, m).t()
     distmat.addmm_(1, -2, qf, gf.t())
-    distmat = distmat.numpy()
+    distmat = distmat.numpy()"""
 
     import h5py
-    h5file = h5py.File('data/features.h5', 'w')
-    h5file.create_dataset('distmat', data=distmat)
+    h5file = h5py.File('data/features.h5', 'r')
+    distmat = h5file['distmat'][...]
     h5file.close()
     
     q_pids, q_camids = [], []
