@@ -122,7 +122,7 @@ def main():
     criterion = CrossEntropyLabelSmooth(num_classes=dataset.num_train_pids, use_gpu=use_gpu)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     if args.stepsize > 0:
-        scheduler = lr_scheduler.StepLR(optimizer, step_size=args.stepsize, gamma=args.lr_decay)
+        scheduler = lr_scheduler.StepLR(optimizer, step_size=args.stepsize, gamma=args.gamma)
     start_epoch = args.start_epoch
 
     if args.resume:
