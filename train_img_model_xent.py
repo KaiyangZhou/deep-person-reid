@@ -185,7 +185,7 @@ def test(model, queryloader, galleryloader, use_gpu):
         qf.append(features)
     qf = torch.cat(qf, 0)
 
-    print("Extracted features for query set: {}-by-{} matrix".format(qf.size(0), qf.size(1)))
+    print("Extracted features for query set, obtained {}-by-{} matrix".format(qf.size(0), qf.size(1)))
 
     for batch_idx, (imgs, _, _) in enumerate(galleryloader):
         if use_gpu:
@@ -196,7 +196,7 @@ def test(model, queryloader, galleryloader, use_gpu):
         gf.append(features)
     gf = torch.cat(gf, 0)
 
-    print("Extracted features for gallery set: {}-by-{} matrix".format(gf.size(0), gf.size(1)))
+    print("Extracted features for gallery set, obtained {}-by-{} matrix".format(gf.size(0), gf.size(1)))
 
     print("Computing distance matrix")
 
