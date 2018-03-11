@@ -123,7 +123,11 @@ def main():
 
     if args.evaluate:
         print("Evaluate only")
-        test()
+        start_time = time.time()
+        test(model, queryloader, galleryloader, use_gpu)
+        elapsed = time.time() - start_time
+        elapsed = str(datetime.timedelta(seconds=elapsed))
+        print("Finished.\t Total elapsed time: {}".format(elapsed))
         return
 
     start_time = time.time()
