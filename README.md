@@ -5,6 +5,17 @@ We will actively maintain this repo.
 
 ## Pretrained models
 ## Prepare data
+Create a data directory to store reid datasets under this repo via `mkdir data/`
+
+Market1501 [7]:
+1. download dataset to `data/` from http://www.liangzheng.org/Project/project_reid.html.
+2. extract dataset and rename to `market1501`.
+
+MARS [8]:
+1. create a directory named `mars/` under `data/`
+2. download dataset to `data/mars/` from http://www.liangzheng.com.cn/Project/project_mars.html.
+3. extract `bbox_train.zip` and `bbox_test.zip`.
+4. download split information from https://github.com/liangzheng06/MARS-evaluation/tree/master/info and put `info/` in `data/mars`.
 ## Train
 ## Test
 ## Results
@@ -30,3 +41,5 @@ htri: triplet loss with hard positive/negative mining [4] <br />
 [4] [Hermans et al. In Defense of the Triplet Loss for Person Re-Identification. arXiv:1703.07737.](https://arxiv.org/abs/1703.07737) <br />
 [5] [Szegedy et al. Rethinking the Inception Architecture for Computer Vision. CVPR 2016.](https://arxiv.org/abs/1512.00567) <br />
 [6] [Kingma and Ba. Adam: A Method for Stochastic Optimization. ICLR 2015.](https://arxiv.org/abs/1412.6980) <br />
+[7] [Zheng et al. Scalable Person Re-identification: A Benchmark. ICCV 2015.](https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Zheng_Scalable_Person_Re-Identification_ICCV_2015_paper.pdf) <br />
+[8] [Zheng et al. MARS: A Video Benchmark for Large-Scale Person Re-identification. ECCV 2016.](http://www.liangzheng.com.cn/Project/project_mars.html) <br />
