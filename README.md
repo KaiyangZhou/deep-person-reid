@@ -10,7 +10,7 @@ We will actively maintain this repo.
 ## Results
 ### Setup
 * Image size: 256-by- 128 <br />
-* Optimizer: Adam <br />
+* Optimizer: Adam [6] <br />
 * Loss functions: <br />
 xent: cross entropy + label smoothing regularizer [5] <br />
 htri: triplet loss with hard positive/negative mining [4] <br />
@@ -29,3 +29,4 @@ htri: triplet loss with hard positive/negative mining [4] <br />
 [3] [Huang et al. Densely Connected Convolutional Networks. CVPR 2017.](https://arxiv.org/abs/1608.06993) <br />
 [4] [Hermans et al. In Defense of the Triplet Loss for Person Re-Identification. arXiv:1703.07737.](https://arxiv.org/abs/1703.07737) <br />
 [5] [Szegedy et al. Rethinking the Inception Architecture for Computer Vision. CVPR 2016.](https://arxiv.org/abs/1512.00567) <br />
+[6] [Kingma and Ba. Adam: A Method for Stochastic Optimization. ICLR 2015.](https://arxiv.org/abs/1412.6980) <br />
