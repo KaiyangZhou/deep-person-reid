@@ -41,7 +41,6 @@ python train_img_model_xent.py -d market1501 -a resnet50 --max-epoch 60 --train-
 ```
 
 ## Results
-
 ### Setup
 * Image size: 256-by-128 <br />
 * Batch: 32 <br />
@@ -53,31 +52,17 @@ htri: triplet loss with hard positive/negative mining [4] <br />
 ### Image person reid
 #### Market1501
 
-| Model | Size (M) | Loss | Rank-1 / -5 / -10 (%) | mAP (%) | Reported Rank | Reported mAP |
-| --- | --- | --- | --- | --- | --- | --- |
-| ResNet50 [1] | 25.05 | xent | 85.8 / 94.4 / 96.3 | 70.1 | | |
-| DenseNet121 [3] | 7.72 | xent | 86.5 / 93.6 / 95.7 | 67.8 | | |
-| ResNet50M [2] | 30.01 | xent | | | 89.9 / - / -  | 75.6 |
+| Model | Size (M) | Loss | Rank-1 / -5 / -10 (%) | mAP (%) | Model weights | Reported Rank | Reported mAP |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| ResNet50 [1] | 25.05 | xent | 85.4 / 94.1 / 95.9 | 68.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/resnet50_xent_market1501.pth.tar) | | |
+| DenseNet121 [3] | 7.72 | xent | 86.5 / 93.6 / 95.7 | 67.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/densenet121_xent_market1501.pth.tar) | | |
+| ResNet50M [2] | 30.01 | xent | | | [download]() | 89.9 / - / - | 75.6 |
 
 ### Video person reid
 #### MARS
 
-## Pretrained models
-You can use `wget` to download the following models.
-
-| Model | Loss | Dataset | Download |
-| --- | --- | --- | --- |
-| ResNet50 | xent | Market1501 | |
-| ResNet50M | xent | Market1501 | |
-| DenseNet121 | xent | Market1501 | http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/densenet121_xent_market1501.pth.tar (30M) |
-
-Create a directory under this repo to store pretrained models
-```
-mkdir saved-models/
-```
-
 ### Test
-Say you have downloaded ResNet50 trained with `xent` on `market1501` and the path to this model is  `saved-models/resnet50-xent-market1501.pth.tar`. Run the following command to test
+Say you have downloaded ResNet50 trained with `xent` on `market1501`. The path to this model is  `'saved-models/resnet50-xent-market1501.pth.tar'` (create a directory to store model weights `mkdir saved-models/`). Then, run the following command to test
 ```
 python train_img_model_xent.py -d market1501 -a resnet50 --evaluate --resume saved-models/resnet50_xent_market1501.pth.tar
 ```
