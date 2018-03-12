@@ -15,7 +15,7 @@ MARS [8]:
 1. create a directory named `mars/` under `data/`
 2. download dataset to `data/mars/` from http://www.liangzheng.com.cn/Project/project_mars.html.
 3. extract `bbox_train.zip` and `bbox_test.zip`.
-4. download split information from https://github.com/liangzheng06/MARS-evaluation/tree/master/info and put `info/` in `data/mars`.
+4. download split information from https://github.com/liangzheng06/MARS-evaluation/tree/master/info and put `info/` in `data/mars`. (we want to follow the standard split in [8])
 ## Train
 ## Test
 ## Results
