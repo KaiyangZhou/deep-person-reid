@@ -3,7 +3,6 @@ This repo contains [pytorch](http://pytorch.org/) implementations of deep person
 
 We will actively maintain this repo.
 
-## Pretrained models
 ## Prepare data
 Create a directory to store reid datasets under this repo via `mkdir data/`.
 
@@ -31,13 +30,23 @@ htri: triplet loss with hard positive/negative mining [4] <br />
 #### Market1501
 
 | Model | Size (M) | Loss | Rank-1 / -5 / -10 (%) | mAP (%) | Reported Rank | Reported mAP |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| --- | --- | --- | --- | --- | --- | --- |
 | ResNet50 [1] | 25.05 | xent | 85.8 / 94.4 / 96.3 | 70.1 | | |
 | ResNet50M [2] | 30.01 | xent | 88.8 / 95.3 / 97.0 | 74.4 | 89.9 / - / -  | 75.6 |
 | DenseNet121 [3] | 7.72 | xent | | | | |
 
 ### Video person reid
 #### MARS
+
+## Pretrained models
+You can use `wget` to download the following models.
+
+### Image person reid models
+| Model | Loss | Download |
+| --- | --- | --- |
+| ResNet50 | xent | |
+| ResNet50M | xent | |
+| DenseNet121 | xent | |
 
 ## References
 [1] [He et al. Deep Residual Learning for Image Recognition. CVPR 2016.](https://arxiv.org/abs/1512.03385)<br />
