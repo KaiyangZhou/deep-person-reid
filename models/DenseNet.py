@@ -9,8 +9,9 @@ import torchvision
 __all__ = ['DenseNet121']
 
 class DenseNet121(nn.Module):
-    def __init__(self, num_classes, **kwargs):
+    def __init__(self, num_classes, loss={'xent'}, **kwargs):
         super(DenseNet121, self).__init__()
+        self.loss = loss
         densenet121 = torchvision.models.densenet121(pretrained=True)
         self.base = densenet121.features
         self.classifier = nn.Linear(1024, num_classes)
@@ -18,8 +19,14 @@ class DenseNet121(nn.Module):
     def forward(self, x):
         x = self.base(x)
         x = F.avg_pool2d(x, x.size()[2:])
-        x = x.view(x.size(0), -1)
+        f = x.view(x.size(0), -1)
         if not self.training:
-            return x
-        x = self.classifier(x)
-        return x
+            return f
+        y = self.classifier(f)
+        
+        if self.loss == {'xent'}:
+            return y
+        elif self.loss == {'xent', 'htri'}:
+            return y, f
+        else:
+            raise KeyError("Unknown loss: {}".format(self.loss))

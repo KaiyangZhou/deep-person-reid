@@ -18,11 +18,12 @@ import data_manager
 from dataset_loader import ImageDataset
 import transforms as T
 import models
-from losses import CrossEntropyLabelSmooth
+from losses import CrossEntropyLabelSmooth, TripletLoss
 from utils import AverageMeter, Logger, save_checkpoint
 from eval_metrics import evaluate
+from samplers import RandomIdentitySampler
 
-parser = argparse.ArgumentParser(description='Train image model with cross entropy loss')
+parser = argparse.ArgumentParser(description='Train image model with cross entropy loss and hard triplet loss')
 # Datasets
 parser.add_argument('-d', '--dataset', type=str, default='market1501',
                     choices=data_manager.get_names())
@@ -48,6 +49,9 @@ parser.add_argument('--gamma', default=0.1, type=float,
                     help="learning rate decay")
 parser.add_argument('--weight-decay', default=5e-04, type=float,
                     help="weight decay (default: 5e-04)")
+parser.add_argument('--margin', type=float, default=0.3, help="margin for triplet loss")
+parser.add_argument('--num-instances', type=int, default=4,
+                    help="number of instances per identity")
 # Architecture
 parser.add_argument('-a', '--arch', type=str, default='resnet50', choices=models.get_names())
 # Miscs
@@ -102,7 +106,8 @@ def main():
 
     trainloader = DataLoader(
         ImageDataset(dataset.train, transform=transform_train),
-        batch_size=args.train_batch, shuffle=True, num_workers=args.workers,
+        sampler=RandomIdentitySampler(dataset.train, num_instances=args.num_instances),
+        batch_size=args.train_batch, num_workers=args.workers,
         pin_memory=pin_memory, drop_last=True,
     )
 
@@ -119,10 +124,11 @@ def main():
     )
 
     print("Initializing model: {}".format(args.arch))
-    model = models.init_model(name=args.arch, num_classes=dataset.num_train_pids, loss={'xent'})
+    model = models.init_model(name=args.arch, num_classes=dataset.num_train_pids, loss={'xent', 'htri'})
     print("Model size: {:.5f}M".format(sum(p.numel() for p in model.parameters())/1000000.0))
 
-    criterion = CrossEntropyLabelSmooth(num_classes=dataset.num_train_pids, use_gpu=use_gpu)
+    criterion_xent = CrossEntropyLabelSmooth(num_classes=dataset.num_train_pids, use_gpu=use_gpu)
+    criterion_htri = TripletLoss(margin=args.margin)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     if args.stepsize > 0:
         scheduler = lr_scheduler.StepLR(optimizer, step_size=args.stepsize, gamma=args.gamma)
@@ -148,7 +154,7 @@ def main():
     for epoch in range(start_epoch, args.max_epoch):
         print("==> Epoch {}/{}".format(epoch+1, args.max_epoch))
         
-        train(model, criterion, optimizer, trainloader, use_gpu)
+        train(model, criterion_xent, criterion_htri, optimizer, trainloader, use_gpu)
         
         if args.stepsize > 0: scheduler.step()
         
@@ -168,7 +174,7 @@ def main():
     elapsed = str(datetime.timedelta(seconds=elapsed))
     print("Finished. Total elapsed time (h:m:s): {}".format(elapsed))
 
-def train(model, criterion, optimizer, trainloader, use_gpu):
+def train(model, criterion_xent, criterion_htri, optimizer, trainloader, use_gpu):
     model.train()
     losses = AverageMeter()
 
@@ -176,8 +182,10 @@ def train(model, criterion, optimizer, trainloader, use_gpu):
         if use_gpu:
             imgs, pids = imgs.cuda(), pids.cuda()
         imgs, pids = Variable(imgs), Variable(pids)
-        outputs = model(imgs)
-        loss = criterion(outputs, pids)
+        outputs, features = model(imgs)
+        xent_loss = criterion_xent(outputs, pids)
+        htri_loss = criterion_htri(features, pids)
+        loss = xent_loss + htri_loss
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()

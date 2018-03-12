@@ -9,8 +9,9 @@ import torchvision
 __all__ = ['ResNet50', 'ResNet50M']
 
 class ResNet50(nn.Module):
-    def __init__(self, num_classes, **kwargs):
+    def __init__(self, num_classes, loss={'xent'}, **kwargs):
         super(ResNet50, self).__init__()
+        self.loss = loss
         resnet50 = torchvision.models.resnet50(pretrained=True)
         self.base = nn.Sequential(*list(resnet50.children())[:-2])
         self.classifier = nn.Linear(2048, num_classes)
@@ -18,11 +19,17 @@ class ResNet50(nn.Module):
     def forward(self, x):
         x = self.base(x)
         x = F.avg_pool2d(x, x.size()[2:])
-        x = x.view(x.size(0), -1)
+        f = x.view(x.size(0), -1)
         if not self.training:
-            return x
-        x = self.classifier(x)
-        return x
+            return f
+        y = self.classifier(f)
+
+        if self.loss == {'xent'}:
+            return y
+        elif self.loss == {'xent', 'htri'}:
+            return y, f
+        else:
+            raise KeyError("Unknown loss: {}".format(self.loss))
 
 class ResNet50M(nn.Module):
     """ResNet50 + mid-level features.
@@ -31,8 +38,9 @@ class ResNet50M(nn.Module):
     Qian et al. The Devil is in the Middle: Exploiting Mid-level Representations for
     Cross-Domain Instance Matching. arXiv:1711.08106.
     """
-    def __init__(self, num_classes=0, **kwargs):
+    def __init__(self, num_classes=0, loss={'xent'}, **kwargs):
         super(ResNet50M, self).__init__()
+        self.loss = loss
         resnet50 = torchvision.models.resnet50(pretrained=True)
         self.base = nn.Sequential(*list(resnet50.children())[:-2])
         self.layers1 = nn.Sequential(self.base[0], self.base[1], self.base[2])
@@ -65,4 +73,17 @@ class ResNet50M(nn.Module):
         if not self.training:
             return combofeat
         prelogits = self.classifier(combofeat)
-        return prelogits
+        
+        if self.loss == {'xent'}:
+            return prelogits
+        elif self.loss == {'xent', 'htri'}:
+            return prelogits, combofeat
+        else:
+            raise KeyError("Unknown loss: {}".format(self.loss))
+
+
+
+
+
+
+

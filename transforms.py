@@ -40,17 +40,4 @@ class Random2DTranslation(object):
         return croped_img
 
 if __name__ == '__main__':
-    """import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-impath', type=str)
-    parser.add_argument('-nlevel', type=float, default=0.1)
-    args = parser.parse_args()
-
-    RC = RandomOcclusion(nlevel=args.nlevel, p=1)
-    im = Image.open(args.impath)
-    transformed_im = RC(im)
-
-    basename = osp.basename(args.impath)
-    save_name = osp.splitext(basename)[0] + '_nlevel_' + str(args.nlevel) + osp.splitext(basename)[1]
-    transformed_im.save(save_name)"""
     pass
