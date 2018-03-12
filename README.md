@@ -1,7 +1,7 @@
 # deep-person-reid
 This repo contains [pytorch](http://pytorch.org/) implementations of deep person re-identification approaches.
 
-We will actively maintain this repo.
+This repo will be actively maintained.
 
 ## Install
 1. `cd` to the folder where you want to download this repo.
@@ -24,12 +24,23 @@ MARS [8]:
 3. extract `bbox_train.zip` and `bbox_test.zip`.
 4. download split information from https://github.com/liangzheng06/MARS-evaluation/tree/master/info and put `info/` in `data/mars`. (we want to follow the standard split in [8])
 
+## Dataset loaders
+These are implemented in `dataset_loader.py` where we have two main classes that subclass [torch.utils.data.Dataset](http://pytorch.org/docs/master/_modules/torch/utils/data/dataset.html#Dataset):
+* `ImageDataset`: processes image-based person reid datasets.
+* `VideoDataset`: processes video-based person reid datasets.
+
+These two classes are used for [torch.utils.data.DataLoader](http://pytorch.org/docs/master/_modules/torch/utils/data/dataloader.html#DataLoader) that can provide batched data.
+
 ## Models
 * `models/ResNet.py`: ResNet50 [1], ResNet50M [2].
 * `models/DenseNet.py`: DenseNet121 [3].
 
+## Loss functions
+* `xent`: cross entropy + label smoothing regularizer [5].
+* `htri`: triplet loss with hard positive/negative mining [4] .
+
 ## Train
-Training codes are implemented in
+Training codes are implemented mainly in
 * `train_img_model_xent.py`: train image model with cross entropy loss.
 * `train_img_model_xent_htri.py`: train image model with combination of cross entropy loss and hard triplet loss.
 * `train_vid_model_xent.py`: train video model with cross entropy loss.
@@ -37,18 +48,12 @@ Training codes are implemented in
 
 For example, to train an image reid model using ResNet50 and cross entropy loss, run
 ```
-python train_img_model_xent.py -d market1501 -a resnet50 --max-epoch 60 --train-batch 32 --test-batch 32 --stepsize 20 --eval-step 20 --save-dir log/resnet50 --gpu-devices 0
+python train_img_model_xent.py -d market1501 -a resnet50 --max-epoch 60 --train-batch 32 --test-batch 32 --stepsize 20 --eval-step 20 --save-dir log/resnet50-xent-market1501 --gpu-devices 0
 ```
 
-## Results
-### Setup
-* Image size: 256-by-128 <br />
-* Batch: 32 <br />
-* Optimizer: Adam [6] <br />
-* Loss functions: <br />
-xent: cross entropy + label smoothing regularizer [5] <br />
-htri: triplet loss with hard positive/negative mining [4] <br />
+Please run `python train_blah_blah.py -h` for more details regarding arguments.
 
+## Results
 ### Image person reid
 #### Market1501
 
@@ -72,10 +77,17 @@ htri: triplet loss with hard positive/negative mining [4] <br />
 | ResNet50M | 29.63 | xent+htri | 82.3/93.8/95.3 | 75.4 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50m_xent_htri_mars.pth.tar) | | |
 
 ## Test
-Say you have downloaded ResNet50 trained with `xent` on `market1501`. The path to this model is  `'saved-models/resnet50-xent-market1501.pth.tar'` (create a directory to store model weights `mkdir saved-models/`). Then, run the following command to test
+Say you have downloaded ResNet50 trained with `xent` on `market1501`. The path to this model is  `'saved-models/resnet50_xent_market1501.pth.tar'` (create a directory to store model weights `mkdir saved-models/`). Then, run the following command to test
 ```
-python train_img_model_xent.py -d market1501 -a resnet50 --evaluate --resume saved-models/resnet50_xent_market1501.pth.tar --save-dir log/resnet50-xent-market1501
+python train_img_model_xent.py -d market1501 -a resnet50 --evaluate --resume saved-models/resnet50_xent_market1501.pth.tar --save-dir log/resnet50-xent-market1501 --test-batch 32
 ```
+
+Likewise, to test video reid model, you should have a pretrained model saved under `saved-models/`, e.g. `saved-models/resnet50_xent_mars.pth.tar`, then run
+```
+python train_vid_model_xent.py -d mars -a resnet50 --evaluate --resume saved-models/resnet50_xent_mars.pth.tar --save-dir log/resnet50-xent-mars --test-batch 2
+```
+Note that `--test-batch` in video reid represents number of tracklets. If we set this argument to 2, and sample 15 images per tracklet, the resulting number of images per batch is 2*15=30. Adjust this argument according to your GPU memory.
+
 
 ## References
 [1] [He et al. Deep Residual Learning for Image Recognition. CVPR 2016.](https://arxiv.org/abs/1512.03385)<br />
