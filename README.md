@@ -40,8 +40,6 @@ For example, to train an image reid model using ResNet50 and cross entropy loss,
 python train_img_model_xent.py -d market1501 -a resnet50 --max-epoch 60 --train-batch 32 --test-batch 32 --stepsize 20 --eval-step 20 --save-dir log/resnet50 --gpu-devices 0
 ```
 
-## Test
-
 ## Results
 
 ### Setup
@@ -72,6 +70,8 @@ You can use `wget` to download the following models.
 | ResNet50 | xent | Market1501 | |
 | ResNet50M | xent | Market1501 | |
 | DenseNet121 | xent | Market1501 | |
+
+### Test
 
 ## References
 [1] [He et al. Deep Residual Learning for Image Recognition. CVPR 2016.](https://arxiv.org/abs/1512.03385)<br />

@@ -1,6 +1,7 @@
 # Custom
 data/
 log/
+saved-models/
 
 # OS X
 .DS_Store
