@@ -21,18 +21,23 @@ MARS [8]:
 ## Results
 ### Setup
 * Image size: 256-by-128 <br />
+* Batch: 32 <br />
 * Optimizer: Adam [6] <br />
 * Loss functions: <br />
 xent: cross entropy + label smoothing regularizer [5] <br />
 htri: triplet loss with hard positive/negative mining [4] <br />
 
-### Market1501
+### Image person reid
+#### Market1501
 
 | Model | Size (M) | Loss | Rank-1 / -5 / -10 (%) | mAP (%) | Reported Rank | Reported mAP |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | ResNet50 [1] | 25.05 | xent | 85.8 / 94.4 / 96.3 | 70.1 | | |
 | ResNet50M [2] | 30.01 | xent | 88.8 / 95.3 / 97.0 | 74.4 | 89.9 / - / -  | 75.6 |
 | DenseNet121 [3] | 7.72 | xent | | | | |
+
+### Video person reid
+#### MARS
 
 ## References
 [1] [He et al. Deep Residual Learning for Image Recognition. CVPR 2016.](https://arxiv.org/abs/1512.03385)<br />
