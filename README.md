@@ -66,9 +66,9 @@ htri: triplet loss with hard positive/negative mining [4] <br />
 
 | Model | Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Published Rank | Published mAP |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| ResNet50 | 24.79 | xent | | | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50_xent_mars.pth.tar) | | |
+| ResNet50 | 24.79 | xent | 74.5/88.8/91.8 | 64.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50_xent_mars.pth.tar) | | |
 | ResNet50 | 24.79 | xent+htri | 80.8/92.1/94.3 | 74.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50_xent_htri_mars.pth.tar) | | |
-| ResNet50M | 29.63 | xent | | | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50m_xent_mars.pth.tar) | | |
+| ResNet50M | 29.63 | xent | 77.8/89.8/92.8 | 67.5 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50m_xent_mars.pth.tar) | | |
 | ResNet50M | 29.63 | xent+htri | 82.3/93.8/95.3 | 75.4 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50m_xent_htri_mars.pth.tar) | | |
 
 ## Test
