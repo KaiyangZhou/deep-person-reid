@@ -23,9 +23,18 @@ MARS [8]:
 2. download dataset to `data/mars/` from http://www.liangzheng.com.cn/Project/project_mars.html.
 3. extract `bbox_train.zip` and `bbox_test.zip`.
 4. download split information from https://github.com/liangzheng06/MARS-evaluation/tree/master/info and put `info/` in `data/mars`. (we want to follow the standard split in [8])
+
 ## Train
+Training codes are implemented in
+* `train_img_model_xent.py`: train image model with cross entropy loss.
+* `train_img_model_xent_htri.py`: train image model with combination of cross entropy loss and hard triplet loss.
+* `train_vid_model_xent.py`: train video model with cross entropy loss.
+* `train_vid_model_xent_htri.py`: train video model with combination of cross entropy loss and hard triplet loss.
+
 ## Test
+
 ## Results
+
 ### Setup
 * Image size: 256-by-128 <br />
 * Batch: 32 <br />
