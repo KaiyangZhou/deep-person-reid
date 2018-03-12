@@ -9,7 +9,7 @@ We will actively maintain this repo.
 ## Test
 ## Results
 ### Setup
-* Image size: 256-by- 128 <br />
+* Image size: 256-by-128 <br />
 * Optimizer: Adam [6] <br />
 * Loss functions: <br />
 xent: cross entropy + label smoothing regularizer [5] <br />
