@@ -8,8 +8,8 @@ We will actively maintain this repo.
 ## Train
 ## Test
 ## Results
-xent: cross entropy + label smoothing regularizer [5]
-htri: triplet loss with hard positive/negative mining [4]
+xent: cross entropy + label smoothing regularizer [5] <br />
+htri: triplet loss with hard positive/negative mining [4] <br />
 ### Market1501
 
 | Model | Size (M) | Loss | Rank-1 / -5 / -10 (%) | mAP (%) | Reported Rank | Reported mAP |
