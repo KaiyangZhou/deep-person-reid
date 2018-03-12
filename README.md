@@ -9,7 +9,7 @@ This repo will be actively maintained.
 
 ## Prepare data
 Create a directory to store reid datasets under this repo via
-```
+```bash
 cd deep-person-reid/
 mkdir data/
 ```
@@ -49,7 +49,7 @@ Training codes are implemented mainly in
 * `train_vid_model_xent_htri.py`: train video model with combination of cross entropy loss and hard triplet loss.
 
 For example, to train an image reid model using ResNet50 and cross entropy loss, run
-```
+```bash
 python train_img_model_xent.py -d market1501 -a resnet50 --max-epoch 60 --train-batch 32 --test-batch 32 --stepsize 20 --eval-step 20 --save-dir log/resnet50-xent-market1501 --gpu-devices 0
 ```
 
@@ -80,12 +80,12 @@ Please run `python train_blah_blah.py -h` for more details regarding arguments.
 
 ## Test
 Say you have downloaded ResNet50 trained with `xent` on `market1501`. The path to this model is  `'saved-models/resnet50_xent_market1501.pth.tar'` (create a directory to store model weights `mkdir saved-models/`). Then, run the following command to test
-```
+```bash
 python train_img_model_xent.py -d market1501 -a resnet50 --evaluate --resume saved-models/resnet50_xent_market1501.pth.tar --save-dir log/resnet50-xent-market1501 --test-batch 32
 ```
 
 Likewise, to test video reid model, you should have a pretrained model saved under `saved-models/`, e.g. `saved-models/resnet50_xent_mars.pth.tar`, then run
-```
+```bash
 python train_vid_model_xent.py -d mars -a resnet50 --evaluate --resume saved-models/resnet50_xent_mars.pth.tar --save-dir log/resnet50-xent-mars --test-batch 2
 ```
 Note that `--test-batch` in video reid represents number of tracklets. If we set this argument to 2, and sample 15 images per tracklet, the resulting number of images per batch is 2*15=30. Adjust this argument according to your GPU memory.
