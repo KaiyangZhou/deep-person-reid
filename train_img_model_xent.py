@@ -98,22 +98,24 @@ def main():
         T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
 
+    pin_memory = True if use_gpu else False
+
     trainloader = DataLoader(
         ImageDataset(dataset.train, transform=transform_train),
         batch_size=args.train_batch, shuffle=True, num_workers=args.workers,
-        pin_memory=False, drop_last=True,
+        pin_memory=pin_memory, drop_last=True,
     )
 
     queryloader = DataLoader(
         ImageDataset(dataset.query, transform=transform_test),
         batch_size=args.test_batch, shuffle=False, num_workers=args.workers,
-        pin_memory=False, drop_last=False,
+        pin_memory=pin_memory, drop_last=False,
     )
 
     galleryloader = DataLoader(
         ImageDataset(dataset.gallery, transform=transform_test),
         batch_size=args.test_batch, shuffle=False, num_workers=args.workers,
-        pin_memory=False, drop_last=False,
+        pin_memory=pin_memory, drop_last=False,
     )
 
     print("Initializing model: {}".format(args.arch))

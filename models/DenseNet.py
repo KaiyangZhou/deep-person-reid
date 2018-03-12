@@ -14,8 +14,6 @@ class DenseNet121(nn.Module):
         densenet121 = torchvision.models.densenet121(pretrained=True)
         self.base = densenet121.features
         self.classifier = nn.Linear(1024, num_classes)
-        self.classifier.weight.data.uniform_(-1, 1)
-        self.classifier.bias.data.zero_()
 
     def forward(self, x):
         x = self.base(x)
