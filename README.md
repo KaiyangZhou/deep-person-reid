@@ -56,8 +56,8 @@ htri: triplet loss with hard positive/negative mining [4] <br />
 | Model | Size (M) | Loss | Rank-1 / -5 / -10 (%) | mAP (%) | Reported Rank | Reported mAP |
 | --- | --- | --- | --- | --- | --- | --- |
 | ResNet50 [1] | 25.05 | xent | 85.8 / 94.4 / 96.3 | 70.1 | | |
-| ResNet50M [2] | 30.01 | xent | 88.8 / 95.3 / 97.0 | 74.4 | 89.9 / - / -  | 75.6 |
-| DenseNet121 [3] | 7.72 | xent | | | | |
+| DenseNet121 [3] | 7.72 | xent | 86.5 / 93.6 / 95.7 | 67.8 | | |
+| ResNet50M [2] | 30.01 | xent | | | 89.9 / - / -  | 75.6 |
 
 ### Video person reid
 #### MARS
@@ -79,7 +79,7 @@ mkdir saved-models/
 ### Test
 Say you have downloaded ResNet50 trained with `xent` on `market1501` and the path to this model is  `saved-models/resnet50-xent-market1501.pth.tar`. Run the following command to test
 ```
-python train_img_model_xent.py -d market1501 -a resnet50 --evaluate --resume saved-models/resnet50-xent-market1501.pth.tar
+python train_img_model_xent.py -d market1501 -a resnet50 --evaluate --resume saved-models/resnet50_xent_market1501.pth.tar
 ```
 
 ## References
