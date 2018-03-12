@@ -8,7 +8,11 @@ We will actively maintain this repo.
 2. run `git clone https://github.com/KaiyangZhou/deep-person-reid`.
 
 ## Prepare data
-Create a directory to store reid datasets under this repo via `mkdir data/`.
+Create a directory to store reid datasets under this repo via
+```
+cd deep-person-reid
+mkdir data/
+```
 
 Market1501 [7]:
 1. download dataset to `data/` from http://www.liangzheng.org/Project/project_reid.html.
