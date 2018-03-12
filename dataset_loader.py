@@ -1,6 +1,7 @@
 from __future__ import print_function, absolute_import
 import os
 from PIL import Image
+import numpy as np
 
 from torch.utils.data import Dataset
 
