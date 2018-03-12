@@ -10,7 +10,7 @@ We will actively maintain this repo.
 ## Prepare data
 Create a directory to store reid datasets under this repo via
 ```
-cd deep-person-reid
+cd deep-person-reid/
 mkdir data/
 ```
 
@@ -69,9 +69,18 @@ You can use `wget` to download the following models.
 | --- | --- | --- | --- |
 | ResNet50 | xent | Market1501 | |
 | ResNet50M | xent | Market1501 | |
-| DenseNet121 | xent | Market1501 | |
+| DenseNet121 | xent | Market1501 | http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/densenet121_xent_market1501.pth.tar (30M) |
+
+Create a directory under this repo to store pretrained models
+```
+mkdir saved-models/
+```
 
 ### Test
+Say you have downloaded ResNet50 trained with `xent` on `market1501` and the path to this model is  `saved-models/resnet50-xent-market1501.pth.tar`. Run the following command to test
+```
+python train_img_model_xent.py -d market1501 -a resnet50 --evaluate --resume saved-models/resnet50-xent-market1501.pth.tar
+```
 
 ## References
 [1] [He et al. Deep Residual Learning for Image Recognition. CVPR 2016.](https://arxiv.org/abs/1512.03385)<br />
