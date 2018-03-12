@@ -5,7 +5,7 @@ We will actively maintain this repo.
 
 ## Pretrained models
 ## Prepare data
-Create a data directory to store reid datasets under this repo via `mkdir data/`
+Create a directory to store reid datasets under this repo via `mkdir data/`
 
 Market1501 [7]:
 1. download dataset to `data/` from http://www.liangzheng.org/Project/project_reid.html.
