@@ -41,12 +41,11 @@ htri: triplet loss with hard positive/negative mining [4] <br />
 ## Pretrained models
 You can use `wget` to download the following models.
 
-### Image person reid models
-| Model | Loss | Download |
-| --- | --- | --- |
-| ResNet50 | xent | |
-| ResNet50M | xent | |
-| DenseNet121 | xent | |
+| Model | Loss | Dataset | Download |
+| --- | --- | --- | --- |
+| ResNet50 | xent | Market1501 | |
+| ResNet50M | xent | Market1501 | |
+| DenseNet121 | xent | Market1501 | |
 
 ## References
 [1] [He et al. Deep Residual Learning for Image Recognition. CVPR 2016.](https://arxiv.org/abs/1512.03385)<br />
