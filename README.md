@@ -39,6 +39,8 @@ These two classes are used for [torch.utils.data.DataLoader](http://pytorch.org/
 * `xent`: cross entropy + label smoothing regularizer [5].
 * `htri`: triplet loss with hard positive/negative mining [4] .
 
+We use `Adam` [6] everywhere, which turned out to be the most effective optimizer in our experiments.
+
 ## Train
 Training codes are implemented mainly in
 * `train_img_model_xent.py`: train image model with cross entropy loss.
@@ -87,7 +89,6 @@ Likewise, to test video reid model, you should have a pretrained model saved und
 python train_vid_model_xent.py -d mars -a resnet50 --evaluate --resume saved-models/resnet50_xent_mars.pth.tar --save-dir log/resnet50-xent-mars --test-batch 2
 ```
 Note that `--test-batch` in video reid represents number of tracklets. If we set this argument to 2, and sample 15 images per tracklet, the resulting number of images per batch is 2*15=30. Adjust this argument according to your GPU memory.
-
 
 ## References
 [1] [He et al. Deep Residual Learning for Image Recognition. CVPR 2016.](https://arxiv.org/abs/1512.03385)<br />
