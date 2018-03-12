@@ -129,6 +129,7 @@ def main():
 
     criterion_xent = CrossEntropyLabelSmooth(num_classes=dataset.num_train_pids, use_gpu=use_gpu)
     criterion_htri = TripletLoss(margin=args.margin)
+    
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     if args.stepsize > 0:
         scheduler = lr_scheduler.StepLR(optimizer, step_size=args.stepsize, gamma=args.gamma)
