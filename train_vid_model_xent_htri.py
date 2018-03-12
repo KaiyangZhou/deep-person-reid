@@ -18,7 +18,7 @@ import data_manager
 from dataset_loader import ImageDataset, VideoDataset
 import transforms as T
 import models
-from losses import CrossEntropyLabelSmooth
+from losses import CrossEntropyLabelSmooth, TripletLoss
 from utils import AverageMeter, Logger, save_checkpoint
 from eval_metrics import evaluate
 from samplers import RandomIdentitySampler
