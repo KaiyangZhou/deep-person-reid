@@ -37,7 +37,7 @@ Training codes are implemented in
 
 For example, to train an image reid model using ResNet50 and cross entropy loss, run
 ```
-python train_img_model_xent.py -d market1501 -a resnet50 --max-epoch 60 --train-batch 32 --test-batch 32 --stepsize 20 --eval-step 20 --save-dir /log/resnet50 --gpu-devices 0 \
+python train_img_model_xent.py -d market1501 -a resnet50 --max-epoch 60 --train-batch 32 --test-batch 32 --stepsize 20 --eval-step 20 --save-dir /log/resnet50 --gpu-devices 0
 ```
 
 ## Test
