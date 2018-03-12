@@ -3,6 +3,10 @@ This repo contains [pytorch](http://pytorch.org/) implementations of deep person
 
 We will actively maintain this repo.
 
+## Install
+1. `cd` to the folder where you want to download this repo
+2. `git clone https://github.com/KaiyangZhou/deep-person-reid`
+
 ## Prepare data
 Create a directory to store reid datasets under this repo via `mkdir data/`.
 
