@@ -54,9 +54,9 @@ htri: triplet loss with hard positive/negative mining [4] <br />
 
 | Model | Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Reported Rank | Reported mAP |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| ResNet50 | 25.05 | xent | 85.4/94.1/95.9 | 68.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/resnet50_xent_market1501.pth.tar) | | |
 | DenseNet121 | 7.72 | xent | 86.5/93.6/95.7 | 67.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/densenet121_xent_market1501.pth.tar) | | |
-| ResNet50M | 30.01 | xent | | | [download]() | 89.9/-/- | 75.6 |
+| ResNet50 | 25.05 | xent | 85.4/94.1/95.9 | 68.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/resnet50_xent_market1501.pth.tar) | | |
+| ResNet50M | 30.01 | xent | 89.0/95.5/97.3 | 75.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/resnet50m_xent_market1501.pth.tar) | 89.9/-/- | 75.6 |
 
 ### Video person reid
 #### MARS
