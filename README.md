@@ -8,8 +8,13 @@ We will actively maintain this repo.
 ## Train
 ## Test
 ## Results
+### Setup
+* Image size: 256-by- 128 <br />
+* Optimizer: Adam <br />
+* Loss functions: <br />
 xent: cross entropy + label smoothing regularizer [5] <br />
 htri: triplet loss with hard positive/negative mining [4] <br />
+
 ### Market1501
 
 | Model | Size (M) | Loss | Rank-1 / -5 / -10 (%) | mAP (%) | Reported Rank | Reported mAP |
