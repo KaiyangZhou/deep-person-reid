@@ -120,13 +120,13 @@ def main():
     )
 
     queryloader = DataLoader(
-        VideoDataset(dataset.query, seq_len=args.seq_len, sample='random', transform=transform_test),
+        VideoDataset(dataset.query, seq_len=args.seq_len, sample='evenly', transform=transform_test),
         batch_size=args.test_batch, shuffle=False, num_workers=args.workers,
         pin_memory=pin_memory, drop_last=False,
     )
 
     galleryloader = DataLoader(
-        VideoDataset(dataset.gallery, seq_len=args.seq_len, sample='random', transform=transform_test),
+        VideoDataset(dataset.gallery, seq_len=args.seq_len, sample='evenly', transform=transform_test),
         batch_size=args.test_batch, shuffle=False, num_workers=args.workers,
         pin_memory=pin_memory, drop_last=False,
     )

@@ -49,6 +49,8 @@ python train_img_model_xent.py -d market1501 -a resnet50 --max-epoch 60 --train-
 xent: cross entropy + label smoothing regularizer [5] <br />
 htri: triplet loss with hard positive/negative mining [4] <br />
 
+Note: size of the same model may vary across different datasets due to different number of identities.
+
 ### Image person reid
 #### Market1501
 
@@ -63,6 +65,13 @@ htri: triplet loss with hard positive/negative mining [4] <br />
 
 ### Video person reid
 #### MARS
+
+| Model | Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Published Rank | Published mAP |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| ResNet50 | 24.79 | xent | | | [download]() | | |
+| ResNet50 | 24.79 | xent+htri | | | [download]() | | |
+| ResNet50M | | xent | | | [download]() | | |
+| ResNet50M | | xent+htri | | | [download]() | | |
 
 ## Test
 Say you have downloaded ResNet50 trained with `xent` on `market1501`. The path to this model is  `'saved-models/resnet50-xent-market1501.pth.tar'` (create a directory to store model weights `mkdir saved-models/`). Then, run the following command to test
