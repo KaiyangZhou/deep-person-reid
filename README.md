@@ -1,7 +1,9 @@
 # deep-person-reid
-This repo contains [pytorch](http://pytorch.org/) implementations of deep person re-identification approaches.
+This repo contains [pytorch](http://pytorch.org/) implementations of deep person re-identification models.
 
-This repo will be actively maintained.
+Pretrained models are available.
+
+We will actively maintain this repo to incorporate new models.
 
 ## Install
 1. `cd` to the folder where you want to download this repo.
