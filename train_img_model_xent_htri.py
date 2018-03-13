@@ -202,7 +202,7 @@ def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20]):
     for batch_idx, (imgs, pids, camids) in enumerate(queryloader):
         if use_gpu:
             imgs = imgs.cuda()
-        imgs = Variable(imgs)
+        imgs = Variable(imgs, volatile=True)
         features = model(imgs)
         features = features.data.cpu()
         qf.append(features)
@@ -218,7 +218,7 @@ def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20]):
     for batch_idx, (imgs, pids, camids) in enumerate(galleryloader):
         if use_gpu:
             imgs = imgs.cuda()
-        imgs = Variable(imgs)
+        imgs = Variable(imgs, volatile=True)
         features = model(imgs)
         features = features.data.cpu()
         gf.append(features)
