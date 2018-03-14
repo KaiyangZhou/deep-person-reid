@@ -80,7 +80,7 @@ def main():
     print("==========\nArgs:{}\n==========".format(args))
 
     if use_gpu:
-        print("Currently using GPU")
+        print("Currently using GPU {}".format(args.gpu_devices))
         cudnn.benchmark = True
         torch.cuda.manual_seed_all(args.seed)
     else:
