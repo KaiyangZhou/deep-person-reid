@@ -26,10 +26,7 @@ class Market1501(object):
     gallery_dir = osp.join(root, 'bounding_box_test')
 
     def __init__(self):
-        self._check_dir(self.root)
-        self._check_dir(self.train_dir)
-        self._check_dir(self.query_dir)
-        self._check_dir(self.gallery_dir)
+        self._check_before_run()
 
         train, num_train_pids, num_train_imgs = self._process_dir(self.train_dir, relabel=True)
         query, num_query_pids, num_query_imgs = self._process_dir(self.query_dir, relabel=False)
@@ -57,6 +54,17 @@ class Market1501(object):
         self.num_query_pids = num_query_pids
         self.num_gallery_pids = num_gallery_pids
 
+    def _check_before_run(self):
+        """Check if all files are available before going deeper"""
+        if not osp.exists(self.root):
+            raise RuntimeError("'{}' is not available".format(self.root))
+        if not osp.exists(self.train_dir):
+            raise RuntimeError("'{}' is not available".format(self.train_dir))
+        if not osp.exists(self.query_dir):
+            raise RuntimeError("'{}' is not available".format(self.query_dir))
+        if not osp.exists(self.gallery_dir):
+            raise RuntimeError("'{}' is not available".format(self.gallery_dir))
+
     def _process_dir(self, dir_path, relabel=False):
         img_paths = glob.glob(osp.join(dir_path, '*.jpg'))
         pattern = re.compile(r'([-\d]+)_c(\d)')
@@ -82,11 +90,6 @@ class Market1501(object):
         num_imgs = len(dataset)
         return dataset, num_pids, num_imgs
 
-    def _check_dir(self, dir_path):
-        if not osp.exists(dir_path):
-            print("Error: '{}' is not available.".format(dir_path))
-            sys.exit()
-
 class Mars(object):
     """
     MARS
@@ -99,7 +102,7 @@ class Mars(object):
     # tracklets: 8298 (train) + 1980 (query) + 9330 (gallery)
 
     Args:
-        min_seq_len (int): tracklet with length shorter than this value will be discarded.
+        min_seq_len (int): tracklet with length shorter than this value will be discarded (default: 0).
     """
     root = './data/mars'
     train_name_path = osp.join(root, 'info/train_name.txt')
@@ -109,6 +112,8 @@ class Mars(object):
     query_IDX_path = osp.join(root, 'info/query_IDX.mat')
 
     def __init__(self, min_seq_len=0):
+        self._check_before_run()
+
         # prepare meta data
         train_names = self._get_names(self.train_name_path)
         test_names = self._get_names(self.test_name_path)
@@ -157,6 +162,21 @@ class Mars(object):
         self.num_train_pids = num_train_pids
         self.num_query_pids = num_query_pids
         self.num_gallery_pids = num_gallery_pids
+
+    def _check_before_run(self):
+        """Check if all files are available before going deeper"""
+        if not osp.exists(self.root):
+            raise RuntimeError("'{}' is not available".format(self.root))
+        if not osp.exists(self.train_name_path):
+            raise RuntimeError("'{}' is not available".format(self.train_name_path))
+        if not osp.exists(self.test_name_path):
+            raise RuntimeError("'{}' is not available".format(self.test_name_path))
+        if not osp.exists(self.track_train_info_path):
+            raise RuntimeError("'{}' is not available".format(self.track_train_info_path))
+        if not osp.exists(self.track_test_info_path):
+            raise RuntimeError("'{}' is not available".format(self.track_test_info_path))
+        if not osp.exists(self.query_IDX_path):
+            raise RuntimeError("'{}' is not available".format(self.query_IDX_path))
 
     def _get_names(self, fpath):
         names = []
@@ -220,7 +240,8 @@ def init_dataset(name, *args, **kwargs):
     return __factory[name](*args, **kwargs)
 
 if __name__ == '__main__':
-    #dataset = Market1501()
+    # test
+    dataset = Market1501()
     dataset = Mars()
 
 
