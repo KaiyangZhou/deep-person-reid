@@ -55,6 +55,52 @@ For example, to train an image reid model using ResNet50 and cross entropy loss,
 python train_img_model_xent.py -d market1501 -a resnet50 --max-epoch 60 --train-batch 32 --test-batch 32 --stepsize 20 --eval-step 20 --save-dir log/resnet50-xent-market1501 --gpu-devices 0
 ```
 
+Then, you will see
+```bash
+==========
+Args:Namespace(arch='resnet50', dataset='market1501', eval_step=20, evaluate=False, gamma=0.1, gpu_devices='0', height=256, lr=0.0003, max_epoch=60, print_freq=10, resume='', save_dir='log/resnet50/', seed=1, start_epoch=0, stepsize=20, test_batch=32, train_batch=32, use_cpu=False, weight_decay=0.0005, width=128, workers=4)
+==========
+Currently using GPU
+Initializing dataset market1501
+=> Market1501 loaded
+Dataset statistics:
+  ------------------------------
+  subset   | # ids | # images
+  ------------------------------
+  train    |   751 |    12936
+  query    |   750 |     3368
+  gallery  |   751 |    15913
+  ------------------------------
+  total    |  1501 |    32217
+  ------------------------------
+Initializing model: resnet50
+Model size: 25.04683M
+==> Epoch 1/60
+Batch 10/404     Loss 6.665115 (6.781841)
+Batch 20/404     Loss 6.792669 (6.837275)
+Batch 30/404     Loss 6.592124 (6.806587)
+... ...
+==> Epoch 60/60
+Batch 10/404     Loss 1.101616 (1.075387)
+Batch 20/404     Loss 1.055073 (1.075455)
+Batch 30/404     Loss 1.081339 (1.073036)
+... ...
+==> Test
+Extracted features for query set, obtained 3368-by-2048 matrix
+Extracted features for gallery set, obtained 15913-by-2048 matrix
+Computing distance matrix
+Computing CMC and mAP
+Results ----------
+mAP: 68.8%
+CMC curve
+Rank-1  : 85.4%
+Rank-5  : 94.1%
+Rank-10 : 95.9%
+Rank-20 : 97.2%
+------------------
+Finished. Total elapsed time (h:m:s): 1:57:44
+```
+
 Please run `python train_blah_blah.py -h` for more details regarding arguments.
 
 ## Results
