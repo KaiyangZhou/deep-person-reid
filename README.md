@@ -31,7 +31,7 @@ These are implemented in `dataset_loader.py` where we have two main classes that
 * `ImageDataset`: processes image-based person reid datasets.
 * `VideoDataset`: processes video-based person reid datasets.
 
-These two classes are used for [torch.utils.data.DataLoader](http://pytorch.org/docs/master/_modules/torch/utils/data/dataloader.html#DataLoader) that can provide batched data.
+These two classes are used for [torch.utils.data.DataLoader](http://pytorch.org/docs/master/_modules/torch/utils/data/dataloader.html#DataLoader) that can provide batched data. Data loader wich `ImageDataset` outputs batch data of `(batch, channel, height, width)`, while data loader with `VideoDataset` outputs batch data of `(batch, sequence, channel, height, width)`.
 
 ## Models
 * `models/ResNet.py`: ResNet50 [1], ResNet50M [2].
