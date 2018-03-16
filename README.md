@@ -101,6 +101,8 @@ Rank-20 : 97.2%
 Finished. Total elapsed time (h:m:s): 1:57:44
 ```
 
+To use multiple GPUs, you can set `--gpu-devices 0,1,2,3`.
+
 Please run `python train_blah_blah.py -h` for more details regarding arguments.
 
 ## Results
