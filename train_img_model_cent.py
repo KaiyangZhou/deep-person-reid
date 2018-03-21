@@ -42,7 +42,7 @@ parser.add_argument('--train-batch', default=32, type=int,
 parser.add_argument('--test-batch', default=32, type=int, help="test batch size")
 parser.add_argument('--lr', '--learning-rate', default=0.0003, type=float,
                     help="initial learning rate")
-parser.add_argument('--lr-cent', '--learning-rate', default=0.3, type=float,
+parser.add_argument('--lr-cent', default=0.3, type=float,
                     help="learning rate for center loss")
 parser.add_argument('--weight-cent', type=float, default=0.1, help="weight for center loss")
 parser.add_argument('--stepsize', default=20, type=int,
