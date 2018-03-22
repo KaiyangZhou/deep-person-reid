@@ -191,6 +191,9 @@ def train(model, criterion_xent, criterion_cent, optimizer_model, optimizer_cent
         optimizer_cent.zero_grad()
         loss.backward()
         optimizer_model.step()
+        # remove the impact of weight_cent in learning centers
+        for param in criterion_cent.parameters():
+            param.grad.data *= (1. / args.weight_cent)
         optimizer_cent.step()
         losses.update(loss.data[0], pids.size(0))
 
