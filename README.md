@@ -5,6 +5,13 @@ Pretrained models are available.
 
 We will actively maintain this repo to incorporate new models.
 
+## Updates
+- Mar 2018: Added [center loss](https://github.com/KaiyangZhou/pytorch-center-loss) [9] and the trained model weights.
+
+## Dependencies
+- [Pytorch](http://pytorch.org/)
+- [torchvision](https://github.com/pytorch/vision/)
+
 ## Install
 1. `cd` to the folder where you want to download this repo.
 2. run `git clone https://github.com/KaiyangZhou/deep-person-reid`.
@@ -40,6 +47,7 @@ These two classes are used for [torch.utils.data.DataLoader](http://pytorch.org/
 ## Loss functions
 * `xent`: cross entropy + label smoothing regularizer [5].
 * `htri`: triplet loss with hard positive/negative mining [4] .
+* `cent`: center loss [9].
 
 We use `Adam` [6] everywhere, which turned out to be the most effective optimizer in our experiments.
 
@@ -47,6 +55,7 @@ We use `Adam` [6] everywhere, which turned out to be the most effective optimize
 Training codes are implemented mainly in
 * `train_img_model_xent.py`: train image model with cross entropy loss.
 * `train_img_model_xent_htri.py`: train image model with combination of cross entropy loss and hard triplet loss.
+* `train_img_model_cent.py`: train image model with center loss.
 * `train_vid_model_xent.py`: train video model with cross entropy loss.
 * `train_vid_model_xent_htri.py`: train video model with combination of cross entropy loss and hard triplet loss.
 
@@ -113,6 +122,7 @@ Please run `python train_blah_blah.py -h` for more details regarding arguments.
 | --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | DenseNet121 | 7.72 | xent | 86.5/93.6/95.7 | 67.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_xent_market1501.pth.tar) | | |
 | DenseNet121 | 7.72 | xent+htri | 89.5/96.3/97.5 | 72.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_xent_htri_market1501.pth.tar) | | |
+| Resnet50 | 25.05 | cent | 85.1/93.8/96.2 | 69.1 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_cent_market1501.pth.tar) | | |
 | ResNet50 | 25.05 | xent | 85.4/94.1/95.9 | 68.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_xent_market1501.pth.tar) | 87.3/-/- | 67.6 |
 | ResNet50 | 25.05 | xent+htri | 87.5/95.3/97.3 | 72.3 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_xent_htri_market1501.pth.tar) | | |
 | ResNet50M | 30.01 | xent | 89.0/95.5/97.3 | 75.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50m_xent_market1501.pth.tar) | 89.9/-/- | 75.6 |
@@ -151,3 +161,4 @@ Note that `--test-batch` in video reid represents number of tracklets. If we set
 [6] [Kingma and Ba. Adam: A Method for Stochastic Optimization. ICLR 2015.](https://arxiv.org/abs/1412.6980) <br />
 [7] [Zheng et al. Scalable Person Re-identification: A Benchmark. ICCV 2015.](https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Zheng_Scalable_Person_Re-Identification_ICCV_2015_paper.pdf) <br />
 [8] [Zheng et al. MARS: A Video Benchmark for Large-Scale Person Re-identification. ECCV 2016.](http://www.liangzheng.com.cn/Project/project_mars.html) <br />
+[9] [Wen et al. A Discriminative Feature Learning Approach for Deep Face Recognition. ECCV 2016](https://ydwen.github.io/papers/WenECCV16.pdf)
