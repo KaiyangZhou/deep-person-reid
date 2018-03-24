@@ -34,7 +34,7 @@ parser.add_argument('--height', type=int, default=256,
 parser.add_argument('--width', type=int, default=128,
                     help="width of an image (default: 128)")
 # Optimization options
-parser.add_argument('--max-epoch', default=60, type=int,
+parser.add_argument('--max-epoch', default=180, type=int,
                     help="maximum epochs to run")
 parser.add_argument('--start-epoch', default=0, type=int,
                     help="manual epoch number (useful on restarts)")
@@ -43,7 +43,7 @@ parser.add_argument('--train-batch', default=32, type=int,
 parser.add_argument('--test-batch', default=32, type=int, help="test batch size")
 parser.add_argument('--lr', '--learning-rate', default=0.0003, type=float,
                     help="initial learning rate")
-parser.add_argument('--stepsize', default=20, type=int,
+parser.add_argument('--stepsize', default=60, type=int,
                     help="stepsize to decay learning rate (>0 means this is enabled)")
 parser.add_argument('--gamma', default=0.1, type=float,
                     help="learning rate decay")
