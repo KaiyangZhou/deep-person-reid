@@ -69,7 +69,10 @@ python train_img_model_xent.py -d market1501 -a resnet50 --max-epoch 60 --train-
 Then, you will see
 ```bash
 ==========
-Args:Namespace(arch='resnet50', dataset='market1501', eval_step=20, evaluate=False, gamma=0.1, gpu_devices='0', height=256, lr=0.0003, max_epoch=60, print_freq=10, resume='', save_dir='log/resnet50/', seed=1, start_epoch=0, stepsize=20, test_batch=32, train_batch=32, use_cpu=False, weight_decay=0.0005, width=128, workers=4)
+Args:Namespace(arch='resnet50', dataset='market1501', eval_step=20, evaluate=False, gamma=0.1,
+gpu_devices='0', height=256, lr=0.0003, max_epoch=60, print_freq=10, resume='',
+save_dir='log/resnet50/', seed=1, start_epoch=0, stepsize=20, test_batch=32, train_batch=32,
+use_cpu=False, weight_decay=0.0005, width=128, workers=4)
 ==========
 Currently using GPU 0
 Initializing dataset market1501
