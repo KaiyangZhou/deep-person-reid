@@ -6,7 +6,7 @@ Pretrained models are available.
 We will actively maintain this repo to incorporate new models.
 
 ## Updates
-- Mar 2018: Added [Multi-scale Deep CNN (ICCV'17)](https://arxiv.org/abs/1709.05165) with slight modifications: (a) Input size is (256, 128) instead of (160, 60); (b) We add an average pooling layer after the last conv feature maps. (c) We train the network with our strategy (`xent + htri` ). Model trained from scratch on Market1501 is available.
+- Mar 2018: Added [Multi-scale Deep CNN (ICCV'17)](https://arxiv.org/abs/1709.05165) with slight modifications: (a) Input size is (256, 128) instead of (160, 60); (b) We add an average pooling layer after the last conv feature maps. (c) We train the network with our strategy. Model trained from scratch on Market1501 is [available](https://github.com/KaiyangZhou/deep-person-reid#results).
 - Mar 2018: Added [center loss (ECCV'16)](https://github.com/KaiyangZhou/pytorch-center-loss) [9] and the trained model weights.
 
 ## Dependencies
