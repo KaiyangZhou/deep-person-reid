@@ -154,6 +154,7 @@ Note that `--test-batch` in video reid represents number of tracklets. If we set
 
 ## Q&A
 1. **How do I set different learning rates to different components in my model?**
+
 A: Instead of giving `model.parameters()` to optimizer, you could pass an iterable of `dict`s, as described [here](http://pytorch.org/docs/master/optim.html#per-parameter-options). Please see the example below
 ```python
 # First comment the following code.
