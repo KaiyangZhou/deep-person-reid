@@ -38,7 +38,7 @@ class ResNet50M(nn.Module):
     """ResNet50 + mid-level features.
 
     Reference:
-    Qian et al. The Devil is in the Middle: Exploiting Mid-level Representations for
+    Yu et al. The Devil is in the Middle: Exploiting Mid-level Representations for
     Cross-Domain Instance Matching. arXiv:1711.08106.
     """
     def __init__(self, num_classes=0, loss={'xent'}, **kwargs):
