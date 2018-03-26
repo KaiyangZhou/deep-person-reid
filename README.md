@@ -164,8 +164,7 @@ param_groups = [
 ]
 # Such that model.base will be frozen and model.classifier will be trained with
 # the default leanring rate, i.e. args.lr. This example code only applies to model
-# that only has two components (base and classifier). Modify the code to
-# adapt to your model.
+# that has two components (base and classifier). Modify the code to adapt to your model.
 optimizer = torch.optim.Adam(param_groups, lr=args.lr, weight_decay=args.weight_decay)
 ```
 
