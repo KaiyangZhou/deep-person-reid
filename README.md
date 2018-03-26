@@ -6,7 +6,8 @@ Pretrained models are available.
 We will actively maintain this repo to incorporate new models.
 
 ## Updates
-- Mar 2018: Added [center loss](https://github.com/KaiyangZhou/pytorch-center-loss) [9] and the trained model weights.
+- Mar 2018: Added [Multi-scale Deep CNN (ICCV'17)](https://arxiv.org/abs/1709.05165) with slight modifications: (a) Input size is (256, 128) instead of (160, 60); (b) We add an average pooling layer after the last conv feature maps. (c) We train the network with our strategy (`xent + htri` ). Model trained from scratch on Market1501 is available.
+- Mar 2018: Added [center loss (ECCV'16)](https://github.com/KaiyangZhou/pytorch-center-loss) [9] and the trained model weights.
 
 ## Dependencies
 - [Pytorch](http://pytorch.org/)
@@ -43,6 +44,7 @@ These two classes are used for [torch.utils.data.DataLoader](http://pytorch.org/
 ## Models
 * `models/ResNet.py`: ResNet50 [1], ResNet50M [2].
 * `models/DenseNet.py`: DenseNet121 [3].
+* `models/MuDeep.py`: MuDeep [10]. 
 
 ## Loss functions
 * `xent`: cross entropy + label smoothing regularizer [5].
@@ -127,6 +129,7 @@ Please run `python train_blah_blah.py -h` for more details regarding arguments.
 | ResNet50 | 25.05 | xent+htri | 87.5/95.3/97.3 | 72.3 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_xent_htri_market1501.pth.tar) | | |
 | ResNet50M | 30.01 | xent | 89.0/95.5/97.3 | 75.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50m_xent_market1501.pth.tar) | 89.9/-/- | 75.6 |
 | ResNet50M | 30.01 | xent+htri | 90.4/96.7/98.0 | 76.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50m_xent_htri_market1501.pth.tar) | | |
+| MuDeep | 138.02 | xent+htri| 71.5/89.3/96.3 | 47.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mudeep_xent_htri_market1501.pth.tar) | | |
 
 ### Video person reid
 #### MARS
@@ -178,4 +181,5 @@ optimizer = torch.optim.Adam(param_groups, lr=args.lr, weight_decay=args.weight_
 [6] [Kingma and Ba. Adam: A Method for Stochastic Optimization. ICLR 2015.](https://arxiv.org/abs/1412.6980) <br />
 [7] [Zheng et al. Scalable Person Re-identification: A Benchmark. ICCV 2015.](https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Zheng_Scalable_Person_Re-Identification_ICCV_2015_paper.pdf) <br />
 [8] [Zheng et al. MARS: A Video Benchmark for Large-Scale Person Re-identification. ECCV 2016.](http://www.liangzheng.com.cn/Project/project_mars.html) <br />
-[9] [Wen et al. A Discriminative Feature Learning Approach for Deep Face Recognition. ECCV 2016](https://ydwen.github.io/papers/WenECCV16.pdf)
+[9] [Wen et al. A Discriminative Feature Learning Approach for Deep Face Recognition. ECCV 2016](https://ydwen.github.io/papers/WenECCV16.pdf) <br />
+[10] [Qian et al. Multi-scale Deep Learning Architectures for Person Re-identification. ICCV 2017.](https://arxiv.org/abs/1709.05165) <br />
