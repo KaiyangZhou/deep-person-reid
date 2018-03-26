@@ -156,12 +156,16 @@ Note that `--test-batch` in video reid represents number of tracklets. If we set
 1. **How do I set different learning rates to different components in my model?**
 A: Instead of giving `model.parameters()` to optimizer, you could pass an iterable of `dict`s, as described [here](http://pytorch.org/docs/master/optim.html#per-parameter-options). Please see the example below
 ```python
+# First comment the following code.
 #optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 param_groups = [
   {'params': model.base.parameters(), 'lr': 0},
   {'params': model.classifier.parameters()},
 ]
-# Such that model.base will be frozen and model.classifier will be trained with the default leanring rate, i.e. args.lr. This example code only applies to model that only has two components (base and classifier). Modify the code to adapt to your model.
+# Such that model.base will be frozen and model.classifier will be trained with
+# the default leanring rate, i.e. args.lr. This example code only applies to model
+# that only has two components (base and classifier). Modify the code to
+# adapt to your model.
 optimizer = torch.optim.Adam(param_groups, lr=args.lr, weight_decay=args.weight_decay)
 ```
 
