@@ -2,11 +2,13 @@ from __future__ import absolute_import
 
 from .ResNet import *
 from .DenseNet import *
+from .MuDeep import *
 
 __factory = {
     'resnet50': ResNet50,
     'densenet121': DenseNet121,
     'resnet50m': ResNet50M,
+    'mudeep': MuDeep,
 }
 
 def get_names():
