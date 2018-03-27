@@ -158,8 +158,12 @@ def main():
             is_best = rank1 > best_rank1
             if is_best: best_rank1 = rank1
 
+            if use_gpu:
+                state_dict = model.module.cpu().state_dict()
+            else:
+                state_dict = model.state_dict()
             save_checkpoint({
-                'state_dict': model.state_dict(),
+                'state_dict': state_dict,
                 'rank1': rank1,
                 'epoch': epoch,
             }, is_best, osp.join(args.save_dir, 'checkpoint_ep' + str(epoch+1) + '.pth.tar'))
