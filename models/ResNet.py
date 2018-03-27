@@ -87,9 +87,3 @@ class ResNet50M(nn.Module):
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))
 
-
-
-
-
-
-
