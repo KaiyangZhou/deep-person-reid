@@ -173,7 +173,7 @@ param_groups = [
 # that has two components (base and classifier). Modify the code to adapt to your model.
 optimizer = torch.optim.Adam(param_groups, lr=args.lr, weight_decay=args.weight_decay)
 ```
-Of course, you can pass `model.classifier.parameters()` to optimizer if you only need to train the classifier (in this case, setting the `requires_grad` wrt the base model to false will be more efficient).
+Of course, you can pass `model.classifier.parameters()` to optimizer if you only need to train the classifier (in this case, setting the `requires_grad`s wrt the base model params to false will be more efficient).
 
 
 ## References
