@@ -168,7 +168,7 @@ def main():
             if is_best: best_rank1 = rank1
 
             if use_gpu:
-                state_dict = model.module.cpu().state_dict()
+                state_dict = model.module.state_dict()
             else:
                 state_dict = model.state_dict()
             save_checkpoint({
