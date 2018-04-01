@@ -4,6 +4,7 @@ This repo contains [pytorch](http://pytorch.org/) implementations of deep person
 Pretrained models are [available](https://github.com/KaiyangZhou/deep-person-reid#results).
 
 ## Updates
+- Apr 2018: Added [iLIDS-VID](http://www.eecs.qmul.ac.uk/~xiatian/downloads_qmul_iLIDS-VID_ReID_dataset.html) and [PRID-2011](https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/).
 - Mar 2018: Added argument `--htri-only` to `train_img_model_xent_htri.py` and `train_vid_model_xent_htri.py`. If this argument is true, only `htri` [4] is used for training. See [here](https://github.com/KaiyangZhou/deep-person-reid/blob/master/train_img_model_xent_htri.py#L189) for detailed changes.
 - Mar 2018: Added [Multi-scale Deep CNN (ICCV'17)](https://arxiv.org/abs/1709.05165) [10] with slight modifications: (a) Input size is (256, 128) instead of (160, 60); (b) We add an average pooling layer after the last conv feature maps. (c) We train the network with our strategy. Model trained from scratch on Market1501 is [available](https://github.com/KaiyangZhou/deep-person-reid#results).
 - Mar 2018: Added [center loss (ECCV'16)](https://github.com/KaiyangZhou/pytorch-center-loss) [9] and the trained model weights.
@@ -23,15 +24,54 @@ cd deep-person-reid/
 mkdir data/
 ```
 
+Please follow the instructions below to prepare each dataset.
+
 Market1501 [7]:
-1. download dataset to `data/` from http://www.liangzheng.org/Project/project_reid.html.
-2. extract dataset and rename to `market1501`.
+1. Download dataset to `data/` from http://www.liangzheng.org/Project/project_reid.html.
+2. Extract dataset and rename to `market1501`. The data structure would look like:
+```
+market1501/
+    bounding_box_test/
+    bounding_box_train/
+    ...
+```
+3. Use `-d market1501` when running the training code.
 
 MARS [8]:
-1. create a directory named `mars/` under `data/`.
-2. download dataset to `data/mars/` from http://www.liangzheng.com.cn/Project/project_mars.html.
-3. extract `bbox_train.zip` and `bbox_test.zip`.
-4. download split information from https://github.com/liangzheng06/MARS-evaluation/tree/master/info and put `info/` in `data/mars`. (we want to follow the standard split in [8])
+1. Create a directory named `mars/` under `data/`.
+2. Download dataset to `data/mars/` from http://www.liangzheng.com.cn/Project/project_mars.html.
+3. Extract `bbox_train.zip` and `bbox_test.zip`.
+4. Download split information from https://github.com/liangzheng06/MARS-evaluation/tree/master/info and put `info/` in `data/mars` (we want to follow the standard split in [8]). The data structure would look like:
+```
+mars/
+    bbox_test/
+    bbox_train/
+    info/
+```
+5. Use `-d mars` when running the training code.
+
+iLIDS-VID [11]:
+1. The code supports automatic download and formatting. Simple use `-d ilidsvid` when running the training code. The data structure would look like:
+```
+ilids-vid/
+    i-LIDS-VID/
+    train-test people splits/
+    splits.json
+```
+
+PRID [12]:
+1. Under `data/`, do `mkdir prid2011` to create a directory.
+2. Download dataset from https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/ and extract it under `data/prid2011`.
+3. Download the split created by [iLIDS-VID](http://www.eecs.qmul.ac.uk/~xiatian/downloads_qmul_iLIDS-VID_ReID_dataset.html) from [here](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/datasets/prid2011/splits_prid2011.json), and put it in `data/prid2011/`. We follow [11] and use 178 persons whose sequences are more than a threshold so that results on this dataset can be fairly compared with other approaches. The data structure would look like:
+```
+prid2011/
+    splits_prid2011.json
+    prid_2011/
+        multi_shot/
+        single_shot/
+        readme.txt
+```
+4. Use `-d prid` when running the training code.
 
 ## Dataset loaders
 These are implemented in `dataset_loader.py` where we have two main classes that subclass [torch.utils.data.Dataset](http://pytorch.org/docs/master/_modules/torch/utils/data/dataset.html#Dataset):
@@ -65,55 +105,6 @@ For example, to train an image reid model using ResNet50 and cross entropy loss,
 python train_img_model_xent.py -d market1501 -a resnet50 --max-epoch 60 --train-batch 32 --test-batch 32 --stepsize 20 --eval-step 20 --save-dir log/resnet50-xent-market1501 --gpu-devices 0
 ```
 
-Then, you will see
-```bash
-==========
-Args:Namespace(arch='resnet50', dataset='market1501', eval_step=20, evaluate=False, gamma=0.1,
-gpu_devices='0', height=256, lr=0.0003, max_epoch=60, print_freq=10, resume='',
-save_dir='log/resnet50/', seed=1, start_epoch=0, stepsize=20, test_batch=32, train_batch=32,
-use_cpu=False, weight_decay=0.0005, width=128, workers=4)
-==========
-Currently using GPU 0
-Initializing dataset market1501
-=> Market1501 loaded
-Dataset statistics:
-  ------------------------------
-  subset   | # ids | # images
-  ------------------------------
-  train    |   751 |    12936
-  query    |   750 |     3368
-  gallery  |   751 |    15913
-  ------------------------------
-  total    |  1501 |    32217
-  ------------------------------
-Initializing model: resnet50
-Model size: 25.04683M
-==> Epoch 1/60
-Batch 10/404     Loss 6.665115 (6.781841)
-Batch 20/404     Loss 6.792669 (6.837275)
-Batch 30/404     Loss 6.592124 (6.806587)
-... ...
-==> Epoch 60/60
-Batch 10/404     Loss 1.101616 (1.075387)
-Batch 20/404     Loss 1.055073 (1.075455)
-Batch 30/404     Loss 1.081339 (1.073036)
-... ...
-==> Test
-Extracted features for query set, obtained 3368-by-2048 matrix
-Extracted features for gallery set, obtained 15913-by-2048 matrix
-Computing distance matrix
-Computing CMC and mAP
-Results ----------
-mAP: 68.8%
-CMC curve
-Rank-1  : 85.4%
-Rank-5  : 94.1%
-Rank-10 : 95.9%
-Rank-20 : 97.2%
-------------------
-Finished. Total elapsed time (h:m:s): 1:57:44
-```
-
 To use multiple GPUs, you can set `--gpu-devices 0,1,2,3`.
 
 Please run `python train_blah_blah.py -h` for more details regarding arguments.
@@ -145,6 +136,20 @@ Please run `python train_blah_blah.py -h` for more details regarding arguments.
 | ResNet50M | 29.63 | xent | 77.8/89.8/92.8 | 67.5 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50m_xent_mars.pth.tar) | | |
 | ResNet50M | 29.63 | xent+htri | 82.3/93.8/95.3 | 75.4 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50m_xent_htri_mars.pth.tar) | | |
 
+#### iLIDS-VID
+
+| Model | Param Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Published Rank | Published mAP |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| ResNet50 | 23.82 | xent | 62.7/82.7/90.7 | 72.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50_xent_ilidsvid.pth.tar) | | |
+| ResNet50M | 28.17 | xent | 63.3/85.3/92.7 | 73.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50m_xent_ilidsvid.pth.tar) | | |
+
+#### PRID-2011
+
+| Model | Param Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Published Rank | Published mAP |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| ResNet50 | 23.69 | xent | 75.3/96.6/97.8 | 84.3 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50_xent_prid.pth.tar) | | |
+| ResNet50M | 27.98 | xent | 85.4/96.6/98.9 | 90.1 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50m_xent_prid.pth.tar) | | |
+
 ## Test
 Say you have downloaded ResNet50 trained with `xent` on `market1501`. The path to this model is  `'saved-models/resnet50_xent_market1501.pth.tar'` (create a directory to store model weights `mkdir saved-models/`). Then, run the following command to test
 ```bash
@@ -155,7 +160,7 @@ Likewise, to test video reid model, you should have a pretrained model saved und
 ```bash
 python train_vid_model_xent.py -d mars -a resnet50 --evaluate --resume saved-models/resnet50_xent_mars.pth.tar --save-dir log/resnet50-xent-mars --test-batch 2
 ```
-Note that `--test-batch` in video reid represents number of tracklets. If we set this argument to 2, and sample 15 images per tracklet, the resulting number of images per batch is 2*15=30. Adjust this argument according to your GPU memory.
+**Note** that `--test-batch` in video reid represents number of tracklets. If we set this argument to 2, and sample 15 images per tracklet, the resulting number of images per batch is 2*15=30. Adjust this argument according to your GPU memory.
 
 ## Q&A
 1. **How do I set different learning rates to different components in my model?**
@@ -187,3 +192,5 @@ Of course, you can pass `model.classifier.parameters()` to optimizer if you only
 [8] [Zheng et al. MARS: A Video Benchmark for Large-Scale Person Re-identification. ECCV 2016.](http://www.liangzheng.com.cn/Project/project_mars.html) <br />
 [9] [Wen et al. A Discriminative Feature Learning Approach for Deep Face Recognition. ECCV 2016](https://ydwen.github.io/papers/WenECCV16.pdf) <br />
 [10] [Qian et al. Multi-scale Deep Learning Architectures for Person Re-identification. ICCV 2017.](https://arxiv.org/abs/1709.05165) <br />
+[11] [Wang et al. Person Re-Identification by Video Ranking. ECCV 2014.](http://www.eecs.qmul.ac.uk/~xiatian/papers/ECCV14/WangEtAl_ECCV14.pdf) <br />
+[12] [Hirzer et al. Person Re-Identification by Descriptive and Discriminative Classification. SCIA 2011.](https://files.icg.tugraz.at/seafhttp/files/ba284964-6e03-4261-bb39-e85280707598/hirzer_scia_2011.pdf) <br />
