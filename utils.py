@@ -3,6 +3,7 @@ import os
 import sys
 import errno
 import shutil
+import json
 import os.path as osp
 
 import torch
@@ -77,3 +78,21 @@ class Logger(object):
         self.console.close()
         if self.file is not None:
             self.file.close()
+
+def read_json(fpath):
+    with open(fpath, 'r') as f:
+        obj = json.load(f)
+    return obj
+
+def write_json(obj, fpath):
+    mkdir_if_missing(osp.dirname(fpath))
+    with open(fpath, 'w') as f:
+        json.dump(obj, f, indent=4, separators=(',', ': '))
+
+
+
+
+
+
+
+
