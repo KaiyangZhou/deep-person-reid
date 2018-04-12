@@ -160,7 +160,7 @@ Likewise, to test video reid model, you should have a pretrained model saved und
 ```bash
 python train_vid_model_xent.py -d mars -a resnet50 --evaluate --resume saved-models/resnet50_xent_mars.pth.tar --save-dir log/resnet50-xent-mars --test-batch 2
 ```
-**Note** that `--test-batch` in video reid represents number of tracklets. If we set this argument to 2, and sample 15 images per tracklet, the resulting number of images per batch is 2*15=30. Adjust this argument according to your GPU memory.
+**Note** that `--test-batch` in video reid represents number of tracklets. If we set this argument to 2, and sample 15 images per tracklet, the resulting number of images per batch is 2*15=30. Adjust this argument according to your GPU memory. Currently, please set `--test-batch` to 1 in `prid` and `ilidsvid` due to [this error](https://github.com/KaiyangZhou/deep-person-reid/issues/2).
 
 ## Q&A
 1. **How do I set different learning rates to different components in my model?**
