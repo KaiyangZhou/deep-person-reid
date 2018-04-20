@@ -2,6 +2,7 @@
 data/
 log/
 saved-models/
+train_imagenet.py
 
 # OS X
 .DS_Store
