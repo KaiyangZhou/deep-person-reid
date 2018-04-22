@@ -2,7 +2,10 @@ from __future__ import print_function, absolute_import
 import numpy as np
 import copy
 
-def evaluate(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50):
+def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50):
+    raise NotImplementedError
+
+def eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50):
     num_q, num_g = distmat.shape
     if num_g < max_rank:
         max_rank = num_g
@@ -13,7 +16,7 @@ def evaluate(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50):
     # compute cmc curve for each query
     all_cmc = []
     all_AP = []
-    num_valid_q = 0.
+    num_valid_q = 0. # number of valid query
     for q_idx in range(num_q):
         # get query pid and camid
         q_pid = q_pids[q_idx]
@@ -53,4 +56,8 @@ def evaluate(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50):
 
     return all_cmc, mAP
 
-
+def evaluate(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50, metric_cuhk03=False):
+    if metric_cuhk03:
+        return eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank)
+    else:
+        return eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank)
