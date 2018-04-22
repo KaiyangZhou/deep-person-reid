@@ -133,10 +133,10 @@ class CUHK03(object):
         self._preprocess()
 
         if cuhk03_labeled:
-            print("Loading CUHK03 Labeled Images")
+            print("Use 'labeled' images")
             split_path = self.split_labeled_path
         else:
-            print("Loading CUHK03 Detected Images")
+            print("Use 'detected' images")
             split_path = self.split_detected_path
 
         splits = read_json(split_path)
@@ -144,9 +144,9 @@ class CUHK03(object):
         split = splits[split_id]
         print("Split index = {}".format(split_id))
 
-        self.train = split['train']
-        self.query = split['query']
-        self.gallery = split['gallery']
+        train = split['train']
+        query = split['query']
+        gallery = split['gallery']
 
         num_train_pids = split['num_train_pids']
         num_query_pids = split['num_query_pids']
@@ -169,6 +169,14 @@ class CUHK03(object):
         print("  ------------------------------")
         print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_imgs))
         print("  ------------------------------")
+
+        self.train = train
+        self.query = query
+        self.gallery = gallery
+
+        self.num_train_pids = num_train_pids
+        self.num_query_pids = num_query_pids
+        self.num_gallery_pids = num_gallery_pids
 
     def _check_before_run(self):
         """Check if all files are available before going deeper"""
@@ -715,6 +723,7 @@ class PRID(object):
 
 __factory = {
     'market1501': Market1501,
+    'cuhk03': CUHK03,
     'mars': Mars,
     'ilidsvid': iLIDSVID,
     'prid': PRID,
@@ -729,8 +738,7 @@ def init_dataset(name, *args, **kwargs):
     return __factory[name](*args, **kwargs)
 
 if __name__ == '__main__':
-    # test
-    dataset = CUHK03()
+    pass
 
 
 
