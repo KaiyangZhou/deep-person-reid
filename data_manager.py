@@ -9,10 +9,14 @@ import zipfile
 import os.path as osp
 from scipy.io import loadmat
 import numpy as np
+import h5py
+from scipy.misc import imsave
 
 from utils import mkdir_if_missing, write_json, read_json
 
 """Dataset classes"""
+
+"""Image ReID"""
 
 class Market1501(object):
     """
@@ -20,6 +24,8 @@ class Market1501(object):
 
     Reference:
     Zheng et al. Scalable Person Re-identification: A Benchmark. ICCV 2015.
+
+    URL: http://www.liangzheng.org/Project/project_reid.html
     
     Dataset statistics:
     # identities: 1501 (+1 for background)
@@ -95,12 +101,214 @@ class Market1501(object):
         num_imgs = len(dataset)
         return dataset, num_pids, num_imgs
 
+class CUHK03(object):
+    """
+    CUHK03
+
+    Reference:
+    Li et al. DeepReID: Deep Filter Pairing Neural Network for Person Re-identification. CVPR 2014.
+
+    URL: http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html#!
+    
+    Dataset statistics:
+    # identities: 1360
+    # images: 13164
+    # cameras: 6
+    # splits: 20
+
+    Args:
+        split_id (int): split index (default: 0)
+        cuhk03_labeled (bool): whether to load labeled images; if false, detected images are loaded (default: False)
+    """
+    root = './data/cuhk03'
+    data_dir = osp.join(root, 'cuhk03_release')
+    raw_mat_path = osp.join(data_dir, 'cuhk-03.mat')
+    imgs_detected_dir = osp.join(root, 'images_detected')
+    imgs_labeled_dir = osp.join(root, 'images_labeled')
+    split_detected_path = osp.join(root, 'splits_detected.json')
+    split_labeled_path = osp.join(root, 'splits_labeled.json')
+
+    def __init__(self, split_id=0, cuhk03_labeled=False):
+        self._check_before_run()
+        self._preprocess()
+
+        if cuhk03_labeled:
+            print("Loading CUHK03 Labeled Images")
+            split_path = self.split_labeled_path
+        else:
+            print("Loading CUHK03 Detected Images")
+            split_path = self.split_detected_path
+
+        splits = read_json(split_path)
+        assert split_id < len(splits), "Condition split_id ({}) < len(splits) ({}) is false".format(split_id, len(splits))
+        split = splits[split_id]
+        print("Split index = {}".format(split_id))
+
+        self.train = split['train']
+        self.query = split['query']
+        self.gallery = split['gallery']
+
+        num_train_pids = split['num_train_pids']
+        num_query_pids = split['num_query_pids']
+        num_gallery_pids = split['num_gallery_pids']
+        num_total_pids = num_train_pids + num_query_pids
+
+        num_train_imgs = split['num_train_imgs']
+        num_query_imgs = split['num_query_imgs']
+        num_gallery_imgs = split['num_gallery_imgs']
+        num_total_imgs = num_train_imgs + num_query_imgs
+
+        print("=> CUHK03 loaded")
+        print("Dataset statistics:")
+        print("  ------------------------------")
+        print("  subset   | # ids | # images")
+        print("  ------------------------------")
+        print("  train    | {:5d} | {:8d}".format(num_train_pids, num_train_imgs))
+        print("  query    | {:5d} | {:8d}".format(num_query_pids, num_query_imgs))
+        print("  gallery  | {:5d} | {:8d}".format(num_gallery_pids, num_gallery_imgs))
+        print("  ------------------------------")
+        print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_imgs))
+        print("  ------------------------------")
+
+    def _check_before_run(self):
+        """Check if all files are available before going deeper"""
+        if not osp.exists(self.root):
+            raise RuntimeError("'{}' is not available".format(self.root))
+        if not osp.exists(self.data_dir):
+            raise RuntimeError("'{}' is not available".format(self.root))
+        if not osp.exists(self.raw_mat_path):
+            raise RuntimeError("'{}' is not available".format(self.root))
+
+    def _preprocess(self):
+        if osp.exists(self.imgs_labeled_dir) and \
+           osp.exists(self.imgs_detected_dir) and \
+           osp.exists(self.split_detected_path) and \
+           osp.exists(self.split_labeled_path):
+            return
+
+        mkdir_if_missing(self.imgs_detected_dir)
+        mkdir_if_missing(self.imgs_labeled_dir)
+
+        """
+        Goal: Extract image data from cuhk-03.mat, which contains three cells, 'detected', 'labeled', and 'testsets'.
+        
+        'detected' and 'labeled', each containing five cells, meaning five different camera pairs. Each cell
+        is a (M, 10) matrix where M is the number of identities. The code below aims to loop through each of
+        M identities and save the data as jpg images. Each image is named with the format 'campid_pid_viewid
+        _imgid.jpg'. Detailed explanation of the arguments are provided below.
+
+        'testsets' contains 20 cells meaning 20 different splits. Each cell is a (100, 2) matrix where the first column
+        represents indices of camera pairs and the second column corresponds to indices of identities.
+        """
+
+        print("Extract image data from {} and save as jpg".format(self.raw_mat_path))
+        mat = h5py.File(self.raw_mat_path, 'r')
+
+        def _deref(ref):
+            return mat[ref][:].T
+
+        def _process_images(img_refs, campid, pid, viewid, save_dir):
+            imgid = 0
+            img_paths = [] # Note: some persons only have images for one view
+            for img_ref in img_refs:
+                img = _deref(img_ref)
+                # skip empty cell
+                if img.size == 0 or img.ndim < 3: continue
+                # images are saved with the following format (ensure uniqueness)
+                # campid: index of camera pair (0 - 4)
+                # pid: index of person in 'campid'-th camera pair
+                # viewid: index of view, {0, 1}
+                # imgid: index of image, (0 - 4)
+                img_name = '{:02d}_{:04d}_{:02d}_{:02d}.jpg'.format(campid, pid, viewid, imgid)
+                img_path = osp.join(save_dir, img_name)
+                imsave(img_path, img)
+                img_paths.append(img_path)
+                imgid += 1
+            return img_paths
+
+        def _extract_img(name):
+            print("Processing {} images (extract and save) ...".format(name))
+            meta_data = []
+            imgs_dir = self.imgs_detected_dir if name == 'detected' else self.imgs_labeled_dir
+            for campid, camp_ref in enumerate(mat[name][0]):
+                camp = _deref(camp_ref)
+                num_pids = camp.shape[0]
+                for pid in range(num_pids):
+                    img_paths_v0 = _process_images(camp[pid,:5], campid, pid, 0, imgs_dir)
+                    img_paths_v1 = _process_images(camp[pid,5:], campid, pid, 1, imgs_dir)
+                    img_paths_both = img_paths_v0 + img_paths_v1
+                    assert len(img_paths_both) > 0, "campid{}-pid{} have no images".format(campid, pid)
+                    meta_data.append((campid, pid, img_paths_both))
+                print("done camera pair {}".format(campid+1))
+            return meta_data
+
+        meta_detected = _extract_img('detected')
+        meta_labeled = _extract_img('labeled')
+
+        def _extract_split(meta_data, test_split):
+            train, test = [], []
+            num_train_pids, num_test_pids = 0, 0
+            num_train_imgs, num_test_imgs = 0, 0
+            for i, (campid, pid, img_paths) in enumerate(meta_data):
+                
+                if [campid+1, pid+1] in test_split:
+                    for img_path in img_paths:
+                        camid = int(img_path.split('_')[2])
+                        test.append((img_path, num_test_pids, camid))
+                    num_test_pids += 1
+                    num_test_imgs += len(img_paths)
+                else:
+                    for img_path in img_paths:
+                        camid = int(img_path.split('_')[2])
+                        train.append((img_path, num_train_pids, camid))
+                    num_train_pids += 1
+                    num_train_imgs += len(img_paths)
+            return train, num_train_pids, num_train_imgs, test, num_test_pids, num_test_imgs
+
+        print("Creating splits ...")
+        splits_detected, splits_labeled = [], []
+        for split_ref in mat['testsets'][0]:
+            test_split = _deref(split_ref).tolist()
+
+            # create split for detected images
+            train, num_train_pids, num_train_imgs, test, num_test_pids, num_test_imgs = \
+                _extract_split(meta_detected, test_split)
+            splits_detected.append({
+                'train': train, 'query': test, 'gallery': test,
+                'num_train_pids': num_train_pids, 'num_train_imgs': num_train_imgs,
+                'num_query_pids': num_test_pids, 'num_query_imgs': num_test_imgs,
+                'num_gallery_pids': num_test_pids, 'num_gallery_imgs': num_test_imgs,
+            })
+
+            # create split for labeled images
+            train, num_train_pids, num_train_imgs, test, num_test_pids, num_test_imgs = \
+                _extract_split(meta_labeled, test_split)
+            splits_labeled.append({
+                'train': train, 'query': test, 'gallery': test,
+                'num_train_pids': num_train_pids, 'num_train_imgs': num_train_imgs,
+                'num_query_pids': num_test_pids, 'num_query_imgs': num_test_imgs,
+                'num_gallery_pids': num_test_pids, 'num_gallery_imgs': num_test_imgs,
+            })
+
+        print("Total number of splits is {}".format(len(splits_detected)))
+        
+        write_json(splits_detected, self.split_detected_path)
+        print("Splits for detected images saved to {}".format(self.split_detected_path))
+        
+        write_json(splits_labeled, self.split_labeled_path)
+        print("Splits for labeled images saved to {}".format(self.split_labeled_path))
+
+
+"""Video ReID"""
+
 class Mars(object):
     """
     MARS
 
     Reference:
     Zheng et al. MARS: A Video Benchmark for Large-Scale Person Re-identification. ECCV 2016.
+
+    URL: http://www.liangzheng.com.cn/Project/project_mars.html
     
     Dataset statistics:
     # identities: 1261
@@ -236,6 +444,8 @@ class iLIDSVID(object):
 
     Reference:
     Wang et al. Person Re-Identification by Video Ranking. ECCV 2014.
+
+    URL: http://www.eecs.qmul.ac.uk/~xiatian/downloads_qmul_iLIDS-VID_ReID_dataset.html
     
     Dataset statistics:
     # identities: 300
@@ -404,6 +614,8 @@ class PRID(object):
 
     Reference:
     Hirzer et al. Person Re-Identification by Descriptive and Discriminative Classification. SCIA 2011.
+
+    URL: https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/
     
     Dataset statistics:
     # identities: 200
@@ -518,10 +730,7 @@ def init_dataset(name, *args, **kwargs):
 
 if __name__ == '__main__':
     # test
-    #dataset = Market1501()
-    #dataset = Mars()
-    dataset = iLIDSVID()
-    dataset = PRID()
+    dataset = CUHK03()
 
 
 
