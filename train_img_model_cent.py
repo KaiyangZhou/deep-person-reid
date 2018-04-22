@@ -32,6 +32,9 @@ parser.add_argument('--height', type=int, default=256,
                     help="height of an image (default: 256)")
 parser.add_argument('--width', type=int, default=128,
                     help="width of an image (default: 128)")
+parser.add_argument('--split-id', type=int, default=0, help="split index")
+parser.add_argument('--cuhk03-labeled', action='store_true',
+                    help="whether to use labeled images, if false, detected images are used (default: False)")
 # Optimization options
 parser.add_argument('--max-epoch', default=60, type=int,
                     help="maximum epochs to run")
@@ -86,7 +89,7 @@ def main():
         print("Currently using CPU (GPU is highly recommended)")
 
     print("Initializing dataset {}".format(args.dataset))
-    dataset = data_manager.init_dataset(name=args.dataset)
+    dataset = data_manager.init_dataset(name=args.dataset, split_id=args.split_id, cuhk03_labeled=args.cuhk03_labeled)
 
     transform_train = T.Compose([
         T.Random2DTranslation(args.height, args.width),
