@@ -1,7 +1,11 @@
 # deep-person-reid
-This repo contains [pytorch](http://pytorch.org/) implementations of deep person re-identification models.
+This repo contains [PyTorch](http://pytorch.org/) implementations of deep person re-identification models.
 
-Trained models can be found [here](https://github.com/KaiyangZhou/deep-person-reid#results).
+We support
+- multi-GPU training.
+- both image-based and video-based reid.
+- unified interface for different reid models and loss functions.
+- download of trained models.
 
 ## Updates
 - Apr 2018: Added [iLIDS-VID](http://www.eecs.qmul.ac.uk/~xiatian/downloads_qmul_iLIDS-VID_ReID_dataset.html) and [PRID-2011](https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/). Models are [available](https://github.com/KaiyangZhou/deep-person-reid#video-person-reid).
@@ -10,7 +14,7 @@ Trained models can be found [here](https://github.com/KaiyangZhou/deep-person-re
 - Mar 2018: Added [center loss (ECCV'16)](https://github.com/KaiyangZhou/pytorch-center-loss) [9] and the trained model weights.
 
 ## Dependencies
-- [Pytorch](http://pytorch.org/)
+- [PyTorch](http://pytorch.org/)
 - [torchvision](https://github.com/pytorch/vision/)
 
 ## Install
