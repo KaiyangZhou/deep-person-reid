@@ -4,7 +4,7 @@ This repo contains [PyTorch](http://pytorch.org/) implementations of deep person
 We support
 - multi-GPU training.
 - both image-based and video-based reid.
-- unified interface for different reid models and loss functions.
+- unified interface for different reid models.
 - download of trained models.
 
 ## Updates
