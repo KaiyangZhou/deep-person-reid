@@ -140,8 +140,8 @@ Please run `python train_blah_blah.py -h` for more details regarding arguments.
 | Resnet50 | 25.05 | cent | 85.1/93.8/96.2 | 69.1 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_cent_market1501.pth.tar) | | |
 | ResNet50 | 25.05 | xent | 85.4/94.1/95.9 | 68.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_xent_market1501.pth.tar) | | |
 | ResNet50 | 25.05 | xent+htri | 87.5/95.3/97.3 | 72.3 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_xent_htri_market1501.pth.tar) | | |
-| ResNet50M | 30.01 | xent | 89.0/95.5/97.3 | 75.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50m_xent_market1501.pth.tar) | 89.9/-/- | 75.6 |
-| ResNet50M | 30.01 | xent+htri | 90.4/96.7/98.0 | 76.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50m_xent_htri_market1501.pth.tar) | | |
+| ResNet50M | 30.01 | xent | 89.0/95.5/97.3 | 75.0 | - | 89.9/-/- | 75.6 |
+| ResNet50M | 30.01 | xent+htri | 90.4/96.7/98.0 | 76.6 | - | | |
 | MuDeep | 138.02 | xent+htri| 71.5/89.3/96.3 | 47.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mudeep_xent_htri_market1501.pth.tar) | | |
 
 #### CUHK03 (detected, [new protocol (767/700)](https://github.com/zhunzhong07/person-re-ranking#the-new-trainingtesting-protocol-for-cuhk03))
@@ -150,7 +150,7 @@ Please run `python train_blah_blah.py -h` for more details regarding arguments.
 | --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | DenseNet121 | 7.74 | xent | 41.0/61.7/71.5 | 40.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_xent_cuhk03.pth.tar) | | |
 | ResNet50 | 25.08 | xent | 48.8/69.4/78.4 | 47.5 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_xent_cuhk03.pth.tar) | | |
-| ResNet50M | 30.06 | xent | 54.8/73.6/80.7 | 53.4 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50m_xent_cuhk03.pth.tar) | 47.1/-/- | 43.5 |
+| ResNet50M | 30.06 | xent | 54.8/73.6/80.7 | 53.4 | - | 47.1/-/- | 43.5 |
 
 ### Video person reid
 #### MARS
@@ -161,22 +161,22 @@ Please run `python train_blah_blah.py -h` for more details regarding arguments.
 | DenseNet121 | 7.59 | xent+htri | 82.6/93.2/95.4 | 74.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/densenet121_xent_htri_mars.pth.tar) | | |
 | ResNet50 | 24.79 | xent | 74.5/88.8/91.8 | 64.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50_xent_mars.pth.tar) | | |
 | ResNet50 | 24.79 | xent+htri | 80.8/92.1/94.3 | 74.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50_xent_htri_mars.pth.tar) | | |
-| ResNet50M | 29.63 | xent | 77.8/89.8/92.8 | 67.5 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50m_xent_mars.pth.tar) | | |
-| ResNet50M | 29.63 | xent+htri | 82.3/93.8/95.3 | 75.4 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50m_xent_htri_mars.pth.tar) | | |
+| ResNet50M | 29.63 | xent | 77.8/89.8/92.8 | 67.5 | - | | |
+| ResNet50M | 29.63 | xent+htri | 82.3/93.8/95.3 | 75.4 | - | | |
 
 #### iLIDS-VID
 
 | Model | Param Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Published Rank | Published mAP |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | ResNet50 | 23.82 | xent | 62.7/82.7/90.7 | 72.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50_xent_ilidsvid.pth.tar) | | |
-| ResNet50M | 28.17 | xent | 63.3/85.3/92.7 | 73.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50m_xent_ilidsvid.pth.tar) | | |
+| ResNet50M | 28.17 | xent | 63.3/85.3/92.7 | 73.6 | - | | |
 
 #### PRID-2011
 
 | Model | Param Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Published Rank | Published mAP |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | ResNet50 | 23.69 | xent | 75.3/96.6/97.8 | 84.3 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50_xent_prid.pth.tar) | | |
-| ResNet50M | 27.98 | xent | 85.4/96.6/98.9 | 90.1 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50m_xent_prid.pth.tar) | | |
+| ResNet50M | 27.98 | xent | 85.4/96.6/98.9 | 90.1 | - | | |
 
 ## Test
 Say you have downloaded ResNet50 trained with `xent` on `market1501`. The path to this model is  `'saved-models/resnet50_xent_market1501.pth.tar'` (create a directory to store model weights `mkdir saved-models/`). Then, run the following command to test
