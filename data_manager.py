@@ -203,7 +203,7 @@ class CUHK03(object):
         """
         This function is a bit complex and ugly, what it does is
         1. Extract data from cuhk-03.mat and save as png images.
-        2. Create classic 20 splits. (Li et al. CVPR'14)
+        2. Create 20 classic splits. (Li et al. CVPR'14)
         3. Create new split. (Zhong et al. CVPR'17)
         """
         if osp.exists(self.imgs_labeled_dir) and \
