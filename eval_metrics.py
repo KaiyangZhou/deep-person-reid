@@ -3,9 +3,11 @@ import numpy as np
 import copy
 
 def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50):
+    """Evaluation with cuhk03 metric"""
     raise NotImplementedError
 
 def eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50):
+    """Evaluation with market1501 metric"""
     num_q, num_g = distmat.shape
     if num_g < max_rank:
         max_rank = num_g
@@ -56,8 +58,8 @@ def eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50):
 
     return all_cmc, mAP
 
-def evaluate(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50, metric_cuhk03=False):
-    if metric_cuhk03:
+def evaluate(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50, use_metric_cuhk03=False):
+    if use_metric_cuhk03:
         return eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank)
     else:
         return eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank)
