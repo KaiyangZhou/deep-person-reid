@@ -7,7 +7,9 @@ def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50):
     raise NotImplementedError
 
 def eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50):
-    """Evaluation with market1501 metric"""
+    """Evaluation with market1501 metric
+    Key: for each query identity, its gallery images from the same camera view are discarded.
+    """
     num_q, num_g = distmat.shape
     if num_g < max_rank:
         max_rank = num_g
