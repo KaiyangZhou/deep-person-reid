@@ -6,7 +6,7 @@ We support
 - both image-based and video-based reid.
 - unified interface for different reid models.
 - download of trained models.
-- standard split as reported by most papers.
+- standard splits used by most papers.
 
 ## Updates
 - Apr 2018: Added [iLIDS-VID](http://www.eecs.qmul.ac.uk/~xiatian/downloads_qmul_iLIDS-VID_ReID_dataset.html) and [PRID-2011](https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/). Models are [available](https://github.com/KaiyangZhou/deep-person-reid#video-person-reid).
