@@ -36,6 +36,8 @@ parser.add_argument('--width', type=int, default=128,
 parser.add_argument('--split-id', type=int, default=0, help="split index")
 parser.add_argument('--cuhk03-labeled', action='store_true',
                     help="whether to use labeled images, if false, detected images are used (default: False)")
+parser.add_argument('--use-metric-cuhk03', action='store_true',
+                    help="whether to use cuhk03-metric (default: False)")
 # Optimization options
 parser.add_argument('--max-epoch', default=180, type=int,
                     help="maximum epochs to run")
@@ -252,7 +254,7 @@ def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20]):
     distmat = distmat.numpy()
 
     print("Computing CMC and mAP")
-    cmc, mAP = evaluate(distmat, q_pids, g_pids, q_camids, g_camids)
+    cmc, mAP = evaluate(distmat, q_pids, g_pids, q_camids, g_camids, use_metric_cuhk03=args.use_metric_cuhk03)
 
     print("Results ----------")
     print("mAP: {:.1%}".format(mAP))
