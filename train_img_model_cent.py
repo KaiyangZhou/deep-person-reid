@@ -35,6 +35,8 @@ parser.add_argument('--width', type=int, default=128,
 parser.add_argument('--split-id', type=int, default=0, help="split index")
 parser.add_argument('--cuhk03-labeled', action='store_true',
                     help="whether to use labeled images, if false, detected images are used (default: False)")
+parser.add_argument('--cuhk03-classic-split', action='store_true',
+                    help="whether to use classic split by Li et al. CVPR'14 (default: False)")
 parser.add_argument('--use-metric-cuhk03', action='store_true',
                     help="whether to use cuhk03-metric (default: False)")
 # Optimization options
@@ -91,7 +93,10 @@ def main():
         print("Currently using CPU (GPU is highly recommended)")
 
     print("Initializing dataset {}".format(args.dataset))
-    dataset = data_manager.init_dataset(name=args.dataset, split_id=args.split_id, cuhk03_labeled=args.cuhk03_labeled)
+    dataset = data_manager.init_dataset(
+        name=args.dataset, split_id=args.split_id,
+        cuhk03_labeled=args.cuhk03_labeled, cuhk03_classic_split=args.cuhk03_classic_split,
+    )
 
     transform_train = T.Compose([
         T.Random2DTranslation(args.height, args.width),
