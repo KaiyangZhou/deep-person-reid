@@ -183,9 +183,3 @@ class MuDeep(nn.Module):
             return y, x
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))
-
-
-
-
-
-

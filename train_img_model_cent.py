@@ -263,10 +263,3 @@ def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20]):
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-

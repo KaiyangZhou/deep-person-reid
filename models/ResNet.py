@@ -86,4 +86,3 @@ class ResNet50M(nn.Module):
             return prelogits, combofeat
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))
-

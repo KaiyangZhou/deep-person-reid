@@ -97,9 +97,3 @@ class VideoDataset(Dataset):
         imgs = torch.cat(imgs, dim=0)
 
         return imgs, pid, camid
-
-
-
-
-
-
