@@ -33,7 +33,7 @@ mkdir data/
 
 Please follow the instructions below to prepare each dataset.
 
-Market1501 [7]:
+**Market1501** [7]:
 1. Download dataset to `data/` from http://www.liangzheng.org/Project/project_reid.html.
 2. Extract dataset and rename to `market1501`. The data structure would look like:
 ```
@@ -44,10 +44,10 @@ market1501/
 ```
 3. Use `-d market1501` when running the training code.
 
-CUHK03 [13]:
+**CUHK03** [13]:
 1. Create a folder named `cuhk03/` under `data/`.
 2. Download dataset to `data/cuhk03/` from http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html and extract `cuhk03_release.zip`, so you will have `data/cuhk03/cuhk03_release`.
-3. Download new split (767/700) from [person-re-ranking](https://github.com/zhunzhong07/person-re-ranking/tree/master/evaluation/data/CUHK03). What you need are `cuhk03_new_protocol_config_detected.mat` and `cuhk03_new_protocol_config_labeled.mat`. Put these two mat files under `data/cuhk03`. Finally, the data structure would look like
+3. Download new split [14] from [person-re-ranking](https://github.com/zhunzhong07/person-re-ranking/tree/master/evaluation/data/CUHK03). What you need are `cuhk03_new_protocol_config_detected.mat` and `cuhk03_new_protocol_config_labeled.mat`. Put these two mat files under `data/cuhk03`. Finally, the data structure would look like
 ```
 cuhk03/
     cuhk03_release/
@@ -57,7 +57,7 @@ cuhk03/
 ```
 4. Use `-d cuhk03` when running the training code. In default mode, we use new split. If you wanna use the original splits created by [13], specify `--cuhk03-classic-split`. As [13] computes CMC differently from Market1501, you might need to specify `--use-metric-cuhk03` for fair comparison with their method. In addition, we support both `labeled` and `detected` modes. The default mode loads `detected` images. Specify `--cuhk03-labeled` if you wanna train and test on `labeled` images.
 
-MARS [8]:
+**MARS** [8]:
 1. Create a directory named `mars/` under `data/`.
 2. Download dataset to `data/mars/` from http://www.liangzheng.com.cn/Project/project_mars.html.
 3. Extract `bbox_train.zip` and `bbox_test.zip`.
@@ -70,7 +70,7 @@ mars/
 ```
 5. Use `-d mars` when running the training code.
 
-iLIDS-VID [11]:
+**iLIDS-VID** [11]:
 1. The code supports automatic download and formatting. Simple use `-d ilidsvid` when running the training code. The data structure would look like:
 ```
 ilids-vid/
@@ -79,7 +79,7 @@ ilids-vid/
     splits.json
 ```
 
-PRID [12]:
+**PRID** [12]:
 1. Under `data/`, do `mkdir prid2011` to create a directory.
 2. Download dataset from https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/ and extract it under `data/prid2011`.
 3. Download the split created by [iLIDS-VID](http://www.eecs.qmul.ac.uk/~xiatian/downloads_qmul_iLIDS-VID_ReID_dataset.html) from [here](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/datasets/prid2011/splits_prid2011.json), and put it in `data/prid2011/`. We follow [11] and use 178 persons whose sequences are more than a threshold so that results on this dataset can be fairly compared with other approaches. The data structure would look like:
@@ -223,3 +223,4 @@ Of course, you can pass `model.classifier.parameters()` to optimizer if you only
 [11] [Wang et al. Person Re-Identification by Video Ranking. ECCV 2014.](http://www.eecs.qmul.ac.uk/~xiatian/papers/ECCV14/WangEtAl_ECCV14.pdf) <br />
 [12] [Hirzer et al. Person Re-Identification by Descriptive and Discriminative Classification. SCIA 2011.](https://files.icg.tugraz.at/seafhttp/files/ba284964-6e03-4261-bb39-e85280707598/hirzer_scia_2011.pdf) <br />
 [13] [Li et al. DeepReID: Deep Filter Pairing Neural Network for Person Re-identification. CVPR 2014.](https://www.cv-foundation.org/openaccess/content_cvpr_2014/papers/Li_DeepReID_Deep_Filter_2014_CVPR_paper.pdf) <br />
+[14] [Zhong et al. Re-ranking Person Re-identification with k-reciprocal Encoding. CVPR 2017](https://arxiv.org/abs/1701.08398) <br />
