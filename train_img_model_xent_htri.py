@@ -196,18 +196,30 @@ def train(model, criterion_xent, criterion_htri, optimizer, trainloader, use_gpu
     model.train()
     losses = AverageMeter()
 
+    def _deep_supervision(criterion, xs, y):
+        loss = 0.
+        for x in xs:
+            loss += criterion(x, y)
+        return loss
+
     for batch_idx, (imgs, pids, _) in enumerate(trainloader):
         if use_gpu:
             imgs, pids = imgs.cuda(), pids.cuda()
         imgs, pids = Variable(imgs), Variable(pids)
         outputs, features = model(imgs)
         if args.htri_only:
-            # only use hard triplet loss to train the network
-            loss = criterion_htri(features, pids)
+            if isinstance(features, tuple):
+                loss = _deep_supervision(criterion_htri, features, pids)
+            else:
+                loss = criterion_htri(features, pids)
         else:
-            # combine hard triplet loss with cross entropy loss
             xent_loss = criterion_xent(outputs, pids)
-            htri_loss = criterion_htri(features, pids)
+
+            if isinstance(features, tuple):
+                htri_loss = _deep_supervision(criterion_htri, features, pids)
+            else:
+                htri_loss = criterion_htri(features, pids)
+            
             loss = xent_loss + htri_loss
         optimizer.zero_grad()
         loss.backward()
