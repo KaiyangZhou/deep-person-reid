@@ -29,7 +29,7 @@ class Market1501(object):
     
     Dataset statistics:
     # identities: 1501 (+1 for background)
-    # images: 12936 (train) + 3368 (query) + 15913 (gallery) 
+    # images: 12936 (train) + 3368 (query) + 15913 (gallery)
     """
     root = './data/market1501'
     train_dir = osp.join(root, 'bounding_box_train')
