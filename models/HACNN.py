@@ -152,7 +152,7 @@ class HACNN(nn.Module):
     Reference:
     Li et al. Harmonious Attention Network for Person Re-identification. CVPR 2018.
     """
-    def __init__(self, num_classes, loss={'xent'}, widths=[32, 64, 96], embed_dim=512, **kwargs):
+    def __init__(self, num_classes, loss={'xent'}, nchannels=[32, 64, 96], embed_dim=512, **kwargs):
         super(HACNN, self).__init__()
         self.loss = loss
         self.conv = ConvBlock(3, 32, 3, s=2, p=1)
@@ -161,24 +161,24 @@ class HACNN(nn.Module):
         # output channel of InceptionA is out_channels*4
         # output channel of InceptionB is out_channels*2+in_channels
         self.inception1 = nn.Sequential(
-            InceptionA(32, widths[0]),
-            InceptionB(widths[0]*4, widths[0]),
+            InceptionA(32, nchannels[0]),
+            InceptionB(nchannels[0]*4, nchannels[0]),
         )
-        self.ha1 = HarmAttn(widths[0]*6)
+        self.ha1 = HarmAttn(nchannels[0]*6)
 
         self.inception2 = nn.Sequential(
-            InceptionA(widths[0]*6, widths[1]),
-            InceptionB(widths[1]*4, widths[1]),
+            InceptionA(nchannels[0]*6, nchannels[1]),
+            InceptionB(nchannels[1]*4, nchannels[1]),
         )
-        self.ha2 = HarmAttn(widths[1]*6)
+        self.ha2 = HarmAttn(nchannels[1]*6)
 
         self.inception3 = nn.Sequential(
-            InceptionA(widths[1]*6, widths[2]),
-            InceptionB(widths[2]*4, widths[2]),
+            InceptionA(nchannels[1]*6, nchannels[2]),
+            InceptionB(nchannels[2]*4, nchannels[2]),
         )
-        self.ha3 = HarmAttn(widths[2]*6)
+        self.ha3 = HarmAttn(nchannels[2]*6)
 
-        self.fc_global = nn.Sequential(nn.Linear(widths[2]*6, embed_dim), nn.BatchNorm1d(embed_dim), nn.ReLU())
+        self.fc_global = nn.Sequential(nn.Linear(nchannels[2]*6, embed_dim), nn.BatchNorm1d(embed_dim), nn.ReLU())
 
         self.classifier = nn.Linear(embed_dim, num_classes)
         self.feat_dim = embed_dim
