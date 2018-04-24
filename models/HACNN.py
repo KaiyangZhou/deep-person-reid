@@ -184,6 +184,7 @@ class HACNN(nn.Module):
         self.feat_dim = embed_dim
 
     def forward(self, x):
+        # input size (3, 160, 64)
         x = self.conv(x)
 
         # block 1
