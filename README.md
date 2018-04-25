@@ -1,5 +1,5 @@
 # deep-person-reid
-This repo contains [PyTorch](http://pytorch.org/) implementations of deep person re-identification models.
+This repo contains [PyTorch](http://pytorch.org/) implementations of deep person re-identification models. (The code is currently based on `pytorch 0.3.1`. We will update to `0.4.0` later)
 
 We support
 - multi-GPU training.
