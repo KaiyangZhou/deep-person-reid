@@ -1,5 +1,5 @@
 # deep-person-reid
-This repo contains [PyTorch](http://pytorch.org/) implementations of deep person re-identification models. (The code is currently based on `pytorch 0.3.1`. We will update to `0.4.0` later)
+This repo contains [PyTorch](http://pytorch.org/) implementations of deep person re-identification models.
 
 We support
 - multi-GPU training.
@@ -10,6 +10,7 @@ We support
 - download of trained models.
 
 ## Updates
+- Apr 2018: Code upgraded to pytorch 0.4.0.
 - Apr 2018: Added [CUHK03](http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html). Models are [available](https://github.com/KaiyangZhou/deep-person-reid#cuhk03-detected-new-protocol-767700).
 - Apr 2018: Added [iLIDS-VID](http://www.eecs.qmul.ac.uk/~xiatian/downloads_qmul_iLIDS-VID_ReID_dataset.html) and [PRID-2011](https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/). Models are [available](https://github.com/KaiyangZhou/deep-person-reid#video-person-reid).
 - Mar 2018: Added argument `--htri-only` to `train_img_model_xent_htri.py` and `train_vid_model_xent_htri.py`. If this argument is true, only `htri` [4] is used for training. See [here](https://github.com/KaiyangZhou/deep-person-reid/blob/master/train_img_model_xent_htri.py#L189) for detailed changes.
@@ -17,7 +18,7 @@ We support
 - Mar 2018: Added [center loss (ECCV'16)](https://github.com/KaiyangZhou/pytorch-center-loss) [9] and the trained model weights.
 
 ## Dependencies
-- [PyTorch](http://pytorch.org/)
+- [PyTorch](http://pytorch.org/) (0.4.0)
 - [torchvision](https://github.com/pytorch/vision/)
 
 ## Install
@@ -188,7 +189,7 @@ Likewise, to test video reid model, you should have a pretrained model saved und
 ```bash
 python train_vid_model_xent.py -d mars -a resnet50 --evaluate --resume saved-models/resnet50_xent_mars.pth.tar --save-dir log/resnet50-xent-mars --test-batch 2
 ```
-**Note** that `--test-batch` in video reid represents number of tracklets. If we set this argument to 2, and sample 15 images per tracklet, the resulting number of images per batch is 2*15=30. Adjust this argument according to your GPU memory. Currently, please set `--test-batch` to 1 in `prid` and `ilidsvid` due to [this error](https://github.com/KaiyangZhou/deep-person-reid/issues/2).
+**Note** that `--test-batch` in video reid represents number of tracklets. If we set this argument to 2, and sample 15 images per tracklet, the resulting number of images per batch is 2*15=30. Adjust this argument according to your GPU memory.
 
 ## Q&A
 1. **How do I set different learning rates to different components in my model?**
