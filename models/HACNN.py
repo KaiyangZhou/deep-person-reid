@@ -27,21 +27,30 @@ class ConvBlock(nn.Module):
         return F.relu(self.bn(self.conv(x)))
 
 class InceptionA(nn.Module):
+    """
+    Args:
+        in_channels (int): number of input channels
+        out_channels (int): number of output channels AFTER concatenation
+    """
     def __init__(self, in_channels, out_channels):
         super(InceptionA, self).__init__()
-        self.stream1 = ConvBlock(in_channels, out_channels, 1)
+        single_out_channels = out_channels / 4
+
+        self.stream1 = nn.Sequential(
+            ConvBlock(in_channels, single_out_channels, 1),
+            ConvBlock(single_out_channels, single_out_channels, 3, p=1),
+        )
         self.stream2 = nn.Sequential(
-            ConvBlock(in_channels, out_channels, 1),
-            ConvBlock(out_channels, out_channels, 3, p=1),
+            ConvBlock(in_channels, single_out_channels, 1),
+            ConvBlock(single_out_channels, single_out_channels, 3, p=1),
         )
         self.stream3 = nn.Sequential(
-            ConvBlock(in_channels, out_channels, 1),
-            ConvBlock(out_channels, out_channels, 3, p=1),
-            ConvBlock(out_channels, out_channels, 3, p=1),
+            ConvBlock(in_channels, single_out_channels, 1),
+            ConvBlock(single_out_channels, single_out_channels, 3, p=1),
         )
         self.stream4 = nn.Sequential(
             nn.AvgPool2d(3, stride=1, padding=1),
-            ConvBlock(in_channels, out_channels, 1),
+            ConvBlock(in_channels, single_out_channels, 1),
         )
 
     def forward(self, x):
@@ -53,18 +62,28 @@ class InceptionA(nn.Module):
         return y
 
 class InceptionB(nn.Module):
+    """
+    Args:
+        in_channels (int): number of input channels
+        out_channels (int): number of output channels AFTER concatenation
+    """
     def __init__(self, in_channels, out_channels):
         super(InceptionB, self).__init__()
+        single_out_channels = out_channels / 4
+
         self.stream1 = nn.Sequential(
-            ConvBlock(in_channels, out_channels, 1),
-            ConvBlock(out_channels, out_channels, 3, s=2, p=1),
+            ConvBlock(in_channels, single_out_channels, 1),
+            ConvBlock(single_out_channels, single_out_channels, 3, s=2, p=1),
         )
         self.stream2 = nn.Sequential(
-            ConvBlock(in_channels, out_channels, 1),
-            ConvBlock(out_channels, out_channels, 3, p=1),
-            ConvBlock(out_channels, out_channels, 3, s=2, p=1),
+            ConvBlock(in_channels, single_out_channels, 1),
+            ConvBlock(single_out_channels, single_out_channels, 3, p=1),
+            ConvBlock(single_out_channels, single_out_channels, 3, s=2, p=1),
         )
-        self.stream3 = nn.MaxPool2d(3, stride=2, padding=1)
+        self.stream3 = nn.Sequential(
+            nn.MaxPool2d(3, stride=2, padding=1),
+            ConvBlock(in_channels, single_out_channels*2, 1),
+        )
 
     def forward(self, x):
         s1 = self.stream1(x)
@@ -103,7 +122,8 @@ class ChannelAttn(nn.Module):
         # squeeze operation (global average pooling)
         x = F.avg_pool2d(x, x.size()[2:])
         # excitation operation (2 conv layers)
-        x = self.conv2(self.conv1(x))
+        x = self.conv1(x)
+        x = self.conv2(x)
         return x
 
 class SoftAttn(nn.Module):
@@ -125,32 +145,30 @@ class SoftAttn(nn.Module):
         return y
 
 class HardAttn(nn.Module):
-    """Hard Attention (Sec. 3.1.II)
-    Output: num_regions*2 transformation parameters (i.e. t_x, t_y).
-    """
-    def __init__(self, in_channels, num_regions):
+    """Hard Attention (Sec. 3.1.II)"""
+    def __init__(self, in_channels):
         super(HardAttn, self).__init__()
-        self.fc = nn.Linear(in_channels, num_regions*2)
-        self.num_regions = num_regions
+        self.fc = nn.Linear(in_channels, 4*2)
+        self.init_params()
 
     def init_params(self):
         self.fc.weight.data.zero_()
-        # TODO
-        #self.fc.bias.data.copy_(torch.tensor([BLAH BLAH], dtype=torch.float))
+        self.fc.bias.data.copy_(torch.tensor([0, -0.75, 0, -0.25, 0, 0.25, 0, 0.75], dtype=torch.float))
 
     def forward(self, x):
         # squeeze operation (global average pooling)
         x = F.avg_pool2d(x, x.size()[2:]).view(x.size(0), x.size(1))
+        # predict transformation parameters
         theta = F.tanh(self.fc(x))
-        theta = theta.view(-1, self.num_regions, 2)
+        theta = theta.view(-1, 4, 2)
         return theta
 
 class HarmAttn(nn.Module):
     """Harmonious Attention (Sec. 3.1)"""
-    def __init__(self, in_channels, num_regions):
+    def __init__(self, in_channels):
         super(HarmAttn, self).__init__()
         self.soft_attn = SoftAttn(in_channels)
-        self.hard_attn = HardAttn(in_channels, num_regions)
+        self.hard_attn = HardAttn(in_channels)
 
     def forward(self, x):
         y_soft_attn = self.soft_attn(x)
@@ -163,12 +181,17 @@ class HACNN(nn.Module):
 
     Reference:
     Li et al. Harmonious Attention Network for Person Re-identification. CVPR 2018.
+
+    Args:
+        num_classes (int): number of classes to predict
+        nchannels (list): number of channels AFTER concatenation
+        feat_dim (int): feature dimension for each branch
+        learn_region (bool): whether to learn region features (i.e. local branch)
     """
-    def __init__(self, num_classes, loss={'xent'}, num_regions=4, nchannels=[32, 64, 96], feat_dim=512, **kwargs):
+    def __init__(self, num_classes, loss={'xent'}, nchannels=[128, 256, 384], feat_dim=512, learn_region=True, **kwargs):
         super(HACNN, self).__init__()
         self.loss = loss
-        self.num_regions = num_regions
-        self.init_scale_factors(num_regions)
+        self.learn_region = learn_region
 
         self.conv = ConvBlock(3, 32, 3, s=2, p=1)
 
@@ -178,49 +201,55 @@ class HACNN(nn.Module):
         # ============== Block 1 ==============
         self.inception1 = nn.Sequential(
             InceptionA(32, nchannels[0]),
-            InceptionB(nchannels[0]*4, nchannels[0]),
+            InceptionB(nchannels[0], nchannels[0]),
         )
-        self.ha1 = HarmAttn(nchannels[0]*6, num_regions)
-        self.local_conv1 = InceptionB(32, nchannels[0])
+        self.ha1 = HarmAttn(nchannels[0])
 
         # ============== Block 2 ==============
         self.inception2 = nn.Sequential(
-            InceptionA(nchannels[0]*6, nchannels[1]),
-            InceptionB(nchannels[1]*4, nchannels[1]),
+            InceptionA(nchannels[0], nchannels[1]),
+            InceptionB(nchannels[1], nchannels[1]),
         )
-        self.ha2 = HarmAttn(nchannels[1]*6, num_regions)
-        self.local_conv2 = InceptionB(nchannels[0]*2+32, nchannels[1])
+        self.ha2 = HarmAttn(nchannels[1])
 
         # ============== Block 3 ==============
         self.inception3 = nn.Sequential(
-            InceptionA(nchannels[1]*6, nchannels[2]),
-            InceptionB(nchannels[2]*4, nchannels[2]),
+            InceptionA(nchannels[1], nchannels[2]),
+            InceptionB(nchannels[2], nchannels[2]),
         )
-        self.ha3 = HarmAttn(nchannels[2]*6, num_regions)
-        self.local_conv3 = InceptionB(nchannels[1]*2+nchannels[0]*2+32, nchannels[2])
+        self.ha3 = HarmAttn(nchannels[2])
 
         # feature embedding layers
         self.fc_global = nn.Sequential(
-            nn.Linear(nchannels[2]*6, feat_dim),
-            nn.BatchNorm1d(feat_dim),
-            nn.ReLU(),
-        )
-        self.fc_local = nn.Sequential(
-            nn.Linear((nchannels[2]*2+nchannels[1]*2+nchannels[0]*2+32)*num_regions, feat_dim),
+            nn.Linear(nchannels[2], feat_dim),
             nn.BatchNorm1d(feat_dim),
             nn.ReLU(),
         )
 
         self.classifier_global = nn.Linear(feat_dim, num_classes)
-        self.classifier_local = nn.Linear(feat_dim, num_classes)
-        self.feat_dim = feat_dim
 
-    def init_scale_factors(self, num_regions):
+        if self.learn_region:
+            self.init_scale_factors()
+            self.local_conv1 = InceptionB(32, nchannels[0])
+            self.local_conv2 = InceptionB(nchannels[0], nchannels[1])
+            self.local_conv3 = InceptionB(nchannels[1], nchannels[2])
+            self.fc_local = nn.Sequential(
+                nn.Linear(nchannels[2]*4, feat_dim),
+                nn.BatchNorm1d(feat_dim),
+                nn.ReLU(),
+            )
+            self.classifier_local = nn.Linear(feat_dim, num_classes)
+            self.feat_dim = feat_dim * 2
+        else:
+            self.feat_dim = feat_dim
+
+    def init_scale_factors(self):
+        # initialize scale factors (s_w, s_h) for four regions
         self.scale_factors = []
-        for region_idx in range(num_regions):
-            # TODO: initialize scale factors
-            scale_factors = torch.tensor([[1, 0], [0, 1]]).float()
-            self.scale_factors.append(scale_factors)
+        self.scale_factors.append(torch.tensor([[1, 0], [0, 0.25]], dtype=torch.float))
+        self.scale_factors.append(torch.tensor([[1, 0], [0, 0.25]], dtype=torch.float))
+        self.scale_factors.append(torch.tensor([[1, 0], [0, 0.25]], dtype=torch.float))
+        self.scale_factors.append(torch.tensor([[1, 0], [0, 0.25]], dtype=torch.float))
 
     def stn(self, x, theta):
         """Perform spatial transform
@@ -241,7 +270,8 @@ class HACNN(nn.Module):
         return theta
 
     def forward(self, x):
-        # input size (3, 160, 64)
+        assert x.size(2) == 160 and x.size(3) == 64, \
+            "Input size does not match, expected (160, 64) but got ({}, {})".format(x.size(2), x.size(3))
         x = self.conv(x)
 
         # ============== Block 1 ==============
@@ -250,15 +280,15 @@ class HACNN(nn.Module):
         x1_attn, x1_theta = self.ha1(x1)
         x1_out = x1 * x1_attn
         # local branch
-        x1_local = []
-        for region_idx in range(self.num_regions):
-            x1_theta_i = x1_theta[:,region_idx,:]
-            x1_theta_i = self.transform_theta(x1_theta_i, region_idx)
-            x1_trans_i = self.stn(x, x1_theta_i)
-            # TODO: reduce size of x1_trans_i to (24, 28)
-            sys.exit()
-            x1_local_i = self.local_conv1(x1_trans_i)
-            x1_local.append(x1_local_i)
+        if self.learn_region:
+            x1_local_list = []
+            for region_idx in range(4):
+                x1_theta_i = x1_theta[:,region_idx,:]
+                x1_theta_i = self.transform_theta(x1_theta_i, region_idx)
+                x1_trans_i = self.stn(x, x1_theta_i)
+                x1_trans_i = F.upsample(x1_trans_i, (24, 28), mode='bilinear', align_corners=True)
+                x1_local_i = self.local_conv1(x1_trans_i)
+                x1_local_list.append(x1_local_i)
 
         # ============== Block 2 ==============
         # Block 2
@@ -267,6 +297,16 @@ class HACNN(nn.Module):
         x2_attn, x2_theta = self.ha2(x2)
         x2_out = x2 * x2_attn
         # local branch
+        if self.learn_region:
+            x2_local_list = []
+            for region_idx in range(4):
+                x2_theta_i = x2_theta[:,region_idx,:]
+                x2_theta_i = self.transform_theta(x2_theta_i, region_idx)
+                x2_trans_i = self.stn(x1_out, x2_theta_i)
+                x2_trans_i = F.upsample(x2_trans_i, (12, 14), mode='bilinear', align_corners=True)
+                x2_local_i = x2_trans_i + x1_local_list[region_idx]
+                x2_local_i = self.local_conv2(x2_local_i)
+                x2_local_list.append(x2_local_i)
 
         # ============== Block 3 ==============
         # Block 3
@@ -275,23 +315,62 @@ class HACNN(nn.Module):
         x3_attn, x3_theta = self.ha3(x3)
         x3_out = x3 * x3_attn
         # local branch
+        if self.learn_region:
+            x3_local_list = []
+            for region_idx in range(4):
+                x3_theta_i = x3_theta[:,region_idx,:]
+                x3_theta_i = self.transform_theta(x3_theta_i, region_idx)
+                x3_trans_i = self.stn(x2_out, x3_theta_i)
+                x3_trans_i = F.upsample(x3_trans_i, (6, 7), mode='bilinear', align_corners=True)
+                x3_local_i = x3_trans_i + x2_local_list[region_idx]
+                x3_local_i = self.local_conv3(x3_local_i)
+                x3_local_list.append(x3_local_i)
 
+        # ============== Feature generation ==============
+        # global branch
         x_global = F.avg_pool2d(x3_out, x3_out.size()[2:]).view(x3_out.size(0), x3_out.size(1))
         x_global = self.fc_global(x_global)
+        # local branch
+        if self.learn_region:
+            x_local_list = []
+            for region_idx in range(4):
+                x_local_i = x3_local_list[region_idx]
+                x_local_i = F.avg_pool2d(x_local_i, x_local_i.size()[2:]).view(x_local_i.size(0), -1)
+                x_local_list.append(x_local_i)
+            x_local = torch.cat(x_local_list, 1)
+            x_local = self.fc_local(x_local)
 
         if not self.training:
-            return x_global
+            # l2 normalization before concatenation
+            if self.learn_region:
+                x_global = x_global / x_global.norm(p=2, dim=1, keepdim=True)
+                x_local = x_local / x_local.norm(p=2, dim=1, keepdim=True)
+                return torch.cat([x_global, x_local], 1)
+            else:
+                return x_global
 
-        prelogits = self.classifier_global(x_global)
+        prelogits_global = self.classifier_global(x_global)
+        if self.learn_region:
+            prelogits_local = self.classifier_local(x_local)
         
         if self.loss == {'xent'}:
-            return prelogits
+            if self.learn_region:
+                return (prelogits_global, prelogits_local)
+            else:
+                return prelogits_global
         elif self.loss == {'xent', 'htri'}:
-            return prelogits, x_global
-        elif self.loss == {'cent'}:
-            return prelogits, x_global
+            if self.learn_region:
+                return (prelogits_global, prelogits_local), (x_global, x_local)
+            else:
+                return prelogits_global, x_global
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))
 
 if __name__ == '__main__':
-    pass
+    import sys
+    model = HACNN(10)
+    model.eval()
+    x = torch.rand(1, 3, 160, 64)
+    with torch.no_grad():
+        y = model(x)
+        print(y.size())
