@@ -17,7 +17,7 @@ import data_manager
 from dataset_loader import ImageDataset
 import transforms as T
 import models
-from losses import CrossEntropyLabelSmooth, TripletLoss
+from losses import CrossEntropyLabelSmooth, TripletLoss, DeepSupervision
 from utils import AverageMeter, Logger, save_checkpoint
 from eval_metrics import evaluate
 from samplers import RandomIdentitySampler
@@ -195,26 +195,23 @@ def train(model, criterion_xent, criterion_htri, optimizer, trainloader, use_gpu
     model.train()
     losses = AverageMeter()
 
-    def _deep_supervision(criterion, xs, y):
-        loss = 0.
-        for x in xs:
-            loss += criterion(x, y)
-        return loss
-
     for batch_idx, (imgs, pids, _) in enumerate(trainloader):
         if use_gpu:
             imgs, pids = imgs.cuda(), pids.cuda()
         outputs, features = model(imgs)
         if args.htri_only:
             if isinstance(features, tuple):
-                loss = _deep_supervision(criterion_htri, features, pids)
+                loss = DeepSupervision(criterion_htri, features, pids)
             else:
                 loss = criterion_htri(features, pids)
         else:
-            xent_loss = criterion_xent(outputs, pids)
-
+            if isinstance(outputs, tuple):
+                xent_loss = DeepSupervision(criterion_xent, outputs, pids)
+            else:
+                xent_loss = criterion_xent(outputs, pids)
+            
             if isinstance(features, tuple):
-                htri_loss = _deep_supervision(criterion_htri, features, pids)
+                htri_loss = DeepSupervision(criterion_htri, features, pids)
             else:
                 htri_loss = criterion_htri(features, pids)
             

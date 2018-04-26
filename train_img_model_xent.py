@@ -17,7 +17,7 @@ import data_manager
 from dataset_loader import ImageDataset
 import transforms as T
 import models
-from losses import CrossEntropyLabelSmooth
+from losses import CrossEntropyLabelSmooth, DeepSupervision
 from utils import AverageMeter, Logger, save_checkpoint
 from eval_metrics import evaluate
 
@@ -129,7 +129,7 @@ def main():
     )
 
     print("Initializing model: {}".format(args.arch))
-    model = models.init_model(name=args.arch, num_classes=dataset.num_train_pids, loss={'xent'})
+    model = models.init_model(name=args.arch, num_classes=dataset.num_train_pids, loss={'xent'}, use_gpu=use_gpu)
     print("Model size: {:.5f}M".format(sum(p.numel() for p in model.parameters())/1000000.0))
 
     criterion = CrossEntropyLabelSmooth(num_classes=dataset.num_train_pids, use_gpu=use_gpu)
@@ -190,7 +190,10 @@ def train(model, criterion, optimizer, trainloader, use_gpu):
         if use_gpu:
             imgs, pids = imgs.cuda(), pids.cuda()
         outputs = model(imgs)
-        loss = criterion(outputs, pids)
+        if isinstance(outputs, tuple):
+            loss = DeepSupervision(criterion, outputs, pids)
+        else:
+            loss = criterion(outputs, pids)
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
