@@ -1,8 +1,8 @@
 from __future__ import absolute_import
+import sys
 
 import torch
 from torch import nn
-from torch.autograd import Variable
 
 """
 Shorthands for loss:
@@ -39,7 +39,6 @@ class CrossEntropyLabelSmooth(nn.Module):
         log_probs = self.logsoftmax(inputs)
         targets = torch.zeros(log_probs.size()).scatter_(1, targets.unsqueeze(1).data.cpu(), 1)
         if self.use_gpu: targets = targets.cuda()
-        targets = Variable(targets, requires_grad=False)
         targets = (1 - self.epsilon) * targets + self.epsilon / self.num_classes
         loss = (- targets * log_probs).mean(0).sum()
         return loss
@@ -76,15 +75,12 @@ class TripletLoss(nn.Module):
         mask = targets.expand(n, n).eq(targets.expand(n, n).t())
         dist_ap, dist_an = [], []
         for i in range(n):
-            dist_ap.append(dist[i][mask[i]].max())
-            dist_an.append(dist[i][mask[i] == 0].min())
+            dist_ap.append(dist[i][mask[i]].max().unsqueeze(0))
+            dist_an.append(dist[i][mask[i] == 0].min().unsqueeze(0))
         dist_ap = torch.cat(dist_ap)
         dist_an = torch.cat(dist_an)
         # Compute ranking hinge loss
-        y = dist_an.data.new()
-        y.resize_as_(dist_an.data)
-        y.fill_(1)
-        y = Variable(y)
+        y = torch.ones_like(dist_an)
         loss = self.ranking_loss(dist_an, dist_ap, y)
         return loss
 
@@ -122,7 +118,6 @@ class CenterLoss(nn.Module):
 
         classes = torch.arange(self.num_classes).long()
         if self.use_gpu: classes = classes.cuda()
-        classes = Variable(classes)
         labels = labels.unsqueeze(1).expand(batch_size, self.num_classes)
         mask = labels.eq(classes.expand(batch_size, self.num_classes))
 

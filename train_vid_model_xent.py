@@ -11,7 +11,6 @@ import torch
 import torch.nn as nn
 import torch.backends.cudnn as cudnn
 from torch.utils.data import DataLoader
-from torch.autograd import Variable
 from torch.optim import lr_scheduler
 
 import data_manager
@@ -187,13 +186,12 @@ def train(model, criterion, optimizer, trainloader, use_gpu):
     for batch_idx, (imgs, pids, _) in enumerate(trainloader):
         if use_gpu:
             imgs, pids = imgs.cuda(), pids.cuda()
-        imgs, pids = Variable(imgs), Variable(pids)
         outputs = model(imgs)
         loss = criterion(outputs, pids)
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-        losses.update(loss.data[0], pids.size(0))
+        losses.update(loss.item(), pids.size(0))
 
         if (batch_idx+1) % args.print_freq == 0:
             print("Batch {}/{}\t Loss {:.6f} ({:.6f})".format(batch_idx+1, len(trainloader), losses.val, losses.avg))
@@ -201,50 +199,50 @@ def train(model, criterion, optimizer, trainloader, use_gpu):
 def test(model, queryloader, galleryloader, pool, use_gpu, ranks=[1, 5, 10, 20]):
     model.eval()
 
-    qf, q_pids, q_camids = [], [], []
-    for batch_idx, (imgs, pids, camids) in enumerate(queryloader):
-        if use_gpu:
-            imgs = imgs.cuda()
-        imgs = Variable(imgs, volatile=True)
-        b, s, c, h, w = imgs.size()
-        imgs = imgs.view(b*s, c, h, w)
-        features = model(imgs)
-        features = features.view(b, s, -1)
-        if pool == 'avg':
-            features = torch.mean(features, 1)
-        else:
-            features, _ = torch.max(features, 1)
-        features = features.data.cpu()
-        qf.append(features)
-        q_pids.extend(pids)
-        q_camids.extend(camids)
-    qf = torch.cat(qf, 0)
-    q_pids = np.asarray(q_pids)
-    q_camids = np.asarray(q_camids)
+    with torch.no_grad():
+        qf, q_pids, q_camids = [], [], []
+        for batch_idx, (imgs, pids, camids) in enumerate(queryloader):
+            if use_gpu: imgs = imgs.cuda()
+            b, s, c, h, w = imgs.size()
+            imgs = imgs.view(b*s, c, h, w)
+            features = model(imgs)
+            features = features.view(b, s, -1)
+            if pool == 'avg':
+                features = torch.mean(features, 1)
+            else:
+                features, _ = torch.max(features, 1)
+            features = features.data.cpu()
+            qf.append(features)
+            q_pids.extend(pids)
+            q_camids.extend(camids)
+        qf = torch.cat(qf, 0)
+        q_pids = np.asarray(q_pids)
+        q_camids = np.asarray(q_camids)
 
-    print("Extracted features for query set, obtained {}-by-{} matrix".format(qf.size(0), qf.size(1)))
+        print("Extracted features for query set, obtained {}-by-{} matrix".format(qf.size(0), qf.size(1)))
 
-    gf, g_pids, g_camids = [], [], []
-    for batch_idx, (imgs, pids, camids) in enumerate(galleryloader):
-        if use_gpu:
-            imgs = imgs.cuda()
-        imgs = Variable(imgs, volatile=True)
-        imgs = imgs.view(b*s, c, h, w)
-        features = model(imgs)
-        features = features.view(b, s, -1)
-        if pool == 'avg':
-            features = torch.mean(features, 1)
-        else:
-            features, _ = torch.max(features, 1)
-        features = features.data.cpu()
-        gf.append(features)
-        g_pids.extend(pids)
-        g_camids.extend(camids)
-    gf = torch.cat(gf, 0)
-    g_pids = np.asarray(g_pids)
-    g_camids = np.asarray(g_camids)
+        gf, g_pids, g_camids = [], [], []
+        for batch_idx, (imgs, pids, camids) in enumerate(galleryloader):
+            if use_gpu: imgs = imgs.cuda()
+            b, s, c, h, w = imgs.size()
+            imgs = imgs.view(b*s, c, h, w)
+            features = model(imgs)
+            features = features.view(b, s, -1)
+            if pool == 'avg':
+                features = torch.mean(features, 1)
+            else:
+                features, _ = torch.max(features, 1)
+            features = features.data.cpu()
+            gf.append(features)
+            g_pids.extend(pids)
+            g_camids.extend(camids)
+        gf = torch.cat(gf, 0)
+        g_pids = np.asarray(g_pids)
+        g_camids = np.asarray(g_camids)
+        sys.exit()
 
-    print("Extracted features for gallery set, obtained {}-by-{} matrix".format(gf.size(0), gf.size(1)))
+        print("Extracted features for gallery set, obtained {}-by-{} matrix".format(gf.size(0), gf.size(1)))
+    
     print("Computing distance matrix")
 
     m, n = qf.size(0), gf.size(0)
