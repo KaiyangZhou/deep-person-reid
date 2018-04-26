@@ -10,7 +10,19 @@ Shorthands for loss:
 - TripletLoss: htri
 - CenterLoss: cent
 """
-__all__ = ['CrossEntropyLabelSmooth', 'TripletLoss', 'CenterLoss']
+__all__ = ['DeepSupervision', 'CrossEntropyLabelSmooth', 'TripletLoss', 'CenterLoss']
+
+def DeepSupervision(criterion, xs, y):
+    """
+    Args:
+        criterion: loss function
+        xs: tuple of inputs
+        y: ground truth
+    """
+    loss = 0.
+    for x in xs:
+        loss += criterion(x, y)
+    return loss
 
 class CrossEntropyLabelSmooth(nn.Module):
     """Cross entropy loss with label smoothing regularizer.
