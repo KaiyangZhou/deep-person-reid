@@ -363,12 +363,3 @@ class HACNN(nn.Module):
                 return prelogits_global, x_global
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))
-
-if __name__ == '__main__':
-    import sys
-    model = HACNN(10)
-    model.eval()
-    x = torch.rand(1, 3, 160, 64)
-    with torch.no_grad():
-        y = model(x)
-        print(y.size())
