@@ -185,7 +185,7 @@ class HACNN(nn.Module):
     Args:
         num_classes (int): number of classes to predict
         nchannels (list): number of channels AFTER concatenation
-        feat_dim (int): feature dimension for each branch
+        feat_dim (int): feature dimension for a single stream
         learn_region (bool): whether to learn region features (i.e. local branch)
     """
     def __init__(self, num_classes, loss={'xent'}, nchannels=[128, 256, 384], feat_dim=512, learn_region=True, use_gpu=True, **kwargs):
@@ -196,9 +196,7 @@ class HACNN(nn.Module):
 
         self.conv = ConvBlock(3, 32, 3, s=2, p=1)
 
-        # construct Inception + HarmAttn blocks
-        # output channel of InceptionA is out_channels*4
-        # output channel of InceptionB is out_channels*2+in_channels
+        # Construct Inception + HarmAttn blocks
         # ============== Block 1 ==============
         self.inception1 = nn.Sequential(
             InceptionA(32, nchannels[0]),
@@ -220,13 +218,11 @@ class HACNN(nn.Module):
         )
         self.ha3 = HarmAttn(nchannels[2])
 
-        # feature embedding layers
         self.fc_global = nn.Sequential(
             nn.Linear(nchannels[2], feat_dim),
             nn.BatchNorm1d(feat_dim),
             nn.ReLU(),
         )
-
         self.classifier_global = nn.Linear(feat_dim, num_classes)
 
         if self.learn_region:
@@ -262,8 +258,8 @@ class HACNN(nn.Module):
         return x
 
     def transform_theta(self, theta_i, region_idx):
-        """Transform theta from (batch, 2) to (batch, 2, 3),
-        which includes (s_w, s_h)"""
+        """Transform theta to include (s_w, s_h),
+        resulting in (batch, 2, 3)"""
         scale_factors = self.scale_factors[region_idx]
         theta = torch.zeros(theta_i.size(0), 2, 3)
         theta[:,:,:2] = scale_factors
