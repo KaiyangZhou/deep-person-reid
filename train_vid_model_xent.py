@@ -151,6 +151,7 @@ def main():
 
     start_time = time.time()
     best_rank1 = -np.inf
+    best_epoch = 0
 
     for epoch in range(start_epoch, args.max_epoch):
         print("==> Epoch {}/{}".format(epoch+1, args.max_epoch))
@@ -163,7 +164,9 @@ def main():
             print("==> Test")
             rank1 = test(model, queryloader, galleryloader, args.pool, use_gpu)
             is_best = rank1 > best_rank1
-            if is_best: best_rank1 = rank1
+            if is_best:
+                best_rank1 = rank1
+                best_epoch = epoch + 1
 
             if use_gpu:
                 state_dict = model.module.state_dict()
@@ -174,6 +177,8 @@ def main():
                 'rank1': rank1,
                 'epoch': epoch,
             }, is_best, osp.join(args.save_dir, 'checkpoint_ep' + str(epoch+1) + '.pth.tar'))
+
+    print("==> Best Rank-1 {:.1%}, achieved at epoch {}".format(best_rank1, best_epoch))
 
     elapsed = round(time.time() - start_time)
     elapsed = str(datetime.timedelta(seconds=elapsed))
