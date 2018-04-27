@@ -247,7 +247,6 @@ def test(model, queryloader, galleryloader, pool, use_gpu, ranks=[1, 5, 10, 20])
         gf = torch.cat(gf, 0)
         g_pids = np.asarray(g_pids)
         g_camids = np.asarray(g_camids)
-        sys.exit()
 
         print("Extracted features for gallery set, obtained {}-by-{} matrix".format(gf.size(0), gf.size(1)))
     
