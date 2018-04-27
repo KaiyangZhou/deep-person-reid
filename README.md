@@ -111,7 +111,7 @@ These two classes are used for [torch.utils.data.DataLoader](http://pytorch.org/
 * `htri`: triplet loss with hard positive/negative mining [4] .
 * `cent`: center loss [9].
 
-We use `Adam` [6] everywhere, which turned out to be the most effective optimizer in our experiments.
+Optimizers are wrapped in `optimizers.py`, which supports `adam` (default) and `sgd`. Use `--optim string_name` to manage the optimizer.
 
 ## Train
 Training codes are implemented mainly in
