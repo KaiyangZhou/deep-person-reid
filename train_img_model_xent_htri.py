@@ -166,11 +166,10 @@ def main():
     start_time = time.time()
     best_rank1 = -np.inf
     best_epoch = 0
+    print("==> Start training")
 
     for epoch in range(start_epoch, args.max_epoch):
-        print("==> Epoch {}/{}".format(epoch+1, args.max_epoch))
-        
-        train(model, criterion_xent, criterion_htri, optimizer, trainloader, use_gpu)
+        train(epoch, model, criterion_xent, criterion_htri, optimizer, trainloader, use_gpu)
         
         if args.stepsize > 0: scheduler.step()
         
@@ -198,7 +197,7 @@ def main():
     elapsed = str(datetime.timedelta(seconds=elapsed))
     print("Finished. Total elapsed time (h:m:s): {}".format(elapsed))
 
-def train(model, criterion_xent, criterion_htri, optimizer, trainloader, use_gpu):
+def train(epoch, model, criterion_xent, criterion_htri, optimizer, trainloader, use_gpu):
     model.train()
     losses = AverageMeter()
 
@@ -229,7 +228,9 @@ def train(model, criterion_xent, criterion_htri, optimizer, trainloader, use_gpu
         losses.update(loss.item(), pids.size(0))
 
         if (batch_idx+1) % args.print_freq == 0:
-            print("Batch {}/{}\t Loss {:.6f} ({:.6f})".format(batch_idx+1, len(trainloader), losses.val, losses.avg))
+            print("Epoch {}/{}\t Batch {}/{}\t Loss {:.6f} ({:.6f})".format(
+                epoch+1, args.max_epoch, batch_idx+1, len(trainloader), losses.val, losses.avg
+            ))
 
 def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20]):
     model.eval()
