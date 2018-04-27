@@ -10,6 +10,7 @@ We support
 - download of trained models.
 
 ## Updates
+- Apr 2018: Added [Harmonious Attention CNN (CVPR'18)](https://arxiv.org/abs/1802.08122). We achieved Rank-1 42.4% (vs. 41.7% in the paper) on CUHK03 (Detected). The result can be reproduced by `python train_img_model_xent.py -d cuhk03 -a hacnn --save-dir log/hacnn-xent-cuhk03 --height 160 --width 64 --max-epoch 500 --stepsize -1 --eval-step 50`.
 - Apr 2018: Code upgraded to pytorch 0.4.0.
 - Apr 2018: Added [CUHK03](http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html). Models are [available](https://github.com/KaiyangZhou/deep-person-reid#cuhk03-detected-new-protocol-767700).
 - Apr 2018: Added [iLIDS-VID](http://www.eecs.qmul.ac.uk/~xiatian/downloads_qmul_iLIDS-VID_ReID_dataset.html) and [PRID-2011](https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/). Models are [available](https://github.com/KaiyangZhou/deep-person-reid#video-person-reid).
@@ -105,6 +106,7 @@ These two classes are used for [torch.utils.data.DataLoader](http://pytorch.org/
 * `models/ResNet.py`: ResNet50 [1], ResNet50M [2].
 * `models/DenseNet.py`: DenseNet121 [3].
 * `models/MuDeep.py`: MuDeep [10]. 
+* `models/HACNN.py`: HACNN [15]
 
 ## Loss functions
 * `xent`: cross entropy + label smoothing regularizer [5].
@@ -152,6 +154,7 @@ Please run `python train_blah_blah.py -h` for more details regarding arguments.
 | DenseNet121 | 7.74 | xent | 41.0/61.7/71.5 | 40.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_xent_cuhk03.pth.tar) | | |
 | ResNet50 | 25.08 | xent | 48.8/69.4/78.4 | 47.5 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_xent_cuhk03.pth.tar) | | |
 | ResNet50M | 30.06 | xent | 54.8/73.6/80.7 | 53.4 | - | 47.1/-/- | 43.5 |
+| HACNN | 3.72 | xent | 42.4/60.9/70.5 | 40.9 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/hacnn_xent_cuhk03.pth.tar) | 41.7/-/- |38.6 |
 
 ### Video person reid
 #### MARS
@@ -225,3 +228,4 @@ Of course, you can pass `model.classifier.parameters()` to optimizer if you only
 [12] [Hirzer et al. Person Re-Identification by Descriptive and Discriminative Classification. SCIA 2011.](https://files.icg.tugraz.at/seafhttp/files/ba284964-6e03-4261-bb39-e85280707598/hirzer_scia_2011.pdf) <br />
 [13] [Li et al. DeepReID: Deep Filter Pairing Neural Network for Person Re-identification. CVPR 2014.](https://www.cv-foundation.org/openaccess/content_cvpr_2014/papers/Li_DeepReID_Deep_Filter_2014_CVPR_paper.pdf) <br />
 [14] [Zhong et al. Re-ranking Person Re-identification with k-reciprocal Encoding. CVPR 2017](https://arxiv.org/abs/1701.08398) <br />
+[15] [Li et al. Harmonious Attention Network for Person Re-identification. CVPR 2018.](https://arxiv.org/abs/1802.08122) <br />
