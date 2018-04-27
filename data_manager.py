@@ -378,7 +378,7 @@ class DukeMTMCreID(object):
     query_dir = osp.join(root, 'DukeMTMC-reID/query')
     gallery_dir = osp.join(root, 'DukeMTMC-reID/bounding_box_test')
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         self._check_before_run()
 
         train, num_train_pids, num_train_imgs = self._process_dir(self.train_dir, relabel=True)
