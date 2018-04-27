@@ -21,6 +21,7 @@ from losses import CrossEntropyLabelSmooth, TripletLoss, DeepSupervision
 from utils import AverageMeter, Logger, save_checkpoint
 from eval_metrics import evaluate
 from samplers import RandomIdentitySampler
+from optimizers import init_optim
 
 parser = argparse.ArgumentParser(description='Train image model with cross entropy loss and hard triplet loss')
 # Datasets
@@ -41,6 +42,7 @@ parser.add_argument('--cuhk03-classic-split', action='store_true',
 parser.add_argument('--use-metric-cuhk03', action='store_true',
                     help="whether to use cuhk03-metric (default: False)")
 # Optimization options
+parser.add_argument('--optim', type=str, default='adam', help="optimization algorithm (see optimizers.py)")
 parser.add_argument('--max-epoch', default=180, type=int,
                     help="maximum epochs to run")
 parser.add_argument('--start-epoch', default=0, type=int,
@@ -142,7 +144,7 @@ def main():
     criterion_xent = CrossEntropyLabelSmooth(num_classes=dataset.num_train_pids, use_gpu=use_gpu)
     criterion_htri = TripletLoss(margin=args.margin)
     
-    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    optimizer = init_optim(args.optim, model.parameters(), args.lr, args.weight_decay)
     if args.stepsize > 0:
         scheduler = lr_scheduler.StepLR(optimizer, step_size=args.stepsize, gamma=args.gamma)
     start_epoch = args.start_epoch
