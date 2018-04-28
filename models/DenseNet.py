@@ -3,7 +3,6 @@ from __future__ import absolute_import
 import torch
 from torch import nn
 from torch.nn import functional as F
-from torch.autograd import Variable
 import torchvision
 
 __all__ = ['DenseNet121']
