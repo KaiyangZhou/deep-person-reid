@@ -79,10 +79,9 @@ class SqueezeNet(nn.Module):
         self.fire7 = FireModule(384, 48, 192, 192)
         self.fire8 = FireModule(384, 64, 256, 256)
         self.fire9 = FireModule(512, 64, 256, 256)
-        self.conv10 = ConvBlock(512, 1000, 1)
-
-        self.classifier = nn.Linear(1000, num_classes)
-        self.feat_dim = 1000
+        self.conv10 = nn.Conv2d(512, num_classes, 1)
+        
+        self.feat_dim = num_classes
 
     def forward(self, x):
         x1 = self.conv1(x)
@@ -105,19 +104,13 @@ class SqueezeNet(nn.Module):
         x9 = self.fire9(x8)
         if self.bypass:
             x9 = x9 + x8
-        x10 = self.conv10(x9)
+        x9 = F.dropout(x9, training=self.training)
+        x10 = F.relu(self.conv10(x9))
         f = F.avg_pool2d(x10, x10.size()[2:]).view(x10.size(0), -1)
 
-        if not self.training:
-            return f
-
-        y = self.classifier(f)
-
         if self.loss == {'xent'}:
-            return y
+            return f
         elif self.loss == {'xent', 'htri'}:
-            return y, f
-        elif self.loss == {'cent'}:
-            return y, f
+            return f, f
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))
