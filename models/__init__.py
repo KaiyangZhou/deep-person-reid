@@ -7,6 +7,7 @@ from .HACNN import *
 from .SqueezeNet import *
 from .MobileNet import *
 from .ShuffleNet import *
+from .Xception import *
 
 __factory = {
     'resnet50': ResNet50,
@@ -17,6 +18,7 @@ __factory = {
     'squeezenet': SqueezeNet,
     'mobilenet': MobileNetV2,
     'shufflenet': ShuffleNet,
+    'xception': Xception,
 }
 
 def get_names():
