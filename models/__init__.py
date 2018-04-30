@@ -6,6 +6,7 @@ from .MuDeep import *
 from .HACNN import *
 from .SqueezeNet import *
 from .MobileNet import *
+from .ShuffleNet import *
 
 __factory = {
     'resnet50': ResNet50,
@@ -15,6 +16,7 @@ __factory = {
     'hacnn': HACNN,
     'squeezenet': SqueezeNet,
     'mobilenet': MobileNetV2,
+    'shufflenet': ShuffleNet,
 }
 
 def get_names():
