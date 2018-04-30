@@ -155,12 +155,15 @@ def main():
         return
 
     start_time = time.time()
+    train_time = 0
     best_rank1 = -np.inf
     best_epoch = 0
     print("==> Start training")
 
     for epoch in range(start_epoch, args.max_epoch):
+        start_train_time = time.time()
         train(epoch, model, criterion, optimizer, trainloader, use_gpu)
+        train_time += round(time.time() - start_train_time)
         
         if args.stepsize > 0: scheduler.step()
         
@@ -186,7 +189,8 @@ def main():
 
     elapsed = round(time.time() - start_time)
     elapsed = str(datetime.timedelta(seconds=elapsed))
-    print("Finished. Total elapsed time (h:m:s): {}".format(elapsed))
+    train_time = str(datetime.timedelta(seconds=train_time))
+    print("Finished. Total elapsed time (h:m:s): {}. Training time (h:m:s): {}.".format(elapsed, train_time))
 
 def train(epoch, model, criterion, optimizer, trainloader, use_gpu):
     model.train()
