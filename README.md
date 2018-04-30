@@ -10,6 +10,7 @@ We support
 - download of trained models.
 
 ## Updates
+- Apr 2018: Added [DukeMTMC-reID](https://github.com/layumi/DukeMTMC-reID_evaluation#dukemtmc-reid-description); Added [SqueezeNet](https://arxiv.org/abs/1602.07360) and [MobileNetV2 (CVPR'18)](https://arxiv.org/abs/1801.04381).
 - Apr 2018: Added [Harmonious Attention CNN (CVPR'18)](https://arxiv.org/abs/1802.08122). We achieved Rank-1 42.4% (vs. 41.7% in the paper) on CUHK03 (Detected) by training from scratch. The result can be reproduced by `python train_img_model_xent.py -d cuhk03 -a hacnn --save-dir log/hacnn-xent-cuhk03 --height 160 --width 64 --max-epoch 500 --stepsize -1 --eval-step 50`.
 - Apr 2018: Code upgraded to pytorch 0.4.0.
 - Apr 2018: Added [CUHK03](http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html). Models are [available](https://github.com/KaiyangZhou/deep-person-reid#cuhk03-detected-new-protocol-767700).
@@ -59,6 +60,17 @@ cuhk03/
 ```
 4. Use `-d cuhk03` when running the training code. In default mode, we use new split (767/700). If you wanna use the original splits (1367/100) created by [13], specify `--cuhk03-classic-split`. As [13] computes CMC differently from Market1501, you might need to specify `--use-metric-cuhk03` for fair comparison with their method. In addition, we support both `labeled` and `detected` modes. The default mode loads `detected` images. Specify `--cuhk03-labeled` if you wanna train and test on `labeled` images.
 
+
+**DukeMTMC-reID** [16, 17]:
+1. Create a directory under `data/` called `dukemtmc-reid`.
+2. Download dataset `DukeMTMC-reID.zip` from https://github.com/layumi/DukeMTMC-reID_evaluation#download-dataset and put it to `data/dukemtmc-reid`. Extract the zip file, which leads to
+```
+dukemtmc-reid/
+    DukeMTMC-reid.zip
+    DukeMTMC-reid/ # this folder contains 8 files.
+```
+3. Use `-d dukemtmcreid` when running the training code.
+
 **MARS** [8]:
 1. Create a directory named `mars/` under `data/`.
 2. Download dataset to `data/mars/` from http://www.liangzheng.com.cn/Project/project_mars.html.
@@ -106,7 +118,11 @@ These two classes are used for [torch.utils.data.DataLoader](http://pytorch.org/
 * `models/ResNet.py`: ResNet50 [1], ResNet50M [2].
 * `models/DenseNet.py`: DenseNet121 [3].
 * `models/MuDeep.py`: MuDeep [10]. 
-* `models/HACNN.py`: HACNN [15]
+* `models/HACNN.py`: HACNN [15].
+* `models/SqueezeNet.py`: SqueezeNet [18].
+* `models/MobileNet.py`: MobileNetV2 [19].
+
+See `models/__init__.py` for details regarding how to call these models in command line.
 
 ## Loss functions
 * `xent`: cross entropy + label smoothing regularizer [5].
@@ -134,8 +150,8 @@ Please run `python train_blah_blah.py -h` for more details regarding arguments.
 
 ## Results
 ### Image person reid
-#### Market1501
 
+#### Market1501
 | Model | Param Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Published Rank | Published mAP |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | DenseNet121 | 7.72 | xent | 86.5/93.6/95.7 | 67.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_xent_market1501.pth.tar) | | |
@@ -146,15 +162,27 @@ Please run `python train_blah_blah.py -h` for more details regarding arguments.
 | ResNet50M | 30.01 | xent | 89.4/95.9/97.4 | 75.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50m_xent_market1501.pth.tar) | 89.9/-/- | 75.6 |
 | ResNet50M | 30.01 | xent+htri | 90.7/97.0/98.2 | 76.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50m_xent_htri_market1501.pth.tar) | | |
 | MuDeep | 138.02 | xent+htri| 71.5/89.3/96.3 | 47.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mudeep_xent_htri_market1501.pth.tar) | | |
+| SqueezeNet | 1.13 | xent | 65.1/82.3/87.9 | 41.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/squeezenet_xent_market1501.pth.tar) | | |
+| MobileNetV2 | 3.19 | xent | 77.0/89.5/92.8 | 56.3 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenet_xent_market1501.pth.tar) | | |
 
 #### CUHK03 (detected, [new protocol (767/700)](https://github.com/zhunzhong07/person-re-ranking#the-new-trainingtesting-protocol-for-cuhk03))
-
 | Model | Param Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Published Rank | Published mAP |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | DenseNet121 | 7.74 | xent | 41.0/61.7/71.5 | 40.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_xent_cuhk03.pth.tar) | | |
 | ResNet50 | 25.08 | xent | 48.8/69.4/78.4 | 47.5 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_xent_cuhk03.pth.tar) | | |
 | ResNet50M | 30.06 | xent | 57.5/75.4/82.5 | 55.2 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50m_xent_cuhk03.pth.tar) | 47.1/-/- | 43.5 |
 | HACNN | 3.72 | xent | 42.4/60.9/70.5 | 40.9 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/hacnn_xent_cuhk03.pth.tar) | 41.7/-/- |38.6 |
+| SqueezeNet | 1.13 | xent | 20.0/38.4/48.2 | 20.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/squeezenet_xent_cuhk03.pth.tar) | | |
+| MobileNetV2 | 3.21 | xent | 35.1/55.8/64.7 | 33.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenet_xent_cuhk03.pth.tar) | | |
+
+#### DukeMTMC-reID
+| Model | Param Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Published Rank | Published mAP |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| DenseNet121 | 7.67 | xent | 74.9/86.0/88.8 | 54.5 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_xent_dukemtmcreid.pth.tar) | | |
+| ResNet50 | 24.94 | xent | 76.3/87.1/90.9 | 59.5 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_xent_dukemtmcreid.pth.tar) | | |
+| ResNet50M | 29.86 | xent | 80.5/89.8/92.4 | 63.3 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50m_xent_dukemtmcreid.pth.tar) | 80.4/-/- | 63.9 |
+| SqueezeNet | 1.10 | xent | 50.2/68.9/75.3  | 30.3 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/squeezenet_xent_dukemtmcreid.pth.tar) | | |
+| MobileNetV2 | 3.12 | xent | 65.6/79.2/83.7 | 43.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenet_xent_dukemtmcreid.pth.tar) | | |
 
 ### Video person reid
 #### MARS
@@ -229,3 +257,7 @@ Of course, you can pass `model.classifier.parameters()` to optimizer if you only
 [13] [Li et al. DeepReID: Deep Filter Pairing Neural Network for Person Re-identification. CVPR 2014.](https://www.cv-foundation.org/openaccess/content_cvpr_2014/papers/Li_DeepReID_Deep_Filter_2014_CVPR_paper.pdf) <br />
 [14] [Zhong et al. Re-ranking Person Re-identification with k-reciprocal Encoding. CVPR 2017](https://arxiv.org/abs/1701.08398) <br />
 [15] [Li et al. Harmonious Attention Network for Person Re-identification. CVPR 2018.](https://arxiv.org/abs/1802.08122) <br />
+[16] [Ristani et al. Performance Measures and a Data Set for Multi-Target, Multi-Camera Tracking. ECCVW 2016.](https://arxiv.org/abs/1609.01775) <br />
+[17] [Zheng et al. Unlabeled Samples Generated by GAN Improve the Person Re-identification Baseline in vitro. ICCV 2017.](https://arxiv.org/abs/1701.07717) <br />
+[18] [Iandola et al. SqueezeNet: AlexNet-level accuracy with 50x fewer parameters and< 0.5 MB model size. arXiv:1602.07360.](https://arxiv.org/abs/1602.07360) <br />
+[19] [Sandler et al. MobileNetV2: Inverted Residuals and Linear Bottlenecks. CVPR 2018.](https://arxiv.org/abs/1801.04381) <br />
