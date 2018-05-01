@@ -10,7 +10,7 @@ We support
 - download of trained models.
 
 ## Updates
-- Apr 2018: Added [DukeMTMC-reID](https://github.com/layumi/DukeMTMC-reID_evaluation#dukemtmc-reid-description); Added [SqueezeNet](https://arxiv.org/abs/1602.07360), [MobileNetV2 (CVPR'18)](https://arxiv.org/abs/1801.04381) and [ShuffleNet (CVPR'18)](https://arxiv.org/abs/1707.01083).
+- Apr 2018: Added [DukeMTMC-reID](https://github.com/layumi/DukeMTMC-reID_evaluation#dukemtmc-reid-description); Added [SqueezeNet](https://arxiv.org/abs/1602.07360), [MobileNetV2 (CVPR'18)](https://arxiv.org/abs/1801.04381), [ShuffleNet (CVPR'18)](https://arxiv.org/abs/1707.01083) and [Xception (CVPR'17)](https://arxiv.org/abs/1610.02357).
 - Apr 2018: Added [Harmonious Attention CNN (CVPR'18)](https://arxiv.org/abs/1802.08122). We achieved Rank-1 42.4% (vs. 41.7% in the paper) on CUHK03 (Detected) by training from scratch. The result can be reproduced by `python train_img_model_xent.py -d cuhk03 -a hacnn --save-dir log/hacnn-xent-cuhk03 --height 160 --width 64 --max-epoch 500 --stepsize -1 --eval-step 50`.
 - Apr 2018: Code upgraded to pytorch 0.4.0.
 - Apr 2018: Added [CUHK03](http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html). Models are [available](https://github.com/KaiyangZhou/deep-person-reid#cuhk03-detected-new-protocol-767700).
@@ -122,6 +122,7 @@ These two classes are used for [torch.utils.data.DataLoader](http://pytorch.org/
 * `models/SqueezeNet.py`: SqueezeNet [18].
 * `models/MobileNet.py`: MobileNetV2 [19].
 * `models/ShuffleNet.py`: ShuffleNet [20].
+* `models/Xception.py`: Xception [21].
 
 See `models/__init__.py` for details regarding how to call these models in command line.
 
@@ -166,6 +167,7 @@ Please run `python train_blah_blah.py -h` for more details regarding arguments.
 | SqueezeNet | 1.13 | xent | 65.1/82.3/87.9 | 41.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/squeezenet_xent_market1501.pth.tar) | | |
 | MobileNetV2 | 3.19 | xent | 77.0/89.5/92.8 | 56.3 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenet_xent_market1501.pth.tar) | | |
 | ShuffleNet | 1.63 | xent | 68.7/85.7/90.2 | 44.9 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/shufflenet_xent_market1501.pth.tar) | | |
+| Xception | 22.39 | xent | 72.1/88.2/92.1 | 52.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/xception_xent_market1501.pth.tar) | | |
 
 #### CUHK03 (detected, [new protocol (767/700)](https://github.com/zhunzhong07/person-re-ranking#the-new-trainingtesting-protocol-for-cuhk03))
 | Model | Param Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Published Rank | Published mAP |
@@ -265,3 +267,4 @@ Of course, you can pass `model.classifier.parameters()` to optimizer if you only
 [18] [Iandola et al. SqueezeNet: AlexNet-level accuracy with 50x fewer parameters and< 0.5 MB model size. arXiv:1602.07360.](https://arxiv.org/abs/1602.07360) <br />
 [19] [Sandler et al. MobileNetV2: Inverted Residuals and Linear Bottlenecks. CVPR 2018.](https://arxiv.org/abs/1801.04381) <br />
 [20] [Zhang et al. ShuffleNet: An Extremely Efficient Convolutional Neural Network for Mobile Devices. CVPR 2018.](https://arxiv.org/abs/1707.01083) <br />
+[21] [Chollet. Xception: Deep Learning with Depthwise Separable Convolutions. CVPR 2017.](https://arxiv.org/abs/1610.02357) <br />
