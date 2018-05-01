@@ -151,23 +151,26 @@ To use multiple GPUs, you can set `--gpu-devices 0,1,2,3`.
 Please run `python train_blah_blah.py -h` for more details regarding arguments.
 
 ## Results
+:dog: means that model is initialized with imagenet pretrained weights.
+
 ### Image person reid
 
 #### Market1501
 | Model | Param Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Published Rank | Published mAP |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| DenseNet121 | 7.72 | xent | 86.5/93.6/95.7 | 67.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_xent_market1501.pth.tar) | | |
-| DenseNet121 | 7.72 | xent+htri | 89.5/96.3/97.5 | 72.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_xent_htri_market1501.pth.tar) | | |
-| Resnet50 | 25.05 | cent | 85.1/93.8/96.2 | 69.1 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_cent_market1501.pth.tar) | | |
-| ResNet50 | 25.05 | xent | 85.4/94.1/95.9 | 68.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_xent_market1501.pth.tar) | | |
-| ResNet50 | 25.05 | xent+htri | 87.5/95.3/97.3 | 72.3 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_xent_htri_market1501.pth.tar) | | |
-| ResNet50M | 30.01 | xent | 89.4/95.9/97.4 | 75.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50m_xent_market1501.pth.tar) | 89.9/-/- | 75.6 |
-| ResNet50M | 30.01 | xent+htri | 90.7/97.0/98.2 | 76.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50m_xent_htri_market1501.pth.tar) | | |
+| DenseNet121:dog: | 7.72 | xent | 86.5/93.6/95.7 | 67.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_xent_market1501.pth.tar) | | |
+| DenseNet121:dog: | 7.72 | xent+htri | 89.5/96.3/97.5 | 72.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_xent_htri_market1501.pth.tar) | | |
+| Resnet50:dog: | 25.05 | cent | 85.1/93.8/96.2 | 69.1 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_cent_market1501.pth.tar) | | |
+| ResNet50:dog: | 25.05 | xent | 85.4/94.1/95.9 | 68.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_xent_market1501.pth.tar) | | |
+| ResNet50:dog: | 25.05 | xent+htri | 87.5/95.3/97.3 | 72.3 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_xent_htri_market1501.pth.tar) | | |
+| ResNet50M:dog: | 30.01 | xent | 89.4/95.9/97.4 | 75.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50m_xent_market1501.pth.tar) | 89.9/-/- | 75.6 |
+| ResNet50M:dog: | 30.01 | xent+htri | 90.7/97.0/98.2 | 76.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50m_xent_htri_market1501.pth.tar) | | |
 | MuDeep | 138.02 | xent+htri| 71.5/89.3/96.3 | 47.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mudeep_xent_htri_market1501.pth.tar) | | |
 | SqueezeNet | 1.13 | xent | 65.1/82.3/87.9 | 41.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/squeezenet_xent_market1501.pth.tar) | | |
 | MobileNetV2 | 3.19 | xent | 77.0/89.5/92.8 | 56.3 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenet_xent_market1501.pth.tar) | | |
 | ShuffleNet | 1.63 | xent | 68.7/85.7/90.2 | 44.9 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/shufflenet_xent_market1501.pth.tar) | | |
 | Xception | 22.39 | xent | 72.1/88.2/92.1 | 52.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/xception_xent_market1501.pth.tar) | | |
+| HACNN | 3.70 | xent | 88.7/95.3/97.4 | 71.2 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/hacnn_xent_market1501.pth.tar) | 91.2/-/- | 75.7 |
 
 #### CUHK03 (detected, [new protocol (767/700)](https://github.com/zhunzhong07/person-re-ranking#the-new-trainingtesting-protocol-for-cuhk03))
 | Model | Param Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Published Rank | Published mAP |
@@ -188,6 +191,7 @@ Please run `python train_blah_blah.py -h` for more details regarding arguments.
 | SqueezeNet | 1.10 | xent | 50.2/68.9/75.3  | 30.3 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/squeezenet_xent_dukemtmcreid.pth.tar) | | |
 | MobileNetV2 | 3.12 | xent | 65.6/79.2/83.7 | 43.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenet_xent_dukemtmcreid.pth.tar) | | |
 | ShuffleNet | 1.58 | xent | 56.9/74.680.5 | 37.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/shufflenet_xent_dukemtmcreid.pth.tar) | | |
+| HACNN | 3.65 | xent | 78.5/88.8/91.3 | 60.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/hacnn_xent_dukemtmcreid.pth.tar) | 80.5/-/- | 63.8 |
 
 ### Video person reid
 #### MARS
