@@ -175,9 +175,9 @@ Please run `python train_blah_blah.py -h` for more details regarding arguments.
 #### CUHK03 (detected, [new protocol (767/700)](https://github.com/zhunzhong07/person-re-ranking#the-new-trainingtesting-protocol-for-cuhk03))
 | Model | Param Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Published Rank | Published mAP |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| DenseNet121 | 7.74 | xent | 41.0/61.7/71.5 | 40.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_xent_cuhk03.pth.tar) | | |
-| ResNet50 | 25.08 | xent | 48.8/69.4/78.4 | 47.5 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_xent_cuhk03.pth.tar) | | |
-| ResNet50M | 30.06 | xent | 57.5/75.4/82.5 | 55.2 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50m_xent_cuhk03.pth.tar) | 47.1/-/- | 43.5 |
+| DenseNet121:dog: | 7.74 | xent | 41.0/61.7/71.5 | 40.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_xent_cuhk03.pth.tar) | | |
+| ResNet50:dog: | 25.08 | xent | 48.8/69.4/78.4 | 47.5 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_xent_cuhk03.pth.tar) | | |
+| ResNet50M:dog: | 30.06 | xent | 57.5/75.4/82.5 | 55.2 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50m_xent_cuhk03.pth.tar) | 47.1/-/- | 43.5 |
 | HACNN | 3.72 | xent | 42.4/60.9/70.5 | 40.9 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/hacnn_xent_cuhk03.pth.tar) | 41.7/-/- |38.6 |
 | SqueezeNet | 1.13 | xent | 20.0/38.4/48.2 | 20.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/squeezenet_xent_cuhk03.pth.tar) | | |
 | MobileNetV2 | 3.21 | xent | 35.1/55.8/64.7 | 33.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenet_xent_cuhk03.pth.tar) | | |
@@ -185,9 +185,9 @@ Please run `python train_blah_blah.py -h` for more details regarding arguments.
 #### DukeMTMC-reID
 | Model | Param Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Published Rank | Published mAP |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| DenseNet121 | 7.67 | xent | 74.9/86.0/88.8 | 54.5 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_xent_dukemtmcreid.pth.tar) | | |
-| ResNet50 | 24.94 | xent | 76.3/87.1/90.9 | 59.5 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_xent_dukemtmcreid.pth.tar) | | |
-| ResNet50M | 29.86 | xent | 80.5/89.8/92.4 | 63.3 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50m_xent_dukemtmcreid.pth.tar) | 80.4/-/- | 63.9 |
+| DenseNet121:dog: | 7.67 | xent | 74.9/86.0/88.8 | 54.5 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_xent_dukemtmcreid.pth.tar) | | |
+| ResNet50:dog: | 24.94 | xent | 76.3/87.1/90.9 | 59.5 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_xent_dukemtmcreid.pth.tar) | | |
+| ResNet50M:dog: | 29.86 | xent | 80.5/89.8/92.4 | 63.3 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50m_xent_dukemtmcreid.pth.tar) | 80.4/-/- | 63.9 |
 | SqueezeNet | 1.10 | xent | 50.2/68.9/75.3  | 30.3 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/squeezenet_xent_dukemtmcreid.pth.tar) | | |
 | MobileNetV2 | 3.12 | xent | 65.6/79.2/83.7 | 43.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenet_xent_dukemtmcreid.pth.tar) | | |
 | ShuffleNet | 1.58 | xent | 56.9/74.680.5 | 37.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/shufflenet_xent_dukemtmcreid.pth.tar) | | |
@@ -198,26 +198,26 @@ Please run `python train_blah_blah.py -h` for more details regarding arguments.
 
 | Model | Param Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Published Rank | Published mAP |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| DenseNet121 | 7.59 | xent | 65.2/81.1/86.3 | 52.1 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/densenet121_xent_mars.pth.tar) | | |
-| DenseNet121 | 7.59 | xent+htri | 82.6/93.2/95.4 | 74.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/densenet121_xent_htri_mars.pth.tar) | | |
-| ResNet50 | 24.79 | xent | 74.5/88.8/91.8 | 64.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50_xent_mars.pth.tar) | | |
-| ResNet50 | 24.79 | xent+htri | 80.8/92.1/94.3 | 74.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50_xent_htri_mars.pth.tar) | | |
-| ResNet50M | 29.63 | xent | 77.8/89.8/92.8 | 67.5 | - | | |
-| ResNet50M | 29.63 | xent+htri | 82.3/93.8/95.3 | 75.4 | - | | |
+| DenseNet121:dog: | 7.59 | xent | 65.2/81.1/86.3 | 52.1 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/densenet121_xent_mars.pth.tar) | | |
+| DenseNet121:dog: | 7.59 | xent+htri | 82.6/93.2/95.4 | 74.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/densenet121_xent_htri_mars.pth.tar) | | |
+| ResNet50:dog: | 24.79 | xent | 74.5/88.8/91.8 | 64.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50_xent_mars.pth.tar) | | |
+| ResNet50:dog: | 24.79 | xent+htri | 80.8/92.1/94.3 | 74.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50_xent_htri_mars.pth.tar) | | |
+| ResNet50M:dog: | 29.63 | xent | 77.8/89.8/92.8 | 67.5 | - | | |
+| ResNet50M:dog: | 29.63 | xent+htri | 82.3/93.8/95.3 | 75.4 | - | | |
 
 #### iLIDS-VID
 
 | Model | Param Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Published Rank | Published mAP |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| ResNet50 | 23.82 | xent | 62.7/82.7/90.7 | 72.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50_xent_ilidsvid.pth.tar) | | |
-| ResNet50M | 28.17 | xent | 63.3/85.3/92.7 | 73.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50m_xent_ilidsvid.pth.tar) | | |
+| ResNet50:dog: | 23.82 | xent | 62.7/82.7/90.7 | 72.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50_xent_ilidsvid.pth.tar) | | |
+| ResNet50M:dog: | 28.17 | xent | 63.3/85.3/92.7 | 73.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50m_xent_ilidsvid.pth.tar) | | |
 
 #### PRID-2011
 
 | Model | Param Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Published Rank | Published mAP |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| ResNet50 | 23.69 | xent | 75.3/96.6/97.8 | 84.3 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50_xent_prid.pth.tar) | | |
-| ResNet50M | 27.98 | xent | 85.4/96.6/98.9 | 90.1 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50m_xent_prid.pth.tar) | | |
+| ResNet50:dog: | 23.69 | xent | 75.3/96.6/97.8 | 84.3 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50_xent_prid.pth.tar) | | |
+| ResNet50M:dog: | 27.98 | xent | 85.4/96.6/98.9 | 90.1 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50m_xent_prid.pth.tar) | | |
 
 ## Test
 Say you have downloaded ResNet50 trained with `xent` on `market1501`. The path to this model is  `'saved-models/resnet50_xent_market1501.pth.tar'` (create a directory to store model weights `mkdir saved-models/`). Then, run the following command to test
