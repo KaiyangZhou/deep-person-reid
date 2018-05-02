@@ -977,7 +977,7 @@ class DukeMTMCvidreID(object):
             raise RuntimeError("'{}' is not available".format(self.train_dir))
         if not osp.exists(self.query_dir):
             raise RuntimeError("'{}' is not available".format(self.query_dir))
-            if not osp.exists(self.gallery_dir):
+        if not osp.exists(self.gallery_dir):
             raise RuntimeError("'{}' is not available".format(self.gallery_dir))
 
 """Create dataset"""
