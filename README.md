@@ -34,7 +34,7 @@ cd deep-person-reid/
 mkdir data/
 ```
 
-Please follow the instructions below to prepare each dataset.
+If you wanna store datasets in another directory, you need to specify `--root path_to_your/data` when running the training code. Please follow the instructions below to prepare each dataset.
 
 **Market1501** [7]:
 1. Download dataset to `data/` from http://www.liangzheng.org/Project/project_reid.html.
@@ -70,6 +70,21 @@ dukemtmc-reid/
     DukeMTMC-reid/ # this folder contains 8 files.
 ```
 3. Use `-d dukemtmcreid` when running the training code.
+
+
+**MSMT17** [22]:
+1. Create a directory named `msmt17/` under `data/`.
+2. Download dataset `MSMT17_V1.tar.gz` to `data/msmt17/` from http://www.pkuvmc.com/publications/msmt17.html. Extract the file under the same folder, so you will have
+```
+msmt17/
+    MSMT17_V1.tar.gz
+    MSMT17_V1/
+        train/
+        test/
+        list_train.txt
+        ... (totally six .txt files)
+```
+3. Use `-d msmt17` when running the training code.
 
 **MARS** [8]:
 1. Create a directory named `mars/` under `data/`.
@@ -273,3 +288,4 @@ Of course, you can pass `model.classifier.parameters()` to optimizer if you only
 [19] [Sandler et al. MobileNetV2: Inverted Residuals and Linear Bottlenecks. CVPR 2018.](https://arxiv.org/abs/1801.04381) <br />
 [20] [Zhang et al. ShuffleNet: An Extremely Efficient Convolutional Neural Network for Mobile Devices. CVPR 2018.](https://arxiv.org/abs/1707.01083) <br />
 [21] [Chollet. Xception: Deep Learning with Depthwise Separable Convolutions. CVPR 2017.](https://arxiv.org/abs/1610.02357) <br />
+[22] [Wei et al. Person Transfer GAN to Bridge Domain Gap for Person Re-Identification. CVPR 2018.](http://www.pkuvmc.com/publications/msmt17.html) <br />
