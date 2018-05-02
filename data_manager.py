@@ -14,7 +14,11 @@ from scipy.misc import imsave
 
 from utils import mkdir_if_missing, write_json, read_json
 
-"""Dataset classes"""
+"""Dataset classes
+
+Each class has a 'root' variable pointing to the './data/specific-dataset' directory.
+If you store dataset in custom paths, please change 'root' accordingly.
+"""
 
 """Image ReID"""
 
@@ -438,6 +442,85 @@ class DukeMTMCreID(object):
 
         num_pids = len(pid_container)
         num_imgs = len(dataset)
+        return dataset, num_pids, num_imgs
+
+class MSMT17(object):
+    """
+    MSMT17
+
+    Reference:
+    Wei et al. Person Transfer GAN to Bridge Domain Gap for Person Re-Identification. CVPR 2018.
+
+    URL: http://www.pkuvmc.com/publications/msmt17.html
+    
+    Dataset statistics:
+    # identities: 4101
+    # images: 32621 (train) + 11659 (query) + 82161 (gallery)
+    # cameras: 15
+    """
+    root = './data/msmt17'
+    train_dir = osp.join(root, 'MSMT17_V1/train')
+    test_dir = osp.join(root, 'MSMT17_V1/test')
+    list_train_path = osp.join(root, 'MSMT17_V1/list_train.txt')
+    list_val_path = osp.join(root, 'MSMT17_V1/list_val.txt')
+    list_query_path = osp.join(root, 'MSMT17_V1/list_query.txt')
+    list_gallery_path = osp.join(root, 'MSMT17_V1/list_gallery.txt')
+
+    def __init__(self, **kwargs):
+        self._check_before_run()
+        train, num_train_pids, num_train_imgs = self._process_dir(self.train_dir, self.list_train_path)
+        val, num_val_pids, num_val_imgs = self._process_dir(self.train_dir, self.list_val_path)
+        query, num_query_pids, num_query_imgs = self._process_dir(self.test_dir, self.list_query_path)
+        gallery, num_gallery_pids, num_gallery_imgs = self._process_dir(self.test_dir, self.list_gallery_path)
+
+        train += val
+        num_train_imgs += num_val_imgs
+
+        num_total_pids = num_train_pids + num_query_pids
+        num_total_imgs = num_train_imgs + num_query_imgs + num_gallery_imgs
+
+        print("=> MSMT17 loaded")
+        print("Dataset statistics:")
+        print("  ------------------------------")
+        print("  subset   | # ids | # images")
+        print("  ------------------------------")
+        print("  train    | {:5d} | {:8d}".format(num_train_pids, num_train_imgs))
+        print("  query    | {:5d} | {:8d}".format(num_query_pids, num_query_imgs))
+        print("  gallery  | {:5d} | {:8d}".format(num_gallery_pids, num_gallery_imgs))
+        print("  ------------------------------")
+        print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_imgs))
+        print("  ------------------------------")
+
+        self.train = train
+        self.query = query
+        self.gallery = gallery
+
+        self.num_train_pids = num_train_pids
+        self.num_query_pids = num_query_pids
+        self.num_gallery_pids = num_gallery_pids
+
+    def _check_before_run(self):
+        """Check if all files are available before going deeper"""
+        if not osp.exists(self.root):
+            raise RuntimeError("'{}' is not available".format(self.root))
+        if not osp.exists(self.train_dir):
+            raise RuntimeError("'{}' is not available".format(self.train_dir))
+        if not osp.exists(self.test_dir):
+            raise RuntimeError("'{}' is not available".format(self.test_dir))
+
+    def _process_dir(self, dir_path, list_path):
+        with open(list_path, 'r') as txt:
+            lines = txt.readlines()
+        dataset = []
+        pid_container = set()
+        for img_idx, img_info in enumerate(lines):
+            img_path, pid = img_info.split(' ')
+            pid = int(pid)
+            camid = int(img_path.split('_')[2])
+            dataset.append((img_path, pid, camid))
+            pid_container.add(pid)
+        num_imgs = len(dataset)
+        num_pids = len(pid_container)
         return dataset, num_pids, num_imgs
 
 """Video ReID"""
