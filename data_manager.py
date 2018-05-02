@@ -545,9 +545,6 @@ class Mars(object):
     # identities: 1261
     # tracklets: 8298 (train) + 1980 (query) + 9330 (gallery)
     # cameras: 6
-
-    Args:
-        min_seq_len (int): tracklet with length shorter than this value will be discarded (default: 0).
     """
     dataset_dir = 'mars'
 
@@ -684,9 +681,6 @@ class iLIDSVID(object):
     # identities: 300
     # tracklets: 600
     # cameras: 2
-
-    Args:
-        split_id (int): indicates which split to use. There are totally 10 splits.
     """
     dataset_dir = 'ilids-vid'
 
@@ -856,10 +850,6 @@ class PRID(object):
     # identities: 200
     # tracklets: 400
     # cameras: 2
-
-    Args:
-        split_id (int): indicates which split to use. There are totally 10 splits.
-        min_seq_len (int): tracklet with length shorter than this value will be discarded (default: 0).
     """
     dataset_dir = 'prid2011'
 
@@ -961,9 +951,6 @@ class DukeMTMCVidReID(object):
     Dataset statistics:
     # identities: 702 (train) + 702 (test)
     # tracklets: 2196 (train) + 2636 (test)
-
-    Args:
-        min_seq_len (int): tracklet with length shorter than this value will be discarded (default: 0).
     """
     dataset_dir = 'dukemtmc-vidreid'
 
@@ -976,7 +963,9 @@ class DukeMTMCVidReID(object):
         self.split_query_json_path = osp.join(self.dataset_dir, 'split_query.json')
         self.split_gallery_json_path = osp.join(self.dataset_dir, 'split_gallery.json')
 
+        self.min_seq_len = min_seq_len
         self._check_before_run()
+        print("Note: if root path is changed, the previously generated json files need to be re-generated (so delete them first)")
 
         train, num_train_tracklets, num_train_pids, num_imgs_train = \
           self._process_dir(self.train_dir, self.split_train_json_path, relabel=True)
@@ -1026,14 +1015,13 @@ class DukeMTMCVidReID(object):
             raise RuntimeError("'{}' is not available".format(self.gallery_dir))
 
     def _process_dir(self, dir_path, json_path, relabel):
-        print("Note: if root path is changed, the previously generated json files need to be re-generated (delete them first)")
         if osp.exists(json_path):
-            print("Split generated before, awesome!")
+            print("=> {} generated before, awesome!".format(json_path))
             split = read_json(json_path)
             return split['tracklets'], split['num_tracklets'], split['num_pids'], split['num_imgs_per_tracklet']
 
         print("=> Automatically generating split (might take a while for the first time, have a coffe)")
-        pdirs = glob.glob(osp.join(dir_path, '*'))
+        pdirs = glob.glob(osp.join(dir_path, '*')) # avoid .DS_Store
         print("Processing {} with {} person identities".format(dir_path, len(pdirs)))
 
         pid_container = set()
@@ -1051,27 +1039,36 @@ class DukeMTMCVidReID(object):
             for tdir in tdirs:
                 raw_img_paths = glob.glob(osp.join(tdir, '*.jpg'))
                 num_imgs = len(raw_img_paths)
+
+                if num_imgs < self.min_seq_len:
+                    continue
+
                 num_imgs_per_tracklet.append(num_imgs)
                 img_paths = []
                 for img_idx in range(num_imgs):
+                    # some tracklet starts from 0002 instead of 0001
                     img_idx_name = 'F' + str(img_idx+1).zfill(4)
-                    img_path = glob.glob(osp.join(tdir, '*' + img_idx_name + '*.jpg'))[0]
-                    img_paths.append(img_path)
+                    res = glob.glob(osp.join(tdir, '*' + img_idx_name + '*.jpg'))
+                    if len(res) == 0:
+                        print("Warn: index name {} in {} is missing, jump to next".format(img_idx_name, tdir))
+                        continue
+                    img_paths.append(res[0])
                 img_name = osp.basename(img_paths[0])
                 camid = int(img_name[5]) - 1 # index-0
+                img_paths = tuple(img_paths)
                 tracklets.append((img_paths, pid, camid))
 
         num_pids = len(pid_container)
         num_tracklets = len(tracklets)
 
-        print("Save split to {}".format(json_path))
-        split = {
+        print("Saving split to {}".format(json_path))
+        split_dict = {
             'tracklets': tracklets,
             'num_tracklets': num_tracklets,
             'num_pids': num_pids,
             'num_imgs_per_tracklet': num_imgs_per_tracklet,
         }
-        write_json(json_path, json_path)
+        write_json(split_dict, json_path)
 
         return tracklets, num_tracklets, num_pids, num_imgs_per_tracklet
 
@@ -1099,4 +1096,4 @@ def init_dataset(name, **kwargs):
     return __factory[name](**kwargs)
 
 if __name__ == '__main__':
-    d = DukeMTMCVidReID()
+    pass
