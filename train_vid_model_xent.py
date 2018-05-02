@@ -24,6 +24,7 @@ from optimizers import init_optim
 
 parser = argparse.ArgumentParser(description='Train video model with cross entropy loss')
 # Datasets
+parser.add_argument('--root', type=str, default='data', help="root path to data directory")
 parser.add_argument('-d', '--dataset', type=str, default='mars',
                     choices=data_manager.get_names())
 parser.add_argument('-j', '--workers', default=4, type=int,
@@ -86,7 +87,7 @@ def main():
         print("Currently using CPU (GPU is highly recommended)")
 
     print("Initializing dataset {}".format(args.dataset))
-    dataset = data_manager.init_dataset(name=args.dataset)
+    dataset = data_manager.init_dataset(root=args.root, name=args.dataset)
 
     transform_train = T.Compose([
         T.Random2DTranslation(args.height, args.width),

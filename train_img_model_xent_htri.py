@@ -25,6 +25,7 @@ from optimizers import init_optim
 
 parser = argparse.ArgumentParser(description='Train image model with cross entropy loss and hard triplet loss')
 # Datasets
+parser.add_argument('--root', type=str, default='data', help="root path to data directory")
 parser.add_argument('-d', '--dataset', type=str, default='market1501',
                     choices=data_manager.get_names())
 parser.add_argument('-j', '--workers', default=4, type=int,
@@ -99,7 +100,7 @@ def main():
 
     print("Initializing dataset {}".format(args.dataset))
     dataset = data_manager.init_dataset(
-        name=args.dataset, split_id=args.split_id,
+        root=args.root, name=args.dataset, split_id=args.split_id,
         cuhk03_labeled=args.cuhk03_labeled, cuhk03_classic_split=args.cuhk03_classic_split,
     )
 
