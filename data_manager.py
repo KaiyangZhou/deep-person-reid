@@ -208,6 +208,7 @@ class CUHK03(object):
         2. Create 20 classic splits. (Li et al. CVPR'14)
         3. Create new split. (Zhong et al. CVPR'17)
         """
+        print("Note: if root path is changed, the previously generated json files need to be re-generated (delete them first)")
         if osp.exists(self.imgs_labeled_dir) and \
            osp.exists(self.imgs_detected_dir) and \
            osp.exists(self.split_classic_det_json_path) and \
@@ -517,13 +518,16 @@ class MSMT17(object):
         pid_container = set()
         for img_idx, img_info in enumerate(lines):
             img_path, pid = img_info.split(' ')
-            pid = int(pid)
+            pid = int(pid) # no need to relabel
             camid = int(img_path.split('_')[2])
             img_path = osp.join(dir_path, img_path)
             dataset.append((img_path, pid, camid))
             pid_container.add(pid)
         num_imgs = len(dataset)
         num_pids = len(pid_container)
+        # check if pid starts from 0 and increments with 1
+        for idx, pid in enumerate(pid_container):
+            assert idx == pid, "See code comment for explanation"
         return dataset, num_pids, num_imgs
 
 """Video ReID"""
@@ -944,9 +948,9 @@ class PRID(object):
 
         return tracklets, num_tracklets, num_pids, num_imgs_per_tracklet
 
-class DukeMTMCvidreID(object):
+class DukeMTMCVidReID(object):
     """
-    DukeMTMCvidreID
+    DukeMTMCVidReID
 
     Reference:
     Wu et al. Exploit the Unknown Gradually: One-Shot Video-Based Person
@@ -968,6 +972,47 @@ class DukeMTMCvidreID(object):
         self.train_dir = osp.join(self.dataset_dir, 'dukemtmc_videoReID/train_split')
         self.query_dir = osp.join(self.dataset_dir, 'dukemtmc_videoReID/query_split')
         self.gallery_dir = osp.join(self.dataset_dir, 'dukemtmc_videoReID/gallery_split')
+        self.split_train_json_path = osp.join(self.dataset_dir, 'split_train.json')
+        self.split_query_json_path = osp.join(self.dataset_dir, 'split_query.json')
+        self.split_gallery_json_path = osp.join(self.dataset_dir, 'split_gallery.json')
+
+        self._check_before_run()
+
+        train, num_train_tracklets, num_train_pids, num_imgs_train = \
+          self._process_dir(self.train_dir, self.split_train_json_path, relabel=True)
+        query, num_query_tracklets, num_query_pids, num_imgs_query = \
+          self._process_dir(self.query_dir, self.split_query_json_path, relabel=False)
+        gallery, num_gallery_tracklets, num_gallery_pids, num_imgs_gallery = \
+          self._process_dir(self.gallery_dir, self.split_gallery_json_path, relabel=False)
+
+        num_imgs_per_tracklet = num_imgs_train + num_imgs_query + num_imgs_gallery
+        min_num = np.min(num_imgs_per_tracklet)
+        max_num = np.max(num_imgs_per_tracklet)
+        avg_num = np.mean(num_imgs_per_tracklet)
+
+        num_total_pids = num_train_pids + num_query_pids
+        num_total_tracklets = num_train_tracklets + num_query_tracklets + num_gallery_tracklets
+
+        print("=> DukeMTMC-VideoReID loaded")
+        print("Dataset statistics:")
+        print("  ------------------------------")
+        print("  subset   | # ids | # tracklets")
+        print("  ------------------------------")
+        print("  train    | {:5d} | {:8d}".format(num_train_pids, num_train_tracklets))
+        print("  query    | {:5d} | {:8d}".format(num_query_pids, num_query_tracklets))
+        print("  gallery  | {:5d} | {:8d}".format(num_gallery_pids, num_gallery_tracklets))
+        print("  ------------------------------")
+        print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_tracklets))
+        print("  number of images per tracklet: {} ~ {}, average {:.1f}".format(min_num, max_num, avg_num))
+        print("  ------------------------------")
+
+        self.train = train
+        self.query = query
+        self.gallery = gallery
+
+        self.num_train_pids = num_train_pids
+        self.num_query_pids = num_query_pids
+        self.num_gallery_pids = num_gallery_pids
 
     def _check_before_run(self):
         """Check if all files are available before going deeper"""
@@ -980,16 +1025,69 @@ class DukeMTMCvidreID(object):
         if not osp.exists(self.gallery_dir):
             raise RuntimeError("'{}' is not available".format(self.gallery_dir))
 
+    def _process_dir(self, dir_path, json_path, relabel):
+        print("Note: if root path is changed, the previously generated json files need to be re-generated (delete them first)")
+        if osp.exists(json_path):
+            print("Split generated before, awesome!")
+            split = read_json(json_path)
+            return split['tracklets'], split['num_tracklets'], split['num_pids'], split['num_imgs_per_tracklet']
+
+        print("=> Automatically generating split (might take a while for the first time, have a coffe)")
+        pdirs = glob.glob(osp.join(dir_path, '*'))
+        print("Processing {} with {} person identities".format(dir_path, len(pdirs)))
+
+        pid_container = set()
+        for pdir in pdirs:
+            pid = int(osp.basename(pdir))
+            pid_container.add(pid)
+        pid2label = {pid:label for label, pid in enumerate(pid_container)}
+
+        tracklets = []
+        num_imgs_per_tracklet = []
+        for pdir in pdirs:
+            pid = int(osp.basename(pdir))
+            if relabel: pid = pid2label[pid]
+            tdirs = glob.glob(osp.join(pdir, '*'))
+            for tdir in tdirs:
+                raw_img_paths = glob.glob(osp.join(tdir, '*.jpg'))
+                num_imgs = len(raw_img_paths)
+                num_imgs_per_tracklet.append(num_imgs)
+                img_paths = []
+                for img_idx in range(num_imgs):
+                    img_idx_name = 'F' + str(img_idx+1).zfill(4)
+                    img_path = glob.glob(osp.join(tdir, '*' + img_idx_name + '*.jpg'))[0]
+                    img_paths.append(img_path)
+                img_name = osp.basename(img_paths[0])
+                camid = int(img_name[5]) - 1 # index-0
+                tracklets.append((img_paths, pid, camid))
+
+        num_pids = len(pid_container)
+        num_tracklets = len(tracklets)
+
+        print("Save split to {}".format(json_path))
+        split = {
+            'tracklets': tracklets,
+            'num_tracklets': num_tracklets,
+            'num_pids': num_pids,
+            'num_imgs_per_tracklet': num_imgs_per_tracklet,
+        }
+        write_json(json_path, json_path)
+
+        return tracklets, num_tracklets, num_pids, num_imgs_per_tracklet
+
 """Create dataset"""
 
 __factory = {
+    # image-based
     'market1501': Market1501,
     'cuhk03': CUHK03,
     'dukemtmcreid': DukeMTMCreID,
     'msmt17': MSMT17,
+    # video-based
     'mars': Mars,
     'ilidsvid': iLIDSVID,
     'prid': PRID,
+    'dukemtmcvidreid': DukeMTMCVidReID,
 }
 
 def get_names():
@@ -1001,4 +1099,4 @@ def init_dataset(name, **kwargs):
     return __factory[name](**kwargs)
 
 if __name__ == '__main__':
-    d = MSMT17()
+    d = DukeMTMCVidReID()

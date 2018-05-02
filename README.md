@@ -34,7 +34,7 @@ cd deep-person-reid/
 mkdir data/
 ```
 
-If you wanna store datasets in another directory, you need to specify `--root path_to_your/data` when running the training code. Please follow the instructions below to prepare each dataset.
+If you wanna store datasets in another directory, you need to specify `--root path_to_your/data` when running the training code. Please follow the instructions below to prepare each dataset. After that, you can simply do `-d the_dataset` when running the training code (isn't it so easy!). Please do not call image dataset when running video reid scripts, otherwise error would occur, and vice versa.
 
 **Market1501** [7]:
 1. Download dataset to `data/` from http://www.liangzheng.org/Project/project_reid.html.
@@ -66,7 +66,7 @@ cuhk03/
 2. Download dataset `DukeMTMC-reID.zip` from https://github.com/layumi/DukeMTMC-reID_evaluation#download-dataset and put it to `data/dukemtmc-reid`. Extract the zip file, which leads to
 ```
 dukemtmc-reid/
-    DukeMTMC-reid.zip
+    DukeMTMC-reid.zip # (you can delete this zip file, it is ok)
     DukeMTMC-reid/ # this folder contains 8 files.
 ```
 3. Use `-d dukemtmcreid` when running the training code.
@@ -77,7 +77,7 @@ dukemtmc-reid/
 2. Download dataset `MSMT17_V1.tar.gz` to `data/msmt17/` from http://www.pkuvmc.com/publications/msmt17.html. Extract the file under the same folder, so you will have
 ```
 msmt17/
-    MSMT17_V1.tar.gz
+    MSMT17_V1.tar.gz # (do whatever you want with this .tar file)
     MSMT17_V1/
         train/
         test/
@@ -121,6 +121,19 @@ prid2011/
         readme.txt
 ```
 4. Use `-d prid` when running the training code.
+
+**DukeMTMC-VideoReID** [16, 23]:
+1. Make a directory `data/dukemtmc-vidreid`.
+2. Download `dukemtmc_videoReID.zip` from https://github.com/Yu-Wu/DukeMTMC-VideoReID. Unzip the file to `data/dukemtmc-vidreid`. You need to have
+```
+dukemtmc-vidreid/
+    dukemtmc_videoReID/
+        train_split/
+        query_split/
+        gallery_split/
+        ... (and two license files)
+```
+3. Use `-d dukemtmcvidreid` when running the training code.
 
 ## Dataset loaders
 These are implemented in `dataset_loader.py` where we have two main classes that subclass [torch.utils.data.Dataset](http://pytorch.org/docs/master/_modules/torch/utils/data/dataset.html#Dataset):
@@ -289,3 +302,4 @@ Of course, you can pass `model.classifier.parameters()` to optimizer if you only
 [20] [Zhang et al. ShuffleNet: An Extremely Efficient Convolutional Neural Network for Mobile Devices. CVPR 2018.](https://arxiv.org/abs/1707.01083) <br />
 [21] [Chollet. Xception: Deep Learning with Depthwise Separable Convolutions. CVPR 2017.](https://arxiv.org/abs/1610.02357) <br />
 [22] [Wei et al. Person Transfer GAN to Bridge Domain Gap for Person Re-Identification. CVPR 2018.](http://www.pkuvmc.com/publications/msmt17.html) <br />
+[23] [Wu et al. Exploit the Unknown Gradually: One-Shot Video-Based Person Re-Identification by Stepwise Learning. CVPR 2018.](http://xuanyidong.com/publication/cvpr-2018-eug/) <br />
