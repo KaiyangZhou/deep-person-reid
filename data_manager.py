@@ -519,7 +519,7 @@ class MSMT17(object):
             img_path, pid = img_info.split(' ')
             pid = int(pid)
             camid = int(img_path.split('_')[2])
-            img_path = osp.join(dir_path, dir_path)
+            img_path = osp.join(dir_path, img_path)
             dataset.append((img_path, pid, camid))
             pid_container.add(pid)
         num_imgs = len(dataset)
@@ -1001,4 +1001,4 @@ def init_dataset(name, **kwargs):
     return __factory[name](**kwargs)
 
 if __name__ == '__main__':
-    d = PRID()
+    d = MSMT17()
