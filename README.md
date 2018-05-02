@@ -181,6 +181,7 @@ Please run `python train_blah_blah.py -h` for more details regarding arguments.
 | HACNN | 3.72 | xent | 42.4/60.9/70.5 | 40.9 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/hacnn_xent_cuhk03.pth.tar) | 41.7/-/- |38.6 |
 | SqueezeNet | 1.13 | xent | 20.0/38.4/48.2 | 20.0 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/squeezenet_xent_cuhk03.pth.tar) | | |
 | MobileNetV2 | 3.21 | xent | 35.1/55.8/64.7 | 33.8 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenet_xent_cuhk03.pth.tar) | | |
+| ShuffleNet | 1.64 | xent | 22.0/39.3/49.9 | 21.2 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/shufflenet_xent_cuhk03.pth.tar) | | |
 
 #### DukeMTMC-reID
 | Model | Param Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Published Rank | Published mAP |
