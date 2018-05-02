@@ -519,6 +519,7 @@ class MSMT17(object):
             img_path, pid = img_info.split(' ')
             pid = int(pid)
             camid = int(img_path.split('_')[2])
+            img_path = osp.join(dir_path, dir_path)
             dataset.append((img_path, pid, camid))
             pid_container.add(pid)
         num_imgs = len(dataset)
@@ -942,6 +943,42 @@ class PRID(object):
         num_pids = len(dirnames)
 
         return tracklets, num_tracklets, num_pids, num_imgs_per_tracklet
+
+class DukeMTMCvidreID(object):
+    """
+    DukeMTMCvidreID
+
+    Reference:
+    Wu et al. Exploit the Unknown Gradually: One-Shot Video-Based Person
+    Re-Identification by Stepwise Learning. CVPR 2018.
+
+    URL: https://github.com/Yu-Wu/Exploit-Unknown-Gradually
+    
+    Dataset statistics:
+    # identities: 702 (train) + 702 (test)
+    # tracklets: 2196 (train) + 2636 (test)
+
+    Args:
+        min_seq_len (int): tracklet with length shorter than this value will be discarded (default: 0).
+    """
+    dataset_dir = 'dukemtmc-vidreid'
+
+    def __init__(self, root='data', min_seq_len=0, **kwargs):
+        self.dataset_dir = osp.join(root, self.dataset_dir)
+        self.train_dir = osp.join(self.dataset_dir, 'dukemtmc_videoReID/train_split')
+        self.query_dir = osp.join(self.dataset_dir, 'dukemtmc_videoReID/query_split')
+        self.gallery_dir = osp.join(self.dataset_dir, 'dukemtmc_videoReID/gallery_split')
+
+    def _check_before_run(self):
+        """Check if all files are available before going deeper"""
+        if not osp.exists(self.dataset_dir):
+            raise RuntimeError("'{}' is not available".format(self.dataset_dir))
+        if not osp.exists(self.train_dir):
+            raise RuntimeError("'{}' is not available".format(self.train_dir))
+        if not osp.exists(self.query_dir):
+            raise RuntimeError("'{}' is not available".format(self.query_dir))
+            if not osp.exists(self.gallery_dir):
+            raise RuntimeError("'{}' is not available".format(self.gallery_dir))
 
 """Create dataset"""
 
