@@ -30,6 +30,8 @@ class ResNet50(nn.Module):
             return y, f
         elif self.loss == {'cent'}:
             return y, f
+        elif self.loss == {'ring'}:
+            return y, f
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))
 
@@ -82,6 +84,8 @@ class ResNet50M(nn.Module):
         elif self.loss == {'xent', 'htri'}:
             return prelogits, combofeat
         elif self.loss == {'cent'}:
+            return prelogits, combofeat
+        elif self.loss == {'ring'}:
             return prelogits, combofeat
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))

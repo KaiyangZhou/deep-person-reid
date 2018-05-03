@@ -30,5 +30,7 @@ class DenseNet121(nn.Module):
             return y, f
         elif self.loss == {'cent'}:
             return y, f
+        elif self.loss == {'ring'}:
+            return y, f
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))
