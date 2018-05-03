@@ -472,12 +472,12 @@ class MSMT17(object):
 
         self._check_before_run()
         train, num_train_pids, num_train_imgs = self._process_dir(self.train_dir, self.list_train_path)
-        val, num_val_pids, num_val_imgs = self._process_dir(self.train_dir, self.list_val_path)
+        #val, num_val_pids, num_val_imgs = self._process_dir(self.train_dir, self.list_val_path)
         query, num_query_pids, num_query_imgs = self._process_dir(self.test_dir, self.list_query_path)
         gallery, num_gallery_pids, num_gallery_imgs = self._process_dir(self.test_dir, self.list_gallery_path)
 
-        train += val
-        num_train_imgs += num_val_imgs
+        #train += val
+        #num_train_imgs += num_val_imgs
 
         num_total_pids = num_train_pids + num_query_pids
         num_total_imgs = num_train_imgs + num_query_imgs + num_gallery_imgs
