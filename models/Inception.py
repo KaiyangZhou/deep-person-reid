@@ -9,6 +9,10 @@ import sys
 
 __all__ = ['InceptionV4ReID']
 
+"""
+Code imported from https://github.com/Cadene/pretrained-models.pytorch
+"""
+
 pretrained_settings = {
     'inceptionv4': {
         'imagenet': {
