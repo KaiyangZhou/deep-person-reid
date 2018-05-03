@@ -8,6 +8,7 @@ from .SqueezeNet import *
 from .MobileNet import *
 from .ShuffleNet import *
 from .Xception import *
+from .Inception import *
 
 __factory = {
     'resnet50': ResNet50,
@@ -19,6 +20,7 @@ __factory = {
     'mobilenet': MobileNetV2,
     'shufflenet': ShuffleNet,
     'xception': Xception,
+    'inceptionv4': InceptionV4ReID,
 }
 
 def get_names():
