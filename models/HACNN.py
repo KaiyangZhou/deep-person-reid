@@ -34,7 +34,7 @@ class InceptionA(nn.Module):
     """
     def __init__(self, in_channels, out_channels):
         super(InceptionA, self).__init__()
-        single_out_channels = out_channels / 4
+        single_out_channels = out_channels // 4
 
         self.stream1 = nn.Sequential(
             ConvBlock(in_channels, single_out_channels, 1),
@@ -69,7 +69,7 @@ class InceptionB(nn.Module):
     """
     def __init__(self, in_channels, out_channels):
         super(InceptionB, self).__init__()
-        single_out_channels = out_channels / 4
+        single_out_channels = out_channels // 4
 
         self.stream1 = nn.Sequential(
             ConvBlock(in_channels, single_out_channels, 1),
@@ -115,8 +115,8 @@ class ChannelAttn(nn.Module):
     def __init__(self, in_channels, reduction_rate=16):
         super(ChannelAttn, self).__init__()
         assert in_channels%reduction_rate == 0
-        self.conv1 = ConvBlock(in_channels, in_channels/reduction_rate, 1)
-        self.conv2 = ConvBlock(in_channels/reduction_rate, in_channels, 1)
+        self.conv1 = ConvBlock(in_channels, in_channels//reduction_rate, 1)
+        self.conv2 = ConvBlock(in_channels//reduction_rate, in_channels, 1)
 
     def forward(self, x):
         # squeeze operation (global average pooling)
@@ -341,8 +341,8 @@ class HACNN(nn.Module):
         if not self.training:
             # l2 normalization before concatenation
             if self.learn_region:
-                x_global = x_global / x_global.norm(p=2, dim=1, keepdim=True)
-                x_local = x_local / x_local.norm(p=2, dim=1, keepdim=True)
+                x_global = x_global // x_global.norm(p=2, dim=1, keepdim=True)
+                x_local = x_local // x_local.norm(p=2, dim=1, keepdim=True)
                 return torch.cat([x_global, x_local], 1)
             else:
                 return x_global
