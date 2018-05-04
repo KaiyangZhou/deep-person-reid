@@ -8,7 +8,7 @@ from .SqueezeNet import *
 from .MobileNet import *
 from .ShuffleNet import *
 from .Xception import *
-from .Inception import *
+from .InceptionV4 import *
 from .SEResNet import *
 from .NASNet import *
 from .DPN import *
