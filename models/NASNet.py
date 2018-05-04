@@ -1,3 +1,11 @@
+from __future__ import absolute_import
+
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.utils.model_zoo as model_zoo
+import numpy as np
+
 """
 NASNet Mobile
 Thanks to Anastasiia (https://github.com/DagnyT) for the great help, support and motivation!
@@ -16,12 +24,6 @@ Thanks to Anastasiia (https://github.com/DagnyT) for the great help, support and
 """
 Code imported from https://github.com/Cadene/pretrained-models.pytorch
 """
-
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.utils.model_zoo as model_zoo
-import numpy as np
 
 pretrained_settings = {
     'nasnetamobile': {

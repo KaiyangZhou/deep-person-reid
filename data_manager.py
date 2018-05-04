@@ -1092,13 +1092,11 @@ def get_names():
     return __img_factory.keys() + __vid_factory.keys()
 
 def init_img_dataset(name, **kwargs):
-    print("Initializing image ReID dataset")
     if name not in __img_factory.keys():
         raise KeyError("Invalid dataset, got '{}', but expected to be one of {}".format(name, __img_factory.keys()))
     return __img_factory[name](**kwargs)
 
 def init_vid_dataset(name, **kwargs):
-    print("Initializing video ReID dataset")
     if name not in __vid_factory.keys():
         raise KeyError("Invalid dataset, got '{}', but expected to be one of {}".format(name, __vid_factory.keys()))
     return __vid_factory[name](**kwargs)
