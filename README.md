@@ -156,8 +156,10 @@ These two classes are used for [torch.utils.data.DataLoader](http://pytorch.org/
 * `models/MobileNet.py`: MobileNetV2 [19].
 * `models/ShuffleNet.py`: ShuffleNet [20].
 * `models/Xception.py`: Xception [21].
+* `models/Inception.py`: InceptionV4ReID [24].
+* `models/SEResNet.py`: SEResNet50[25].
 
-See `models/__init__.py` for details regarding how to call these models in command line.
+See `models/__init__.py` for details regarding what keys to use to call these models.
 
 ## Loss functions
 * `xent`: cross entropy + label smoothing regularizer [5].
@@ -308,3 +310,5 @@ Of course, you can pass `model.classifier.parameters()` to optimizer if you only
 [21] [Chollet. Xception: Deep Learning with Depthwise Separable Convolutions. CVPR 2017.](https://arxiv.org/abs/1610.02357) <br />
 [22] [Wei et al. Person Transfer GAN to Bridge Domain Gap for Person Re-Identification. CVPR 2018.](http://www.pkuvmc.com/publications/msmt17.html) <br />
 [23] [Wu et al. Exploit the Unknown Gradually: One-Shot Video-Based Person Re-Identification by Stepwise Learning. CVPR 2018.](http://xuanyidong.com/publication/cvpr-2018-eug/) <br />
+[24] [Szegedy et al. Inception-v4, Inception-ResNet and the Impact of Residual Connections on Learning. ICLRW 2016.](https://arxiv.org/abs/1602.07261) <br />
+[25] [Hu et al. Squeeze-and-Excitation Networks. CVPR 2018.](https://arxiv.org/abs/1709.01507) <br />
