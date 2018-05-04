@@ -93,7 +93,7 @@ def main():
         print("Currently using CPU (GPU is highly recommended)")
 
     print("Initializing dataset {}".format(args.dataset))
-    dataset = data_manager.init_dataset(
+    dataset = data_manager.init_img_dataset(
         root=args.root, name=args.dataset, split_id=args.split_id,
         cuhk03_labeled=args.cuhk03_labeled, cuhk03_classic_split=args.cuhk03_classic_split,
     )
@@ -132,7 +132,7 @@ def main():
     )
 
     print("Initializing model: {}".format(args.arch))
-    model = models.init_img_dataset(name=args.arch, num_classes=dataset.num_train_pids, loss={'xent'}, use_gpu=use_gpu)
+    model = models.init_model(name=args.arch, num_classes=dataset.num_train_pids, loss={'xent'}, use_gpu=use_gpu)
     print("Model size: {:.5f}M".format(sum(p.numel() for p in model.parameters())/1000000.0))
 
     criterion = CrossEntropyLabelSmooth(num_classes=dataset.num_train_pids, use_gpu=use_gpu)
