@@ -10,6 +10,7 @@ We support
 - download of trained models.
 
 ## Updates
+- May 2018: Support [MSMT17](http://www.pkuvmc.com/publications/msmt17.html) and [DukeMTMC-VideoReID](https://github.com/Yu-Wu/DukeMTMC-VideoReID); Added Inception-v4 and SE-ResNet50.
 - Apr 2018: Added [DukeMTMC-reID](https://github.com/layumi/DukeMTMC-reID_evaluation#dukemtmc-reid-description); Added [SqueezeNet](https://arxiv.org/abs/1602.07360), [MobileNetV2 (CVPR'18)](https://arxiv.org/abs/1801.04381), [ShuffleNet (CVPR'18)](https://arxiv.org/abs/1707.01083) and [Xception (CVPR'17)](https://arxiv.org/abs/1610.02357).
 - Apr 2018: Added [Harmonious Attention CNN (CVPR'18)](https://arxiv.org/abs/1802.08122). We achieved Rank-1 42.4% (vs. 41.7% in the paper) on CUHK03 (Detected) by training from scratch. The result can be reproduced by `python train_img_model_xent.py -d cuhk03 -a hacnn --save-dir log/hacnn-xent-cuhk03 --height 160 --width 64 --max-epoch 500 --stepsize -1 --eval-step 50`.
 - Apr 2018: Code upgraded to pytorch 0.4.0.
@@ -23,6 +24,8 @@ We support
 - [PyTorch](http://pytorch.org/) (0.4.0)
 - [torchvision](https://github.com/pytorch/vision/)
 
+Python2 is recommended for current version.
+
 ## Install
 1. `cd` to the folder where you want to download this repo.
 2. run `git clone https://github.com/KaiyangZhou/deep-person-reid`.
@@ -34,7 +37,9 @@ cd deep-person-reid/
 mkdir data/
 ```
 
-If you wanna store datasets in another directory, you need to specify `--root path_to_your/data` when running the training code. Please follow the instructions below to prepare each dataset. After that, you can simply do `-d the_dataset` when running the training code (isn't it so easy!). Please do not call image dataset when running video reid scripts, otherwise error would occur, and vice versa.
+If you wanna store datasets in another directory, you need to specify `--root path_to_your/data` when running the training code. Please follow the instructions below to prepare each dataset. After that, you can simply do `-d the_dataset` when running the training code. 
+
+Please do not call image dataset when running video reid scripts, otherwise error would occur, and vice versa.
 
 **Market1501** [7]:
 1. Download dataset to `data/` from http://www.liangzheng.org/Project/project_reid.html.
