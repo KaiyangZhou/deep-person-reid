@@ -7,7 +7,7 @@ import torch.utils.model_zoo as model_zoo
 import os
 import sys
 
-__all__ = ['InceptionResNetV2', 'inceptionresnetv2']
+__all__ = ['InceptionResNetV2']
 
 pretrained_settings = {
     'inceptionresnetv2': {

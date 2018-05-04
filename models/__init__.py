@@ -12,6 +12,7 @@ from .InceptionV4 import *
 from .SEResNet import *
 from .NASNet import *
 from .DPN import *
+from .InceptionResNetV2 import *
 
 __factory = {
     'resnet50': ResNet50,
@@ -27,6 +28,7 @@ __factory = {
     'seresnet50': SEResNet50,
     'nasnet': NASNetAMobile,
     'dpn92': DPN,
+    'inceptionresnetv2': InceptionResNetV2,
 }
 
 def get_names():
