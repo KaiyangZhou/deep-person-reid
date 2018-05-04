@@ -1074,13 +1074,14 @@ class DukeMTMCVidReID(object):
 
 """Create dataset"""
 
-__factory = {
-    # image-based
+__img_factory = {
     'market1501': Market1501,
     'cuhk03': CUHK03,
     'dukemtmcreid': DukeMTMCreID,
     'msmt17': MSMT17,
-    # video-based
+}
+
+__vid_factory = {
     'mars': Mars,
     'ilidsvid': iLIDSVID,
     'prid': PRID,
@@ -1088,12 +1089,14 @@ __factory = {
 }
 
 def get_names():
-    return __factory.keys()
+    return __img_factory.keys() + __vid_factory.keys()
 
-def init_dataset(name, **kwargs):
-    if name not in __factory.keys():
-        raise KeyError("Unknown dataset: {}".format(name))
-    return __factory[name](**kwargs)
+def init_img_dataset(name, **kwargs):
+    if name not in __img_factory.keys():
+        raise KeyError("Invalid dataset: {}".format(name))
+    return __img_factory[name](**kwargs)
 
-if __name__ == '__main__':
-    pass
+def init_vid_dataset(name, **kwargs):
+    if name not in __vid_factory.keys():
+        raise KeyError("Invalid dataset: {}".format(name))
+    return __vid_factory[name](**kwargs)

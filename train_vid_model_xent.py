@@ -87,7 +87,7 @@ def main():
         print("Currently using CPU (GPU is highly recommended)")
 
     print("Initializing dataset {}".format(args.dataset))
-    dataset = data_manager.init_dataset(root=args.root, name=args.dataset)
+    dataset = data_manager.init_vid_dataset(root=args.root, name=args.dataset)
 
     transform_train = T.Compose([
         T.Random2DTranslation(args.height, args.width),
