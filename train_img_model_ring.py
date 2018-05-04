@@ -22,7 +22,7 @@ from utils import AverageMeter, Logger, save_checkpoint
 from eval_metrics import evaluate
 from optimizers import init_optim
 
-parser = argparse.ArgumentParser(description='Train image model with cross entropy loss')
+parser = argparse.ArgumentParser(description='Train image model with ring loss')
 # Datasets
 parser.add_argument('--root', type=str, default='data', help="root path to data directory")
 parser.add_argument('-d', '--dataset', type=str, default='market1501',
