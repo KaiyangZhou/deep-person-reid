@@ -10,11 +10,12 @@ from .ShuffleNet import *
 from .Xception import *
 from .Inception import *
 from .SEResNet import *
+from .NASNet import *
 
 __factory = {
     'resnet50': ResNet50,
-    'densenet121': DenseNet121,
     'resnet50m': ResNet50M,
+    'densenet121': DenseNet121,
     'mudeep': MuDeep,
     'hacnn': HACNN,
     'squeezenet': SqueezeNet,
@@ -23,6 +24,7 @@ __factory = {
     'xception': Xception,
     'inceptionv4': InceptionV4ReID,
     'seresnet50': SEResNet50,
+    'nasnet': NASNetAMobile,
 }
 
 def get_names():
