@@ -1,5 +1,8 @@
+from __future__ import absolute_import
+
 import torch
 import torch.nn as nn
+from torch.nn import functional as F
 import torch.utils.model_zoo as model_zoo
 import os
 import sys
@@ -232,13 +235,9 @@ class Block8(nn.Module):
 
 class InceptionResNetV2(nn.Module):
 
-    def __init__(self, num_classes=1001):
+    def __init__(self, num_classes, loss={'xent'}, **kwargs):
         super(InceptionResNetV2, self).__init__()
-        # Special attributs
-        self.input_space = None
-        self.input_size = (299, 299, 3)
-        self.mean = None
-        self.std = None
+        self.loss = loss
         # Modules
         self.conv2d_1a = BasicConv2d(3, 32, kernel_size=3, stride=2)
         self.conv2d_2a = BasicConv2d(32, 32, kernel_size=3, stride=1)
@@ -297,8 +296,19 @@ class InceptionResNetV2(nn.Module):
         )
         self.block8 = Block8(noReLU=True)
         self.conv2d_7b = BasicConv2d(2080, 1536, kernel_size=1, stride=1)
-        self.avgpool_1a = nn.AvgPool2d(8, count_include_pad=False)
-        self.last_linear = nn.Linear(1536, num_classes)
+        self.classifier = nn.Linear(1536, num_classes)
+        self.feat_dim = 1536
+
+        self.init_params()
+
+    def init_params(self):
+        """Load ImageNet pretrained weights"""
+        settings = pretrained_settings['inceptionresnetv2']['imagenet']
+        pretrained_dict = model_zoo.load_url(settings['url'], map_location=None)
+        model_dict = self.state_dict()
+        pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
+        model_dict.update(pretrained_dict)
+        self.load_state_dict(model_dict)
 
     def features(self, input):
         x = self.conv2d_1a(input)
@@ -316,18 +326,28 @@ class InceptionResNetV2(nn.Module):
         x = self.repeat_2(x)
         x = self.block8(x)
         x = self.conv2d_7b(x)
-        return x
-
-    def logits(self, features):
-        x = self.avgpool_1a(features)
+        x = F.avg_pool2d(x, x.size()[2:])
         x = x.view(x.size(0), -1)
-        x = self.last_linear(x) 
         return x
 
     def forward(self, input):
         x = self.features(input)
-        x = self.logits(x)
-        return x
+
+        if not self.training:
+            return x
+
+        y = self.classifier(x)
+
+        if self.loss == {'xent'}:
+            return y
+        elif self.loss == {'xent', 'htri'}:
+            return y, x
+        elif self.loss == {'cent'}:
+            return y, x
+        elif self.loss == {'ring'}:
+            return y, x
+        else:
+            raise KeyError("Unsupported loss: {}".format(self.loss))
 
 def inceptionresnetv2(num_classes=1000, pretrained='imagenet'):
     r"""InceptionResNetV2 model architecture from the
@@ -357,14 +377,3 @@ def inceptionresnetv2(num_classes=1000, pretrained='imagenet'):
     else:
         model = InceptionResNetV2(num_classes=num_classes)
     return model
-
-'''
-TEST
-Run this code with:
-```
-cd $HOME/pretrained-models.pytorch
-python -m pretrainedmodels.inceptionresnetv2
-```
-'''
-if __name__ == '__main__':
-    assert inceptionresnetv2(num_classes=1000, pretrained='imagenet')

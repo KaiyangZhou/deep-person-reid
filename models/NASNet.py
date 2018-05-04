@@ -581,6 +581,7 @@ class NASNetAMobile(nn.Module):
         self.relu = nn.ReLU()
         self.dropout = nn.Dropout()
         self.classifier = nn.Linear(24*filters, self.num_classes)
+        self.feat_dim = 24*filters
 
         self.init_params()
 

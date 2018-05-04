@@ -376,6 +376,7 @@ class DPN(nn.Module):
         # Using 1x1 conv for the FC layer to allow the extra pooling scheme
         #self.classifier = nn.Conv2d(in_chs, num_classes, kernel_size=1, bias=True)
         self.classifier = nn.Linear(in_chs, num_classes)
+        self.feat_dim = in_chs
 
         self.init_params()
 
@@ -492,11 +493,3 @@ class AdaptiveAvgMaxPool2d(torch.nn.Module):
         return self.__class__.__name__ + ' (' \
                + 'output_size=' + str(self.output_size) \
                + ', pool_type=' + self.pool_type + ')'
-
-if __name__ == '__main__':
-    model = DPN(10)
-    x = torch.rand(1, 3, 256, 128)
-    model.eval()
-    y = model(x)
-    model.train()
-    y = model(x)
