@@ -13,7 +13,7 @@ import torchvision
 Code imported from https://github.com/Cadene/pretrained-models.pytorch
 """
 
-__all__ = ['SEResNet50']
+__all__ = ['SEResNet50', 'SEResNet101', 'SEResNeXt50', 'SEResNeXt101']
 
 pretrained_settings = {
     'senet154': {
@@ -190,7 +190,7 @@ class SEResNeXtBottleneck(Bottleneck):
     def __init__(self, inplanes, planes, groups, reduction, stride=1,
                  downsample=None, base_width=4):
         super(SEResNeXtBottleneck, self).__init__()
-        width = math.floor(planes * (base_width / 64)) * groups
+        width = int(math.floor(planes * (base_width / 64.)) * groups)
         self.conv1 = nn.Conv2d(inplanes, width, kernel_size=1, bias=False,
                                stride=1)
         self.bn1 = nn.BatchNorm2d(width)
@@ -442,11 +442,97 @@ def se_resnext101_32x4d(num_classes=1000, pretrained='imagenet'):
         initialize_pretrained_model(model, num_classes, settings)
     return model
 
+##################### Model Definition #########################
+
 class SEResNet50(nn.Module):
     def __init__(self, num_classes, loss={'xent'}, **kwargs):
         super(SEResNet50, self).__init__()
         self.loss = loss
         base = se_resnet50()
+        self.base = nn.Sequential(*list(base.children())[:-2])
+        self.classifier = nn.Linear(2048, num_classes)
+        self.feat_dim = 2048 # feature dimension
+
+    def forward(self, x):
+        x = self.base(x)
+        x = F.avg_pool2d(x, x.size()[2:])
+        f = x.view(x.size(0), -1)
+        if not self.training:
+            return f
+        y = self.classifier(f)
+
+        if self.loss == {'xent'}:
+            return y
+        elif self.loss == {'xent', 'htri'}:
+            return y, f
+        elif self.loss == {'cent'}:
+            return y, f
+        elif self.loss == {'ring'}:
+            return y, f
+        else:
+            raise KeyError("Unsupported loss: {}".format(self.loss))
+
+class SEResNet101(nn.Module):
+    def __init__(self, num_classes, loss={'xent'}, **kwargs):
+        super(SEResNet101, self).__init__()
+        self.loss = loss
+        base = se_resnet101()
+        self.base = nn.Sequential(*list(base.children())[:-2])
+        self.classifier = nn.Linear(2048, num_classes)
+        self.feat_dim = 2048 # feature dimension
+
+    def forward(self, x):
+        x = self.base(x)
+        x = F.avg_pool2d(x, x.size()[2:])
+        f = x.view(x.size(0), -1)
+        if not self.training:
+            return f
+        y = self.classifier(f)
+
+        if self.loss == {'xent'}:
+            return y
+        elif self.loss == {'xent', 'htri'}:
+            return y, f
+        elif self.loss == {'cent'}:
+            return y, f
+        elif self.loss == {'ring'}:
+            return y, f
+        else:
+            raise KeyError("Unsupported loss: {}".format(self.loss))
+
+class SEResNeXt50(nn.Module):
+    def __init__(self, num_classes, loss={'xent'}, **kwargs):
+        super(SEResNeXt50, self).__init__()
+        self.loss = loss
+        base = se_resnext50_32x4d()
+        self.base = nn.Sequential(*list(base.children())[:-2])
+        self.classifier = nn.Linear(2048, num_classes)
+        self.feat_dim = 2048 # feature dimension
+
+    def forward(self, x):
+        x = self.base(x)
+        x = F.avg_pool2d(x, x.size()[2:])
+        f = x.view(x.size(0), -1)
+        if not self.training:
+            return f
+        y = self.classifier(f)
+
+        if self.loss == {'xent'}:
+            return y
+        elif self.loss == {'xent', 'htri'}:
+            return y, f
+        elif self.loss == {'cent'}:
+            return y, f
+        elif self.loss == {'ring'}:
+            return y, f
+        else:
+            raise KeyError("Unsupported loss: {}".format(self.loss))
+
+class SEResNeXt101(nn.Module):
+    def __init__(self, num_classes, loss={'xent'}, **kwargs):
+        super(SEResNeXt101, self).__init__()
+        self.loss = loss
+        base = se_resnext101_32x4d()
         self.base = nn.Sequential(*list(base.children())[:-2])
         self.classifier = nn.Linear(2048, num_classes)
         self.feat_dim = 2048 # feature dimension
