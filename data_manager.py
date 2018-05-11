@@ -689,7 +689,7 @@ class iLIDSVID(object):
         self.dataset_url = 'http://www.eecs.qmul.ac.uk/~xiatian/iLIDS-VID/iLIDS-VID.tar'
         self.data_dir = osp.join(self.dataset_dir, 'i-LIDS-VID')
         self.split_dir = osp.join(self.dataset_dir, 'train-test people splits')
-        self.split_mat_path = osp.join(self.dataset_dir, 'train_test_splits_ilidsvid.mat')
+        self.split_mat_path = osp.join(self.split_dir, 'train_test_splits_ilidsvid.mat')
         self.split_path = osp.join(self.dataset_dir, 'splits.json')
         self.cam_1_path = osp.join(self.dataset_dir, 'i-LIDS-VID/sequences/cam1')
         self.cam_2_path = osp.join(self.dataset_dir, 'i-LIDS-VID/sequences/cam2')
