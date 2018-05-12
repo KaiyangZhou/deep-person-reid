@@ -108,6 +108,9 @@ class SqueezeNet(nn.Module):
         x10 = F.relu(self.conv10(x9))
         f = F.avg_pool2d(x10, x10.size()[2:]).view(x10.size(0), -1)
 
+        if not self.training:
+            return f
+
         if self.loss == {'xent'}:
             return f
         elif self.loss == {'xent', 'htri'}:
