@@ -10,7 +10,7 @@ We support
 - download of trained models.
 
 ## Updates
-- May 2018: Support [MSMT17](http://www.pkuvmc.com/publications/msmt17.html) and [DukeMTMC-VideoReID](https://github.com/Yu-Wu/DukeMTMC-VideoReID); Added Inception-v4 and SE-ResNet50.
+- May 2018: Support [MSMT17](http://www.pkuvmc.com/publications/msmt17.html) and [DukeMTMC-VideoReID](https://github.com/Yu-Wu/DukeMTMC-VideoReID); Added Inception-v4, ResNext and SE-ResNe(X)t.
 - Apr 2018: Added [DukeMTMC-reID](https://github.com/layumi/DukeMTMC-reID_evaluation#dukemtmc-reid-description); Added [SqueezeNet](https://arxiv.org/abs/1602.07360), [MobileNetV2 (CVPR'18)](https://arxiv.org/abs/1801.04381), [ShuffleNet (CVPR'18)](https://arxiv.org/abs/1707.01083) and [Xception (CVPR'17)](https://arxiv.org/abs/1610.02357).
 - Apr 2018: Added [Harmonious Attention CNN (CVPR'18)](https://arxiv.org/abs/1802.08122). We achieved Rank-1 42.4% (vs. 41.7% in the paper) on CUHK03 (Detected) by training from scratch. The result can be reproduced by `python train_img_model_xent.py -d cuhk03 -a hacnn --save-dir log/hacnn-xent-cuhk03 --height 160 --width 64 --max-epoch 500 --stepsize -1 --eval-step 50`.
 - Apr 2018: Code upgraded to pytorch 0.4.0.
@@ -148,7 +148,9 @@ These are implemented in `dataset_loader.py` where we have two main classes that
 These two classes are used for [torch.utils.data.DataLoader](http://pytorch.org/docs/master/_modules/torch/utils/data/dataloader.html#DataLoader) that can provide batched data. Data loader wich `ImageDataset` outputs batch data of `(batch, channel, height, width)`, while data loader with `VideoDataset` outputs batch data of `(batch, sequence, channel, height, width)`.
 
 ## Models
-* `models/ResNet.py`: ResNet50 [1], ResNet50M [2].
+* `models/ResNet.py`: ResNet50 [1], ResNet101 [1], ResNet50M [2].
+* `models/ResNeXt.py`: ResNeXt101 [26].
+* `models/SEResNet.py`: SEResNet50 [27], SEResNet101 [27], SEResNeXt50 [27], SEResNeXt101 [27].
 * `models/DenseNet.py`: DenseNet121 [3].
 * `models/MuDeep.py`: MuDeep [10]. 
 * `models/HACNN.py`: HACNN [15].
@@ -312,3 +314,6 @@ Of course, you can pass `model.classifier.parameters()` to optimizer if you only
 [23] [Wu et al. Exploit the Unknown Gradually: One-Shot Video-Based Person Re-Identification by Stepwise Learning. CVPR 2018.](http://xuanyidong.com/publication/cvpr-2018-eug/) <br />
 [24] [Szegedy et al. Inception-v4, Inception-ResNet and the Impact of Residual Connections on Learning. ICLRW 2016.](https://arxiv.org/abs/1602.07261) <br />
 [25] [Hu et al. Squeeze-and-Excitation Networks. CVPR 2018.](https://arxiv.org/abs/1709.01507) <br />
+[26] [Xie et al. 
+Aggregated Residual Transformations for Deep Neural Networks. CVPR 2017.](https://arxiv.org/abs/1611.05431) <br />
+[27] [Hu et al. Squeeze-and-Excitation Networks. CVPR 2018.](https://arxiv.org/abs/1709.01507) <br />
