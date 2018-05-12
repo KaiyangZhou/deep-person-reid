@@ -150,7 +150,7 @@ These two classes are used for [torch.utils.data.DataLoader](http://pytorch.org/
 ## Models
 * `models/ResNet.py`: ResNet50 [1], ResNet101 [1], ResNet50M [2].
 * `models/ResNeXt.py`: ResNeXt101 [26].
-* `models/SEResNet.py`: SEResNet50 [27], SEResNet101 [27], SEResNeXt50 [27], SEResNeXt101 [27].
+* `models/SEResNet.py`: SEResNet50 [25], SEResNet101 [25], SEResNeXt50 [25], SEResNeXt101 [25].
 * `models/DenseNet.py`: DenseNet121 [3].
 * `models/MuDeep.py`: MuDeep [10]. 
 * `models/HACNN.py`: HACNN [15].
@@ -159,7 +159,6 @@ These two classes are used for [torch.utils.data.DataLoader](http://pytorch.org/
 * `models/ShuffleNet.py`: ShuffleNet [20].
 * `models/Xception.py`: Xception [21].
 * `models/Inception.py`: InceptionV4ReID [24].
-* `models/SEResNet.py`: SEResNet50[25].
 
 See `models/__init__.py` for details regarding what keys to use to call these models.
 
@@ -316,4 +315,3 @@ Of course, you can pass `model.classifier.parameters()` to optimizer if you only
 [25] [Hu et al. Squeeze-and-Excitation Networks. CVPR 2018.](https://arxiv.org/abs/1709.01507) <br />
 [26] [Xie et al. 
 Aggregated Residual Transformations for Deep Neural Networks. CVPR 2017.](https://arxiv.org/abs/1611.05431) <br />
-[27] [Hu et al. Squeeze-and-Excitation Networks. CVPR 2018.](https://arxiv.org/abs/1709.01507) <br />
