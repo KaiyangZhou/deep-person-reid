@@ -7,6 +7,10 @@ import torch.utils.model_zoo as model_zoo
 import os
 import sys
 
+"""
+Code imported from https://github.com/Cadene/pretrained-models.pytorch
+"""
+
 __all__ = ['InceptionResNetV2']
 
 pretrained_settings = {

@@ -16,8 +16,12 @@ many ideas from another PyTorch implementation https://github.com/oyam/pytorch-D
 This implementation is compatible with the pretrained weights
 from cypw's MXNet implementation.
 """
-
 #__all__ = ['DPN', 'dpn68', 'dpn68b', 'dpn92', 'dpn98', 'dpn131', 'dpn107']
+
+
+"""
+Code imported from https://github.com/Cadene/pretrained-models.pytorch
+"""
 __all__ = ['DPN']
 
 pretrained_settings = {
