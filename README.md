@@ -158,7 +158,7 @@ These two classes are used for [torch.utils.data.DataLoader](http://pytorch.org/
 * `models/MobileNet.py`: MobileNetV2 [19].
 * `models/ShuffleNet.py`: ShuffleNet [20].
 * `models/Xception.py`: Xception [21].
-* `models/InceptionV4.py`: InceptionV4ReID [24].
+* `models/InceptionV4.py`: InceptionV4 [24].
 * `models/InceptionResNetV2.py`: InceptionResNetV2 [24].
 * `models/DPN.py`: DPN92 [27].
 
