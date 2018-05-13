@@ -22,7 +22,7 @@ We support
 
 ## Dependencies
 - [PyTorch](http://pytorch.org/) (0.4.0)
-- [torchvision](https://github.com/pytorch/vision/)
+- [torchvision](https://github.com/pytorch/vision/) (0.2.1)
 
 Python2 is recommended for current version.
 
