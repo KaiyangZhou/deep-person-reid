@@ -10,7 +10,7 @@ We support
 - download of trained models.
 
 ## Updates
-- May 2018: Support [MSMT17](http://www.pkuvmc.com/publications/msmt17.html) and [DukeMTMC-VideoReID](https://github.com/Yu-Wu/DukeMTMC-VideoReID); Added Inception-v4, ResNext and SE-ResNe(X)t.
+- May 2018: Support [MSMT17](http://www.pkuvmc.com/publications/msmt17.html) and [DukeMTMC-VideoReID](https://github.com/Yu-Wu/DukeMTMC-VideoReID); Added Inception-v4, Inception-ResNet-v2, DPN, ResNext and SE-ResNe(X)t. (trained models coming up later)
 - Apr 2018: Added [DukeMTMC-reID](https://github.com/layumi/DukeMTMC-reID_evaluation#dukemtmc-reid-description); Added [SqueezeNet](https://arxiv.org/abs/1602.07360), [MobileNetV2 (CVPR'18)](https://arxiv.org/abs/1801.04381), [ShuffleNet (CVPR'18)](https://arxiv.org/abs/1707.01083) and [Xception (CVPR'17)](https://arxiv.org/abs/1610.02357).
 - Apr 2018: Added [Harmonious Attention CNN (CVPR'18)](https://arxiv.org/abs/1802.08122). We achieved Rank-1 42.4% (vs. 41.7% in the paper) on CUHK03 (Detected) by training from scratch. The result can be reproduced by `python train_img_model_xent.py -d cuhk03 -a hacnn --save-dir log/hacnn-xent-cuhk03 --height 160 --width 64 --max-epoch 500 --stepsize -1 --eval-step 50`.
 - Apr 2018: Code upgraded to pytorch 0.4.0.
@@ -158,7 +158,9 @@ These two classes are used for [torch.utils.data.DataLoader](http://pytorch.org/
 * `models/MobileNet.py`: MobileNetV2 [19].
 * `models/ShuffleNet.py`: ShuffleNet [20].
 * `models/Xception.py`: Xception [21].
-* `models/Inception.py`: InceptionV4ReID [24].
+* `models/InceptionV4.py`: InceptionV4ReID [24].
+* `models/InceptionResNetV2.py`: InceptionResNetV2 [24].
+* `models/DPN.py`: DPN92 [27].
 
 See `models/__init__.py` for details regarding what keys to use to call these models.
 
@@ -314,3 +316,4 @@ Of course, you can pass `model.classifier.parameters()` to optimizer if you only
 [25] [Hu et al. Squeeze-and-Excitation Networks. CVPR 2018.](https://arxiv.org/abs/1709.01507) <br />
 [26] [Xie et al. 
 Aggregated Residual Transformations for Deep Neural Networks. CVPR 2017.](https://arxiv.org/abs/1611.05431) <br />
+[27] [Chen et al. Dual Path Networks. NIPS 2017.](https://arxiv.org/abs/1707.01629) <br />
