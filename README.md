@@ -243,19 +243,6 @@ Please run `python train_blah_blah.py -h` for more details regarding arguments.
 | ResNet50M:dog: | 29.63 | xent | 77.8/89.8/92.8 | 67.5 | - | | |
 | ResNet50M:dog: | 29.63 | xent+htri | 82.3/93.8/95.3 | 75.4 | - | | |
 
-#### iLIDS-VID
-
-| Model | Param Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Published Rank | Published mAP |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| ResNet50:dog: | 23.82 | xent | 62.7/82.7/90.7 | 72.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50_xent_ilidsvid.pth.tar) | | |
-| ResNet50M:dog: | 28.17 | xent | 63.3/85.3/92.7 | 73.6 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50m_xent_ilidsvid.pth.tar) | | |
-
-#### PRID-2011
-
-| Model | Param Size (M) | Loss | Rank-1/5/10 (%) | mAP (%) | Model weights | Published Rank | Published mAP |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| ResNet50:dog: | 23.69 | xent | 75.3/96.6/97.8 | 84.3 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50_xent_prid.pth.tar) | | |
-| ResNet50M:dog: | 27.98 | xent | 85.4/96.6/98.9 | 90.1 | [download](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/video-models/resnet50m_xent_prid.pth.tar) | | |
 
 ## Test
 Say you have downloaded ResNet50 trained with `xent` on `market1501`. The path to this model is  `'saved-models/resnet50_xent_market1501.pth.tar'` (create a directory to store model weights `mkdir saved-models/`). Then, run the following command to test
