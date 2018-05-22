@@ -199,10 +199,17 @@ def main():
     print("Finished. Total elapsed time (h:m:s): {}. Training time (h:m:s): {}.".format(elapsed, train_time))
 
 def train(epoch, model, criterion_xent, criterion_cent, optimizer_model, optimizer_cent, trainloader, use_gpu):
-    model.train()
     losses = AverageMeter()
+    batch_time = AverageMeter()
+    data_time = AverageMeter()
 
+    model.train()
+
+    end = time.time()
     for batch_idx, (imgs, pids, _) in enumerate(trainloader):
+        # measure data loading time
+        data_time.update(time.time() - end)
+
         if use_gpu:
             imgs, pids = imgs.cuda(), pids.cuda()
         outputs, features = model(imgs)
@@ -217,21 +224,35 @@ def train(epoch, model, criterion_xent, criterion_cent, optimizer_model, optimiz
         for param in criterion_cent.parameters():
             param.grad.data *= (1. / args.weight_cent)
         optimizer_cent.step()
+
+        # measure elapsed time
+        batch_time.update(time.time() - end)
+        end = time.time()
+
         losses.update(loss.item(), pids.size(0))
 
         if (batch_idx+1) % args.print_freq == 0:
-            print("Epoch {}/{}\t Batch {}/{}\t Loss {:.6f} ({:.6f})".format(
-                epoch+1, args.max_epoch, batch_idx+1, len(trainloader), losses.val, losses.avg
-            ))
+            print('Epoch: [{0}][{1}/{2}]\t'
+                  'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
+                  'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
+                  'Loss {loss.val:.4f} ({loss.avg:.4f})\t'.format(
+                   epoch+1, batch_idx+1, len(trainloader), batch_time=batch_time,
+                   data_time=data_time, loss=losses))
 
 def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20]):
+    batch_time = AverageMeter()
+
     model.eval()
 
     with torch.no_grad():
         qf, q_pids, q_camids = [], [], []
         for batch_idx, (imgs, pids, camids) in enumerate(queryloader):
             if use_gpu: imgs = imgs.cuda()
+            
+            end = time.time()
             features = model(imgs)
+            batch_time.update(time.time() - end)
+
             features = features.data.cpu()
             qf.append(features)
             q_pids.extend(pids)
@@ -245,7 +266,11 @@ def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20]):
         gf, g_pids, g_camids = [], [], []
         for batch_idx, (imgs, pids, camids) in enumerate(galleryloader):
             if use_gpu: imgs = imgs.cuda()
+            
+            end = time.time()
             features = model(imgs)
+            batch_time.update(time.time() - end)
+
             features = features.data.cpu()
             gf.append(features)
             g_pids.extend(pids)
@@ -256,7 +281,7 @@ def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20]):
 
         print("Extracted features for gallery set, obtained {}-by-{} matrix".format(gf.size(0), gf.size(1)))
     
-    print("Computing distance matrix")
+    print("==> BatchTime(s)/BatchSize(img): {:.3f}/{}".format(batch_time.avg, args.test_batch))
 
     m, n = qf.size(0), gf.size(0)
     distmat = torch.pow(qf, 2).sum(dim=1, keepdim=True).expand(m, n) + \
