@@ -208,11 +208,12 @@ def train(epoch, model, criterion_xent, criterion_cent, optimizer_model, optimiz
 
     end = time.time()
     for batch_idx, (imgs, pids, _) in enumerate(trainloader):
+        if use_gpu:
+            imgs, pids = imgs.cuda(), pids.cuda()
+        
         # measure data loading time
         data_time.update(time.time() - end)
 
-        if use_gpu:
-            imgs, pids = imgs.cuda(), pids.cuda()
         outputs, features = model(imgs)
         xentloss = criterion_xent(outputs, pids)
         centloss = criterion_cent(features, pids) * args.weight_cent

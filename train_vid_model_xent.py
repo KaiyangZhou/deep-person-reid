@@ -200,11 +200,12 @@ def train(epoch, model, criterion, optimizer, trainloader, use_gpu):
 
     end = time.time()
     for batch_idx, (imgs, pids, _) in enumerate(trainloader):
-        # measure data loading time
-        data_time.update(time.time() - end)
-
         if use_gpu:
             imgs, pids = imgs.cuda(), pids.cuda()
+
+        # measure data loading time
+        data_time.update(time.time() - end)
+        
         outputs = model(imgs)
         loss = criterion(outputs, pids)
         optimizer.zero_grad()
