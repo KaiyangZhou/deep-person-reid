@@ -1842,6 +1842,3 @@ def init_vid_dataset(name, **kwargs):
     if name not in __vid_factory.keys():
         raise KeyError("Invalid dataset, got '{}', but expected to be one of {}".format(name, __vid_factory.keys()))
     return __vid_factory[name](**kwargs)
-
-if __name__ == '__main__':
-    dataset = iLIDS()
