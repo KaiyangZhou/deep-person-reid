@@ -530,6 +530,303 @@ class MSMT17(object):
             assert idx == pid, "See code comment for explanation"
         return dataset, num_pids, num_imgs
 
+class VIPeR(object):
+    """
+    VIPeR
+
+    Reference:
+    Gray et al. Evaluating appearance models for recognition, reacquisition, and tracking. PETS 2007.
+
+    URL: https://vision.soe.ucsc.edu/node/178
+    
+    Dataset statistics:
+    # identities: 632
+    # images: 632 x 2 = 1264
+    # cameras: 2
+    """
+    dataset_dir = 'viper'
+
+    def __init__(self, root='data', split_id=0, **kwargs):
+        self.dataset_dir = osp.join(root, self.dataset_dir)
+        self.dataset_url = 'http://users.soe.ucsc.edu/~manduchi/VIPeR.v1.0.zip'
+        self.cam_a_path = osp.join(self.dataset_dir, 'VIPeR', 'cam_a')
+        self.cam_b_path = osp.join(self.dataset_dir, 'VIPeR', 'cam_b')
+        self.split_path = osp.join(self.dataset_dir, 'splits.json')
+
+        self._download_data()
+        self._check_before_run()
+        
+        self._prepare_split()
+        splits = read_json(self.split_path)
+        if split_id >= len(splits):
+            raise ValueError("split_id exceeds range, received {}, but expected between 0 and {}".format(split_id, len(splits)-1))
+        split = splits[split_id]
+
+        train = split['train']
+        query = split['query'] # query and gallery share the same images
+        gallery = split['gallery']
+
+        train = [tuple(item) for item in train]
+        query = [tuple(item) for item in query]
+        gallery = [tuple(item) for item in gallery]
+        
+        num_train_pids = split['num_train_pids']
+        num_query_pids = split['num_query_pids']
+        num_gallery_pids = split['num_gallery_pids']
+        
+        num_train_imgs = len(train)
+        num_query_imgs = len(query)
+        num_gallery_imgs = len(gallery)
+
+        num_total_pids = num_train_pids + num_query_pids
+        num_total_imgs = num_train_imgs + num_query_imgs
+
+        print("=> VIPeR loaded")
+        print("Dataset statistics:")
+        print("  ------------------------------")
+        print("  subset   | # ids | # images")
+        print("  ------------------------------")
+        print("  train    | {:5d} | {:8d}".format(num_train_pids, num_train_imgs))
+        print("  query    | {:5d} | {:8d}".format(num_query_pids, num_query_imgs))
+        print("  gallery  | {:5d} | {:8d}".format(num_gallery_pids, num_gallery_imgs))
+        print("  ------------------------------")
+        print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_imgs))
+        print("  ------------------------------")
+
+        self.train = train
+        self.query = query
+        self.gallery = gallery
+
+        self.num_train_pids = num_train_pids
+        self.num_query_pids = num_query_pids
+        self.num_gallery_pids = num_gallery_pids
+
+    def _download_data(self):
+        if osp.exists(self.dataset_dir):
+            print("This dataset has been downloaded.")
+            return
+
+        print("Creating directory {}".format(self.dataset_dir))
+        mkdir_if_missing(self.dataset_dir)
+        fpath = osp.join(self.dataset_dir, osp.basename(self.dataset_url))
+
+        print("Downloading VIPeR dataset")
+        urllib.urlretrieve(self.dataset_url, fpath)
+
+        print("Extracting files")
+        zip_ref = zipfile.ZipFile(fpath, 'r')
+        zip_ref.extractall(self.dataset_dir)
+        zip_ref.close()
+
+    def _check_before_run(self):
+        """Check if all files are available before going deeper"""
+        if not osp.exists(self.dataset_dir):
+            raise RuntimeError("'{}' is not available".format(self.dataset_dir))
+        if not osp.exists(self.cam_a_path):
+            raise RuntimeError("'{}' is not available".format(self.cam_a_path))
+        if not osp.exists(self.cam_b_path):
+            raise RuntimeError("'{}' is not available".format(self.cam_b_path))
+
+    def _prepare_split(self):
+        if not osp.exists(self.split_path):
+            print("Creating 10 random splits")
+
+            cam_a_imgs = sorted(glob.glob(osp.join(self.cam_a_path, '*.bmp')))
+            cam_b_imgs = sorted(glob.glob(osp.join(self.cam_b_path, '*.bmp')))
+            assert len(cam_a_imgs) == len(cam_b_imgs)
+            num_pids = len(cam_a_imgs)
+            print("Number of identities: {}".format(num_pids))
+            num_train_pids = num_pids // 2
+
+            splits = []
+            for _ in range(1):
+                order = np.arange(num_pids)
+                np.random.shuffle(order)
+                train_idxs = order[:num_train_pids]
+                test_idxs = order[num_train_pids:]
+                assert not bool(set(train_idxs) & set(test_idxs)), "Error: train and test overlap"
+
+                train = []
+                for pid, idx in enumerate(train_idxs):
+                    cam_a_img = cam_a_imgs[idx]
+                    cam_b_img = cam_b_imgs[idx]
+                    train.append((cam_a_img, pid, 0))
+                    train.append((cam_b_img, pid, 1))
+
+                test = []
+                for pid, idx in enumerate(test_idxs):
+                    cam_a_img = cam_a_imgs[idx]
+                    cam_b_img = cam_b_imgs[idx]
+                    test.append((cam_a_img, pid, 0))
+                    test.append((cam_b_img, pid, 1))
+
+                split = {'train': train, 'query': test, 'gallery': test,
+                         'num_train_pids': num_train_pids,
+                         'num_query_pids': num_pids - num_train_pids,
+                         'num_gallery_pids': num_pids - num_train_pids
+                         }
+                splits.append(split)
+
+            print("Totally {} splits are created".format(len(splits)))
+            write_json(splits, self.split_path)
+            print("Split file saved to {}".format(self.split_path))
+
+        print("Splits created")
+
+class GRID(object):
+    """
+    GRID
+
+    Reference:
+    Loy et al. Multi-camera activity correlation analysis. CVPR 2009.
+
+    URL: http://personal.ie.cuhk.edu.hk/~ccloy/downloads_qmul_underground_reid.html
+    
+    Dataset statistics:
+    # identities: 250
+    # images: 1275
+    # cameras: 8
+    """
+    dataset_dir = 'grid'
+
+    def __init__(self, root='data', split_id=0, **kwargs):
+        self.dataset_dir = osp.join(root, self.dataset_dir)
+        self.dataset_url = 'http://personal.ie.cuhk.edu.hk/~ccloy/files/datasets/underground_reid.zip'
+        self.probe_path = osp.join(self.dataset_dir, 'underground_reid', 'probe')
+        self.gallery_path = osp.join(self.dataset_dir, 'underground_reid', 'gallery')
+        self.split_mat_path = osp.join(self.dataset_dir, 'underground_reid', 'features_and_partitions.mat')
+        self.split_path = osp.join(self.dataset_dir, 'splits.json')
+
+        self._download_data()
+        self._check_before_run()
+
+        self._prepare_split()
+        splits = read_json(self.split_path)
+        if split_id >= len(splits):
+            raise ValueError("split_id exceeds range, received {}, but expected between 0 and {}".format(split_id, len(splits)-1))
+        split = splits[split_id]
+
+        train = split['train']
+        query = split['query']
+        gallery = split['gallery']
+
+        train = [tuple(item) for item in train]
+        query = [tuple(item) for item in query]
+        gallery = [tuple(item) for item in gallery]
+        
+        num_train_pids = split['num_train_pids']
+        num_query_pids = split['num_query_pids']
+        num_gallery_pids = split['num_gallery_pids']
+        
+        num_train_imgs = len(train)
+        num_query_imgs = len(query)
+        num_gallery_imgs = len(gallery)
+
+        num_total_pids = num_train_pids + num_gallery_pids
+        num_total_imgs = num_train_imgs + num_query_imgs + num_gallery_imgs
+
+        print("=> GRID loaded")
+        print("Dataset statistics:")
+        print("  ------------------------------")
+        print("  subset   | # ids | # images")
+        print("  ------------------------------")
+        print("  train    | {:5d} | {:8d}".format(num_train_pids, num_train_imgs))
+        print("  query    | {:5d} | {:8d}".format(num_query_pids, num_query_imgs))
+        print("  gallery  | {:5d} | {:8d}".format(num_gallery_pids, num_gallery_imgs))
+        print("  ------------------------------")
+        print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_imgs))
+        print("  ------------------------------")
+
+        self.train = train
+        self.query = query
+        self.gallery = gallery
+
+        self.num_train_pids = num_train_pids
+        self.num_query_pids = num_query_pids
+        self.num_gallery_pids = num_gallery_pids
+
+    def _check_before_run(self):
+        """Check if all files are available before going deeper"""
+        if not osp.exists(self.dataset_dir):
+            raise RuntimeError("'{}' is not available".format(self.dataset_dir))
+        if not osp.exists(self.probe_path):
+            raise RuntimeError("'{}' is not available".format(self.probe_path))
+        if not osp.exists(self.gallery_path):
+            raise RuntimeError("'{}' is not available".format(self.gallery_path))
+        if not osp.exists(self.split_mat_path):
+            raise RuntimeError("'{}' is not available".format(self.split_mat_path))
+
+    def _download_data(self):
+        if osp.exists(self.dataset_dir):
+            print("This dataset has been downloaded.")
+            return
+
+        print("Creating directory {}".format(self.dataset_dir))
+        mkdir_if_missing(self.dataset_dir)
+        fpath = osp.join(self.dataset_dir, osp.basename(self.dataset_url))
+
+        print("Downloading GRID dataset")
+        urllib.urlretrieve(self.dataset_url, fpath)
+
+        print("Extracting files")
+        zip_ref = zipfile.ZipFile(fpath, 'r')
+        zip_ref.extractall(self.dataset_dir)
+        zip_ref.close()
+
+    def _prepare_split(self):
+        if not osp.exists(self.split_path):
+            print("Creating 10 random splits")
+            split_mat = loadmat(self.split_mat_path)
+            trainIdxAll = split_mat['trainIdxAll'][0] # length = 10
+            probe_img_paths = sorted(glob.glob(osp.join(self.probe_path, '*.jpeg')))
+            gallery_img_paths = sorted(glob.glob(osp.join(self.gallery_path, '*.jpeg')))
+
+            splits = []
+            for split_idx in range(10):
+                train_idxs = trainIdxAll[split_idx][0][0][2][0].tolist()
+                assert len(train_idxs) == 125
+                idx2pid = {idx: pid for pid, idx in enumerate(train_idxs)}
+
+                train, query, gallery = [], [], []
+                
+                # processing probe folder
+                for img_path in probe_img_paths:
+                    img_name = osp.basename(img_path)
+                    img_idx = int(img_name.split('_')[0])
+                    camid = int(img_name.split('_')[1])
+                    if img_idx in train_idxs:
+                        # add to train data
+                        train.append((img_path, idx2pid[img_idx], camid))
+                    else:
+                        # add to query data
+                        query.append((img_path, img_idx, camid))
+                
+                # process gallery folder
+                for img_path in gallery_img_paths:
+                    img_name = osp.basename(img_path)
+                    img_idx = int(img_name.split('_')[0])
+                    camid = int(img_name.split('_')[1])
+                    if img_idx in train_idxs:
+                        # add to train data
+                        train.append((img_path, idx2pid[img_idx], camid))
+                    else:
+                        # add to gallery data
+                        gallery.append((img_path, img_idx, camid))
+
+                split = {'train': train, 'query': query, 'gallery': gallery,
+                         'num_train_pids': 125,
+                         'num_query_pids': 125,
+                         'num_gallery_pids': 900,
+                         }
+                splits.append(split)
+            
+            print("Totally {} splits are created".format(len(splits)))
+            write_json(splits, self.split_path)
+            print("Split file saved to {}".format(self.split_path))
+
+        print("Splits created")
+
+
 """Video ReID"""
 
 class Mars(object):
@@ -750,8 +1047,7 @@ class iLIDSVID(object):
         fpath = osp.join(self.dataset_dir, osp.basename(self.dataset_url))
 
         print("Downloading iLIDS-VID dataset")
-        url_opener = urllib.URLopener()
-        url_opener.retrieve(self.dataset_url, fpath)
+        urllib.urlretrieve(self.dataset_url, fpath)
 
         print("Extracting files")
         tar = tarfile.open(fpath)
@@ -1079,6 +1375,8 @@ __img_factory = {
     'cuhk03': CUHK03,
     'dukemtmcreid': DukeMTMCreID,
     'msmt17': MSMT17,
+    'viper': VIPeR,
+    'grid': GRID,
 }
 
 __vid_factory = {
@@ -1100,3 +1398,6 @@ def init_vid_dataset(name, **kwargs):
     if name not in __vid_factory.keys():
         raise KeyError("Invalid dataset, got '{}', but expected to be one of {}".format(name, __vid_factory.keys()))
     return __vid_factory[name](**kwargs)
+
+if __name__ == '__main__':
+    dataset = GRID()
