@@ -1469,13 +1469,11 @@ class ResNeXt101_64x4d(nn.Module):
         x = self.features(input)
         x = F.avg_pool2d(x, x.size()[2:])
         x = x.view(x.size(0), -1)
-        print x.size()
 
         if not self.training:
             return x
 
         y = self.classifier(x)
-        print y.size()
 
         if self.loss == {'xent'}:
             return y
