@@ -24,7 +24,7 @@ from optimizers import init_optim
 
 parser = argparse.ArgumentParser(description='Train image model with cross entropy loss')
 # Datasets
-parser.add_argument('--root', type=str, default='data', help="root path to data directory")
+parser.add_argument('--root', type=str, help="root path to data directory", default='/home/xinglu/.torch/data/')
 parser.add_argument('-d', '--dataset', type=str, default='market1501',
                     choices=data_manager.get_names())
 parser.add_argument('-j', '--workers', default=4, type=int,
@@ -49,7 +49,7 @@ parser.add_argument('--start-epoch', default=0, type=int,
                     help="manual epoch number (useful on restarts)")
 parser.add_argument('--train-batch', default=32, type=int,
                     help="train batch size")
-parser.add_argument('--test-batch', default=32, type=int, help="test batch size")
+parser.add_argument('--test-batch', default=128, type=int, help="test batch size")
 parser.add_argument('--lr', '--learning-rate', default=0.0003, type=float,
                     help="initial learning rate")
 parser.add_argument('--stepsize', default=20, type=int,
@@ -63,8 +63,8 @@ parser.add_argument('-a', '--arch', type=str, default='resnet50', choices=models
 # Miscs
 parser.add_argument('--print-freq', type=int, default=10, help="print frequency")
 parser.add_argument('--seed', type=int, default=1, help="manual seed")
-parser.add_argument('--resume', type=str, default='', metavar='PATH')
-parser.add_argument('--evaluate', action='store_true', help="evaluation only")
+parser.add_argument('--resume', type=str, default='./resnet50_xent_market1501.pth.tar', metavar='PATH')
+parser.add_argument('--evaluate', action='store_true', help="evaluation only", default=True)
 parser.add_argument('--eval-step', type=int, default=-1,
                     help="run evaluation for every N epochs (set to -1 to test after training)")
 parser.add_argument('--save-dir', type=str, default='log')
@@ -72,6 +72,7 @@ parser.add_argument('--use-cpu', action='store_true', help="use cpu")
 parser.add_argument('--gpu-devices', default='0', type=str, help='gpu device ids for CUDA_VISIBLE_DEVICES')
 
 args = parser.parse_args()
+
 
 def main():
     torch.manual_seed(args.seed)
@@ -133,7 +134,7 @@ def main():
 
     print("Initializing model: {}".format(args.arch))
     model = models.init_model(name=args.arch, num_classes=dataset.num_train_pids, loss={'xent'}, use_gpu=use_gpu)
-    print("Model size: {:.5f}M".format(sum(p.numel() for p in model.parameters())/1000000.0))
+    print("Model size: {:.5f}M".format(sum(p.numel() for p in model.parameters()) / 1000000.0))
 
     criterion = CrossEntropyLabelSmooth(num_classes=dataset.num_train_pids, use_gpu=use_gpu)
     optimizer = init_optim(args.optim, model.parameters(), args.lr, args.weight_decay)
@@ -143,6 +144,10 @@ def main():
 
     if args.resume:
         print("Loading checkpoint from '{}'".format(args.resume))
+        # with open(args.resume, encoding='latin1') as f:
+        #     import io
+        #     buffer = io.BytesIO(f.read())
+        #     checkpoint = torch.load(buffer)
         checkpoint = torch.load(args.resume)
         model.load_state_dict(checkpoint['state_dict'])
         start_epoch = checkpoint['epoch']
@@ -165,10 +170,10 @@ def main():
         start_train_time = time.time()
         train(epoch, model, criterion, optimizer, trainloader, use_gpu)
         train_time += round(time.time() - start_train_time)
-        
+
         if args.stepsize > 0: scheduler.step()
-        
-        if args.eval_step > 0 and (epoch+1) % args.eval_step == 0 or (epoch+1) == args.max_epoch:
+
+        if args.eval_step > 0 and (epoch + 1) % args.eval_step == 0 or (epoch + 1) == args.max_epoch:
             print("==> Test")
             rank1 = test(model, queryloader, galleryloader, use_gpu)
             is_best = rank1 > best_rank1
@@ -184,7 +189,7 @@ def main():
                 'state_dict': state_dict,
                 'rank1': rank1,
                 'epoch': epoch,
-            }, is_best, osp.join(args.save_dir, 'checkpoint_ep' + str(epoch+1) + '.pth.tar'))
+            }, is_best, osp.join(args.save_dir, 'checkpoint_ep' + str(epoch + 1) + '.pth.tar'))
 
     print("==> Best Rank-1 {:.1%}, achieved at epoch {}".format(best_rank1, best_epoch))
 
@@ -192,6 +197,7 @@ def main():
     elapsed = str(datetime.timedelta(seconds=elapsed))
     train_time = str(datetime.timedelta(seconds=train_time))
     print("Finished. Total elapsed time (h:m:s): {}. Training time (h:m:s): {}.".format(elapsed, train_time))
+
 
 def train(epoch, model, criterion, optimizer, trainloader, use_gpu):
     losses = AverageMeter()
@@ -222,17 +228,18 @@ def train(epoch, model, criterion, optimizer, trainloader, use_gpu):
 
         losses.update(loss.item(), pids.size(0))
 
-        if (batch_idx+1) % args.print_freq == 0:
+        if (batch_idx + 1) % args.print_freq == 0:
             print('Epoch: [{0}][{1}/{2}]\t'
                   'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                   'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
                   'Loss {loss.val:.4f} ({loss.avg:.4f})\t'.format(
-                   epoch+1, batch_idx+1, len(trainloader), batch_time=batch_time,
-                   data_time=data_time, loss=losses))
+                epoch + 1, batch_idx + 1, len(trainloader), batch_time=batch_time,
+                data_time=data_time, loss=losses))
+
 
 def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20]):
     batch_time = AverageMeter()
-    
+
     model.eval()
 
     with torch.no_grad():
@@ -243,7 +250,7 @@ def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20]):
             end = time.time()
             features = model(imgs)
             batch_time.update(time.time() - end)
-            
+
             features = features.data.cpu()
             qf.append(features)
             q_pids.extend(pids)
@@ -280,18 +287,42 @@ def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20]):
               torch.pow(gf, 2).sum(dim=1, keepdim=True).expand(n, m).t()
     distmat.addmm_(1, -2, qf, gf.t())
     distmat = distmat.numpy()
+    # qf = qf.numpy()
+    # gf = gf.numpy()
+    # from scipy.spatial.distance import cdist
+    # distmat = cdist(qf, gf)
 
-    print("Computing CMC and mAP")
-    cmc, mAP = evaluate(distmat, q_pids, g_pids, q_camids, g_camids, use_metric_cuhk03=args.use_metric_cuhk03, use_cython=True)
-
+    print("Computing CMC and mAP, origin eval")
+    tic = time.time()
+    cmc0, mAP0 = evaluate(distmat, q_pids, g_pids, q_camids, g_camids, use_metric_cuhk03=args.use_metric_cuhk03,
+                          use_cython=False)
     print("Results ----------")
-    print("mAP: {:.1%}".format(mAP))
+    print("mAP: {:.1%}".format(mAP0))
     print("CMC curve")
     for r in ranks:
-        print("Rank-{:<3}: {:.1%}".format(r, cmc[r-1]))
-    print("------------------")
+        print("Rank-{:<3}: {:.1%}".format(r, cmc0[r - 1]))
+    print("consume {} s".format(time.time() - tic))
+    print("------------------\n")
 
-    return cmc[0]
+    print("Computing CMC and mAP, use cython")
+    tic = time.time()
+    cmc1, mAP1 = evaluate(distmat, q_pids, g_pids, q_camids, g_camids, use_metric_cuhk03=args.use_metric_cuhk03,
+                          use_cython=True)
+    print("Results ----------")
+    print("mAP: {:.1%}".format(mAP1))
+    print("CMC curve")
+    for r in ranks:
+        print("Rank-{:<3}: {:.1%}".format(r, cmc1[r - 1]))
+    print("consume {} s".format(time.time() - tic))
+    print("------------------\n")
+
+    print('absolute difference between two version mAP is {}, '
+          'relative difference between two version mAP is {} %'.format(
+        np.abs(mAP0 - mAP1), np.abs(mAP0 - mAP1) * 100. / mAP0
+    ))
+
+    return cmc1[0]
+
 
 if __name__ == '__main__':
     main()

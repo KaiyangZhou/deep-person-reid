@@ -1089,7 +1089,7 @@ __vid_factory = {
 }
 
 def get_names():
-    return __img_factory.keys() + __vid_factory.keys()
+    return list(__img_factory.keys()) + list(__vid_factory.keys())
 
 def init_img_dataset(name, **kwargs):
     if name not in __img_factory.keys():

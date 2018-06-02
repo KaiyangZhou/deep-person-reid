@@ -1,3 +1,9 @@
+from __future__ import absolute_import
+import sys, os
+
+sys.path.insert(
+    0, os.path.dirname(os.path.abspath(__file__)) + '/..'
+)
 from eval_lib.cython_eval import eval_market1501_wrap
 from eval_metrics import eval_market1501
 import numpy as np

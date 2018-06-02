@@ -94,10 +94,7 @@ cpdef eval_market1501(
         # print('tmp_cmc', np.asarray(tmp_cmc).tolist())
 
         tmp_cmc_sum=my_sum(tmp_cmc,num_orig_cmc)
-        if num_rel<1e-31:
-            all_AP[q_idx] =0
-        else:
-            all_AP[q_idx] = tmp_cmc_sum / num_rel
+        all_AP[q_idx] = tmp_cmc_sum / num_rel
         # print('final',tmp_cmc_sum, num_rel, tmp_cmc_sum / num_rel,'\n')
 
     assert num_valid_q > 0, "Error: all query identities do not appear in gallery"
@@ -105,8 +102,8 @@ cpdef eval_market1501(
     # print_dbg('all cmc', all_cmc)
     all_AP_np = np.asarray(all_AP)
     all_AP_np[np.isclose(all_AP,-1)] = np.nan
-    return  np.nanmean(all_AP_np), \
-            np.asarray(all_cmc).astype(np.float32).sum(axis=0) / num_valid_q
+    return  np.asarray(all_cmc).astype(np.float32).sum(axis=0) / num_valid_q, \
+            np.nanmean(all_AP_np)
 
 def print_dbg(msg, val):
     print(msg, np.asarray(val))
