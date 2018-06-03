@@ -3,6 +3,7 @@ import numpy as np
 import copy
 from collections import defaultdict
 import sys
+from eval_lib.cython_eval import eval_market1501_wrap
 
 def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank, N=100):
     """Evaluation with cuhk03 metric
@@ -126,8 +127,11 @@ def eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank):
 
     return all_cmc, mAP
 
-def evaluate(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50, use_metric_cuhk03=False):
+def evaluate(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50, use_metric_cuhk03=False, use_cython=False):
     if use_metric_cuhk03:
         return eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank)
     else:
-        return eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank)
+        if not use_cython:
+            return eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank)
+        else:
+            return eval_market1501_wrap(distmat, q_pids, g_pids, q_camids, g_camids, max_rank)
