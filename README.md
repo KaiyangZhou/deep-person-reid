@@ -1,24 +1,15 @@
 # deep-person-reid
-This repo contains [PyTorch](http://pytorch.org/) implementations of deep person re-identification models.
+This repo contains [PyTorch](http://pytorch.org/) implementations of deep person re-identification models. It is developed for academic research.
 
 We support
 - multi-GPU training.
 - both image-based and video-based reid.
 - unified interface for different reid models.
+- easy dataset preparation.
 - end-to-end training and evaluation.
-- standard splits used by most papers.
+- standard dataset splits used by most papers.
 - download of trained models.
-
-## Updates
-- May 2018: Support [MSMT17](http://www.pkuvmc.com/publications/msmt17.html) and [DukeMTMC-VideoReID](https://github.com/Yu-Wu/DukeMTMC-VideoReID); Added Inception-v4, Inception-ResNet-v2, DPN, ResNext and SE-ResNe(X)t. (trained models coming up later)
-- Apr 2018: Added [DukeMTMC-reID](https://github.com/layumi/DukeMTMC-reID_evaluation#dukemtmc-reid-description); Added [SqueezeNet](https://arxiv.org/abs/1602.07360), [MobileNetV2 (CVPR'18)](https://arxiv.org/abs/1801.04381), [ShuffleNet (CVPR'18)](https://arxiv.org/abs/1707.01083) and [Xception (CVPR'17)](https://arxiv.org/abs/1610.02357).
-- Apr 2018: Added [Harmonious Attention CNN (CVPR'18)](https://arxiv.org/abs/1802.08122). We achieved Rank-1 42.4% (vs. 41.7% in the paper) on CUHK03 (Detected) by training from scratch. The result can be reproduced by `python train_img_model_xent.py -d cuhk03 -a hacnn --save-dir log/hacnn-xent-cuhk03 --height 160 --width 64 --max-epoch 500 --stepsize -1 --eval-step 50`.
-- Apr 2018: Code upgraded to pytorch 0.4.0.
-- Apr 2018: Added [CUHK03](http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html). Models are [available](https://github.com/KaiyangZhou/deep-person-reid#cuhk03-detected-new-protocol-767700).
-- Apr 2018: Added [iLIDS-VID](http://www.eecs.qmul.ac.uk/~xiatian/downloads_qmul_iLIDS-VID_ReID_dataset.html) and [PRID-2011](https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/). Models are [available](https://github.com/KaiyangZhou/deep-person-reid#video-person-reid).
-- Mar 2018: Added argument `--htri-only` to `train_img_model_xent_htri.py` and `train_vid_model_xent_htri.py`. If this argument is true, only `htri` [4] is used for training. See [here](https://github.com/KaiyangZhou/deep-person-reid/blob/master/train_img_model_xent_htri.py#L189) for detailed changes.
-- Mar 2018: Added [Multi-scale Deep CNN (ICCV'17)](https://arxiv.org/abs/1709.05165) [10] with slight modifications: (a) Input size is (256, 128) instead of (160, 60); (b) We add an average pooling layer after the last conv feature maps. (c) We train the network with our strategy. Model trained from scratch on Market1501 is [available](https://github.com/KaiyangZhou/deep-person-reid#results).
-- Mar 2018: Added [center loss (ECCV'16)](https://github.com/KaiyangZhou/pytorch-center-loss) [9] and the trained model weights.
+- fast cython-based evaluation.
 
 ## Dependencies
 - [PyTorch](http://pytorch.org/) (0.4.0)
@@ -28,7 +19,8 @@ Python2 is recommended for current version.
 
 ## Install
 1. `cd` to the folder where you want to download this repo.
-2. run `git clone https://github.com/KaiyangZhou/deep-person-reid`.
+2. Run `git clone https://github.com/KaiyangZhou/deep-person-reid`.
+3. To accelerate evaluation (10x faster), you can use cython-based evaluation code (developed by [luzai](https://github.com/luzai)). First `cd` to `eval_lib`, then do `make` or `python setup.py build_ext -i`. After that, run `python test_cython_eval.py` to test if the package is successfully installed.
 
 ## Prepare data
 Create a directory to store reid datasets under this repo via
@@ -90,6 +82,41 @@ msmt17/
         ... (totally six .txt files)
 ```
 3. Use `-d msmt17` when running the training code.
+
+**VIPeR** [28]:
+1. The code supports automatic download and formatting. Just use `-d viper` as usual. The final data structure would look like:
+```
+viper/
+    VIPeR/
+    VIPeR.v1.0.zip # useless
+    splits.json
+```
+
+**GRID** [29]:
+1. The code supports automatic download and formatting. Just use `-d grid` as usual. The final data structure would look like:
+```
+grid/
+    underground_reid/
+    underground_reid.zip # useless
+    splits.json
+```
+
+**CUHK01** [30]:
+1. Create `cuhk01/` under `data/` or your custom data dir.
+2. Download `CUHK01.zip` from http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html and place it in `cuhk01/`.
+3. Do `-d cuhk01` to use the data.
+
+
+**PRID450S** [31]:
+1. The code supports automatic download and formatting. Just use `-d prid450s` as usual. The final data structure would look like:
+```
+prid450s/
+    cam_a/
+    cam_b/
+    readme.txt
+    splits.json
+```
+
 
 **MARS** [8]:
 1. Create a directory named `mars/` under `data/`.
@@ -274,7 +301,6 @@ optimizer = torch.optim.Adam(param_groups, lr=args.lr, weight_decay=args.weight_
 ```
 Of course, you can pass `model.classifier.parameters()` to optimizer if you only need to train the classifier (in this case, setting the `requires_grad`s wrt the base model params to false will be more efficient).
 
-
 ## References
 [1] [He et al. Deep Residual Learning for Image Recognition. CVPR 2016.](https://arxiv.org/abs/1512.03385)<br />
 [2] [Yu et al. The Devil is in the Middle: Exploiting Mid-level Representations for Cross-Domain Instance Matching. arXiv:1711.08106.](https://arxiv.org/abs/1711.08106) <br />
@@ -304,3 +330,7 @@ Of course, you can pass `model.classifier.parameters()` to optimizer if you only
 [26] [Xie et al. 
 Aggregated Residual Transformations for Deep Neural Networks. CVPR 2017.](https://arxiv.org/abs/1611.05431) <br />
 [27] [Chen et al. Dual Path Networks. NIPS 2017.](https://arxiv.org/abs/1707.01629) <br />
+[28] [Gray et al. Evaluating appearance models for recognition, reacquisition, and tracking. PETS 2007.](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.331.7285&rep=rep1&type=pdf) <br />
+[29] [Loy et al. Multi-camera activity correlation analysis. CVPR 2009.](https://ieeexplore.ieee.org/document/5206827/) <br />
+[30] [Li et al. Human Reidentification with Transferred Metric Learning. ACCV 2012.](http://www.ee.cuhk.edu.hk/~xgwang/papers/liZWaccv12.pdf) <br />
+[31] [Roth et al. Mahalanobis Distance Learning for Person Re-Identification. PR 2014.](https://pdfs.semanticscholar.org/f62d/71e701c9fd021610e2076b5e0f5b2c7c86ca.pdf) <br />
