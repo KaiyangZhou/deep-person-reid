@@ -28,8 +28,9 @@ class Random2DTranslation(object):
         Returns:
             PIL Image: Cropped image.
         """
-        if random.random() < self.p:
+        if random.uniform(0, 1) > self.p:
             return img.resize((self.width, self.height), self.interpolation)
+        
         new_width, new_height = int(round(self.width * 1.125)), int(round(self.height * 1.125))
         resized_img = img.resize((new_width, new_height), self.interpolation)
         x_maxrange = new_width - self.width
