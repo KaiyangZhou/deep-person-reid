@@ -639,7 +639,7 @@ class VIPeR(object):
             num_train_pids = num_pids // 2
 
             splits = []
-            for _ in range(1):
+            for _ in range(10):
                 order = np.arange(num_pids)
                 np.random.shuffle(order)
                 train_idxs = order[:num_train_pids]
@@ -1068,7 +1068,7 @@ class PRID450S(object):
             num_train_pids = num_pids // 2
 
             splits = []
-            for _ in range(1):
+            for _ in range(10):
                 order = np.arange(num_pids)
                 np.random.shuffle(order)
                 train_idxs = np.sort(order[:num_train_pids])
