@@ -24,13 +24,15 @@ class ChannelShuffle(nn.Module):
         return x
 
 class Bottleneck(nn.Module):
-    def __init__(self, in_channels, out_channels, stride, num_groups):
+    def __init__(self, in_channels, out_channels, stride, num_groups, group_conv1x1=True):
         super(Bottleneck, self).__init__()
         assert stride in [1, 2], "Warning: stride must be either 1 or 2"
         self.stride = stride
         mid_channels = out_channels / 4
         if stride == 2: out_channels -= in_channels
-        self.conv1 = nn.Conv2d(in_channels, mid_channels, 1, groups=num_groups, bias=False)
+        # group conv is not applied to first conv1x1 at stage 2
+        num_groups_conv1x1 = num_groups if group_conv1x1 else 1
+        self.conv1 = nn.Conv2d(in_channels, mid_channels, 1, groups=num_groups_conv1x1, bias=False)
         self.bn1 = nn.BatchNorm2d(mid_channels)
         self.shuffle1 = ChannelShuffle(num_groups)
         self.conv2 = nn.Conv2d(mid_channels, mid_channels, 3, stride=stride, padding=1, groups=mid_channels, bias=False)
@@ -79,7 +81,7 @@ class ShuffleNet(nn.Module):
         )
 
         self.stage2 = nn.Sequential(
-            Bottleneck(24, cfg[num_groups][0], 2, num_groups),
+            Bottleneck(24, cfg[num_groups][0], 2, num_groups, group_conv1x1=False),
             Bottleneck(cfg[num_groups][0], cfg[num_groups][0], 1, num_groups),
             Bottleneck(cfg[num_groups][0], cfg[num_groups][0], 1, num_groups),
             Bottleneck(cfg[num_groups][0], cfg[num_groups][0], 1, num_groups),
