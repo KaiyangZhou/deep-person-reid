@@ -2,7 +2,6 @@
 data/
 log/
 saved-models/
-train_imagenet.py
 eval_lib/eval.c
 .idea
 
