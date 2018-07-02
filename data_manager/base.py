@@ -15,6 +15,8 @@ class BaseImgDataset(object):
         assert isinstance(self.train, list)
         assert isinstance(self.query, list)
         assert isinstance(self.gallery, list)
+        
+        print("Reminder: this function is under development, some datasets might not be applicable yet")
 
         self.train_lmdb_path = osp.join(self.dataset_dir, 'train_lmdb')
         self.query_lmdb_path = osp.join(self.dataset_dir, 'query_lmdb')
