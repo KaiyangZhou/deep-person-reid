@@ -4,6 +4,8 @@ import os
 from PIL import Image
 import numpy as np
 import os.path as osp
+import lmdb
+import io
 
 import torch
 from torch.utils.data import Dataset
@@ -27,18 +29,32 @@ def read_image(img_path):
 
 class ImageDataset(Dataset):
     """Image Person ReID Dataset"""
-    def __init__(self, dataset, transform=None):
+    def __init__(self, dataset, transform=None, use_lmdb=False, lmdb_path=None):
         self.dataset = dataset
         self.transform = transform
+        self.use_lmdb = use_lmdb
+        self.lmdb_path = lmdb_path
+
+        if self.use_lmdb:
+            assert self.lmdb_path is not None
+            self.env = lmdb.open(lmdb_path, max_readers=1, readonly=True, lock=False, readahead=False, meminit=False)
 
     def __len__(self):
         return len(self.dataset)
 
     def __getitem__(self, index):
         img_path, pid, camid = self.dataset[index]
-        img = read_image(img_path)
+        
+        if self.use_lmdb:
+            with self.env.begin(write=False) as txn:
+                imgbuf = txn.get(img_path)
+            img = Image.open(io.BytesIO(imgbuf)).convert('RGB')
+        else:
+            img = read_image(img_path)
+        
         if self.transform is not None:
             img = self.transform(img)
+        
         return img, pid, camid
 
 
