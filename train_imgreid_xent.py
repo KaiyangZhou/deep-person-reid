@@ -212,7 +212,6 @@ def train(epoch, model, criterion, optimizer, trainloader, use_gpu):
 
     end = time.time()
     for batch_idx, (imgs, pids, _) in enumerate(trainloader):
-        # measure data loading time
         data_time.update(time.time() - end)
         
         if use_gpu:
@@ -227,9 +226,7 @@ def train(epoch, model, criterion, optimizer, trainloader, use_gpu):
         loss.backward()
         optimizer.step()
 
-        # measure elapsed time
         batch_time.update(time.time() - end)
-        end = time.time()
 
         losses.update(loss.item(), pids.size(0))
 
@@ -240,6 +237,8 @@ def train(epoch, model, criterion, optimizer, trainloader, use_gpu):
                   'Loss {loss.val:.4f} ({loss.avg:.4f})\t'.format(
                    epoch+1, batch_idx+1, len(trainloader), batch_time=batch_time,
                    data_time=data_time, loss=losses))
+        
+        end = time.time()
 
 
 def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20]):
