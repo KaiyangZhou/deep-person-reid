@@ -1,10 +1,11 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, division
 
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.model_zoo as model_zoo
 import numpy as np
+
 
 """
 NASNet Mobile
@@ -21,9 +22,11 @@ Thanks to Anastasiia (https://github.com/DagnyT) for the great help, support and
     (https://arxiv.org/abs/1707.07012)
 """
 
+
 """
 Code imported from https://github.com/Cadene/pretrained-models.pytorch
 """
+
 
 pretrained_settings = {
     'nasnetamobile': {
@@ -49,7 +52,9 @@ pretrained_settings = {
     }
 }
 
+
 __all__ = ['NASNetAMobile']
+
 
 class MaxPoolPad(nn.Module):
 
@@ -580,8 +585,8 @@ class NASNetAMobile(nn.Module):
 
         self.relu = nn.ReLU()
         self.dropout = nn.Dropout()
-        self.classifier = nn.Linear(24*filters, self.num_classes)
-        self.feat_dim = 24*filters
+        self.classifier = nn.Linear(24 * filters, self.num_classes)
+        self.feat_dim = 24 * filters
 
         self.init_params()
 

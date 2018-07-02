@@ -1,4 +1,5 @@
-from __future__ import print_function, absolute_import
+from __future__ import print_function, absolute_import, division
+
 import numpy as np
 import copy
 from collections import defaultdict
@@ -11,6 +12,7 @@ try:
 except ImportError:
     CYTHON_EVAL_AVAI = False
     print("Warning: Cython evaluation is UNAVAILABLE")
+
 
 def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank, N=100):
     """Evaluation with cuhk03 metric
@@ -80,6 +82,7 @@ def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank, N=100):
 
     return all_cmc, mAP
 
+
 def eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank):
     """Evaluation with market1501 metric
     Key: for each query identity, its gallery images from the same camera view are discarded.
@@ -133,6 +136,7 @@ def eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank):
     mAP = np.mean(all_AP)
 
     return all_cmc, mAP
+
 
 def evaluate(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50, use_metric_cuhk03=False, use_cython=True):
     if use_metric_cuhk03:

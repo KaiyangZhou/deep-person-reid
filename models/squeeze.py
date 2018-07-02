@@ -1,11 +1,13 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, division
 
 import torch
 from torch import nn
 from torch.nn import functional as F
 import torchvision
 
+
 __all__ = ['SqueezeNet']
+
 
 class ConvBlock(nn.Module):
     """Basic convolutional block:
@@ -26,6 +28,7 @@ class ConvBlock(nn.Module):
     def forward(self, x):
         return F.relu(self.bn(self.conv(x)))
 
+
 class ExpandLayer(nn.Module):
     def __init__(self, in_channels, e1_channels, e3_channels):
         super(ExpandLayer, self).__init__()
@@ -37,6 +40,7 @@ class ExpandLayer(nn.Module):
         x33 = self.conv33(x)
         x = torch.cat([x11, x33], 1)
         return x
+
 
 class FireModule(nn.Module):
     """
@@ -57,6 +61,7 @@ class FireModule(nn.Module):
         x = self.squeeze(x)
         x = self.expand(x)
         return x
+
 
 class SqueezeNet(nn.Module):
     """SqueezeNet

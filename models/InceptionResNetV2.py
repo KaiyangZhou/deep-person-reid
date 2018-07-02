@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, division
 
 import torch
 import torch.nn as nn
@@ -7,11 +7,14 @@ import torch.utils.model_zoo as model_zoo
 import os
 import sys
 
+
 """
 Code imported from https://github.com/Cadene/pretrained-models.pytorch
 """
 
+
 __all__ = ['InceptionResNetV2']
+
 
 pretrained_settings = {
     'inceptionresnetv2': {
@@ -236,6 +239,7 @@ class Block8(nn.Module):
             out = self.relu(out)
         return out
 
+
 def inceptionresnetv2(num_classes=1000, pretrained='imagenet'):
     r"""InceptionResNetV2 model architecture from the
     `"InceptionV4, Inception-ResNet..." <https://arxiv.org/abs/1602.07261>`_ paper.
@@ -265,7 +269,9 @@ def inceptionresnetv2(num_classes=1000, pretrained='imagenet'):
         model = InceptionResNetV2(num_classes=num_classes)
     return model
 
+
 ##################### Model Definition #########################
+
 
 class InceptionResNetV2(nn.Module):
     def __init__(self, num_classes, loss={'xent'}, **kwargs):
@@ -374,10 +380,6 @@ class InceptionResNetV2(nn.Module):
         if self.loss == {'xent'}:
             return y
         elif self.loss == {'xent', 'htri'}:
-            return y, x
-        elif self.loss == {'cent'}:
-            return y, x
-        elif self.loss == {'ring'}:
             return y, x
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))

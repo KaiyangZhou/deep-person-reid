@@ -1,11 +1,13 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, division
 
 import torch
 from torch import nn
 from torch.nn import functional as F
 import torchvision
 
+
 __all__ = ['MobileNetV2']
+
 
 class ConvBlock(nn.Module):
     """Basic convolutional block:
@@ -28,6 +30,7 @@ class ConvBlock(nn.Module):
     def forward(self, x):
         return F.relu6(self.bn(self.conv(x)))
 
+
 class Bottleneck(nn.Module):
     def __init__(self, in_channels, out_channels, expansion_factor, stride):
         super(Bottleneck, self).__init__()
@@ -49,8 +52,11 @@ class Bottleneck(nn.Module):
         else:
             return m
 
+
+
 class MobileNetV2(nn.Module):
-    """MobileNetV2
+    """
+    MobileNetV2
 
     Reference:
     Sandler et al. MobileNetV2: Inverted Residuals and Linear Bottlenecks. CVPR 2018.

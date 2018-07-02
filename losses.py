@@ -1,28 +1,24 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, division
+
 import sys
 
 import torch
 from torch import nn
 
-"""
-Shorthands for loss:
-- CrossEntropyLabelSmooth: xent
-- TripletLoss: htri
-- CenterLoss: cent
-"""
-__all__ = ['DeepSupervision', 'CrossEntropyLabelSmooth', 'TripletLoss', 'CenterLoss', 'RingLoss']
 
 def DeepSupervision(criterion, xs, y):
     """
     Args:
-        criterion: loss function
-        xs: tuple of inputs
-        y: ground truth
+    - criterion: loss function
+    - xs: tuple of inputs
+    - y: ground truth
     """
     loss = 0.
     for x in xs:
         loss += criterion(x, y)
+    loss /= len(xs)
     return loss
+
 
 class CrossEntropyLabelSmooth(nn.Module):
     """Cross entropy loss with label smoothing regularizer.
@@ -32,8 +28,8 @@ class CrossEntropyLabelSmooth(nn.Module):
     Equation: y = (1 - epsilon) * y + epsilon / K.
 
     Args:
-        num_classes (int): number of classes.
-        epsilon (float): weight.
+    - num_classes (int): number of classes.
+    - epsilon (float): weight.
     """
     def __init__(self, num_classes, epsilon=0.1, use_gpu=True):
         super(CrossEntropyLabelSmooth, self).__init__()
@@ -45,8 +41,8 @@ class CrossEntropyLabelSmooth(nn.Module):
     def forward(self, inputs, targets):
         """
         Args:
-            inputs: prediction matrix (before softmax) with shape (batch_size, num_classes)
-            targets: ground truth labels with shape (num_classes)
+        - inputs: prediction matrix (before softmax) with shape (batch_size, num_classes)
+        - targets: ground truth labels with shape (num_classes)
         """
         log_probs = self.logsoftmax(inputs)
         targets = torch.zeros(log_probs.size()).scatter_(1, targets.unsqueeze(1).data.cpu(), 1)
@@ -54,6 +50,7 @@ class CrossEntropyLabelSmooth(nn.Module):
         targets = (1 - self.epsilon) * targets + self.epsilon / self.num_classes
         loss = (- targets * log_probs).mean(0).sum()
         return loss
+
 
 class TripletLoss(nn.Module):
     """Triplet loss with hard positive/negative mining.
@@ -64,7 +61,7 @@ class TripletLoss(nn.Module):
     Code imported from https://github.com/Cysu/open-reid/blob/master/reid/loss/triplet.py.
 
     Args:
-        margin (float): margin for triplet.
+    - margin (float): margin for triplet.
     """
     def __init__(self, margin=0.3):
         super(TripletLoss, self).__init__()
@@ -74,15 +71,17 @@ class TripletLoss(nn.Module):
     def forward(self, inputs, targets):
         """
         Args:
-            inputs: feature matrix with shape (batch_size, feat_dim)
-            targets: ground truth labels with shape (num_classes)
+        - inputs: feature matrix with shape (batch_size, feat_dim)
+        - targets: ground truth labels with shape (num_classes)
         """
         n = inputs.size(0)
+        
         # Compute pairwise distance, replace by the official when merged
         dist = torch.pow(inputs, 2).sum(dim=1, keepdim=True).expand(n, n)
         dist = dist + dist.t()
         dist.addmm_(1, -2, inputs, inputs.t())
         dist = dist.clamp(min=1e-12).sqrt()  # for numerical stability
+        
         # For each anchor, find the hardest positive and negative
         mask = targets.expand(n, n).eq(targets.expand(n, n).t())
         dist_ap, dist_an = [], []
@@ -91,10 +90,12 @@ class TripletLoss(nn.Module):
             dist_an.append(dist[i][mask[i] == 0].min().unsqueeze(0))
         dist_ap = torch.cat(dist_ap)
         dist_an = torch.cat(dist_an)
+        
         # Compute ranking hinge loss
         y = torch.ones_like(dist_an)
         loss = self.ranking_loss(dist_an, dist_ap, y)
         return loss
+
 
 class CenterLoss(nn.Module):
     """Center loss.
@@ -103,8 +104,8 @@ class CenterLoss(nn.Module):
     Wen et al. A Discriminative Feature Learning Approach for Deep Face Recognition. ECCV 2016.
     
     Args:
-        num_classes (int): number of classes.
-        feat_dim (int): feature dimension.
+    - num_classes (int): number of classes.
+    - feat_dim (int): feature dimension.
     """
     def __init__(self, num_classes=10, feat_dim=2, use_gpu=True):
         super(CenterLoss, self).__init__()
@@ -120,8 +121,8 @@ class CenterLoss(nn.Module):
     def forward(self, x, labels):
         """
         Args:
-            x: feature matrix with shape (batch_size, feat_dim).
-            labels: ground truth labels with shape (num_classes).
+        - x: feature matrix with shape (batch_size, feat_dim).
+        - labels: ground truth labels with shape (num_classes).
         """
         batch_size = x.size(0)
         distmat = torch.pow(x, 2).sum(dim=1, keepdim=True).expand(batch_size, self.num_classes) + \
@@ -143,20 +144,17 @@ class CenterLoss(nn.Module):
 
         return loss
 
+
 class RingLoss(nn.Module):
     """Ring loss.
     
     Reference:
     Zheng et al. Ring loss: Convex Feature Normalization for Face Recognition. CVPR 2018.
     """
-    def __init__(self, weight_ring=1.):
+    def __init__(self):
         super(RingLoss, self).__init__()
         self.radius = nn.Parameter(torch.ones(1, dtype=torch.float))
-        self.weight_ring = weight_ring
 
     def forward(self, x):
-        l = ((x.norm(p=2, dim=1) - self.radius)**2).mean()
-        return l * self.weight_ring
-
-if __name__ == '__main__':
-    pass
+        loss = ((x.norm(p=2, dim=1) - self.radius)**2).mean()
+        return loss

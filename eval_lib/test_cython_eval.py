@@ -1,14 +1,16 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
 import sys, os
 
 sys.path.insert(
     0, os.path.dirname(os.path.abspath(__file__)) + '/..'
 )
+
 try:
     from eval_lib.cython_eval import eval_market1501_wrap
 except ImportError:
     print("Error: eval.pyx not compiled, please do 'make' before running 'python test.py'. exit")
     sys.exit()
+
 from eval_metrics import eval_market1501
 import numpy as np
 import time

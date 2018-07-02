@@ -1,18 +1,20 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, division
 
 from torchvision.transforms import *
+
 from PIL import Image
 import random
 import numpy as np
+
 
 class Random2DTranslation(object):
     """
     With a probability, first increase image size to (1 + 1/8), and then perform random crop.
 
     Args:
-        height (int): target height.
-        width (int): target width.
-        p (float): probability of performing this transformation. Default: 0.5.
+    - height (int): target height.
+    - width (int): target width.
+    - p (float): probability of performing this transformation. Default: 0.5.
     """
     def __init__(self, height, width, p=0.5, interpolation=Image.BILINEAR):
         self.height = height
@@ -23,10 +25,7 @@ class Random2DTranslation(object):
     def __call__(self, img):
         """
         Args:
-            img (PIL Image): Image to be cropped.
-
-        Returns:
-            PIL Image: Cropped image.
+        - img (PIL Image): Image to be cropped.
         """
         if random.uniform(0, 1) > self.p:
             return img.resize((self.width, self.height), self.interpolation)
@@ -39,6 +38,3 @@ class Random2DTranslation(object):
         y1 = int(round(random.uniform(0, y_maxrange)))
         croped_img = resized_img.crop((x1, y1, x1 + self.width, y1 + self.height))
         return croped_img
-
-if __name__ == '__main__':
-    pass

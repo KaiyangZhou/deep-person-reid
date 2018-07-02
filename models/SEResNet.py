@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, division
 
 from collections import OrderedDict
 import math
@@ -9,11 +9,14 @@ from torch.utils import model_zoo
 from torch.nn import functional as F
 import torchvision
 
+
 """
 Code imported from https://github.com/Cadene/pretrained-models.pytorch
 """
 
+
 __all__ = ['SEResNet50', 'SEResNet101', 'SEResNeXt50', 'SEResNeXt101']
+
 
 pretrained_settings = {
     'senet154': {
@@ -442,7 +445,9 @@ def se_resnext101_32x4d(num_classes=1000, pretrained='imagenet'):
         initialize_pretrained_model(model, num_classes, settings)
     return model
 
+
 ##################### Model Definition #########################
+
 
 class SEResNet50(nn.Module):
     def __init__(self, num_classes, loss={'xent'}, **kwargs):
@@ -451,7 +456,7 @@ class SEResNet50(nn.Module):
         base = se_resnet50()
         self.base = nn.Sequential(*list(base.children())[:-2])
         self.classifier = nn.Linear(2048, num_classes)
-        self.feat_dim = 2048 # feature dimension
+        self.feat_dim = 2048
 
     def forward(self, x):
         x = self.base(x)
@@ -465,12 +470,9 @@ class SEResNet50(nn.Module):
             return y
         elif self.loss == {'xent', 'htri'}:
             return y, f
-        elif self.loss == {'cent'}:
-            return y, f
-        elif self.loss == {'ring'}:
-            return y, f
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))
+
 
 class SEResNet101(nn.Module):
     def __init__(self, num_classes, loss={'xent'}, **kwargs):
@@ -479,7 +481,7 @@ class SEResNet101(nn.Module):
         base = se_resnet101()
         self.base = nn.Sequential(*list(base.children())[:-2])
         self.classifier = nn.Linear(2048, num_classes)
-        self.feat_dim = 2048 # feature dimension
+        self.feat_dim = 2048
 
     def forward(self, x):
         x = self.base(x)
@@ -493,12 +495,9 @@ class SEResNet101(nn.Module):
             return y
         elif self.loss == {'xent', 'htri'}:
             return y, f
-        elif self.loss == {'cent'}:
-            return y, f
-        elif self.loss == {'ring'}:
-            return y, f
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))
+
 
 class SEResNeXt50(nn.Module):
     def __init__(self, num_classes, loss={'xent'}, **kwargs):
@@ -507,7 +506,7 @@ class SEResNeXt50(nn.Module):
         base = se_resnext50_32x4d()
         self.base = nn.Sequential(*list(base.children())[:-2])
         self.classifier = nn.Linear(2048, num_classes)
-        self.feat_dim = 2048 # feature dimension
+        self.feat_dim = 2048
 
     def forward(self, x):
         x = self.base(x)
@@ -521,12 +520,9 @@ class SEResNeXt50(nn.Module):
             return y
         elif self.loss == {'xent', 'htri'}:
             return y, f
-        elif self.loss == {'cent'}:
-            return y, f
-        elif self.loss == {'ring'}:
-            return y, f
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))
+
 
 class SEResNeXt101(nn.Module):
     def __init__(self, num_classes, loss={'xent'}, **kwargs):
@@ -535,7 +531,7 @@ class SEResNeXt101(nn.Module):
         base = se_resnext101_32x4d()
         self.base = nn.Sequential(*list(base.children())[:-2])
         self.classifier = nn.Linear(2048, num_classes)
-        self.feat_dim = 2048 # feature dimension
+        self.feat_dim = 2048
 
     def forward(self, x):
         x = self.base(x)
@@ -548,10 +544,6 @@ class SEResNeXt101(nn.Module):
         if self.loss == {'xent'}:
             return y
         elif self.loss == {'xent', 'htri'}:
-            return y, f
-        elif self.loss == {'cent'}:
-            return y, f
-        elif self.loss == {'ring'}:
             return y, f
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))

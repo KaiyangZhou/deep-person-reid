@@ -1,4 +1,5 @@
-from __future__ import print_function, absolute_import
+from __future__ import print_function, absolute_import, division
+
 import os
 from PIL import Image
 import numpy as np
@@ -6,6 +7,7 @@ import os.path as osp
 
 import torch
 from torch.utils.data import Dataset
+
 
 def read_image(img_path):
     """Keep reading image until succeed.
@@ -22,6 +24,7 @@ def read_image(img_path):
             pass
     return img
 
+
 class ImageDataset(Dataset):
     """Image Person ReID Dataset"""
     def __init__(self, dataset, transform=None):
@@ -37,6 +40,7 @@ class ImageDataset(Dataset):
         if self.transform is not None:
             img = self.transform(img)
         return img, pid, camid
+
 
 class VideoDataset(Dataset):
     """Video Person ReID Dataset.
@@ -65,11 +69,12 @@ class VideoDataset(Dataset):
             indices = np.arange(num)
             replace = False if num >= self.seq_len else True
             indices = np.random.choice(indices, size=self.seq_len, replace=replace)
-            # sort indices to keep temporal order
-            # comment it to be order-agnostic
+            # sort indices to keep temporal order (comment it to be order-agnostic)
             indices = np.sort(indices)
         elif self.sample == 'evenly':
-            """Evenly sample seq_len items from num items."""
+            """
+            Evenly sample seq_len items from num items.
+            """
             if num >= self.seq_len:
                 num -= num % self.seq_len
                 indices = np.arange(0, num, num/self.seq_len)

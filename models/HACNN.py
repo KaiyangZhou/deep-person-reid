@@ -1,22 +1,24 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, division
 
 import torch
 from torch import nn
 from torch.nn import functional as F
 import torchvision
 
+
 __all__ = ['HACNN']
+
 
 class ConvBlock(nn.Module):
     """Basic convolutional block:
     convolution + batch normalization + relu.
 
     Args (following http://pytorch.org/docs/master/nn.html#torch.nn.Conv2d):
-        in_c (int): number of input channels.
-        out_c (int): number of output channels.
-        k (int or tuple): kernel size.
-        s (int or tuple): stride.
-        p (int or tuple): padding.
+    - in_c (int): number of input channels.
+    - out_c (int): number of output channels.
+    - k (int or tuple): kernel size.
+    - s (int or tuple): stride.
+    - p (int or tuple): padding.
     """
     def __init__(self, in_c, out_c, k, s=1, p=0):
         super(ConvBlock, self).__init__()
@@ -26,31 +28,32 @@ class ConvBlock(nn.Module):
     def forward(self, x):
         return F.relu(self.bn(self.conv(x)))
 
+
 class InceptionA(nn.Module):
     """
     Args:
-        in_channels (int): number of input channels
-        out_channels (int): number of output channels AFTER concatenation
+    - in_channels (int): number of input channels
+    - out_channels (int): number of output channels AFTER concatenation
     """
     def __init__(self, in_channels, out_channels):
         super(InceptionA, self).__init__()
-        single_out_channels = out_channels // 4
+        mid_channels = out_channels // 4
 
         self.stream1 = nn.Sequential(
-            ConvBlock(in_channels, single_out_channels, 1),
-            ConvBlock(single_out_channels, single_out_channels, 3, p=1),
+            ConvBlock(in_channels, mid_channels, 1),
+            ConvBlock(mid_channels, mid_channels, 3, p=1),
         )
         self.stream2 = nn.Sequential(
-            ConvBlock(in_channels, single_out_channels, 1),
-            ConvBlock(single_out_channels, single_out_channels, 3, p=1),
+            ConvBlock(in_channels, mid_channels, 1),
+            ConvBlock(mid_channels, mid_channels, 3, p=1),
         )
         self.stream3 = nn.Sequential(
-            ConvBlock(in_channels, single_out_channels, 1),
-            ConvBlock(single_out_channels, single_out_channels, 3, p=1),
+            ConvBlock(in_channels, mid_channels, 1),
+            ConvBlock(mid_channels, mid_channels, 3, p=1),
         )
         self.stream4 = nn.Sequential(
             nn.AvgPool2d(3, stride=1, padding=1),
-            ConvBlock(in_channels, single_out_channels, 1),
+            ConvBlock(in_channels, mid_channels, 1),
         )
 
     def forward(self, x):
@@ -61,28 +64,29 @@ class InceptionA(nn.Module):
         y = torch.cat([s1, s2, s3, s4], dim=1)
         return y
 
+
 class InceptionB(nn.Module):
     """
     Args:
-        in_channels (int): number of input channels
-        out_channels (int): number of output channels AFTER concatenation
+    - in_channels (int): number of input channels
+    - out_channels (int): number of output channels AFTER concatenation
     """
     def __init__(self, in_channels, out_channels):
         super(InceptionB, self).__init__()
-        single_out_channels = out_channels // 4
+        mid_channels = out_channels // 4
 
         self.stream1 = nn.Sequential(
-            ConvBlock(in_channels, single_out_channels, 1),
-            ConvBlock(single_out_channels, single_out_channels, 3, s=2, p=1),
+            ConvBlock(in_channels, mid_channels, 1),
+            ConvBlock(mid_channels, mid_channels, 3, s=2, p=1),
         )
         self.stream2 = nn.Sequential(
-            ConvBlock(in_channels, single_out_channels, 1),
-            ConvBlock(single_out_channels, single_out_channels, 3, p=1),
-            ConvBlock(single_out_channels, single_out_channels, 3, s=2, p=1),
+            ConvBlock(in_channels, mid_channels, 1),
+            ConvBlock(mid_channels, mid_channels, 3, p=1),
+            ConvBlock(mid_channels, mid_channels, 3, s=2, p=1),
         )
         self.stream3 = nn.Sequential(
             nn.MaxPool2d(3, stride=2, padding=1),
-            ConvBlock(in_channels, single_out_channels*2, 1),
+            ConvBlock(in_channels, mid_channels*2, 1),
         )
 
     def forward(self, x):
@@ -91,6 +95,7 @@ class InceptionB(nn.Module):
         s3 = self.stream3(x)
         y = torch.cat([s1, s2, s3], dim=1)
         return y
+
 
 class SpatialAttn(nn.Module):
     """Spatial Attention (Sec. 3.1.I.1)"""
@@ -110,13 +115,14 @@ class SpatialAttn(nn.Module):
         x = self.conv2(x)
         return x
 
+
 class ChannelAttn(nn.Module):
     """Channel Attention (Sec. 3.1.I.2)"""
     def __init__(self, in_channels, reduction_rate=16):
         super(ChannelAttn, self).__init__()
         assert in_channels%reduction_rate == 0
-        self.conv1 = ConvBlock(in_channels, in_channels//reduction_rate, 1)
-        self.conv2 = ConvBlock(in_channels//reduction_rate, in_channels, 1)
+        self.conv1 = ConvBlock(in_channels, in_channels // reduction_rate, 1)
+        self.conv2 = ConvBlock(in_channels // reduction_rate, in_channels, 1)
 
     def forward(self, x):
         # squeeze operation (global average pooling)
@@ -125,6 +131,7 @@ class ChannelAttn(nn.Module):
         x = self.conv1(x)
         x = self.conv2(x)
         return x
+
 
 class SoftAttn(nn.Module):
     """Soft Attention (Sec. 3.1.I)
@@ -143,6 +150,7 @@ class SoftAttn(nn.Module):
         y = y_spatial * y_channel
         y = F.sigmoid(self.conv(y))
         return y
+
 
 class HardAttn(nn.Module):
     """Hard Attention (Sec. 3.1.II)"""
@@ -163,6 +171,7 @@ class HardAttn(nn.Module):
         theta = theta.view(-1, 4, 2)
         return theta
 
+
 class HarmAttn(nn.Module):
     """Harmonious Attention (Sec. 3.1)"""
     def __init__(self, in_channels):
@@ -175,6 +184,7 @@ class HarmAttn(nn.Module):
         theta = self.hard_attn(x)
         return y_soft_attn, theta
 
+
 class HACNN(nn.Module):
     """
     Harmonious Attention Convolutional Neural Network
@@ -183,10 +193,10 @@ class HACNN(nn.Module):
     Li et al. Harmonious Attention Network for Person Re-identification. CVPR 2018.
 
     Args:
-        num_classes (int): number of classes to predict
-        nchannels (list): number of channels AFTER concatenation
-        feat_dim (int): feature dimension for a single stream
-        learn_region (bool): whether to learn region features (i.e. local branch)
+    - num_classes (int): number of classes to predict
+    - nchannels (list): number of channels AFTER concatenation
+    - feat_dim (int): feature dimension for a single stream
+    - learn_region (bool): whether to learn region features (i.e. local branch)
     """
     def __init__(self, num_classes, loss={'xent'}, nchannels=[128, 256, 384], feat_dim=512, learn_region=True, use_gpu=True, **kwargs):
         super(HACNN, self).__init__()
@@ -250,8 +260,8 @@ class HACNN(nn.Module):
 
     def stn(self, x, theta):
         """Perform spatial transform
-        x: (batch, channel, height, width)
-        theta: (batch, 2, 3)
+        - x: (batch, channel, height, width)
+        - theta: (batch, 2, 3)
         """
         grid = F.affine_grid(theta, x.size())
         x = F.grid_sample(x, grid)
@@ -356,10 +366,12 @@ class HACNN(nn.Module):
                 return (prelogits_global, prelogits_local)
             else:
                 return prelogits_global
+        
         elif self.loss == {'xent', 'htri'}:
             if self.learn_region:
                 return (prelogits_global, prelogits_local), (x_global, x_local)
             else:
                 return prelogits_global, x_global
+        
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))

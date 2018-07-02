@@ -1,4 +1,4 @@
-from __future__ import print_function, absolute_import
+from __future__ import print_function, absolute_import, division
 import os
 import sys
 import time
@@ -18,7 +18,9 @@ from dataset_loader import ImageDataset, VideoDataset
 import transforms as T
 import models
 from losses import CrossEntropyLabelSmooth
-from utils import AverageMeter, Logger, save_checkpoint
+from utils.iotools import save_checkpoint
+from utils.avgmeter import AverageMeter
+from utils.logger import Logger
 from eval_metrics import evaluate
 from optimizers import init_optim
 
@@ -45,8 +47,8 @@ parser.add_argument('--train-batch', default=32, type=int,
 parser.add_argument('--test-batch', default=5, type=int, help="test batch size (number of tracklets)")
 parser.add_argument('--lr', '--learning-rate', default=0.0003, type=float,
                     help="initial learning rate")
-parser.add_argument('--stepsize', default=5, type=int,
-                    help="stepsize to decay learning rate (>0 means this is enabled)")
+parser.add_argument('--stepsize', default=[20, 40], nargs='+', type=int,
+                    help="stepsize to decay learning rate")
 parser.add_argument('--gamma', default=0.1, type=float,
                     help="learning rate decay")
 parser.add_argument('--weight-decay', default=5e-04, type=float,
@@ -88,7 +90,7 @@ def main():
         print("Currently using CPU (GPU is highly recommended)")
 
     print("Initializing dataset {}".format(args.dataset))
-    dataset = data_manager.init_vid_dataset(root=args.root, name=args.dataset)
+    dataset = data_manager.init_vidreid_dataset(root=args.root, name=args.dataset)
 
     transform_train = T.Compose([
         T.Random2DTranslation(args.height, args.width),
@@ -135,8 +137,7 @@ def main():
 
     criterion = CrossEntropyLabelSmooth(num_classes=dataset.num_train_pids, use_gpu=use_gpu)
     optimizer = init_optim(args.optim, model.parameters(), args.lr, args.weight_decay)
-    if args.stepsize > 0:
-        scheduler = lr_scheduler.StepLR(optimizer, step_size=args.stepsize, gamma=args.gamma)
+    scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=args.stepsize, gamma=args.gamma)
     start_epoch = args.start_epoch
 
     if args.resume:
@@ -164,7 +165,7 @@ def main():
         train(epoch, model, criterion, optimizer, trainloader, use_gpu)
         train_time += round(time.time() - start_train_time)
         
-        if args.stepsize > 0: scheduler.step()
+        scheduler.step()
         
         if (epoch+1) > args.start_eval and args.eval_step > 0 and (epoch+1) % args.eval_step == 0 or (epoch+1) == args.max_epoch:
             print("==> Test")

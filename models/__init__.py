@@ -1,21 +1,21 @@
 from __future__ import absolute_import
 
-from .ResNet import *
-from .ResNeXt import *
-from .SEResNet import *
-from .DenseNet import *
-from .MuDeep import *
-from .HACNN import *
-from .SqueezeNet import *
-from .MobileNet import *
-from .ShuffleNet import *
-from .Xception import *
-from .InceptionV4 import *
-from .NASNet import *
-from .DPN import *
-from .InceptionResNetV2 import *
+from .resnet import *
+from .resnext import *
+from .seresnet import *
+from .densenet import *
+from .mudeep import *
+from .hacnn import *
+from .squeeze import *
+from .mobilenetv2 import *
+from .shufflenet import *
+from .xception import *
+from .inceptionv4 import *
+from .nasnet import *
+from .inceptionresnetv2 import *
 
-__factory = {
+
+__model_factory = {
     'resnet50': ResNet50,
     'resnet101': ResNet101,
     'seresnet50': SEResNet50,
@@ -26,21 +26,22 @@ __factory = {
     'resnet50m': ResNet50M,
     'densenet121': DenseNet121,
     'squeezenet': SqueezeNet,
-    'mobilenet': MobileNetV2,
+    'mobilenetv2': MobileNetV2,
     'shufflenet': ShuffleNet,
     'xception': Xception,
-    'inceptionv4': InceptionV4ReID,
-    'nasnet': NASNetAMobile,
-    'dpn92': DPN,
+    'inceptionv4': InceptionV4,
+    'nasnsetmobile': NASNetAMobile,
     'inceptionresnetv2': InceptionResNetV2,
     'mudeep': MuDeep,
     'hacnn': HACNN,
 }
 
+
 def get_names():
-    return __factory.keys()
+    return __model_factory.keys()
+
 
 def init_model(name, *args, **kwargs):
-    if name not in __factory.keys():
+    if name not in __model_factory.keys():
         raise KeyError("Unknown model: {}".format(name))
-    return __factory[name](*args, **kwargs)
+    return __model_factory[name](*args, **kwargs)

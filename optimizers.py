@@ -1,6 +1,5 @@
 import torch
 
-__all__ = ['init_optim']
 
 def init_optim(optim, params, lr, weight_decay):
     if optim == 'adam':
@@ -10,4 +9,4 @@ def init_optim(optim, params, lr, weight_decay):
     elif optim == 'rmsprop':
         return torch.optim.RMSprop(params, lr=lr, momentum=0.9, weight_decay=weight_decay)
     else:
-        raise KeyError("Unsupported optim: {}".format(optim))
+        raise KeyError("Unsupported optimizer: {}".format(optim))

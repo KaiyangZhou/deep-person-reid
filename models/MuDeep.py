@@ -1,11 +1,13 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, division
 
 import torch
 from torch import nn
 from torch.nn import functional as F
 import torchvision
 
+
 __all__ = ['MuDeep']
+
 
 class ConvBlock(nn.Module):
     """Basic convolutional block:
@@ -26,6 +28,7 @@ class ConvBlock(nn.Module):
     def forward(self, x):
         return F.relu(self.bn(self.conv(x)))
 
+
 class ConvLayers(nn.Module):
     """Preprocessing layers."""
     def __init__(self):
@@ -39,6 +42,7 @@ class ConvLayers(nn.Module):
         x = self.conv2(x)
         x = self.maxpool(x)
         return x
+
 
 class MultiScaleA(nn.Module):
     """Multi-scale stream layer A (Sec.3.1)"""
@@ -67,6 +71,7 @@ class MultiScaleA(nn.Module):
         y = torch.cat([s1, s2, s3, s4], dim=1)
         return y
 
+
 class Reduction(nn.Module):
     """Reduction layer (Sec.3.1)"""
     def __init__(self):
@@ -85,6 +90,7 @@ class Reduction(nn.Module):
         s3 = self.stream3(x)
         y = torch.cat([s1, s2, s3], dim=1)
         return y
+
 
 class MultiScaleB(nn.Module):
     """Multi-scale stream layer B (Sec.3.1)"""
@@ -115,6 +121,7 @@ class MultiScaleB(nn.Module):
         s4 = self.stream4(x)
         return s1, s2, s3, s4
 
+
 class Fusion(nn.Module):
     """Saliency-based learning fusion layer (Sec.3.2)"""
     def __init__(self):
@@ -135,6 +142,7 @@ class Fusion(nn.Module):
         s4 = self.a4.expand_as(x4) * x4
         y = self.avgpool(s1 + s2 + s3 + s4)
         return y
+
 
 class MuDeep(nn.Module):
     """Multiscale deep neural network.
@@ -162,7 +170,7 @@ class MuDeep(nn.Module):
             nn.ReLU(),
         )
         self.classifier = nn.Linear(4096, num_classes)
-        self.feat_dim = 4096 # feature dimension
+        self.feat_dim = 4096
 
     def forward(self, x):
         x = self.block1(x)
@@ -177,8 +185,6 @@ class MuDeep(nn.Module):
         if self.loss == {'xent'}:
             return y
         elif self.loss == {'xent', 'htri'}:
-            return y, x
-        elif self.loss == {'cent'}:
             return y, x
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))

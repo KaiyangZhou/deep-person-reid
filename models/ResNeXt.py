@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, division
 
 import torch
 import torch.nn as nn
@@ -8,11 +8,14 @@ import torch.utils.model_zoo as model_zoo
 
 import os
 
-__all__ = ['ResNeXt101_32x4d']
 
 """
 Code imported from https://github.com/Cadene/pretrained-models.pytorch
 """
+
+
+__all__ = ['ResNeXt101_32x4d']
+
 
 class LambdaBase(nn.Sequential):
     def __init__(self, fn, *args):
@@ -25,17 +28,21 @@ class LambdaBase(nn.Sequential):
             output.append(module(input))
         return output if output else input
 
+
 class Lambda(LambdaBase):
     def forward(self, input):
         return self.lambda_func(self.forward_prepare(input))
+
 
 class LambdaMap(LambdaBase):
     def forward(self, input):
         return list(map(self.lambda_func,self.forward_prepare(input)))
 
+
 class LambdaReduce(LambdaBase):
     def forward(self, input):
         return reduce(self.lambda_func,self.forward_prepare(input))
+
 
 # JUMP TO THE END #########################################################################
 resnext101_32x4d_features = nn.Sequential( # Sequential,
@@ -1346,8 +1353,8 @@ resnext101_64x4d_features = nn.Sequential(#Sequential,
         ),
     )
 )
-
 #################################################################################
+
 
 pretrained_settings = {
     'resnext101_32x4d': {
@@ -1374,6 +1381,7 @@ pretrained_settings = {
     }
 }
 
+
 def resnext101_32x4d(num_classes=1000, pretrained='imagenet'):
     """Deprecated"""
     model = ResNeXt101_32x4d(num_classes=num_classes)
@@ -1388,6 +1396,7 @@ def resnext101_32x4d(num_classes=1000, pretrained='imagenet'):
         model.mean = settings['mean']
         model.std = settings['std']
     return model
+
 
 def resnext101_64x4d(num_classes=1000, pretrained='imagenet'):
     """Deprecated"""
@@ -1404,7 +1413,9 @@ def resnext101_64x4d(num_classes=1000, pretrained='imagenet'):
         model.std = settings['std']
     return model
 
+
 ##################### Model Definition #########################
+
 
 class ResNeXt101_32x4d(nn.Module):
     def __init__(self, num_classes, loss={'xent'}, **kwargs):
@@ -1437,51 +1448,6 @@ class ResNeXt101_32x4d(nn.Module):
         if self.loss == {'xent'}:
             return y
         elif self.loss == {'xent', 'htri'}:
-            return y, x
-        elif self.loss == {'cent'}:
-            return y, x
-        elif self.loss == {'ring'}:
-            return y, x
-        else:
-            raise KeyError("Unsupported loss: {}".format(self.loss))
-
-
-class ResNeXt101_64x4d(nn.Module):
-    """This model is not used"""
-    def __init__(self, num_classes, loss={'xent'}, **kwargs):
-        super(ResNeXt101_64x4d, self).__init__()
-        self.loss = loss
-        self.features = resnext101_64x4d_features
-        self.classifier = nn.Linear(2048, num_classes)
-        self.feat_dim = 2048
-        self.init_params()
-
-    def init_params(self):
-        """Load ImageNet pretrained weights"""
-        settings = pretrained_settings['resnext101_64x4d']['imagenet']
-        pretrained_dict = model_zoo.load_url(settings['url'], map_location=None)
-        model_dict = self.state_dict()
-        pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
-        model_dict.update(pretrained_dict)
-        self.load_state_dict(model_dict)
-
-    def forward(self, input):
-        x = self.features(input)
-        x = F.avg_pool2d(x, x.size()[2:])
-        x = x.view(x.size(0), -1)
-
-        if not self.training:
-            return x
-
-        y = self.classifier(x)
-
-        if self.loss == {'xent'}:
-            return y
-        elif self.loss == {'xent', 'htri'}:
-            return y, x
-        elif self.loss == {'cent'}:
-            return y, x
-        elif self.loss == {'ring'}:
             return y, x
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))

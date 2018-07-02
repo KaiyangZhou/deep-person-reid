@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, division
 
 import torch
 import torch.nn as nn
@@ -7,11 +7,13 @@ import torch.utils.model_zoo as model_zoo
 import os
 import sys
 
-__all__ = ['InceptionV4ReID']
+
+__all__ = ['InceptionV4']
 
 """
 Code imported from https://github.com/Cadene/pretrained-models.pytorch
 """
+
 
 pretrained_settings = {
     'inceptionv4': {
@@ -266,10 +268,10 @@ class Inception_C(nn.Module):
         return out
 
 
-class InceptionV4(nn.Module):
+class InceptionV4Base(nn.Module):
 
     def __init__(self, num_classes=1001):
-        super(InceptionV4, self).__init__()
+        super(InceptionV4Base, self).__init__()
         # Special attributs
         self.input_space = None
         self.input_size = (299, 299, 3)
@@ -322,7 +324,7 @@ def inceptionv4(num_classes=1000, pretrained='imagenet'):
             "num_classes should be {}, but is {}".format(settings['num_classes'], num_classes)
 
         # both 'imagenet'&'imagenet+background' are loaded from same parameters
-        model = InceptionV4(num_classes=1001)
+        model = InceptionV4Base(num_classes=1001)
         model.load_state_dict(model_zoo.load_url(settings['url']))
         
         if pretrained == 'imagenet':
@@ -337,17 +339,18 @@ def inceptionv4(num_classes=1000, pretrained='imagenet'):
         model.mean = settings['mean']
         model.std = settings['std']
     else:
-        model = InceptionV4(num_classes=num_classes)
+        model = InceptionV4Base(num_classes=num_classes)
     return model
 
-class InceptionV4ReID(nn.Module):
+
+class InceptionV4(nn.Module):
     def __init__(self, num_classes, loss={'xent'}, **kwargs):
-        super(InceptionV4ReID, self).__init__()
+        super(InceptionV4, self).__init__()
         self.loss = loss
         base = inceptionv4()
         self.features = base.features
         self.classifier = nn.Linear(1536, num_classes)
-        self.feat_dim = 1536 # feature dimension
+        self.feat_dim = 1536
 
     def forward(self, x):
         x = self.features(x)
@@ -360,10 +363,6 @@ class InceptionV4ReID(nn.Module):
         if self.loss == {'xent'}:
             return y
         elif self.loss == {'xent', 'htri'}:
-            return y, f
-        elif self.loss == {'cent'}:
-            return y, f
-        elif self.loss == {'ring'}:
             return y, f
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))

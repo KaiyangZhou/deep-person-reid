@@ -1,11 +1,13 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, division
 
 import torch
 from torch import nn
 from torch.nn import functional as F
 import torchvision
 
+
 __all__ = ['ShuffleNet']
+
 
 class ChannelShuffle(nn.Module):
     def __init__(self, num_groups):
@@ -23,12 +25,13 @@ class ChannelShuffle(nn.Module):
         x = x.view(b, c, h, w)
         return x
 
+
 class Bottleneck(nn.Module):
     def __init__(self, in_channels, out_channels, stride, num_groups, group_conv1x1=True):
         super(Bottleneck, self).__init__()
         assert stride in [1, 2], "Warning: stride must be either 1 or 2"
         self.stride = stride
-        mid_channels = out_channels / 4
+        mid_channels = out_channels // 4
         if stride == 2: out_channels -= in_channels
         # group conv is not applied to first conv1x1 at stage 2
         num_groups_conv1x1 = num_groups if group_conv1x1 else 1
@@ -53,6 +56,7 @@ class Bottleneck(nn.Module):
             out = F.relu(x + out)
         return out
 
+
 # configuration of (num_groups: #out_channels) based on Table 1 in the paper
 cfg = {
     1: [144, 288, 576],
@@ -61,6 +65,7 @@ cfg = {
     4: [272, 544, 1088],
     8: [384, 768, 1536],
 }
+
 
 class ShuffleNet(nn.Module):
     """ShuffleNet

@@ -1,11 +1,13 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, division
 
 import torch
 from torch import nn
 from torch.nn import functional as F
 import torchvision
 
+
 __all__ = ['Xception']
+
 
 class ConvBlock(nn.Module):
     """Basic convolutional block:
@@ -28,6 +30,7 @@ class ConvBlock(nn.Module):
     def forward(self, x):
         return F.relu6(self.bn(self.conv(x)))
 
+
 class SepConv(nn.Module):
     def __init__(self, in_channels, out_channels):
         super(SepConv, self).__init__()
@@ -42,6 +45,7 @@ class SepConv(nn.Module):
 
     def forward(self, x):
         return self.conv2(self.conv1(x))
+
 
 class EntryFLow(nn.Module):
     def __init__(self, nchannels):
@@ -105,6 +109,7 @@ class EntryFLow(nn.Module):
 
         return x5
 
+
 class MidFlowBlock(nn.Module):
     def __init__(self, in_channels, out_channels):
         super(MidFlowBlock, self).__init__()
@@ -117,6 +122,7 @@ class MidFlowBlock(nn.Module):
         x = self.conv2(F.relu(x))
         x = self.conv3(F.relu(x))
         return x
+
 
 class MidFlow(nn.Module):
     def __init__(self, in_channels, out_channels, num_repeats):
@@ -132,6 +138,7 @@ class MidFlow(nn.Module):
 
     def forward(self, x):
         return self.blocks(x)
+
 
 class ExitFlow(nn.Module):
     def __init__(self, in_channels, nchannels):
@@ -156,6 +163,7 @@ class ExitFlow(nn.Module):
         x4 = F.relu(self.conv4(x3))
         x4 = F.avg_pool2d(x4, x4.size()[2:]).view(x4.size(0), -1)
         return x4
+
 
 class Xception(nn.Module):
     """Xception

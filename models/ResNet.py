@@ -1,11 +1,13 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, division
 
 import torch
 from torch import nn
 from torch.nn import functional as F
 import torchvision
 
+
 __all__ = ['ResNet50', 'ResNet101', 'ResNet50M']
+
 
 class ResNet50(nn.Module):
     def __init__(self, num_classes, loss={'xent'}, **kwargs):
@@ -14,7 +16,7 @@ class ResNet50(nn.Module):
         resnet50 = torchvision.models.resnet50(pretrained=True)
         self.base = nn.Sequential(*list(resnet50.children())[:-2])
         self.classifier = nn.Linear(2048, num_classes)
-        self.feat_dim = 2048 # feature dimension
+        self.feat_dim = 2048
 
     def forward(self, x):
         x = self.base(x)
@@ -28,12 +30,9 @@ class ResNet50(nn.Module):
             return y
         elif self.loss == {'xent', 'htri'}:
             return y, f
-        elif self.loss == {'cent'}:
-            return y, f
-        elif self.loss == {'ring'}:
-            return y, f
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))
+
 
 class ResNet101(nn.Module):
     def __init__(self, num_classes, loss={'xent'}, **kwargs):
@@ -56,12 +55,9 @@ class ResNet101(nn.Module):
             return y
         elif self.loss == {'xent', 'htri'}:
             return y, f
-        elif self.loss == {'cent'}:
-            return y, f
-        elif self.loss == {'ring'}:
-            return y, f
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))
+
 
 class ResNet50M(nn.Module):
     """ResNet50 + mid-level features.
@@ -103,17 +99,15 @@ class ResNet50M(nn.Module):
         midfeat = self.fc_fuse(midfeat)
 
         combofeat = torch.cat((x5c_feat, midfeat), dim=1)
+        
         if not self.training:
             return combofeat
+        
         prelogits = self.classifier(combofeat)
         
         if self.loss == {'xent'}:
             return prelogits
         elif self.loss == {'xent', 'htri'}:
-            return prelogits, combofeat
-        elif self.loss == {'cent'}:
-            return prelogits, combofeat
-        elif self.loss == {'ring'}:
             return prelogits, combofeat
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))
