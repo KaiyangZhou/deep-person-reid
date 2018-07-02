@@ -9,17 +9,8 @@ import torch
 from torch.utils.data.sampler import Sampler
 
 
+""" Deprecated
 class RandomIdentitySampler(Sampler):
-    """
-    Randomly sample N identities, then for each identity,
-    randomly sample K instances, therefore batch size is N*K.
-
-    Code imported from https://github.com/Cysu/open-reid/blob/master/reid/utils/data/sampler.py.
-
-    Args:
-    - data_source (Dataset): dataset to sample from.
-    - num_instances (int): number of instances per identity.
-    """
     def __init__(self, data_source, num_instances=4):
         self.data_source = data_source
         self.num_instances = num_instances
@@ -42,10 +33,18 @@ class RandomIdentitySampler(Sampler):
 
     def __len__(self):
         return self.num_identities * self.num_instances
+"""
 
 
-class RandomIdentitySamplerV2(Sampler):
-    # under testing
+class RandomIdentitySampler(Sampler):
+    """
+    Randomly sample N identities, then for each identity,
+    randomly sample K instances, therefore batch size is N*K.
+
+    Args:
+    - data_source (Dataset): dataset to sample from.
+    - num_instances (int): number of instances per identity.
+    """
     def __init__(self, data_source, num_instances=4):
         self.data_source = data_source
         self.num_instances = num_instances
