@@ -24,6 +24,7 @@ from utils.logger import Logger
 from eval_metrics import evaluate
 from optimizers import init_optim
 
+
 parser = argparse.ArgumentParser(description='Train video model with cross entropy loss')
 # Datasets
 parser.add_argument('--root', type=str, default='data', help="root path to data directory")
@@ -69,6 +70,7 @@ parser.add_argument('--use-cpu', action='store_true', help="use cpu")
 parser.add_argument('--gpu-devices', default='0', type=str, help='gpu device ids for CUDA_VISIBLE_DEVICES')
 
 args = parser.parse_args()
+
 
 def main():
     torch.manual_seed(args.seed)
@@ -192,6 +194,7 @@ def main():
     train_time = str(datetime.timedelta(seconds=train_time))
     print("Finished. Total elapsed time (h:m:s): {}. Training time (h:m:s): {}.".format(elapsed, train_time))
 
+
 def train(epoch, model, criterion, optimizer, trainloader, use_gpu):
     losses = AverageMeter()
     batch_time = AverageMeter()
@@ -201,11 +204,11 @@ def train(epoch, model, criterion, optimizer, trainloader, use_gpu):
 
     end = time.time()
     for batch_idx, (imgs, pids, _) in enumerate(trainloader):
-        if use_gpu:
-            imgs, pids = imgs.cuda(), pids.cuda()
-
         # measure data loading time
         data_time.update(time.time() - end)
+        
+        if use_gpu:
+            imgs, pids = imgs.cuda(), pids.cuda()
         
         outputs = model(imgs)
         loss = criterion(outputs, pids)
@@ -226,6 +229,7 @@ def train(epoch, model, criterion, optimizer, trainloader, use_gpu):
                   'Loss {loss.val:.4f} ({loss.avg:.4f})\t'.format(
                    epoch+1, batch_idx+1, len(trainloader), batch_time=batch_time,
                    data_time=data_time, loss=losses))
+
 
 def test(model, queryloader, galleryloader, pool, use_gpu, ranks=[1, 5, 10, 20]):
     batch_time = AverageMeter()
@@ -302,6 +306,7 @@ def test(model, queryloader, galleryloader, pool, use_gpu, ranks=[1, 5, 10, 20])
     print("------------------")
 
     return cmc[0]
+
 
 if __name__ == '__main__':
     main()
