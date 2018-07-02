@@ -96,7 +96,7 @@ class VideoDataset(Dataset):
 
         imgs = []
         for index in indices:
-            img_path = img_paths[index]
+            img_path = img_paths[int(index)]
             img = read_image(img_path)
             if self.transform is not None:
                 img = self.transform(img)

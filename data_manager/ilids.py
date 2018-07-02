@@ -14,9 +14,10 @@ import h5py
 from scipy.misc import imsave
 
 from utils.iotools import mkdir_if_missing, write_json, read_json
+from .base import BaseImgDataset
 
 
-class iLIDS(object):
+class iLIDS(BaseImgDataset):
     """
     iLIDS (for single shot setting)
 
@@ -32,7 +33,7 @@ class iLIDS(object):
     """
     dataset_dir = 'ilids-vid'
 
-    def __init__(self, root='data', split_id=0, **kwargs):
+    def __init__(self, root='data', split_id=0, verbose=True, use_lmdb=False, **kwargs):
         self.dataset_dir = osp.join(root, self.dataset_dir)
         self.dataset_url = 'http://www.eecs.qmul.ac.uk/~xiatian/iLIDS-VID/iLIDS-VID.tar'
         self.data_dir = osp.join(self.dataset_dir, 'i-LIDS-VID')
@@ -60,17 +61,18 @@ class iLIDS(object):
         num_total_pids = num_train_pids + num_query_pids
         num_total_imgs = num_train_imgs + num_query_imgs
 
-        print("=> iLIDS (single-shot) loaded")
-        print("Dataset statistics:")
-        print("  ------------------------------")
-        print("  subset   | # ids | # images")
-        print("  ------------------------------")
-        print("  train    | {:5d} | {:8d}".format(num_train_pids, num_train_imgs))
-        print("  query    | {:5d} | {:8d}".format(num_query_pids, num_query_imgs))
-        print("  gallery  | {:5d} | {:8d}".format(num_gallery_pids, num_gallery_imgs))
-        print("  ------------------------------")
-        print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_imgs))
-        print("  ------------------------------")
+        if verbose:
+            print("=> iLIDS (single-shot) loaded")
+            print("Dataset statistics:")
+            print("  ------------------------------")
+            print("  subset   | # ids | # images")
+            print("  ------------------------------")
+            print("  train    | {:5d} | {:8d}".format(num_train_pids, num_train_imgs))
+            print("  query    | {:5d} | {:8d}".format(num_query_pids, num_query_imgs))
+            print("  gallery  | {:5d} | {:8d}".format(num_gallery_pids, num_gallery_imgs))
+            print("  ------------------------------")
+            print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_imgs))
+            print("  ------------------------------")
 
         self.train = train
         self.query = query
@@ -79,6 +81,9 @@ class iLIDS(object):
         self.num_train_pids = num_train_pids
         self.num_query_pids = num_query_pids
         self.num_gallery_pids = num_gallery_pids
+
+        if use_lmdb:
+            self.generate_lmdb()
 
     def _download_data(self):
         if osp.exists(self.dataset_dir):

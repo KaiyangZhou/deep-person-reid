@@ -13,8 +13,10 @@ import numpy as np
 import h5py
 from scipy.misc import imsave
 
+from .base import BaseImgDataset
 
-class DukeMTMCreID(object):
+
+class DukeMTMCreID(BaseImgDataset):
     """
     DukeMTMC-reID
 
@@ -31,7 +33,7 @@ class DukeMTMCreID(object):
     """
     dataset_dir = 'dukemtmc-reid'
 
-    def __init__(self, root='data', **kwargs):
+    def __init__(self, root='data', verbose=True, use_lmdb=False, **kwargs):
         self.dataset_dir = osp.join(root, self.dataset_dir)
         self.train_dir = osp.join(self.dataset_dir, 'DukeMTMC-reID/bounding_box_train')
         self.query_dir = osp.join(self.dataset_dir, 'DukeMTMC-reID/query')
@@ -45,17 +47,18 @@ class DukeMTMCreID(object):
         num_total_pids = num_train_pids + num_query_pids
         num_total_imgs = num_train_imgs + num_query_imgs + num_gallery_imgs
 
-        print("=> DukeMTMC-reID loaded")
-        print("Dataset statistics:")
-        print("  ------------------------------")
-        print("  subset   | # ids | # images")
-        print("  ------------------------------")
-        print("  train    | {:5d} | {:8d}".format(num_train_pids, num_train_imgs))
-        print("  query    | {:5d} | {:8d}".format(num_query_pids, num_query_imgs))
-        print("  gallery  | {:5d} | {:8d}".format(num_gallery_pids, num_gallery_imgs))
-        print("  ------------------------------")
-        print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_imgs))
-        print("  ------------------------------")
+        if verbose:
+            print("=> DukeMTMC-reID loaded")
+            print("Dataset statistics:")
+            print("  ------------------------------")
+            print("  subset   | # ids | # images")
+            print("  ------------------------------")
+            print("  train    | {:5d} | {:8d}".format(num_train_pids, num_train_imgs))
+            print("  query    | {:5d} | {:8d}".format(num_query_pids, num_query_imgs))
+            print("  gallery  | {:5d} | {:8d}".format(num_gallery_pids, num_gallery_imgs))
+            print("  ------------------------------")
+            print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_imgs))
+            print("  ------------------------------")
 
         self.train = train
         self.query = query
@@ -64,6 +67,9 @@ class DukeMTMCreID(object):
         self.num_train_pids = num_train_pids
         self.num_query_pids = num_query_pids
         self.num_gallery_pids = num_gallery_pids
+
+        if use_lmdb:
+            self.generate_lmdb()
 
     def _check_before_run(self):
         """Check if all files are available before going deeper"""

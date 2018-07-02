@@ -32,7 +32,7 @@ class PRID2011(object):
     """
     dataset_dir = 'prid2011'
 
-    def __init__(self, root='data', split_id=0, min_seq_len=0, **kwargs):
+    def __init__(self, root='data', split_id=0, min_seq_len=0, verbose=True, **kwargs):
         self.dataset_dir = osp.join(root, self.dataset_dir)
         self.split_path = osp.join(self.dataset_dir, 'splits_prid2011.json')
         self.cam_a_path = osp.join(self.dataset_dir, 'prid_2011', 'multi_shot', 'cam_a')
@@ -61,18 +61,19 @@ class PRID2011(object):
         num_total_pids = num_train_pids + num_query_pids
         num_total_tracklets = num_train_tracklets + num_query_tracklets + num_gallery_tracklets
 
-        print("=> PRID2011 loaded")
-        print("Dataset statistics:")
-        print("  ------------------------------")
-        print("  subset   | # ids | # tracklets")
-        print("  ------------------------------")
-        print("  train    | {:5d} | {:8d}".format(num_train_pids, num_train_tracklets))
-        print("  query    | {:5d} | {:8d}".format(num_query_pids, num_query_tracklets))
-        print("  gallery  | {:5d} | {:8d}".format(num_gallery_pids, num_gallery_tracklets))
-        print("  ------------------------------")
-        print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_tracklets))
-        print("  number of images per tracklet: {} ~ {}, average {:.1f}".format(min_num, max_num, avg_num))
-        print("  ------------------------------")
+        if verbose:
+            print("=> PRID2011 loaded")
+            print("Dataset statistics:")
+            print("  ------------------------------")
+            print("  subset   | # ids | # tracklets")
+            print("  ------------------------------")
+            print("  train    | {:5d} | {:8d}".format(num_train_pids, num_train_tracklets))
+            print("  query    | {:5d} | {:8d}".format(num_query_pids, num_query_tracklets))
+            print("  gallery  | {:5d} | {:8d}".format(num_gallery_pids, num_gallery_tracklets))
+            print("  ------------------------------")
+            print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_tracklets))
+            print("  number of images per tracklet: {} ~ {}, average {:.1f}".format(min_num, max_num, avg_num))
+            print("  ------------------------------")
 
         self.train = train
         self.query = query

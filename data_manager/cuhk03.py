@@ -14,9 +14,10 @@ import h5py
 from scipy.misc import imsave
 
 from utils.iotools import mkdir_if_missing, write_json, read_json
+from .base import BaseImgDataset
 
 
-class CUHK03(object):
+class CUHK03(BaseImgDataset):
     """
     CUHK03
 
@@ -37,7 +38,7 @@ class CUHK03(object):
     """
     dataset_dir = 'cuhk03'
 
-    def __init__(self, root='data', split_id=0, cuhk03_labeled=False, cuhk03_classic_split=False, **kwargs):
+    def __init__(self, root='data', split_id=0, cuhk03_labeled=False, cuhk03_classic_split=False, verbose=True, use_lmdb=False, **kwargs):
         self.dataset_dir = osp.join(root, self.dataset_dir)
         self.data_dir = osp.join(self.dataset_dir, 'cuhk03_release')
         self.raw_mat_path = osp.join(self.data_dir, 'cuhk-03.mat')
@@ -83,17 +84,18 @@ class CUHK03(object):
         num_gallery_imgs = split['num_gallery_imgs']
         num_total_imgs = num_train_imgs + num_query_imgs
 
-        print("=> CUHK03 ({}) loaded".format(image_type))
-        print("Dataset statistics:")
-        print("  ------------------------------")
-        print("  subset   | # ids | # images")
-        print("  ------------------------------")
-        print("  train    | {:5d} | {:8d}".format(num_train_pids, num_train_imgs))
-        print("  query    | {:5d} | {:8d}".format(num_query_pids, num_query_imgs))
-        print("  gallery  | {:5d} | {:8d}".format(num_gallery_pids, num_gallery_imgs))
-        print("  ------------------------------")
-        print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_imgs))
-        print("  ------------------------------")
+        if verbose:
+            print("=> CUHK03 ({}) loaded".format(image_type))
+            print("Dataset statistics:")
+            print("  ------------------------------")
+            print("  subset   | # ids | # images")
+            print("  ------------------------------")
+            print("  train    | {:5d} | {:8d}".format(num_train_pids, num_train_imgs))
+            print("  query    | {:5d} | {:8d}".format(num_query_pids, num_query_imgs))
+            print("  gallery  | {:5d} | {:8d}".format(num_gallery_pids, num_gallery_imgs))
+            print("  ------------------------------")
+            print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_imgs))
+            print("  ------------------------------")
 
         self.train = train
         self.query = query
@@ -102,6 +104,9 @@ class CUHK03(object):
         self.num_train_pids = num_train_pids
         self.num_query_pids = num_query_pids
         self.num_gallery_pids = num_gallery_pids
+
+        if use_lmdb:
+            self.generate_lmdb()
 
     def _check_before_run(self):
         """Check if all files are available before going deeper"""

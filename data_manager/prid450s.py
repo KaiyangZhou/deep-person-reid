@@ -14,9 +14,10 @@ import h5py
 from scipy.misc import imsave
 
 from utils.iotools import mkdir_if_missing, write_json, read_json
+from .base import BaseImgDataset
 
 
-class PRID450S(object):
+class PRID450S(BaseImgDataset):
     """
     PRID450S
 
@@ -32,7 +33,7 @@ class PRID450S(object):
     """
     dataset_dir = 'prid450s'
 
-    def __init__(self, root='data', split_id=0, min_seq_len=0, **kwargs):
+    def __init__(self, root='data', split_id=0, min_seq_len=0, verbose=True, use_lmdb=False, **kwargs):
         self.dataset_dir = osp.join(root, self.dataset_dir)
         self.dataset_url = 'https://files.icg.tugraz.at/f/8c709245bb/?raw=1'
         self.split_path = osp.join(self.dataset_dir, 'splits.json')
@@ -67,17 +68,18 @@ class PRID450S(object):
         num_total_pids = num_train_pids + num_query_pids
         num_total_imgs = num_train_imgs + num_query_imgs
 
-        print("=> PRID450S loaded")
-        print("Dataset statistics:")
-        print("  ------------------------------")
-        print("  subset   | # ids | # images")
-        print("  ------------------------------")
-        print("  train    | {:5d} | {:8d}".format(num_train_pids, num_train_imgs))
-        print("  query    | {:5d} | {:8d}".format(num_query_pids, num_query_imgs))
-        print("  gallery  | {:5d} | {:8d}".format(num_gallery_pids, num_gallery_imgs))
-        print("  ------------------------------")
-        print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_imgs))
-        print("  ------------------------------")
+        if verbose:
+            print("=> PRID450S loaded")
+            print("Dataset statistics:")
+            print("  ------------------------------")
+            print("  subset   | # ids | # images")
+            print("  ------------------------------")
+            print("  train    | {:5d} | {:8d}".format(num_train_pids, num_train_imgs))
+            print("  query    | {:5d} | {:8d}".format(num_query_pids, num_query_imgs))
+            print("  gallery  | {:5d} | {:8d}".format(num_gallery_pids, num_gallery_imgs))
+            print("  ------------------------------")
+            print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_imgs))
+            print("  ------------------------------")
 
         self.train = train
         self.query = query
@@ -86,6 +88,9 @@ class PRID450S(object):
         self.num_train_pids = num_train_pids
         self.num_query_pids = num_query_pids
         self.num_gallery_pids = num_gallery_pids
+
+        if use_lmdb:
+            self.generate_lmdb()
 
     def _check_before_run(self):
         """Check if all files are available before going deeper"""
