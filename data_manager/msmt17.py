@@ -33,6 +33,7 @@ class MSMT17(BaseImgDataset):
     dataset_dir = 'msmt17'
 
     def __init__(self, root='data', verbose=True, use_lmdb=False, **kwargs):
+        super(MSMT17, self).__init__()
         self.dataset_dir = osp.join(root, self.dataset_dir)
         self.train_dir = osp.join(self.dataset_dir, 'MSMT17_V1/train')
         self.test_dir = osp.join(self.dataset_dir, 'MSMT17_V1/test')

@@ -6,6 +6,11 @@ import lmdb
 
 
 class BaseImgDataset(object):
+    def __init__(self):
+        self.train_lmdb_path = None
+        self.query_lmdb_path = None
+        self.gallery_lmdb_path = None
+
     def generate_lmdb(self):
         assert isinstance(self.train, list)
         assert isinstance(self.query, list)
@@ -19,7 +24,7 @@ class BaseImgDataset(object):
             if osp.exists(write_path):
                 return
             
-            print("Generating lmdb files to {}".format(write_path))
+            print("Generating lmdb files to '{}'".format(write_path))
             
             num_data = len(data_list)
             max_map_size = int(num_data * 500**2 * 3) # be careful with this

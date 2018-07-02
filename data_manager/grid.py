@@ -34,6 +34,7 @@ class GRID(BaseImgDataset):
     dataset_dir = 'grid'
 
     def __init__(self, root='data', split_id=0, verbose=True, use_lmdb=False, **kwargs):
+        super(GRID, self).__init__()
         self.dataset_dir = osp.join(root, self.dataset_dir)
         self.dataset_url = 'http://personal.ie.cuhk.edu.hk/~ccloy/files/datasets/underground_reid.zip'
         self.probe_path = osp.join(self.dataset_dir, 'underground_reid', 'probe')

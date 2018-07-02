@@ -34,6 +34,7 @@ class iLIDS(BaseImgDataset):
     dataset_dir = 'ilids-vid'
 
     def __init__(self, root='data', split_id=0, verbose=True, use_lmdb=False, **kwargs):
+        super(iLIDS, self).__init__()
         self.dataset_dir = osp.join(root, self.dataset_dir)
         self.dataset_url = 'http://www.eecs.qmul.ac.uk/~xiatian/iLIDS-VID/iLIDS-VID.tar'
         self.data_dir = osp.join(self.dataset_dir, 'i-LIDS-VID')
