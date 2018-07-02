@@ -12,7 +12,7 @@ CUHK03: detected, [new protocol (767/700)](https://github.com/zhunzhong07/person
 | DenseNet121:dog: | - | xent | - | - | - | - |
 | ResNet50M:dog: | - | xent | - | - | - | - |
 | InceptionV4:dog: | - | xent | - | - | - | - |
-| InceptionResNetV2:dog | - | xent | - | - | - | - |
+| InceptionResNetV2:dog: | - | xent | - | - | - | - |
 | SqueezeNet | - | xent | - | - | - | - |
 | MobileNetV2 | - | xent | - | - | - |- |
 | ShuffleNet | - | xent | - | - | - | - |
