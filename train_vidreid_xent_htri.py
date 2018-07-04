@@ -1,4 +1,6 @@
-from __future__ import print_function, absolute_import, division
+from __future__ import print_function
+from __future__ import division
+
 import os
 import sys
 import time
@@ -28,7 +30,8 @@ from optimizers import init_optim
 
 parser = argparse.ArgumentParser(description='Train video model with cross entropy loss')
 # Datasets
-parser.add_argument('--root', type=str, default='data', help="root path to data directory")
+parser.add_argument('--root', type=str, default='data',
+                    help="root path to data directory")
 parser.add_argument('-d', '--dataset', type=str, default='mars',
                     choices=data_manager.get_names())
 parser.add_argument('-j', '--workers', default=4, type=int,
@@ -37,16 +40,19 @@ parser.add_argument('--height', type=int, default=256,
                     help="height of an image (default: 256)")
 parser.add_argument('--width', type=int, default=128,
                     help="width of an image (default: 128)")
-parser.add_argument('--seq-len', type=int, default=15, help="number of images to sample in a tracklet")
+parser.add_argument('--seq-len', type=int, default=15,
+                    help="number of images to sample in a tracklet")
 # Optimization options
-parser.add_argument('--optim', type=str, default='adam', help="optimization algorithm (see optimizers.py)")
+parser.add_argument('--optim', type=str, default='adam',
+                    help="optimization algorithm (see optimizers.py)")
 parser.add_argument('--max-epoch', default=500, type=int,
                     help="maximum epochs to run")
 parser.add_argument('--start-epoch', default=0, type=int,
                     help="manual epoch number (useful on restarts)")
 parser.add_argument('--train-batch', default=32, type=int,
                     help="train batch size")
-parser.add_argument('--test-batch', default=5, type=int, help="test batch size (number of tracklets)")
+parser.add_argument('--test-batch', default=5, type=int,
+                    help="test batch size (number of tracklets)")
 parser.add_argument('--lr', '--learning-rate', default=0.0003, type=float,
                     help="initial learning rate")
 parser.add_argument('--stepsize', default=[300, 400], nargs='+', type=int,
@@ -55,7 +61,8 @@ parser.add_argument('--gamma', default=0.1, type=float,
                     help="learning rate decay")
 parser.add_argument('--weight-decay', default=5e-04, type=float,
                     help="weight decay (default: 5e-04)")
-parser.add_argument('--margin', type=float, default=0.3, help="margin for triplet loss")
+parser.add_argument('--margin', type=float, default=0.3,
+                    help="margin for triplet loss")
 parser.add_argument('--num-instances', type=int, default=4,
                     help="number of instances per identity")
 parser.add_argument('--htri-only', action='store_true', default=False,
@@ -64,16 +71,22 @@ parser.add_argument('--htri-only', action='store_true', default=False,
 parser.add_argument('-a', '--arch', type=str, default='resnet50', choices=models.get_names())
 parser.add_argument('--pool', type=str, default='avg', choices=['avg', 'max'])
 # Miscs
-parser.add_argument('--print-freq', type=int, default=10, help="print frequency")
-parser.add_argument('--seed', type=int, default=1, help="manual seed")
+parser.add_argument('--print-freq', type=int, default=10,
+                    help="print frequency")
+parser.add_argument('--seed', type=int, default=1,
+                    help="manual seed")
 parser.add_argument('--resume', type=str, default='', metavar='PATH')
-parser.add_argument('--evaluate', action='store_true', help="evaluation only")
+parser.add_argument('--evaluate', action='store_true',
+                    help="evaluation only")
 parser.add_argument('--eval-step', type=int, default=-1,
                     help="run evaluation for every N epochs (set to -1 to test after training)")
-parser.add_argument('--start-eval', type=int, default=0, help="start to evaluate after specific epoch")
+parser.add_argument('--start-eval', type=int, default=0,
+                    help="start to evaluate after specific epoch")
 parser.add_argument('--save-dir', type=str, default='log')
-parser.add_argument('--use-cpu', action='store_true', help="use cpu")
-parser.add_argument('--gpu-devices', default='0', type=str, help='gpu device ids for CUDA_VISIBLE_DEVICES')
+parser.add_argument('--use-cpu', action='store_true',
+                    help="use cpu")
+parser.add_argument('--gpu-devices', default='0', type=str,
+                    help='gpu device ids for CUDA_VISIBLE_DEVICES')
 
 args = parser.parse_args()
 
