@@ -34,7 +34,7 @@ Video reid datasets:
 - PRID2011 [12]
 - DukeMTMC-VideoReID [16, 23]
 
-Instructions regarding how to prepare these datasets can be found [here]().
+Instructions regarding how to prepare these datasets can be found [here](https://github.com/KaiyangZhou/deep-person-reid/blob/master/DATASETS.md).
 
 
 ## Models
@@ -53,7 +53,7 @@ Instructions regarding how to prepare these datasets can be found [here]().
 
 See `models/__init__.py` for details regarding what keys to use to call these models.
 
-Benchmarks can be found [here]().
+Benchmarks can be found [here](https://github.com/KaiyangZhou/deep-person-reid/blob/master/BENCHMARK.md).
 
 
 ## Train
