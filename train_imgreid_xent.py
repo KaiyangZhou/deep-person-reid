@@ -23,6 +23,7 @@ from losses import CrossEntropyLabelSmooth, DeepSupervision
 from utils.iotools import save_checkpoint
 from utils.avgmeter import AverageMeter
 from utils.logger import Logger
+from utils.torchtools import set_bn_to_eval, count_num_param
 from eval_metrics import evaluate
 from optimizers import init_optim
 
@@ -69,6 +70,12 @@ parser.add_argument('--gamma', default=0.1, type=float,
                     help="learning rate decay")
 parser.add_argument('--weight-decay', default=5e-04, type=float,
                     help="weight decay (default: 5e-04)")
+parser.add_argument('--fixbase-epoch', default=0, type=int,
+                    help="epochs to fix base network (only train classifier, default: 0)")
+parser.add_argument('--fixbase-lr', default=0.0003, type=float,
+                    help="learning rate (when base network is frozen)")
+parser.add_argument('--freeze-bn', action='store_true',
+                    help="freeze running statistics in BatchNorm layers during training (default: False)")
 # Architecture
 parser.add_argument('-a', '--arch', type=str, default='resnet50', choices=models.get_names())
 # Miscs
@@ -156,12 +163,15 @@ def main():
 
     print("Initializing model: {}".format(args.arch))
     model = models.init_model(name=args.arch, num_classes=dataset.num_train_pids, loss={'xent'}, use_gpu=use_gpu)
-    print("Model size: {:.5f}M".format(sum(p.numel() for p in model.parameters())/1000000.0))
+    print("Model size: {:.3f} M".format(count_num_param(model)))
 
     criterion = CrossEntropyLabelSmooth(num_classes=dataset.num_train_pids, use_gpu=use_gpu)
     optimizer = init_optim(args.optim, model.parameters(), args.lr, args.weight_decay)
     scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=args.stepsize, gamma=args.gamma)
     start_epoch = args.start_epoch
+
+    if args.fixbase_epoch > 0:
+        optimizer_tmp = init_optim(args.optim, model.classifier.parameters(), args.fixbase_lr, args.weight_decay)
 
     if args.resume:
         print("Loading checkpoint from '{}'".format(args.resume))
@@ -183,6 +193,17 @@ def main():
     best_epoch = 0
     print("==> Start training")
 
+    if args.fixbase_epoch > 0:
+        print("Train classifier for {} epochs while keeping base network frozen".format(args.fixbase_epoch))
+
+        for epoch in range(args.fixbase_epoch):
+            start_train_time = time.time()
+            train(epoch, model, criterion, optimizer_tmp, trainloader, use_gpu, freeze_bn=True)
+            train_time += round(time.time() - start_train_time)
+
+        del optimizer_tmp
+        print("Now open all layers for training")
+
     for epoch in range(start_epoch, args.max_epoch):
         start_train_time = time.time()
         train(epoch, model, criterion, optimizer, trainloader, use_gpu)
@@ -194,14 +215,16 @@ def main():
             print("==> Test")
             rank1 = test(model, queryloader, galleryloader, use_gpu)
             is_best = rank1 > best_rank1
+            
             if is_best:
                 best_rank1 = rank1
                 best_epoch = epoch + 1
-
+            
             if use_gpu:
                 state_dict = model.module.state_dict()
             else:
                 state_dict = model.state_dict()
+            
             save_checkpoint({
                 'state_dict': state_dict,
                 'rank1': rank1,
@@ -216,12 +239,15 @@ def main():
     print("Finished. Total elapsed time (h:m:s): {}. Training time (h:m:s): {}.".format(elapsed, train_time))
 
 
-def train(epoch, model, criterion, optimizer, trainloader, use_gpu):
+def train(epoch, model, criterion, optimizer, trainloader, use_gpu, freeze_bn=False):
     losses = AverageMeter()
     batch_time = AverageMeter()
     data_time = AverageMeter()
 
     model.train()
+
+    if freeze_bn or args.freeze_bn:
+        model.apply(set_bn_to_eval)
 
     end = time.time()
     for batch_idx, (imgs, pids, _) in enumerate(trainloader):

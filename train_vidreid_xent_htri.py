@@ -23,6 +23,7 @@ from losses import CrossEntropyLabelSmooth, TripletLoss
 from utils.iotools import save_checkpoint
 from utils.avgmeter import AverageMeter
 from utils.logger import Logger
+from utils.torchtools import count_num_param
 from eval_metrics import evaluate
 from samplers import RandomIdentitySampler
 from optimizers import init_optim
@@ -155,7 +156,7 @@ def main():
 
     print("Initializing model: {}".format(args.arch))
     model = models.init_model(name=args.arch, num_classes=dataset.num_train_pids, loss={'xent', 'htri'})
-    print("Model size: {:.5f}M".format(sum(p.numel() for p in model.parameters())/1000000.0))
+    print("Model size: {:.3f} M".format(count_num_param(model)))
 
     criterion_xent = CrossEntropyLabelSmooth(num_classes=dataset.num_train_pids, use_gpu=use_gpu)
     criterion_htri = TripletLoss(margin=args.margin)
@@ -195,6 +196,7 @@ def main():
             print("==> Test")
             rank1 = test(model, queryloader, galleryloader, args.pool, use_gpu)
             is_best = rank1 > best_rank1
+            
             if is_best:
                 best_rank1 = rank1
                 best_epoch = epoch + 1
@@ -203,6 +205,7 @@ def main():
                 state_dict = model.module.state_dict()
             else:
                 state_dict = model.state_dict()
+            
             save_checkpoint({
                 'state_dict': state_dict,
                 'rank1': rank1,
