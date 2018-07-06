@@ -1,5 +1,5 @@
 # deep-person-reid
-This repo contains [PyTorch](http://pytorch.org/) implementations of deep person re-identification models. It is developed for academic research.
+[PyTorch](http://pytorch.org/) implementation of deep person re-identification models.
 
 We support
 - multi-GPU training.
@@ -8,7 +8,6 @@ We support
 - easy dataset preparation.
 - end-to-end training and evaluation.
 - standard dataset splits used by most papers.
-- download of trained models.
 - fast cython-based evaluation.
 
 
@@ -18,11 +17,27 @@ We support
 3. Install dependencies by `pip install -r requirements.txt`.
 4. To accelerate evaluation (10x faster), you can use cython-based evaluation code (developed by [luzai](https://github.com/luzai)). First `cd` to `eval_lib`, then do `make` or `python setup.py build_ext -i`. After that, run `python test_cython_eval.py` to test if the package is successfully installed.
 
-Instructions regarding how to prepare datasets can be found [here]().
+## Datasets
+Image reid datasets:
+- Market1501 [7]
+- CUHK03 [13]
+- DukeMTMC-reID [16, 17]
+- MSMT17 [22]
+- VIPeR [28]
+- GRID [29]
+- CUHK01 [30]
+- PRID450S [31]
+
+Video reid datasets:
+- MARS [8]
+- iLIDS-VID [11]
+- PRID2011 [12]
+- DukeMTMC-VideoReID [16, 23]
+
+Instructions regarding how to prepare these datasets can be found [here]().
 
 
 ## Models
-Currently, we have the following models:
 * `models/resnet.py`: ResNet50 [1], ResNet101 [1], ResNet50M [2].
 * `models/resnext.py`: ResNeXt101 [26].
 * `models/seresnet.py`: SEResNet50 [25], SEResNet101 [25], SEResNeXt50 [25], SEResNeXt101 [25].
@@ -35,7 +50,6 @@ Currently, we have the following models:
 * `models/xception.py`: Xception [21].
 * `models/inceptionv4.py`: InceptionV4 [24].
 * `models/inceptionresnetv2.py`: InceptionResNetV2 [24].
-* `models/dpn.py`: DPN92 [27].
 
 See `models/__init__.py` for details regarding what keys to use to call these models.
 
@@ -43,7 +57,7 @@ Benchmarks can be found [here]().
 
 
 ## Train
-Training codes are implemented mainly in
+Training codes are implemented in
 * `train_imgreid_xent.py`: train image model with cross entropy loss.
 * `train_imgreid_xent_htri.py`: train image model with combination of cross entropy loss and hard triplet loss.
 * `train_vidreid_xent.py`: train video model with cross entropy loss.
@@ -51,7 +65,7 @@ Training codes are implemented mainly in
 
 For example, to train an image reid model using ResNet50 and cross entropy loss, run
 ```bash
-python train_imgreid_xent.py -d market1501 -a resnet50 --optim adam --lr 0.0003 --max-epoch 60 --stepsize 20 40 --train-batch 32 --test-batch 32 --eval-step 20 --save-dir log/resnet50-xent-market1501 --gpu-devices 0
+python train_imgreid_xent.py -d market1501 -a resnet50 --optim adam --lr 0.0003 --max-epoch 60 --stepsize 20 40 --train-batch 32 --test-batch 100 --save-dir log/resnet50-xent-market1501 --gpu-devices 0
 ```
 
 To use multiple GPUs, you can set `--gpu-devices 0,1,2,3`.
@@ -71,23 +85,9 @@ python train_vid_model_xent.py -d mars -a resnet50 --evaluate --resume saved-mod
 ```
 **Note** that `--test-batch` in video reid represents number of tracklets. If you set this argument to 2, and sample 15 images per tracklet, the resulting number of images per batch is 2*15=30. Adjust this argument according to your GPU memory.
 
-## Q&A
-1. **How do I set different learning rates to different components in my model?**
 
-A: Instead of giving `model.parameters()` to optimizer, you could pass an iterable of `dict`s, as described [here](http://pytorch.org/docs/master/optim.html#per-parameter-options). Please see the example below
-```python
-# First comment the following code.
-#optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-param_groups = [
-  {'params': model.base.parameters(), 'lr': 0},
-  {'params': model.classifier.parameters()},
-]
-# Such that model.base will be frozen and model.classifier will be trained with
-# the default leanring rate, i.e. args.lr. This example code only applies to model
-# that has two components (base and classifier). Modify the code to adapt to your model.
-optimizer = torch.optim.Adam(param_groups, lr=args.lr, weight_decay=args.weight_decay)
-```
-Of course, you can pass `model.classifier.parameters()` to optimizer if you only need to train the classifier (in this case, setting the `requires_grad`s wrt the base model params to false will be more efficient).
+## Citation
+Please link this project in your paper.
 
 ## References
 [1] [He et al. Deep Residual Learning for Image Recognition. CVPR 2016.](https://arxiv.org/abs/1512.03385)<br />
