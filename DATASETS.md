@@ -1,4 +1,4 @@
-## Prepare Data
+## How to prepare data
 
 Create a directory to store reid datasets under this repo via
 ```bash
