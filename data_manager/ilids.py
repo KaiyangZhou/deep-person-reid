@@ -115,14 +115,14 @@ class iLIDS(BaseImgDataset):
 
     def _prepare_split(self):
         if not osp.exists(self.split_path):
-            print("Creating splits")
+            print("Creating splits ...")
             mat_split_data = loadmat(self.split_mat_path)['ls_set']
             
             num_splits = mat_split_data.shape[0]
             num_total_ids = mat_split_data.shape[1]
             assert num_splits == 10
             assert num_total_ids == 300
-            num_ids_each = num_total_ids/2
+            num_ids_each = num_total_ids // 2
 
             # pids in mat_split_data are indices, so we need to transform them
             # to real pids
