@@ -77,6 +77,8 @@ parser.add_argument('--print-freq', type=int, default=10,
 parser.add_argument('--seed', type=int, default=1,
                     help="manual seed")
 parser.add_argument('--resume', type=str, default='', metavar='PATH')
+parser.add_argument('--load-weights', type=str, default='',
+                    help="load pretrained weights but ignores layers that don't match in size")
 parser.add_argument('--evaluate', action='store_true',
                     help="evaluation only")
 parser.add_argument('--eval-step', type=int, default=-1,
@@ -165,11 +167,23 @@ def main():
     scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=args.stepsize, gamma=args.gamma)
     start_epoch = args.start_epoch
 
+    if args.load_weights:
+        # load pretrained weights but ignore layers that don't match in size
+        print("Loading pretrained weights from '{}'".format(args.load_weights))
+        checkpoint = torch.load(args.load_weights)
+        pretrain_dict = checkpoint['state_dict']
+        model_dict = model.state_dict()
+        pretrain_dict = {k: v for k, v in pretrain_dict.items() if k in model_dict and model_dict[k].size() == v.size()}
+        model_dict.update(pretrain_dict)
+        model.load_state_dict(model_dict)
+
     if args.resume:
-        print("Loading checkpoint from '{}'".format(args.resume))
         checkpoint = torch.load(args.resume)
         model.load_state_dict(checkpoint['state_dict'])
         start_epoch = checkpoint['epoch']
+        rank1 = checkpoint['rank1']
+        print("Loaded checkpoint from '{}'".format(args.resume))
+        print("- start_epoch: {}\n- rank1: {}".format(start_epoch, rank1))
 
     if use_gpu:
         model = nn.DataParallel(model).cuda()
