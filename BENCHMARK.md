@@ -5,6 +5,8 @@ Results are presented using the format of `Rank1 (mAP)` in the following tables.
 
 CUHK03: detected, [new protocol (767/700)](https://github.com/zhunzhong07/person-re-ranking#the-new-trainingtesting-protocol-for-cuhk03).
 
+Classification layer is ignored when computing model size.
+
 ### Image person reid
 | Model | # param (M) | Loss | Market1501 | CUHK03 | DukeMTMC-reID | MSMT17 |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -15,4 +17,4 @@ CUHK03: detected, [new protocol (767/700)](https://github.com/zhunzhong07/person
 | SqueezeNet | 1.1 | xent | 72.2 (47.9) | 26.9 (25.8) | 58.8 (37.8) | 30.6 (13.0) |
 | MobileNetV2 | 2.2 | xent | 84.2 (65.8) | 41.0 (40.3) | 73.2 (52.5) | 44.9 (21.1) |
 | ShuffleNet | 0.9 | xent | 80.0 (58.4) | 31.9 (31.7) | 69.3 (46.8) | 39.6 (17.8) |
-| HACNN | 3.7 | xent | 90.6 (75.3) | 48.0 (47.6) | 80.7 (64.4) | 61.8 (34.6) |
+| HACNN | 2.9 | xent | 90.6 (75.3) | 48.0 (47.6) | 80.7 (64.4) | 61.8 (34.6) |
