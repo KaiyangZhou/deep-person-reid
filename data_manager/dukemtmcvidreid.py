@@ -135,7 +135,12 @@ class DukeMTMCVidReID(object):
                         continue
                     img_paths.append(res[0])
                 img_name = osp.basename(img_paths[0])
-                camid = int(img_name[5]) - 1 # index-0
+                if img_name.find('_') == -1:
+                    # old naming format: 0001C6F0099X30823.jpg
+                    camid = int(img_name[5]) - 1
+                else:
+                    # new naming format: 0001_C6_F0099_X30823.jpg
+                    camid = int(img_name[6]) - 1
                 img_paths = tuple(img_paths)
                 tracklets.append((img_paths, pid, camid))
 
