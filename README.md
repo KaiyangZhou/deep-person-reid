@@ -70,7 +70,9 @@ python train_imgreid_xent.py -d market1501 -a resnet50 --optim adam --lr 0.0003 
 
 To use multiple GPUs, you can set `--gpu-devices 0,1,2,3`.
 
-Please run `python train_blah_blah.py -h` for more details regarding arguments.
+To resume training, you can use `--resume path/to/.pth.tar` to load a checkpoint from which saved model weights and `start_epoch` will be used. Learning rate needs to be initialized carefully. If you just wanna load a pretrained model by discarding layers that do not match in size (e.g. classification layer), use '--load-weights path/to/.pth.tar' instead.
+
+Please refer to the code for more details.
 
 
 ## Test
@@ -85,6 +87,7 @@ python train_vid_model_xent.py -d mars -a resnet50 --evaluate --resume saved-mod
 ```
 **Note** that `--test-batch` in video reid represents number of tracklets. If you set this argument to 2, and sample 15 images per tracklet, the resulting number of images per batch is 2*15=30. Adjust this argument according to your GPU memory.
 
+Before raising an issue, please have a look at the [history issues](https://github.com/KaiyangZhou/deep-person-reid/issues) where you may find answers. If those answers do not solve your problem, raise a new issue (choose an informative title) and include the following details in your question: (1) environmental settings, e.g. python version, torch/torchvision version, etc. (2) command that leads to the errors. (3) screenshot of error logs if available. If you find any errors in the code, please inform me by opening a new issue.
 
 ## Citation
 Please link this project in your paper.
