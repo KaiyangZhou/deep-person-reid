@@ -12,6 +12,8 @@ Classification layer is ignored when computing model size.
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | ResNet50:dog: | 23.5 | xent | [88.5 (71.3)](http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_xent_market1501.pth.tar) | 47.9 (46.8) | 77.7 (58.8) | 63.4 (34.2) |
 | DenseNet121:dog: | 7.0 | xent | [88.2 (69.2)](http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_xent_market1501.pth.tar) | 41.0 (40.1) | 78.6 (58.5) | 66.0 (34.6) |
+| DenseNet121:dog: | 7.0 | htri | [86.6 (70.8)](http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_htri_market1501.pth.tar) | - | - | - |
+| DenseNet121:dog: | 7.0 | xent+htri | [90.1 (74.0)](http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_xent_htri_market1501.pth.tar) | - | - | - |
 | ResNet50M:dog: | 27.7 | xent | [89.0 (74.6)](http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50m_xent_market1501.pth.tar) | 55.4 (52.7) | 81.0 (64.1) | 64.6 (35.9) |
 | NasnetMobile:dog: | 4.2 | xent | 83.8 (64.9) | 42.4 (42.4) | 74.0 (53.7) | 57.1 (30.2) |
 | SqueezeNet | 1.1 | xent | 72.2 (47.9) | 26.9 (25.8) | 58.8 (37.8) | 30.6 (13.0) |
