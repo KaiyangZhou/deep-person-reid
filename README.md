@@ -11,7 +11,7 @@ We support
 - fast cython-based evaluation.
 
 
-## Get Started
+## Get started
 1. `cd` to the folder where you want to download this repo.
 2. Run `git clone https://github.com/KaiyangZhou/deep-person-reid`.
 3. Install dependencies by `pip install -r requirements.txt`.
