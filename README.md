@@ -87,6 +87,13 @@ python train_vid_model_xent.py -d mars -a resnet50 --evaluate --resume saved-mod
 ```
 **Note** that `--test-batch` in video reid represents number of tracklets. If you set this argument to 2, and sample 15 images per tracklet, the resulting number of images per batch is 2*15=30. Adjust this argument according to your GPU memory.
 
+## Visualize ranked results
+Ranked results can be visualized via `--vis-ranked-res`, which works along with `--evaluate`. Ranked images will be saved in `save_dir/ranked_results` where `save_dir` is the directory you specify with `--save-dir`.
+
+<div align="center">
+  <img src="imgs/ranked_results.jpg" alt="train" width="60%">
+</div>
+
 Before raising an issue, please have a look at the [history issues](https://github.com/KaiyangZhou/deep-person-reid/issues) where you may find answers. If those answers do not solve your problem, raise a new issue (choose an informative title) and include the following details in your question: (1) environmental settings, e.g. python version, torch/torchvision version, etc. (2) command that leads to the errors. (3) screenshot of error logs if available. If you find any errors in the code, please inform me by opening a new issue.
 
 ## Citation
