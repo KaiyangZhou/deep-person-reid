@@ -25,7 +25,7 @@ def visualize_ranked_results(distmat, dataset, save_dir='log/ranked_results', to
     """
     num_q, num_g = distmat.shape
 
-    print("Visualizing ranked results in '{}' ...".format(save_dir))
+    print("Visualizing top-{} ranks in '{}' ...".format(topk, save_dir))
     print("# query: {}. # gallery {}".format(num_q, num_g))
     
     assert num_q == len(dataset.query)
@@ -47,15 +47,21 @@ def visualize_ranked_results(distmat, dataset, save_dir='log/ranked_results', to
             for img_path in src:
                 shutil.copy(img_path, dst)
         else:
-            dst = osp.join(dst, prefix + '_top' + str(rank).zfill(3) + osp.basename(src))
+            dst = osp.join(dst, prefix + '_top' + str(rank).zfill(3) + '_name_' + osp.basename(src))
             shutil.copy(src, dst)
 
     for q_idx in range(num_q):
-        qimg_path = dataset.query[q_idx][0]
+        qimg_path, qpid, qcamid = dataset.query[q_idx]
         qdir = osp.join(save_dir, 'query' + str(q_idx + 1).zfill(5))
         mkdir_if_missing(qdir)
         _cp_img_to(qimg_path, qdir, rank=0, prefix='query')
 
-        for rank_idx, g_idx in enumerate(indices[q_idx,:topk]):
-            gimg_path = dataset.gallery[g_idx][0]
-            _cp_img_to(gimg_path, qdir, rank=rank_idx + 1, prefix='gallery')
+        rank_idx = 1
+        for g_idx in indices[q_idx,:]:
+            gimg_path, gpid, gcamid = dataset.gallery[g_idx]
+            invalid = (qpid == gpid) & (qcamid == gcamid)
+            if not invalid:
+                _cp_img_to(gimg_path, qdir, rank=rank_idx, prefix='gallery')
+                rank_idx += 1
+                if rank_idx > topk:
+                    break
