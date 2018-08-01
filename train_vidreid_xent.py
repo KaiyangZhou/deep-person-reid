@@ -164,7 +164,6 @@ def main():
     criterion = CrossEntropyLabelSmooth(num_classes=dataset.num_train_pids, use_gpu=use_gpu)
     optimizer = init_optim(args.optim, model.parameters(), args.lr, args.weight_decay)
     scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=args.stepsize, gamma=args.gamma)
-    start_epoch = args.start_epoch
 
     if args.fixbase_epoch > 0:
         if hasattr(model, 'classifier') and isinstance(model.classifier, nn.Module):
@@ -184,12 +183,15 @@ def main():
         model.load_state_dict(model_dict)
 
     if args.resume:
-        checkpoint = torch.load(args.resume)
-        model.load_state_dict(checkpoint['state_dict'])
-        start_epoch = checkpoint['epoch']
-        rank1 = checkpoint['rank1']
-        print("Loaded checkpoint from '{}'".format(args.resume))
-        print("- start_epoch: {}\n- rank1: {}".format(start_epoch, rank1))
+        if osp.isfile(args.resume):
+            checkpoint = torch.load(args.resume)
+            model.load_state_dict(checkpoint['state_dict'])
+            args.start_epoch = checkpoint['epoch']
+            rank1 = checkpoint['rank1']
+            print("Loaded checkpoint from '{}'".format(args.resume))
+            print("- start_epoch: {}\n- rank1: {}".format(args.start_epoch, rank1))
+        else:
+            print("=> No checkpoint found at '{}'".format(args.resume))
 
     if use_gpu:
         model = nn.DataParallel(model).cuda()
@@ -222,14 +224,14 @@ def main():
         del optimizer_tmp
         print("Now open all layers for training")
 
-    for epoch in range(start_epoch, args.max_epoch):
+    for epoch in range(args.start_epoch, args.max_epoch):
         start_train_time = time.time()
         train(epoch, model, criterion, optimizer, trainloader, use_gpu)
         train_time += round(time.time() - start_train_time)
         
         scheduler.step()
         
-        if (epoch+1) > args.start_eval and args.eval_step > 0 and (epoch+1) % args.eval_step == 0 or (epoch+1) == args.max_epoch:
+        if (epoch + 1) > args.start_eval and args.eval_step > 0 and (epoch + 1) % args.eval_step == 0 or (epoch + 1) == args.max_epoch:
             print("==> Test")
             rank1 = test(model, queryloader, galleryloader, args.pool, use_gpu)
             is_best = rank1 > best_rank1
@@ -247,7 +249,7 @@ def main():
                 'state_dict': state_dict,
                 'rank1': rank1,
                 'epoch': epoch,
-            }, is_best, osp.join(args.save_dir, 'checkpoint_ep' + str(epoch+1) + '.pth.tar'))
+            }, is_best, osp.join(args.save_dir, 'checkpoint_ep' + str(epoch + 1) + '.pth.tar'))
 
     print("==> Best Rank-1 {:.1%}, achieved at epoch {}".format(best_rank1, best_epoch))
 
@@ -284,12 +286,12 @@ def train(epoch, model, criterion, optimizer, trainloader, use_gpu, freeze_bn=Fa
 
         losses.update(loss.item(), pids.size(0))
 
-        if (batch_idx+1) % args.print_freq == 0:
+        if (batch_idx + 1) % args.print_freq == 0:
             print('Epoch: [{0}][{1}/{2}]\t'
                   'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                   'Data {data_time.val:.4f} ({data_time.avg:.4f})\t'
                   'Loss {loss.val:.4f} ({loss.avg:.4f})\t'.format(
-                   epoch+1, batch_idx+1, len(trainloader), batch_time=batch_time,
+                   epoch + 1, batch_idx + 1, len(trainloader), batch_time=batch_time,
                    data_time=data_time, loss=losses))
         
         end = time.time()
