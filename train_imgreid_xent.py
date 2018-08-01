@@ -205,7 +205,7 @@ def main():
 
     if args.evaluate:
         print("Evaluate only")
-        _, distmat = test(model, queryloader, galleryloader, use_gpu, return_distmat=True)
+        distmat = test(model, queryloader, galleryloader, use_gpu, return_distmat=True)
         if args.vis_ranked_res:
             visualize_ranked_results(
                 distmat, dataset,
@@ -369,7 +369,7 @@ def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20], retur
     print("------------------")
 
     if return_distmat:
-        return cmc[0], distmat
+        return distmat
     return cmc[0]
 
 
