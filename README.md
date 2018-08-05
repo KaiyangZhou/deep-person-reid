@@ -70,7 +70,7 @@ python train_imgreid_xent.py -d market1501 -a resnet50 --optim adam --lr 0.0003 
 
 To use multiple GPUs, you can set `--gpu-devices 0,1,2,3`.
 
-To resume training, you can use `--resume path/to/.pth.tar` to load a checkpoint from which saved model weights and `start_epoch` will be used. Learning rate needs to be initialized carefully. If you just wanna load a pretrained model by discarding layers that do not match in size (e.g. classification layer), use '--load-weights path/to/.pth.tar' instead.
+**Note:** To resume training, you can use `--resume path/to/.pth.tar` to load a checkpoint from which saved model weights and `start_epoch` will be used. Learning rate needs to be initialized carefully. If you just wanna load a pretrained model by discarding layers that do not match in size (e.g. classification layer), use `--load-weights path/to/.pth.tar` instead.
 
 Please refer to the code for more details.
 
