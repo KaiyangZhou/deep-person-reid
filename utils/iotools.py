@@ -18,6 +18,13 @@ def mkdir_if_missing(directory):
                 raise
 
 
+def check_isfile(path):
+    isfile = osp.isfile(path)
+    if not isfile:
+        print("=> Warning: no file found at '{}' (ignored)".format(path))
+    return isfile
+
+
 def read_json(fpath):
     with open(fpath, 'r') as f:
         obj = json.load(f)
