@@ -15,10 +15,8 @@ import numpy as np
 import h5py
 from scipy.misc import imsave
 
-from .base import BaseImgDataset
 
-
-class DukeMTMCreID(BaseImgDataset):
+class DukeMTMCreID(object):
     """
     DukeMTMC-reID
 
@@ -35,7 +33,7 @@ class DukeMTMCreID(BaseImgDataset):
     """
     dataset_dir = 'dukemtmc-reid'
 
-    def __init__(self, root='data', verbose=True, use_lmdb=False, **kwargs):
+    def __init__(self, root='data', verbose=True, **kwargs):
         super(DukeMTMCreID, self).__init__()
         self.dataset_dir = osp.join(root, self.dataset_dir)
         self.train_dir = osp.join(self.dataset_dir, 'DukeMTMC-reID/bounding_box_train')
@@ -70,9 +68,6 @@ class DukeMTMCreID(BaseImgDataset):
         self.num_train_pids = num_train_pids
         self.num_query_pids = num_query_pids
         self.num_gallery_pids = num_gallery_pids
-
-        if use_lmdb:
-            self.generate_lmdb()
 
     def _check_before_run(self):
         """Check if all files are available before going deeper"""

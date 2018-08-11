@@ -16,10 +16,9 @@ import h5py
 from scipy.misc import imsave
 
 from utils.iotools import mkdir_if_missing, write_json, read_json
-from .base import BaseImgDataset
 
 
-class PRID450S(BaseImgDataset):
+class PRID450S(object):
     """
     PRID450S
 
@@ -35,7 +34,7 @@ class PRID450S(BaseImgDataset):
     """
     dataset_dir = 'prid450s'
 
-    def __init__(self, root='data', split_id=0, min_seq_len=0, verbose=True, use_lmdb=False, **kwargs):
+    def __init__(self, root='data', split_id=0, min_seq_len=0, verbose=True, **kwargs):
         super(PRID450S, self).__init__()
         self.dataset_dir = osp.join(root, self.dataset_dir)
         self.dataset_url = 'https://files.icg.tugraz.at/f/8c709245bb/?raw=1'
@@ -91,9 +90,6 @@ class PRID450S(BaseImgDataset):
         self.num_train_pids = num_train_pids
         self.num_query_pids = num_query_pids
         self.num_gallery_pids = num_gallery_pids
-
-        if use_lmdb:
-            self.generate_lmdb()
 
     def _check_before_run(self):
         """Check if all files are available before going deeper"""

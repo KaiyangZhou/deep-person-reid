@@ -16,10 +16,9 @@ import h5py
 from scipy.misc import imsave
 
 from utils.iotools import mkdir_if_missing, write_json, read_json
-from .base import BaseImgDataset
 
 
-class iLIDS(BaseImgDataset):
+class iLIDS(object):
     """
     iLIDS (for single shot setting)
 
@@ -35,7 +34,7 @@ class iLIDS(BaseImgDataset):
     """
     dataset_dir = 'ilids-vid'
 
-    def __init__(self, root='data', split_id=0, verbose=True, use_lmdb=False, **kwargs):
+    def __init__(self, root='data', split_id=0, verbose=True, **kwargs):
         super(iLIDS, self).__init__()
         self.dataset_dir = osp.join(root, self.dataset_dir)
         self.dataset_url = 'http://www.eecs.qmul.ac.uk/~xiatian/iLIDS-VID/iLIDS-VID.tar'
@@ -84,9 +83,6 @@ class iLIDS(BaseImgDataset):
         self.num_train_pids = num_train_pids
         self.num_query_pids = num_query_pids
         self.num_gallery_pids = num_gallery_pids
-
-        if use_lmdb:
-            self.generate_lmdb()
 
     def _download_data(self):
         if osp.exists(self.dataset_dir):

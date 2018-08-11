@@ -43,8 +43,6 @@ parser.add_argument('--width', type=int, default=128,
                     help="width of an image (default: 128)")
 parser.add_argument('--split-id', type=int, default=0,
                     help="split index")
-parser.add_argument('--use-lmdb', action='store_true',
-                    help="whether to use lmdb dataset")
 # CUHK03-specific setting
 parser.add_argument('--cuhk03-labeled', action='store_true',
                     help="whether to use labeled images, if false, detected images are used (default: False)")
@@ -127,7 +125,6 @@ def main():
     dataset = data_manager.init_imgreid_dataset(
         root=args.root, name=args.dataset, split_id=args.split_id,
         cuhk03_labeled=args.cuhk03_labeled, cuhk03_classic_split=args.cuhk03_classic_split,
-        use_lmdb=args.use_lmdb,
     )
 
     transform_train = T.Compose([
@@ -146,22 +143,19 @@ def main():
     pin_memory = True if use_gpu else False
 
     trainloader = DataLoader(
-        ImageDataset(dataset.train, transform=transform_train,
-                     use_lmdb=args.use_lmdb, lmdb_path=dataset.train_lmdb_path),
+        ImageDataset(dataset.train, transform=transform_train),
         batch_size=args.train_batch, shuffle=True, num_workers=args.workers,
         pin_memory=pin_memory, drop_last=True,
     )
 
     queryloader = DataLoader(
-        ImageDataset(dataset.query, transform=transform_test,
-                     use_lmdb=args.use_lmdb, lmdb_path=dataset.query_lmdb_path),
+        ImageDataset(dataset.query, transform=transform_test),
         batch_size=args.test_batch, shuffle=False, num_workers=args.workers,
         pin_memory=pin_memory, drop_last=False,
     )
 
     galleryloader = DataLoader(
-        ImageDataset(dataset.gallery, transform=transform_test,
-                     use_lmdb=args.use_lmdb, lmdb_path=dataset.gallery_lmdb_path),
+        ImageDataset(dataset.gallery, transform=transform_test),
         batch_size=args.test_batch, shuffle=False, num_workers=args.workers,
         pin_memory=pin_memory, drop_last=False,
     )

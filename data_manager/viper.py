@@ -15,10 +15,9 @@ import h5py
 from scipy.misc import imsave
 
 from utils.iotools import mkdir_if_missing, write_json, read_json
-from .base import BaseImgDataset
 
 
-class VIPeR(BaseImgDataset):
+class VIPeR(object):
     """
     VIPeR
 
@@ -34,7 +33,7 @@ class VIPeR(BaseImgDataset):
     """
     dataset_dir = 'viper'
 
-    def __init__(self, root='data', split_id=0, verbose=True, use_lmdb=False, **kwargs):
+    def __init__(self, root='data', split_id=0, verbose=True, **kwargs):
         super(VIPeR, self).__init__()
         self.dataset_dir = osp.join(root, self.dataset_dir)
         self.dataset_url = 'http://users.soe.ucsc.edu/~manduchi/VIPeR.v1.0.zip'
@@ -90,9 +89,6 @@ class VIPeR(BaseImgDataset):
         self.num_train_pids = num_train_pids
         self.num_query_pids = num_query_pids
         self.num_gallery_pids = num_gallery_pids
-
-        if use_lmdb:
-            self.generate_lmdb()
 
     def _download_data(self):
         if osp.exists(self.dataset_dir):

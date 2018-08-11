@@ -16,10 +16,9 @@ import h5py
 from scipy.misc import imsave
 
 from utils.iotools import mkdir_if_missing, write_json, read_json
-from .base import BaseImgDataset
 
 
-class GRID(BaseImgDataset):
+class GRID(object):
     """
     GRID
 
@@ -35,7 +34,7 @@ class GRID(BaseImgDataset):
     """
     dataset_dir = 'grid'
 
-    def __init__(self, root='data', split_id=0, verbose=True, use_lmdb=False, **kwargs):
+    def __init__(self, root='data', split_id=0, verbose=True, **kwargs):
         super(GRID, self).__init__()
         self.dataset_dir = osp.join(root, self.dataset_dir)
         self.dataset_url = 'http://personal.ie.cuhk.edu.hk/~ccloy/files/datasets/underground_reid.zip'
@@ -92,9 +91,6 @@ class GRID(BaseImgDataset):
         self.num_train_pids = num_train_pids
         self.num_query_pids = num_query_pids
         self.num_gallery_pids = num_gallery_pids
-
-        if use_lmdb:
-            self.generate_lmdb()
 
     def _check_before_run(self):
         """Check if all files are available before going deeper"""

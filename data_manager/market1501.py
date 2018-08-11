@@ -15,10 +15,8 @@ import numpy as np
 import h5py
 from scipy.misc import imsave
 
-from .base import BaseImgDataset
 
-
-class Market1501(BaseImgDataset):
+class Market1501(object):
     """
     Market1501
 
@@ -33,7 +31,7 @@ class Market1501(BaseImgDataset):
     """
     dataset_dir = 'market1501'
 
-    def __init__(self, root='data', verbose=True, use_lmdb=False, **kwargs):
+    def __init__(self, root='data', verbose=True, **kwargs):
         super(Market1501, self).__init__()
         self.dataset_dir = osp.join(root, self.dataset_dir)
         self.train_dir = osp.join(self.dataset_dir, 'bounding_box_train')
@@ -68,9 +66,6 @@ class Market1501(BaseImgDataset):
         self.num_train_pids = num_train_pids
         self.num_query_pids = num_query_pids
         self.num_gallery_pids = num_gallery_pids
-
-        if use_lmdb:
-            self.generate_lmdb()
 
     def _check_before_run(self):
         """Check if all files are available before going deeper"""

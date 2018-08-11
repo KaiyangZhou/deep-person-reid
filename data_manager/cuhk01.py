@@ -16,10 +16,9 @@ import h5py
 from scipy.misc import imsave
 
 from utils.iotools import mkdir_if_missing, write_json, read_json
-from .base import BaseImgDataset
 
 
-class CUHK01(BaseImgDataset):
+class CUHK01(object):
     """
     CUHK01
 
@@ -35,7 +34,7 @@ class CUHK01(BaseImgDataset):
     """
     dataset_dir = 'cuhk01'
 
-    def __init__(self, root='data', split_id=0, verbose=True, use_lmdb=False, **kwargs):
+    def __init__(self, root='data', split_id=0, verbose=True, **kwargs):
         super(CUHK01, self).__init__()
         self.dataset_dir = osp.join(root, self.dataset_dir)
         self.zip_path = osp.join(self.dataset_dir, 'CUHK01.zip')
@@ -90,9 +89,6 @@ class CUHK01(BaseImgDataset):
         self.num_train_pids = num_train_pids
         self.num_query_pids = num_query_pids
         self.num_gallery_pids = num_gallery_pids
-
-        if use_lmdb:
-            self.generate_lmdb()
 
     def _extract_file(self):
         if not osp.exists(self.campus_dir):
