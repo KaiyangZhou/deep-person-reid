@@ -76,6 +76,10 @@ parser.add_argument('--num-instances', type=int, default=4,
                     help="number of instances per identity")
 parser.add_argument('--htri-only', action='store_true', default=False,
                     help="if this is True, only htri loss is used in training")
+parser.add_argument('--lambda-xent', type=float, default=1,
+                    help="weight to balance cross entropy loss")
+parser.add_argument('--lambda-htri', type=float, default=1,
+                    help="weight to balance hard triplet loss")
 # Architecture
 parser.add_argument('-a', '--arch', type=str, default='resnet50', choices=models.get_names())
 # Miscs
@@ -278,7 +282,7 @@ def train(epoch, model, criterion_xent, criterion_htri, optimizer, trainloader, 
             else:
                 htri_loss = criterion_htri(features, pids)
             
-            loss = xent_loss + htri_loss
+            loss = args.lambda_xent * xent_loss + args.lambda_htri * htri_loss
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
