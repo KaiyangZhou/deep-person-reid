@@ -100,6 +100,8 @@ Ranked results can be visualized via `--vis-ranked-res`, which works along with 
 ## Issue
 Before raising an issue, please have a look at the [history issues](https://github.com/KaiyangZhou/deep-person-reid/issues) where you may find answers. If those answers do not solve your problem, raise a new issue (choose an informative title) and include the following details in your question: (1) environmental settings, e.g. python version, torch/torchvision version, etc. (2) command that leads to the errors. (3) screenshot of error logs if available. If you find any errors in the code, please inform me by opening a new issue.
 
+If you wanna contribute to this project, e.g. implementing new losses, please open an issue for discussion or directly email me.
+
 
 
 ## Citation
