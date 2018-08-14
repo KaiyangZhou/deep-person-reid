@@ -15,19 +15,19 @@ import torch.backends.cudnn as cudnn
 from torch.utils.data import DataLoader
 from torch.optim import lr_scheduler
 
-import data_manager
-from dataset_loader import ImageDataset, VideoDataset
-import transforms as T
-import models
-from losses import CrossEntropyLabelSmooth, TripletLoss, DeepSupervision
-from utils.iotools import save_checkpoint, check_isfile
-from utils.avgmeter import AverageMeter
-from utils.logger import Logger
-from utils.torchtools import count_num_param
-from utils.reidtools import visualize_ranked_results
-from eval_metrics import evaluate
-from samplers import RandomIdentitySampler
-from optimizers import init_optim
+from deepreid import data_manager
+from deepreid.dataset_loader import ImageDataset, VideoDataset
+from deepreid import transforms as T
+from deepreid import models
+from deepreid.losses import CrossEntropyLabelSmooth, TripletLoss, DeepSupervision
+from deepreid.utils.iotools import save_checkpoint, check_isfile
+from deepreid.utils.avgmeter import AverageMeter
+from deepreid.utils.logger import Logger
+from deepreid.utils.torchtools import count_num_param
+from deepreid.utils.reidtools import visualize_ranked_results
+from deepreid.eval_metrics import evaluate
+from deepreid.samplers import RandomIdentitySampler
+from deepreid.optimizers import init_optim
 
 
 parser = argparse.ArgumentParser(description='Train video model with cross entropy loss')

@@ -15,18 +15,18 @@ import torch.backends.cudnn as cudnn
 from torch.utils.data import DataLoader
 from torch.optim import lr_scheduler
 
-import data_manager
-from dataset_loader import ImageDataset
-import transforms as T
-import models
-from losses import CrossEntropyLabelSmooth, DeepSupervision
-from utils.iotools import save_checkpoint, check_isfile
-from utils.avgmeter import AverageMeter
-from utils.logger import Logger
-from utils.torchtools import set_bn_to_eval, count_num_param
-from utils.reidtools import visualize_ranked_results
-from eval_metrics import evaluate
-from optimizers import init_optim
+from deepreid import data_manager
+from deepreid.dataset_loader import ImageDataset
+from deepreid import transforms as T
+from deepreid import models
+from deepreid.losses import CrossEntropyLabelSmooth, DeepSupervision
+from deepreid.utils.iotools import save_checkpoint, check_isfile
+from deepreid.utils.avgmeter import AverageMeter
+from deepreid.utils.logger import Logger
+from deepreid.utils.torchtools import set_bn_to_eval, count_num_param
+from deepreid.utils.reidtools import visualize_ranked_results
+from deepreid.eval_metrics import evaluate
+from deepreid.optimizers import init_optim
 
 
 parser = argparse.ArgumentParser(description='Train image model with cross entropy loss')
