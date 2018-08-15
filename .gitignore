@@ -2,7 +2,7 @@
 data/
 log/
 saved-models/
-eval_lib/eval.c
+torchreid/eval_lib/eval.c
 .idea
 
 # OS X
