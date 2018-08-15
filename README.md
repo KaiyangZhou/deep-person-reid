@@ -38,20 +38,20 @@ Instructions regarding how to prepare these datasets can be found [here](https:/
 
 
 ## Models
-* `deepreid/models/resnet.py`: ResNet50 [1], ResNet101 [1], ResNet50M [2].
-* `deepreid/models/resnext.py`: ResNeXt101 [26].
-* `deepreid/models/seresnet.py`: SEResNet50 [25], SEResNet101 [25], SEResNeXt50 [25], SEResNeXt101 [25].
-* `deepreid/models/densenet.py`: DenseNet121 [3].
-* `deepreid/models/mudeep.py`: MuDeep [10]. 
-* `deepreid/models/hacnn.py`: HACNN [15].
-* `deepreid/models/squeezenet.py`: SqueezeNet [18].
-* `deepreid/models/mobilenetv2.py`: MobileNetV2 [19].
-* `deepreid/models/shufflenet.py`: ShuffleNet [20].
-* `deepreid/models/xception.py`: Xception [21].
-* `deepreid/models/inceptionv4.py`: InceptionV4 [24].
-* `deepreid/models/inceptionresnetv2.py`: InceptionResNetV2 [24].
+* `torchreid/models/resnet.py`: ResNet50 [1], ResNet101 [1], ResNet50M [2].
+* `torchreid/models/resnext.py`: ResNeXt101 [26].
+* `torchreid/models/seresnet.py`: SEResNet50 [25], SEResNet101 [25], SEResNeXt50 [25], SEResNeXt101 [25].
+* `torchreid/models/densenet.py`: DenseNet121 [3].
+* `torchreid/models/mudeep.py`: MuDeep [10]. 
+* `torchreid/models/hacnn.py`: HACNN [15].
+* `torchreid/models/squeezenet.py`: SqueezeNet [18].
+* `torchreid/models/mobilenetv2.py`: MobileNetV2 [19].
+* `torchreid/models/shufflenet.py`: ShuffleNet [20].
+* `torchreid/models/xception.py`: Xception [21].
+* `torchreid/models/inceptionv4.py`: InceptionV4 [24].
+* `torchreid/models/inceptionresnetv2.py`: InceptionResNetV2 [24].
 
-See `deepreid/models/__init__.py` for details regarding what keys to use to call these models.
+See `torchreid/models/__init__.py` for details regarding what keys to use to call these models.
 
 Benchmarks can be found [here](https://github.com/KaiyangZhou/deep-person-reid/blob/master/BENCHMARK.md).
 
