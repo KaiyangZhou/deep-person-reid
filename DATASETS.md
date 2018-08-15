@@ -130,17 +130,16 @@ prid2011/
 4. Use `-d prid2011` when running the training code.
 
 **DukeMTMC-VideoReID** [16, 23]:
-1. Make a directory `data/dukemtmc-vidreid`.
-2. Download `dukemtmc_videoReID.zip` from https://github.com/Yu-Wu/DukeMTMC-VideoReID. Unzip the file to `data/dukemtmc-vidreid`. You need to have
+1. Use `-d dukemtmcvidreid` directly.
+2. If you wanna download the dataset manually, get `DukeMTMC-VideoReID.zip` from https://github.com/Yu-Wu/DukeMTMC-VideoReID. Unzip the file to `data/dukemtmc-vidreid`. Ultimately, you need to have
 ```
 dukemtmc-vidreid/
-    dukemtmc_videoReID/
-        train_split/
-        query_split/
-        gallery_split/
-        ... (and two license files)
+    DukeMTMC-VideoReID/
+        train/ # essential
+        query/ # essential
+        gallery/ # essential
+        ... (and license files)
 ```
-3. Use `-d dukemtmcvidreid` when running the training code.
 
 
 ## Dataset loaders
