@@ -8,7 +8,7 @@ from collections import defaultdict
 import sys
 
 try:
-    from deepreid.eval_lib.cython_eval import eval_market1501_wrap
+    from torchreid.eval_lib.cython_eval import eval_market1501_wrap
     CYTHON_EVAL_AVAI = True
     print("Cython evaluation is AVAILABLE")
 except ImportError:

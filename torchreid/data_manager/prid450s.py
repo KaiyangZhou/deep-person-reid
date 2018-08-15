@@ -15,7 +15,7 @@ import numpy as np
 import h5py
 from scipy.misc import imsave
 
-from deepreid.utils.iotools import mkdir_if_missing, write_json, read_json
+from torchreid.utils.iotools import mkdir_if_missing, write_json, read_json
 
 
 class PRID450S(object):
