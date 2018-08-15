@@ -26,7 +26,7 @@ class DukeMTMCVidReID(object):
     Wu et al. Exploit the Unknown Gradually: One-Shot Video-Based Person
     Re-Identification by Stepwise Learning. CVPR 2018.
 
-    URL: https://github.com/Yu-Wu/Exploit-Unknown-Gradually
+    URL: https://github.com/Yu-Wu/DukeMTMC-VideoReID
     
     Dataset statistics:
     # identities: 702 (train) + 702 (test)
@@ -36,14 +36,16 @@ class DukeMTMCVidReID(object):
 
     def __init__(self, root='data', min_seq_len=0, verbose=True, **kwargs):
         self.dataset_dir = osp.join(root, self.dataset_dir)
-        self.train_dir = osp.join(self.dataset_dir, 'dukemtmc_videoReID/train_split')
-        self.query_dir = osp.join(self.dataset_dir, 'dukemtmc_videoReID/query_split')
-        self.gallery_dir = osp.join(self.dataset_dir, 'dukemtmc_videoReID/gallery_split')
+        self.dataset_url = 'http://vision.cs.duke.edu/DukeMTMC/data/misc/DukeMTMC-VideoReID.zip'
+        self.train_dir = osp.join(self.dataset_dir, 'DukeMTMC-VideoReID/train')
+        self.query_dir = osp.join(self.dataset_dir, 'DukeMTMC-VideoReID/query')
+        self.gallery_dir = osp.join(self.dataset_dir, 'DukeMTMC-VideoReID/gallery')
         self.split_train_json_path = osp.join(self.dataset_dir, 'split_train.json')
         self.split_query_json_path = osp.join(self.dataset_dir, 'split_query.json')
         self.split_gallery_json_path = osp.join(self.dataset_dir, 'split_gallery.json')
 
         self.min_seq_len = min_seq_len
+        self._download_data()
         self._check_before_run()
         print("Note: if root path is changed, the previously generated json files need to be re-generated (so delete them first)")
 
@@ -83,6 +85,23 @@ class DukeMTMCVidReID(object):
         self.num_train_pids = num_train_pids
         self.num_query_pids = num_query_pids
         self.num_gallery_pids = num_gallery_pids
+
+    def _download_data(self):
+        if osp.exists(self.dataset_dir):
+            print("This dataset has been downloaded.")
+            return
+
+        print("Creating directory {}".format(self.dataset_dir))
+        mkdir_if_missing(self.dataset_dir)
+        fpath = osp.join(self.dataset_dir, osp.basename(self.dataset_url))
+
+        print("Downloading DukeMTMC-VideoReID dataset")
+        urllib.urlretrieve(self.dataset_url, fpath)
+
+        print("Extracting files")
+        zip_ref = zipfile.ZipFile(fpath, 'r')
+        zip_ref.extractall(self.dataset_dir)
+        zip_ref.close()
 
     def _check_before_run(self):
         """Check if all files are available before going deeper"""
