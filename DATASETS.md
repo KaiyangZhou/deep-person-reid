@@ -36,14 +36,12 @@ cuhk03/
 
 
 **DukeMTMC-reID** [16, 17]:
-1. Create a directory under `data/` called `dukemtmc-reid`.
-2. Download dataset `DukeMTMC-reID.zip` from https://github.com/layumi/DukeMTMC-reID_evaluation#download-dataset and put it to `data/dukemtmc-reid`. Extract the zip file, which leads to
+1. The process is automated, please use `-d dukemtmcreid` when running the training code. The final folder structure looks like as follows
 ```
 dukemtmc-reid/
     DukeMTMC-reid.zip # (you can delete this zip file, it is ok)
-    DukeMTMC-reid/ # this folder contains 8 files.
+    DukeMTMC-reid/
 ```
-3. Use `-d dukemtmcreid` when running the training code.
 
 
 **MSMT17** [22]:
