@@ -10,6 +10,8 @@ If you wanna store datasets in another directory, you need to specify `--root pa
 
 Please do not call image dataset when running video reid scripts, otherwise error would occur, and vice versa.
 
+### Image ReID
+
 **Market1501** [7]:
 1. Download dataset to `data/` from http://www.liangzheng.org/Project/project_reid.html.
 2. Extract dataset and rename to `market1501`. The data structure would look like:
@@ -92,6 +94,20 @@ prid450s/
     splits.json
 ```
 
+
+**SenseReID** [32]:
+1. Create `sensereid/` under `data/` or your custom data dir.
+2. Download dataset from this [link](https://drive.google.com/file/d/0B56OfSrVI8hubVJLTzkwV2VaOWM/view) and extract to `sensereid/`. The final folder structure should look like
+```
+sensereid/
+    SenseReID/
+        test_probe/
+        test_gallery/
+```
+3. The command for using SenseReID is `-d sensereid`. Note that SenseReID is for test purpose only so training images are unavailable. Please use `--evaluate` along with `-d sensereid`.
+
+
+### Video ReID
 
 **MARS** [8]:
 1. Create a directory named `mars/` under `data/`.

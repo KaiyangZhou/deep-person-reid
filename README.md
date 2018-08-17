@@ -27,6 +27,7 @@ Image reid datasets:
 - GRID [29]
 - CUHK01 [30]
 - PRID450S [31]
+- SenseReID [32]
 
 Video reid datasets:
 - MARS [8]
@@ -142,3 +143,4 @@ Aggregated Residual Transformations for Deep Neural Networks. CVPR 2017.](https:
 [29] [Loy et al. Multi-camera activity correlation analysis. CVPR 2009.](https://ieeexplore.ieee.org/document/5206827/) <br />
 [30] [Li et al. Human Reidentification with Transferred Metric Learning. ACCV 2012.](http://www.ee.cuhk.edu.hk/~xgwang/papers/liZWaccv12.pdf) <br />
 [31] [Roth et al. Mahalanobis Distance Learning for Person Re-Identification. PR 2014.](https://pdfs.semanticscholar.org/f62d/71e701c9fd021610e2076b5e0f5b2c7c86ca.pdf) <br />
+[32] [Zhao et al. Spindle Net: Person Re-identification with Human Body Region Guided Feature Decomposition and Fusion. CVPR 2017.](http://openaccess.thecvf.com/content_cvpr_2017/papers/Zhao_Spindle_Net_Person_CVPR_2017_paper.pdf) <br />
