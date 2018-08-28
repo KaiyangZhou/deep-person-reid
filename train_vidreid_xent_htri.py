@@ -198,7 +198,7 @@ def main():
 
     if args.evaluate:
         print("Evaluate only")
-        distmat = test(model, queryloader, galleryloader, use_gpu, return_distmat=True)
+        distmat = test(model, queryloader, galleryloader, args.pool, use_gpu, return_distmat=True)
         if args.vis_ranked_res:
             visualize_ranked_results(
                 distmat, dataset,
