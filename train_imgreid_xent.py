@@ -75,6 +75,8 @@ parser.add_argument('--fixbase-lr', default=0.0003, type=float,
                     help="learning rate (when base network is frozen)")
 parser.add_argument('--freeze-bn', action='store_true',
                     help="freeze running statistics in BatchNorm layers during training (default: False)")
+parser.add_argument('--label-smooth', action='store_true',
+                    help="use label smoothing regularizer in cross entropy loss")
 # Architecture
 parser.add_argument('-a', '--arch', type=str, default='resnet50', choices=models.get_names())
 # Miscs
@@ -164,7 +166,10 @@ def main():
     model = models.init_model(name=args.arch, num_classes=dataset.num_train_pids, loss={'xent'}, use_gpu=use_gpu)
     print("Model size: {:.3f} M".format(count_num_param(model)))
 
-    criterion = CrossEntropyLabelSmooth(num_classes=dataset.num_train_pids, use_gpu=use_gpu)
+    if args.label_smooth:
+        criterion = CrossEntropyLabelSmooth(num_classes=dataset.num_train_pids, use_gpu=use_gpu)
+    else:
+        criterion = nn.CrossEntropyLoss()
     optimizer = init_optim(args.optim, model.parameters(), args.lr, args.weight_decay)
     scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=args.stepsize, gamma=args.gamma)
 

@@ -80,6 +80,8 @@ parser.add_argument('--lambda-xent', type=float, default=1,
                     help="weight to balance cross entropy loss")
 parser.add_argument('--lambda-htri', type=float, default=1,
                     help="weight to balance hard triplet loss")
+parser.add_argument('--label-smooth', action='store_true',
+                    help="use label smoothing regularizer in cross entropy loss")
 # Architecture
 parser.add_argument('-a', '--arch', type=str, default='resnet50', choices=models.get_names())
 # Miscs
@@ -170,7 +172,10 @@ def main():
     model = models.init_model(name=args.arch, num_classes=dataset.num_train_pids, loss={'xent', 'htri'})
     print("Model size: {:.3f} M".format(count_num_param(model)))
 
-    criterion_xent = CrossEntropyLabelSmooth(num_classes=dataset.num_train_pids, use_gpu=use_gpu)
+    if args.label_smooth:
+        criterion_xent = CrossEntropyLabelSmooth(num_classes=dataset.num_train_pids, use_gpu=use_gpu)
+    else:
+        criterion_xent = nn.CrossEntropyLoss()
     criterion_htri = TripletLoss(margin=args.margin)
     
     optimizer = init_optim(args.optim, model.parameters(), args.lr, args.weight_decay)
