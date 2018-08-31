@@ -148,7 +148,7 @@ def main():
 
     trainloader = DataLoader(
         ImageDataset(new_train, transform=transform_train),
-        sampler=RandomIdentitySampler(dataset.train, args.train_batch, args.num_instances),
+        sampler=RandomIdentitySampler(new_train, args.train_batch, args.num_instances),
         batch_size=args.train_batch, num_workers=args.workers,
         pin_memory=pin_memory, drop_last=True,
     )
