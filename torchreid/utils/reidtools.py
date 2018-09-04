@@ -41,7 +41,7 @@ def visualize_ranked_results(distmat, dataset, save_dir='log/ranked_results', to
         - rank: int, denoting ranked position, starting from 1
         - prefix: string
         """
-        if isinstance(src, tuple):
+        if isinstance(src, tuple) or isinstance(src, list):
             dst = osp.join(dst, prefix + '_top' + str(rank).zfill(3))
             mkdir_if_missing(dst)
             for img_path in src:
