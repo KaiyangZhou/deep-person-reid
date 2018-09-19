@@ -67,8 +67,8 @@ parser.add_argument('--margin', type=float, default=0.3,
                     help="margin for triplet loss")
 parser.add_argument('--num-instances', type=int, default=4,
                     help="number of instances per identity")
-parser.add_argument('--htri-only', action='store_true', default=False,
-                    help="if this is True, only htri loss is used in training")
+parser.add_argument('--htri-only', action='store_true',
+                    help="only use hard triplet loss (default: Fasle)")
 parser.add_argument('--lambda-xent', type=float, default=1,
                     help="weight to balance cross entropy loss")
 parser.add_argument('--lambda-htri', type=float, default=1,
@@ -97,6 +97,8 @@ parser.add_argument('--use-cpu', action='store_true',
                     help="use cpu")
 parser.add_argument('--gpu-devices', default='0', type=str,
                     help='gpu device ids for CUDA_VISIBLE_DEVICES')
+parser.add_argument('--use-avai-gpus', action='store_true',
+                    help="use available gpus instead of specified devices (this is useful when using managed clusters)")
 parser.add_argument('--vis-ranked-res', action='store_true',
                     help="visualize ranked results, only available in evaluation mode (default: False)")
 
@@ -105,7 +107,7 @@ args = parser.parse_args()
 
 def main():
     torch.manual_seed(args.seed)
-    os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_devices
+    if not args.use_avai_gpus: os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_devices
     use_gpu = torch.cuda.is_available()
     if args.use_cpu: use_gpu = False
 
