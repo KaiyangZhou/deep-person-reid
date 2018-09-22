@@ -149,7 +149,7 @@ class SoftAttn(nn.Module):
         y_spatial = self.spatial_attn(x)
         y_channel = self.channel_attn(x)
         y = y_spatial * y_channel
-        y = F.sigmoid(self.conv(y))
+        y = torch.sigmoid(self.conv(y))
         return y
 
 
@@ -168,7 +168,7 @@ class HardAttn(nn.Module):
         # squeeze operation (global average pooling)
         x = F.avg_pool2d(x, x.size()[2:]).view(x.size(0), x.size(1))
         # predict transformation parameters
-        theta = F.tanh(self.fc(x))
+        theta = torch.tanh(self.fc(x))
         theta = theta.view(-1, 4, 2)
         return theta
 
