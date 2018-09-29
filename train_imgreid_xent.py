@@ -103,7 +103,9 @@ parser.add_argument('--use-avai-gpus', action='store_true',
 parser.add_argument('--vis-ranked-res', action='store_true',
                     help="visualize ranked results, only available in evaluation mode (default: False)")
 
+# global variables
 args = parser.parse_args()
+best_rank1 = -np.inf
 
 
 def main():
@@ -182,25 +184,23 @@ def main():
             print("Warn: model has no attribute 'classifier' and fixbase_epoch is reset to 0")
             args.fixbase_epoch = 0
 
-    if args.load_weights:
+    if args.load_weights and check_isfile(args.load_weights):
         # load pretrained weights but ignore layers that don't match in size
-        if check_isfile(args.load_weights):
-            checkpoint = torch.load(args.load_weights)
-            pretrain_dict = checkpoint['state_dict']
-            model_dict = model.state_dict()
-            pretrain_dict = {k: v for k, v in pretrain_dict.items() if k in model_dict and model_dict[k].size() == v.size()}
-            model_dict.update(pretrain_dict)
-            model.load_state_dict(model_dict)
-            print("Loaded pretrained weights from '{}'".format(args.load_weights))
+        checkpoint = torch.load(args.load_weights)
+        pretrain_dict = checkpoint['state_dict']
+        model_dict = model.state_dict()
+        pretrain_dict = {k: v for k, v in pretrain_dict.items() if k in model_dict and model_dict[k].size() == v.size()}
+        model_dict.update(pretrain_dict)
+        model.load_state_dict(model_dict)
+        print("Loaded pretrained weights from '{}'".format(args.load_weights))
 
-    if args.resume:
-        if check_isfile(args.resume):
-            checkpoint = torch.load(args.resume)
-            model.load_state_dict(checkpoint['state_dict'])
-            args.start_epoch = checkpoint['epoch']
-            rank1 = checkpoint['rank1']
-            print("Loaded checkpoint from '{}'".format(args.resume))
-            print("- start_epoch: {}\n- rank1: {}".format(args.start_epoch, rank1))
+    if args.resume and check_isfile(args.resume):
+        checkpoint = torch.load(args.resume)
+        model.load_state_dict(checkpoint['state_dict'])
+        args.start_epoch = checkpoint['epoch'] + 1
+        best_rank1 = checkpoint['rank1']
+        print("Loaded checkpoint from '{}'".format(args.resume))
+        print("- start_epoch: {}\n- rank1: {}".format(args.start_epoch, best_rank1))
 
     if use_gpu:
         model = nn.DataParallel(model).cuda()
@@ -218,8 +218,7 @@ def main():
 
     start_time = time.time()
     train_time = 0
-    best_rank1 = -np.inf
-    best_epoch = 0
+    best_epoch = args.start_epoch
     print("==> Start training")
 
     if args.fixbase_epoch > 0:
