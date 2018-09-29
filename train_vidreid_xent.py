@@ -196,6 +196,8 @@ def main():
             model.load_state_dict(checkpoint['state_dict'])
             args.start_epoch = checkpoint['epoch']
             rank1 = checkpoint['rank1']
+            best_rank1 = checkpoint['best_rank1']
+            best_epoch = checkpoint['best_epoch']
             print("Loaded checkpoint from '{}'".format(args.resume))
             print("- start_epoch: {}\n- rank1: {}".format(args.start_epoch, rank1))
 
@@ -255,6 +257,8 @@ def main():
                 'state_dict': state_dict,
                 'rank1': rank1,
                 'epoch': epoch,
+                'best_rank1': best_rank1,
+                'best_epoch': best_epoch,
             }, is_best, osp.join(args.save_dir, 'checkpoint_ep' + str(epoch + 1) + '.pth.tar'))
 
     print("==> Best Rank-1 {:.1%}, achieved at epoch {}".format(best_rank1, best_epoch))
