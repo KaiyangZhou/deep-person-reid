@@ -99,7 +99,7 @@ parser.add_argument('--gpu-devices', default='0', type=str,
                     help='gpu device ids for CUDA_VISIBLE_DEVICES')
 parser.add_argument('--use-avai-gpus', action='store_true',
                     help="use available gpus instead of specified devices (this is useful when using managed clusters)")
-parser.add_argument('--vis-ranked-res', action='store_true',
+parser.add_argument('--visualize-ranks', action='store_true',
                     help="visualize ranked results, only available in evaluation mode (default: False)")
 
 # global variables
@@ -206,7 +206,7 @@ def main():
     if args.evaluate:
         print("Evaluate only")
         distmat = test(model, queryloader, galleryloader, args.pool, use_gpu, return_distmat=True)
-        if args.vis_ranked_res:
+        if args.visualize_ranks:
             visualize_ranked_results(
                 distmat, dataset,
                 save_dir=osp.join(args.save_dir, 'ranked_results'),
