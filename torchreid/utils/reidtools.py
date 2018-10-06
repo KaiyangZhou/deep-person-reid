@@ -26,8 +26,8 @@ def visualize_ranked_results(distmat, dataset, save_dir='log/ranked_results', to
     num_q, num_g = distmat.shape
 
     print("Visualizing top-{} ranks".format(topk))
-    print("Saving images to '{}'".format(save_dir))
     print("# query: {}\n# gallery {}".format(num_q, num_g))
+    print("Saving images to '{}'".format(save_dir))
     
     assert num_q == len(dataset.query)
     assert num_g == len(dataset.gallery)
