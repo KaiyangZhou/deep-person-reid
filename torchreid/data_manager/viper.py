@@ -127,6 +127,15 @@ class VIPeR(object):
             print("Number of identities: {}".format(num_pids))
             num_train_pids = num_pids // 2
 
+            """
+            In total, there will be 20 splits because each random split creates two
+            sub-splits, one using cameraA as query and cameraB as gallery
+            while the other using cameraB as query and cameraA as gallery.
+            Therefore, results should be averaged over 20 splits (split_id=0~19).
+            
+            In practice, a model trained on split_id=0 can be applied to split_id=0&1
+            as split_id=0&1 share the same training data (so on and so forth).
+            """
             splits = []
             for _ in range(10):
                 order = np.arange(num_pids)
@@ -142,14 +151,24 @@ class VIPeR(object):
                     train.append((cam_a_img, pid, 0))
                     train.append((cam_b_img, pid, 1))
 
-                test = []
+                test_a = []
+                test_b = []
                 for pid, idx in enumerate(test_idxs):
                     cam_a_img = cam_a_imgs[idx]
                     cam_b_img = cam_b_imgs[idx]
-                    test.append((cam_a_img, pid, 0))
-                    test.append((cam_b_img, pid, 1))
+                    test_a.append((cam_a_img, pid, 0))
+                    test_b.append((cam_b_img, pid, 1))
 
-                split = {'train': train, 'query': test, 'gallery': test,
+                # use cameraA as query and cameraB as gallery
+                split = {'train': train, 'query': test_a, 'gallery': test_b,
+                         'num_train_pids': num_train_pids,
+                         'num_query_pids': num_pids - num_train_pids,
+                         'num_gallery_pids': num_pids - num_train_pids
+                         }
+                splits.append(split)
+
+                # use cameraB as query and cameraA as gallery
+                split = {'train': train, 'query': test_b, 'gallery': test_a,
                          'num_train_pids': num_train_pids,
                          'num_query_pids': num_pids - num_train_pids,
                          'num_gallery_pids': num_pids - num_train_pids
