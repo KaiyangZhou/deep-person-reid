@@ -91,7 +91,7 @@ python train_vid_model_xent.py -d mars -a resnet50 --evaluate --resume saved-mod
 
 
 ## Visualizing ranked results
-Ranked results can be visualized via `--vis-ranked-res`, which works along with `--evaluate`. Ranked images will be saved in `save_dir/ranked_results` where `save_dir` is the directory you specify with `--save-dir`.
+Ranked results can be visualized via `--visualize-ranks`, which works along with `--evaluate`. Ranked images will be saved in `save_dir/ranked_results` where `save_dir` is the directory you specify with `--save-dir`.
 
 <div align="center">
   <img src="imgs/ranked_results.jpg" alt="train" width="70%">
