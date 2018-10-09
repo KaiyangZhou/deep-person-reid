@@ -104,6 +104,9 @@ Before raising an issue, please have a look at the [history issues](https://gith
 If you wanna contribute to this project, e.g. implementing new losses, please open an issue for discussion or directly email me.
 
 
+## Misc
+- [Related person ReID projects](https://github.com/KaiyangZhou/deep-person-reid/blob/master/RELATED_PROJECTS.md).
+
 
 ## Citation
 Please link this project in your paper.
