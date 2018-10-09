@@ -35,7 +35,7 @@ Video reid datasets:
 - PRID2011 [12]
 - DukeMTMC-VideoReID [16, 23]
 
-Instructions regarding how to prepare these datasets can be found [here](https://github.com/KaiyangZhou/deep-person-reid/blob/master/DATASETS.md).
+Instructions regarding how to prepare (and do evaluation on) these datasets can be found [here](https://github.com/KaiyangZhou/deep-person-reid/blob/master/DATASETS.md).
 
 
 ## Models
