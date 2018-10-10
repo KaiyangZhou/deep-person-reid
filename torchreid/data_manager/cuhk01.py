@@ -112,14 +112,14 @@ class CUHK01(object):
         view and camera 3&4 are considered the same view.
         """
         if not osp.exists(self.split_path):
-            print("Creating 10 random splits")
+            print("Creating 10 random splits of train ids and test ids")
             img_paths = sorted(glob.glob(osp.join(self.campus_dir, '*.png')))
             img_list = []
             pid_container = set()
             for img_path in img_paths:
                 img_name = osp.basename(img_path)
                 pid = int(img_name[:4]) - 1
-                camid = (int(img_name[4:7]) - 1) // 2
+                camid = (int(img_name[4:7]) - 1) // 2 # result is either 0 or 1
                 img_list.append((img_path, pid, camid))
                 pid_container.add(pid)
 
@@ -134,15 +134,27 @@ class CUHK01(object):
                 train_idxs = np.sort(train_idxs)
                 idx2label = {idx: label for label, idx in enumerate(train_idxs)}
 
-                train, test = [], []
-                
+                train, test_a, test_b = [], [], []
+
                 for img_path, pid, camid in img_list:
                     if pid in train_idxs:
                         train.append((img_path, idx2label[pid], camid))
                     else:
-                        test.append((img_path, pid, camid))
+                        if camid == 0:
+                            test_a.append((img_path, pid, camid))
+                        else:
+                            test_b.append((img_path, pid, camid))
 
-                split = {'train': train, 'query': test, 'gallery': test,
+                # use cameraA as query and cameraB as gallery
+                split = {'train': train, 'query': test_a, 'gallery': test_b,
+                         'num_train_pids': num_train_pids,
+                         'num_query_pids': num_pids - num_train_pids,
+                         'num_gallery_pids': num_pids - num_train_pids,
+                         }
+                splits.append(split)
+
+                # use cameraB as query and cameraA as gallery
+                split = {'train': train, 'query': test_b, 'gallery': test_a,
                          'num_train_pids': num_train_pids,
                          'num_query_pids': num_pids - num_train_pids,
                          'num_gallery_pids': num_pids - num_train_pids,

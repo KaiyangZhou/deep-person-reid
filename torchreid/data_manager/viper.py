@@ -118,7 +118,7 @@ class VIPeR(object):
 
     def _prepare_split(self):
         if not osp.exists(self.split_path):
-            print("Creating 10 random splits")
+            print("Creating 10 random splits of train ids and test ids")
 
             cam_a_imgs = sorted(glob.glob(osp.join(self.cam_a_path, '*.bmp')))
             cam_b_imgs = sorted(glob.glob(osp.join(self.cam_b_path, '*.bmp')))
