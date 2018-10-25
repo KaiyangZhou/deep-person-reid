@@ -275,17 +275,17 @@ def train(epoch, model, criterion_xent, criterion_htri, optimizer, trainloader, 
         
         outputs, features = model(imgs)
         if args.htri_only:
-            if isinstance(features, tuple):
+            if isinstance(features, (tuple, list)):
                 loss = DeepSupervision(criterion_htri, features, pids)
             else:
                 loss = criterion_htri(features, pids)
         else:
-            if isinstance(outputs, tuple):
+            if isinstance(outputs, (tuple, list)):
                 xent_loss = DeepSupervision(criterion_xent, outputs, pids)
             else:
                 xent_loss = criterion_xent(outputs, pids)
             
-            if isinstance(features, tuple):
+            if isinstance(features, (tuple, list)):
                 htri_loss = DeepSupervision(criterion_htri, features, pids)
             else:
                 htri_loss = criterion_htri(features, pids)
