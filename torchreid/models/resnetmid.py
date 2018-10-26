@@ -149,13 +149,14 @@ class ResNet(nn.Module):
 
         return nn.Sequential(*layers)
 
-    def _construct_fc_layer(self, fc_dims, input_dim):
+    def _construct_fc_layer(self, fc_dims, input_dim, dropout_p=None):
         """
         Construct fully connected layer
 
         - fc_dims (list or tuple): dimensions of fc layers, if None,
                                    no fc layers are constructed
         - input_dim (int): input dimension
+        - dropout_p (float): dropout probability, if None, dropout is unused
         """
         if fc_dims is None:
             self.feature_dim = input_dim
@@ -168,6 +169,8 @@ class ResNet(nn.Module):
             layers.append(nn.Linear(input_dim, dim))
             layers.append(nn.BatchNorm1d(dim))
             layers.append(nn.ReLU(inplace=True))
+            if dropout_p is not None:
+                layers.append(nn.Dropout(p=dropout_p))
             input_dim = dim
         
         self.feature_dim = fc_dims[-1]

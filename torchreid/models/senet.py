@@ -16,7 +16,8 @@ Code imported from https://github.com/Cadene/pretrained-models.pytorch
 """
 
 
-__all__ = ['SEResNet50', 'SEResNet101', 'SEResNeXt50', 'SEResNeXt101']
+__all__ = ['senet154', 'se_resnet50', 'se_resnet101', 'se_resnet152', 'se_resnext50_32x4d', 'se_resnext101_32x4d',
+           'se_resnet50_fc512']
 
 
 pretrained_settings = {
@@ -211,9 +212,9 @@ class SEResNeXtBottleneck(Bottleneck):
 
 class SENet(nn.Module):
 
-    def __init__(self, block, layers, groups, reduction, dropout_p=0.2,
-                 inplanes=128, input_3x3=True, downsample_kernel_size=3,
-                 downsample_padding=1, num_classes=1000):
+    def __init__(self, num_classes, loss, block, layers, groups, reduction, dropout_p=0.2,
+                 inplanes=128, input_3x3=True, downsample_kernel_size=3, downsample_padding=1,
+                 last_stride=2, fc_dims=None):
         """
         Parameters
         ----------
@@ -254,8 +255,7 @@ class SENet(nn.Module):
             - For SENet154: 1
             - For SE-ResNet models: 0
             - For SE-ResNeXt models: 0
-        num_classes (int): Number of outputs in `last_linear` layer.
-            - For all models: 1000
+        num_classes (int): Number of outputs in `classifier` layer.
         """
         super(SENet, self).__init__()
         self.inplanes = inplanes
@@ -319,15 +319,16 @@ class SENet(nn.Module):
             block,
             planes=512,
             blocks=layers[3],
-            stride=2,
+            stride=last_stride,
             groups=groups,
             reduction=reduction,
             downsample_kernel_size=downsample_kernel_size,
             downsample_padding=downsample_padding
         )
-        self.avg_pool = nn.AvgPool2d(7, stride=1)
-        self.dropout = nn.Dropout(dropout_p) if dropout_p is not None else None
-        self.last_linear = nn.Linear(512 * block.expansion, num_classes)
+        
+        self.global_avgpool = nn.AdaptiveAvgPool2d(1)
+        self.fc = self._construct_fc_layer(fc_dims, 512 * block.expansion, dropout_p)
+        self.classifier = nn.Linear(self.feature_dim, num_classes)
 
     def _make_layer(self, block, planes, blocks, groups, reduction, stride=1,
                     downsample_kernel_size=1, downsample_padding=0):
@@ -349,7 +350,35 @@ class SENet(nn.Module):
 
         return nn.Sequential(*layers)
 
-    def features(self, x):
+    def _construct_fc_layer(self, fc_dims, input_dim, dropout_p=None):
+        """
+        Construct fully connected layer
+
+        - fc_dims (list or tuple): dimensions of fc layers, if None,
+                                   no fc layers are constructed
+        - input_dim (int): input dimension
+        - dropout_p (float): dropout probability, if None, dropout is unused
+        """
+        if fc_dims is None:
+            self.feature_dim = input_dim
+            return None
+        
+        assert isinstance(fc_dims, (list, tuple)), "fc_dims must be either list or tuple, but got {}".format(type(fc_dims))
+        
+        layers = []
+        for dim in fc_dims:
+            layers.append(nn.Linear(input_dim, dim))
+            layers.append(nn.BatchNorm1d(dim))
+            layers.append(nn.ReLU(inplace=True))
+            if dropout_p is not None:
+                layers.append(nn.Dropout(p=dropout_p))
+            input_dim = dim
+        
+        self.feature_dim = fc_dims[-1]
+        
+        return nn.Sequential(*layers)
+
+    def featuremaps(self, x):
         x = self.layer0(x)
         x = self.layer1(x)
         x = self.layer2(x)
@@ -357,194 +386,185 @@ class SENet(nn.Module):
         x = self.layer4(x)
         return x
 
-    def logits(self, x):
-        x = self.avg_pool(x)
-        if self.dropout is not None:
-            x = self.dropout(x)
-        x = x.view(x.size(0), -1)
-        x = self.last_linear(x)
-        return x
-
     def forward(self, x):
-        x = self.features(x)
-        x = self.logits(x)
-        return x
-
-
-def initialize_pretrained_model(model, num_classes, settings):
-    assert num_classes == settings['num_classes'], \
-        'num_classes should be {}, but is {}'.format(
-            settings['num_classes'], num_classes)
-    model.load_state_dict(model_zoo.load_url(settings['url']))
-    model.input_space = settings['input_space']
-    model.input_size = settings['input_size']
-    model.input_range = settings['input_range']
-    model.mean = settings['mean']
-    model.std = settings['std']
-
-
-def senet154(num_classes=1000, pretrained='imagenet'):
-    model = SENet(SEBottleneck, [3, 8, 36, 3], groups=64, reduction=16,
-                  dropout_p=0.2, num_classes=num_classes)
-    if pretrained is not None:
-        settings = pretrained_settings['senet154'][pretrained]
-        initialize_pretrained_model(model, num_classes, settings)
-    return model
-
-
-def se_resnet50(num_classes=1000, pretrained='imagenet'):
-    model = SENet(SEResNetBottleneck, [3, 4, 6, 3], groups=1, reduction=16,
-                  dropout_p=None, inplanes=64, input_3x3=False,
-                  downsample_kernel_size=1, downsample_padding=0,
-                  num_classes=num_classes)
-    if pretrained is not None:
-        settings = pretrained_settings['se_resnet50'][pretrained]
-        initialize_pretrained_model(model, num_classes, settings)
-    return model
-
-
-def se_resnet101(num_classes=1000, pretrained='imagenet'):
-    model = SENet(SEResNetBottleneck, [3, 4, 23, 3], groups=1, reduction=16,
-                  dropout_p=None, inplanes=64, input_3x3=False,
-                  downsample_kernel_size=1, downsample_padding=0,
-                  num_classes=num_classes)
-    if pretrained is not None:
-        settings = pretrained_settings['se_resnet101'][pretrained]
-        initialize_pretrained_model(model, num_classes, settings)
-    return model
-
-
-def se_resnet152(num_classes=1000, pretrained='imagenet'):
-    model = SENet(SEResNetBottleneck, [3, 8, 36, 3], groups=1, reduction=16,
-                  dropout_p=None, inplanes=64, input_3x3=False,
-                  downsample_kernel_size=1, downsample_padding=0,
-                  num_classes=num_classes)
-    if pretrained is not None:
-        settings = pretrained_settings['se_resnet152'][pretrained]
-        initialize_pretrained_model(model, num_classes, settings)
-    return model
-
-
-def se_resnext50_32x4d(num_classes=1000, pretrained='imagenet'):
-    model = SENet(SEResNeXtBottleneck, [3, 4, 6, 3], groups=32, reduction=16,
-                  dropout_p=None, inplanes=64, input_3x3=False,
-                  downsample_kernel_size=1, downsample_padding=0,
-                  num_classes=num_classes)
-    if pretrained is not None:
-        settings = pretrained_settings['se_resnext50_32x4d'][pretrained]
-        initialize_pretrained_model(model, num_classes, settings)
-    return model
-
-
-def se_resnext101_32x4d(num_classes=1000, pretrained='imagenet'):
-    model = SENet(SEResNeXtBottleneck, [3, 4, 23, 3], groups=32, reduction=16,
-                  dropout_p=None, inplanes=64, input_3x3=False,
-                  downsample_kernel_size=1, downsample_padding=0,
-                  num_classes=num_classes)
-    if pretrained is not None:
-        settings = pretrained_settings['se_resnext101_32x4d'][pretrained]
-        initialize_pretrained_model(model, num_classes, settings)
-    return model
-
-
-##################### Model Definition #########################
-
-
-class SEResNet50(nn.Module):
-    def __init__(self, num_classes, loss={'xent'}, **kwargs):
-        super(SEResNet50, self).__init__()
-        self.loss = loss
-        base = se_resnet50()
-        self.base = nn.Sequential(*list(base.children())[:-2])
-        self.classifier = nn.Linear(2048, num_classes)
-        self.feat_dim = 2048
-
-    def forward(self, x):
-        x = self.base(x)
-        x = F.avg_pool2d(x, x.size()[2:])
-        f = x.view(x.size(0), -1)
+        f = self.featuremaps(x)
+        v = self.global_avgpool(f)
+        v = v.view(v.size(0), -1)
+        
+        if self.fc is not None:
+            v = self.fc(v)
+        
         if not self.training:
-            return f
-        y = self.classifier(f)
-
+            return v
+        
+        y = self.classifier(v)
+        
         if self.loss == {'xent'}:
             return y
         elif self.loss == {'xent', 'htri'}:
-            return y, f
+            return y, v
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))
 
 
-class SEResNet101(nn.Module):
-    def __init__(self, num_classes, loss={'xent'}, **kwargs):
-        super(SEResNet101, self).__init__()
-        self.loss = loss
-        base = se_resnet101()
-        self.base = nn.Sequential(*list(base.children())[:-2])
-        self.classifier = nn.Linear(2048, num_classes)
-        self.feat_dim = 2048
-
-    def forward(self, x):
-        x = self.base(x)
-        x = F.avg_pool2d(x, x.size()[2:])
-        f = x.view(x.size(0), -1)
-        if not self.training:
-            return f
-        y = self.classifier(f)
-
-        if self.loss == {'xent'}:
-            return y
-        elif self.loss == {'xent', 'htri'}:
-            return y, f
-        else:
-            raise KeyError("Unsupported loss: {}".format(self.loss))
+def init_pretrained_weights(model, model_url):
+    """
+    Initialize model with pretrained weights.
+    Layers that don't match with pretrained layers in name or size are kept unchanged.
+    """
+    pretrain_dict = model_zoo.load_url(model_url, map_location=None)
+    model_dict = model.state_dict()
+    pretrain_dict = {k: v for k, v in pretrain_dict.items() if k in model_dict and model_dict[k].size() == v.size()}
+    model_dict.update(pretrain_dict)
+    model.load_state_dict(model_dict)
+    print("Initialized model with pretrained weights from {}".format(model_url))
 
 
-class SEResNeXt50(nn.Module):
-    def __init__(self, num_classes, loss={'xent'}, **kwargs):
-        super(SEResNeXt50, self).__init__()
-        self.loss = loss
-        base = se_resnext50_32x4d()
-        self.base = nn.Sequential(*list(base.children())[:-2])
-        self.classifier = nn.Linear(2048, num_classes)
-        self.feat_dim = 2048
-
-    def forward(self, x):
-        x = self.base(x)
-        x = F.avg_pool2d(x, x.size()[2:])
-        f = x.view(x.size(0), -1)
-        if not self.training:
-            return f
-        y = self.classifier(f)
-
-        if self.loss == {'xent'}:
-            return y
-        elif self.loss == {'xent', 'htri'}:
-            return y, f
-        else:
-            raise KeyError("Unsupported loss: {}".format(self.loss))
+def senet154(num_classes, loss, pretrained='imagenet', **kwargs):
+    model = SENet(
+        num_classes=num_classes,
+        loss=loss,
+        block=SEBottleneck,
+        layers=[3, 8, 36, 3],
+        groups=64,
+        reduction=16,
+        dropout_p=0.2,
+        last_stride=2,
+        fc_dims=None,
+        **kwargs
+    )
+    if pretrained == 'imagenet':
+        init_pretrained_weights(model, pretrained_settings['senet154']['imagenet']['url'])
+    return model
 
 
-class SEResNeXt101(nn.Module):
-    def __init__(self, num_classes, loss={'xent'}, **kwargs):
-        super(SEResNeXt101, self).__init__()
-        self.loss = loss
-        base = se_resnext101_32x4d()
-        self.base = nn.Sequential(*list(base.children())[:-2])
-        self.classifier = nn.Linear(2048, num_classes)
-        self.feat_dim = 2048
+def se_resnet50(num_classes, loss, pretrained='imagenet', **kwargs):
+    model = SENet(
+        num_classes=num_classes,
+        loss=loss,
+        block=SEResNetBottleneck,
+        layers=[3, 4, 6, 3],
+        groups=1,
+        reduction=16,
+        dropout_p=None,
+        inplanes=64,
+        input_3x3=False,
+        downsample_kernel_size=1,
+        downsample_padding=0,
+        last_stride=2,
+        fc_dims=None,
+        **kwargs
+    )
+    if pretrained == 'imagenet':
+        init_pretrained_weights(model, pretrained_settings['se_resnet50']['imagenet']['url'])
+    return model
 
-    def forward(self, x):
-        x = self.base(x)
-        x = F.avg_pool2d(x, x.size()[2:])
-        f = x.view(x.size(0), -1)
-        if not self.training:
-            return f
-        y = self.classifier(f)
 
-        if self.loss == {'xent'}:
-            return y
-        elif self.loss == {'xent', 'htri'}:
-            return y, f
-        else:
-            raise KeyError("Unsupported loss: {}".format(self.loss))
+def se_resnet50_fc512(num_classes, loss, pretrained='imagenet', **kwargs):
+    model = SENet(
+        num_classes=num_classes,
+        loss=loss,
+        block=SEResNetBottleneck,
+        layers=[3, 4, 6, 3],
+        groups=1,
+        reduction=16,
+        dropout_p=None,
+        inplanes=64,
+        input_3x3=False,
+        downsample_kernel_size=1,
+        downsample_padding=0,
+        last_stride=1,
+        fc_dims=[512],
+        **kwargs
+    )
+    if pretrained == 'imagenet':
+        init_pretrained_weights(model, pretrained_settings['se_resnet50']['imagenet']['url'])
+    return model
+
+
+def se_resnet101(num_classes, loss, pretrained='imagenet', **kwargs):
+    model = SENet(
+        num_classes=num_classes,
+        loss=loss,
+        block=SEResNetBottleneck,
+        layers=[3, 4, 23, 3],
+        groups=1,
+        reduction=16,
+        dropout_p=None,
+        inplanes=64,
+        input_3x3=False,
+        downsample_kernel_size=1,
+        downsample_padding=0,
+        last_stride=2,
+        fc_dims=None,
+        **kwargs
+    )
+    if pretrained == 'imagenet':
+        init_pretrained_weights(model, pretrained_settings['se_resnet101']['imagenet']['url'])
+    return model
+
+
+def se_resnet152(num_classes, loss, pretrained='imagenet', **kwargs):
+    model = SENet(
+        num_classes=num_classes,
+        loss=loss,
+        block=SEResNetBottleneck,
+        layers=[3, 8, 36, 3],
+        groups=1,
+        reduction=16,
+        dropout_p=None,
+        inplanes=64,
+        input_3x3=False,
+        downsample_kernel_size=1,
+        downsample_padding=0,
+        last_stride=2,
+        fc_dims=None,
+        **kwargs
+    )
+    if pretrained == 'imagenet':
+        init_pretrained_weights(model, pretrained_settings['se_resnet152']['imagenet']['url'])
+    return model
+
+
+def se_resnext50_32x4d(num_classes, loss, pretrained='imagenet', **kwargs):
+    model = SENet(
+        num_classes=num_classes,
+        loss=loss,
+        block=SEResNeXtBottleneck,
+        layers=[3, 4, 6, 3],
+        groups=32,
+        reduction=16,
+        dropout_p=None,
+        inplanes=64,
+        input_3x3=False,
+        downsample_kernel_size=1,
+        downsample_padding=0,
+        last_stride=2,
+        fc_dims=None,
+        **kwargs
+    )
+    if pretrained == 'imagenet':
+        init_pretrained_weights(model, pretrained_settings['se_resnext50_32x4d']['imagenet']['url'])
+    return model
+
+
+def se_resnext101_32x4d(num_classes, loss, pretrained='imagenet', **kwargs):
+    model = SENet(
+        num_classes=num_classes,
+        loss=loss,
+        block=SEResNeXtBottleneck,
+        layers=[3, 4, 23, 3],
+        groups=32,
+        reduction=16,
+        dropout_p=None,
+        inplanes=64,
+        input_3x3=False,
+        downsample_kernel_size=1,
+        downsample_padding=0,
+        last_stride=2,
+        fc_dims=None,
+        **kwargs
+    )
+    if pretrained == 'imagenet':
+        init_pretrained_weights(model, pretrained_settings['se_resnext101_32x4d']['imagenet']['url'])
+    return model
