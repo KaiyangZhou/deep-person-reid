@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from .resnet import *
+from .resnetmid import *
 from .resnext import *
 from .seresnet import *
 from .densenet import *
@@ -16,22 +17,22 @@ from .inceptionresnetv2 import *
 
 
 __model_factory = {
-    'resnet50': ResNet50,
-    'resnet101': ResNet101,
-    'seresnet50': SEResNet50,
-    'seresnet101': SEResNet101,
-    'seresnext50': SEResNeXt50,
-    'seresnext101': SEResNeXt101,
-    'resnext101': ResNeXt101_32x4d,
-    'resnet50m': ResNet50M,
-    'densenet121': DenseNet121,
-    'squeezenet': SqueezeNet,
+    'resnet50': resnet50,
+    'resnet50_fc512': resnet50_fc512,
+    'resnet50mid': resnet50mid,
+    #'seresnet50': SEResNet50,
+    #'seresnet101': SEResNet101,
+    #'seresnext50': SEResNeXt50,
+    #'seresnext101': SEResNeXt101,
+    #'resnext101': ResNeXt101_32x4d,
+    #'densenet121': DenseNet121,
+    #'squeezenet': SqueezeNet, # https://github.com/pytorch/vision/blob/master/torchvision/models/squeezenet.py
     'mobilenetv2': MobileNetV2,
     'shufflenet': ShuffleNet,
-    'xception': Xception,
-    'inceptionv4': InceptionV4,
-    'nasnsetmobile': NASNetAMobile,
-    'inceptionresnetv2': InceptionResNetV2,
+    #'xception': Xception,
+    #'inceptionv4': InceptionV4,
+    #'nasnsetmobile': NASNetAMobile,
+    #'inceptionresnetv2': InceptionResNetV2,
     'mudeep': MuDeep,
     'hacnn': HACNN,
 }

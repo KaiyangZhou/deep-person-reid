@@ -8,7 +8,7 @@ import torchvision
 import torch.utils.model_zoo as model_zoo
 
 
-__all__ = ['resnet50', 'resnet50_fc512']
+__all__ = ['resnet50mid']
 
 
 model_urls = {
@@ -99,10 +99,11 @@ class Bottleneck(nn.Module):
 
 class ResNet(nn.Module):
     """
-    Residual network
+    Residual network + mid-level features.
     
     Reference:
-    He et al. Deep Residual Learning for Image Recognition. CVPR 2016.
+    Yu et al. The Devil is in the Middle: Exploiting Mid-level Representations for
+    Cross-Domain Instance Matching. arXiv:1711.08106.
     """
     def __init__(self, num_classes, loss, block, layers,
                  last_stride=2,
@@ -124,7 +125,9 @@ class ResNet(nn.Module):
         self.layer4 = self._make_layer(block, 512, layers[3], stride=last_stride)
         
         self.global_avgpool = nn.AdaptiveAvgPool2d(1)
-        self.fc = self._construct_fc_layer(fc_dims, 512 * block.expansion)
+        assert fc_dims is not None
+        self.fc_fusion = self._construct_fc_layer(fc_dims, 512 * block.expansion * 2)
+        self.feature_dim += 512 * block.expansion
         self.classifier = nn.Linear(self.feature_dim, num_classes)
 
         self._init_params()
@@ -196,17 +199,23 @@ class ResNet(nn.Module):
         x = self.layer1(x)
         x = self.layer2(x)
         x = self.layer3(x)
-        x = self.layer4(x)
-        return x
+        x4a = self.layer4[0](x)
+        x4b = self.layer4[1](x4a)
+        x4c = self.layer4[2](x4b)
+        return x4a, x4b, x4c
 
     def forward(self, x):
-        f = self.featuremaps(x)
-        v = self.global_avgpool(f)
-        v = v.view(v.size(0), -1)
-        
-        if self.fc is not None:
-            v = self.fc(v)
-        
+        x4a, x4b, x4c = self.featuremaps(x)
+
+        v4a = self.global_avgpool(x4a)
+        v4b = self.global_avgpool(x4b)
+        v4c = self.global_avgpool(x4c)
+        v4ab = torch.cat([v4a, v4b], 1)
+        v4ab = v4ab.view(v4ab.size(0), -1)
+        v4ab = self.fc_fusion(v4ab)
+        v4c = v4c.view(v4c.size(0), -1)
+        v = torch.cat([v4ab, v4c], 1)
+
         if not self.training:
             return v
         
@@ -244,29 +253,14 @@ resnet152: block=Bottleneck, layers=[3, 8, 36, 3]
 """
 
 
-def resnet50(num_classes, loss, pretrained='imagenet', **kwargs):
+def resnet50mid(num_classes, loss, pretrained='imagenet', **kwargs):
     model = ResNet(
         num_classes=num_classes,
         loss=loss,
         block=Bottleneck,
         layers=[3, 4, 6, 3],
         last_stride=2,
-        fc_dims=None,
-        **kwargs
-    )
-    if pretrained == 'imagenet':
-        init_pretrained_weights(model, model_urls['resnet50'])
-    return model
-
-
-def resnet50_fc512(num_classes, loss, pretrained='imagenet', **kwargs):
-    model = ResNet(
-        num_classes=num_classes,
-        loss=loss,
-        block=Bottleneck,
-        layers=[3, 4, 6, 3],
-        last_stride=1,
-        fc_dims=[512],
+        fc_dims=[1024],
         **kwargs
     )
     if pretrained == 'imagenet':
