@@ -40,6 +40,7 @@ __model_factory = {
     'mobilenetv2': MobileNetV2,
     'shufflenet': ShuffleNet,
     'squeezenet1_0': squeezenet1_0,
+    'squeezenet1_0_fc512': squeezenet1_0_fc512,
     'squeezenet1_1': squeezenet1_1,
     # reid-specific models
     'mudeep': MuDeep,
