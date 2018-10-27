@@ -8,6 +8,7 @@ from .densenet import *
 from .inceptionresnetv2 import *
 from .inceptionv4 import *
 from .xception import *
+
 from .nasnet import *
 from .mobilenetv2 import *
 from .shufflenet import *
@@ -34,6 +35,7 @@ __model_factory = {
     'inceptionresnetv2': InceptionResNetV2,
     'inceptionv4': inceptionv4,
     'xception': xception,
+    # lightweight models
     'nasnsetmobile': nasnetamobile,
     'mobilenetv2': MobileNetV2,
     'shufflenet': ShuffleNet,
