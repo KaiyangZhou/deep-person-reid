@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 from .resnet import *
 from .resnetmid import *
+from .resnext import *
 from .senet import *
 from .densenet import *
 from .mudeep import *
@@ -27,6 +28,8 @@ __model_factory = {
     'resnet50': resnet50,
     'resnet50_fc512': resnet50_fc512,
     'resnet50mid': resnet50mid,
+    'resnext50_32x4d': resnext50_32x4d,
+    'resnext101_32x4d': resnext101_32x4d,
     'se_resnet50': se_resnet50,
     'se_resnet50_fc512': se_resnet50_fc512,
     'se_resnet101': se_resnet101,
@@ -34,7 +37,6 @@ __model_factory = {
     'se_resnext101_32x4d': se_resnext101_32x4d,
     'densenet121': densenet121,
     'densenet121_fc512': densenet121_fc512,
-    #'resnext101': ResNeXt101_32x4d,
     #'squeezenet': SqueezeNet, # https://github.com/pytorch/vision/blob/master/torchvision/models/squeezenet.py
     'mobilenetv2': MobileNetV2,
     'shufflenet': ShuffleNet,
