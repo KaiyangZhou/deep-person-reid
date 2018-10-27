@@ -12,11 +12,13 @@ from .nasnet import *
 from .mobilenetv2 import *
 from .shufflenet import *
 from .squeezenet import *
+
 from .mudeep import *
 from .hacnn import *
 
 
 __model_factory = {
+    # image classification models
     'resnet50': resnet50,
     'resnet50_fc512': resnet50_fc512,
     'resnet50mid': resnet50mid,
@@ -37,6 +39,7 @@ __model_factory = {
     'shufflenet': ShuffleNet,
     'squeezenet1_0': squeezenet1_0,
     'squeezenet1_1': squeezenet1_1,
+    # reid-specific models
     'mudeep': MuDeep,
     'hacnn': HACNN,
 }
