@@ -198,7 +198,7 @@ densenet161: num_init_features=96, growth_rate=48, block_config=(6, 12, 36, 24)
 """
 
 
-def densenet121(num_classes, loss, pretrained=False, **kwargs):
+def densenet121(num_classes, loss, pretrained=True, **kwargs):
     model = DenseNet(
         num_classes=num_classes,
         loss=loss,
@@ -215,7 +215,7 @@ def densenet121(num_classes, loss, pretrained=False, **kwargs):
     return model
 
 
-def densenet121_fc512(num_classes, loss, pretrained=False, **kwargs):
+def densenet121_fc512(num_classes, loss, pretrained=True, **kwargs):
     model = DenseNet(
         num_classes=num_classes,
         loss=loss,
