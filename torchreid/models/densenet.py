@@ -1,9 +1,16 @@
+from __future__ import absolute_import
+from __future__ import division
+
+from collections import OrderedDict
+import math
 import re
+
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-import torch.utils.model_zoo as model_zoo
-from collections import OrderedDict
+from torch.utils import model_zoo
+from torch.nn import functional as F
+import torchvision
+
 
 __all__ = ['densenet121', 'densenet121_fc512']
 
