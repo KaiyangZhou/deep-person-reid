@@ -211,7 +211,12 @@ class SEResNeXtBottleneck(Bottleneck):
 
 
 class SENet(nn.Module):
-
+    """
+    Squeeze-and-excitation network
+    
+    Reference:
+    Hu et al. Squeeze-and-Excitation Networks. CVPR 2018.
+    """
     def __init__(self, num_classes, loss, block, layers, groups, reduction, dropout_p=0.2,
                  inplanes=128, input_3x3=True, downsample_kernel_size=3, downsample_padding=1,
                  last_stride=2, fc_dims=None, **kwargs):
