@@ -259,6 +259,8 @@ class SENet(nn.Module):
         """
         super(SENet, self).__init__()
         self.inplanes = inplanes
+        self.loss = loss
+
         if input_3x3:
             layer0_modules = [
                 ('conv1', nn.Conv2d(3, 64, 3, stride=2, padding=1,
