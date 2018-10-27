@@ -5,23 +5,15 @@ from .resnetmid import *
 from .resnext import *
 from .senet import *
 from .densenet import *
-from .mudeep import *
-from .hacnn import *
+from .inceptionresnetv2 import *
+from .inceptionv4 import *
+from .xception import *
+from .nasnet import *
 from .mobilenetv2 import *
 from .shufflenet import *
 from .squeezenet import *
-
-"""
-from .resnext import *
-from .densenet import *
 from .mudeep import *
 from .hacnn import *
-from .squeeze import *
-from .xception import *
-from .inceptionv4 import *
-from .nasnet import *
-from .inceptionresnetv2 import *
-"""
 
 
 __model_factory = {
@@ -37,15 +29,14 @@ __model_factory = {
     'se_resnext101_32x4d': se_resnext101_32x4d,
     'densenet121': densenet121,
     'densenet121_fc512': densenet121_fc512,
-    #'squeezenet': SqueezeNet, # https://github.com/pytorch/vision/blob/master/torchvision/models/squeezenet.py
+    'inceptionresnetv2': InceptionResNetV2,
+    'inceptionv4': inceptionv4,
+    'xception': xception,
+    'nasnsetmobile': nasnetamobile,
     'mobilenetv2': MobileNetV2,
     'shufflenet': ShuffleNet,
     'squeezenet1_0': squeezenet1_0,
     'squeezenet1_1': squeezenet1_1,
-    #'xception': Xception,
-    #'inceptionv4': InceptionV4,
-    #'nasnsetmobile': NASNetAMobile,
-    #'inceptionresnetv2': InceptionResNetV2,
     'mudeep': MuDeep,
     'hacnn': HACNN,
 }

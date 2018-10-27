@@ -28,6 +28,8 @@ Thanks to Anastasiia (https://github.com/DagnyT) for the great help, support and
 Code imported from https://github.com/Cadene/pretrained-models.pytorch
 """
 
+__all__ = ['nasnetamobile']
+
 
 pretrained_settings = {
     'nasnetamobile': {
@@ -52,9 +54,6 @@ pretrained_settings = {
         # }
     }
 }
-
-
-__all__ = ['NASNetAMobile']
 
 
 class MaxPoolPad(nn.Module):
@@ -530,11 +529,13 @@ class ReductionCell1(nn.Module):
 
 
 class NASNetAMobile(nn.Module):
-    """NASNetAMobile (4 @ 1056) """
+    """
+    Neural Architecture Search (NAS)
 
-    def __init__(self, num_classes, stem_filters=32, penultimate_filters=1056, filters_multiplier=2, loss={'xent'}, **kwargs):
+    Zoph et al. Learning Transferable Architectures for Scalable Image Recognition. CVPR 2018.
+    """
+    def __init__(self, num_classes, loss, stem_filters=32, penultimate_filters=1056, filters_multiplier=2, **kwargs):
         super(NASNetAMobile, self).__init__()
-        self.num_classes = num_classes
         self.stem_filters = stem_filters
         self.penultimate_filters = penultimate_filters
         self.filters_multiplier = filters_multiplier
@@ -586,19 +587,26 @@ class NASNetAMobile(nn.Module):
 
         self.relu = nn.ReLU()
         self.dropout = nn.Dropout()
-        self.classifier = nn.Linear(24 * filters, self.num_classes)
-        self.feat_dim = 24 * filters
+        self.classifier = nn.Linear(24 * filters, num_classes)
 
-        self.init_params()
+        self._init_params()
 
-    def init_params(self):
-        """Load ImageNet pretrained weights"""
-        settings = pretrained_settings['nasnetamobile']['imagenet']
-        pretrained_dict = model_zoo.load_url(settings['url'], map_location=None)
-        model_dict = self.state_dict()
-        pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
-        model_dict.update(pretrained_dict)
-        self.load_state_dict(model_dict)
+    def _init_params(self):
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+                if m.bias is not None:
+                    nn.init.constant_(m.bias, 0)
+            elif isinstance(m, nn.BatchNorm2d):
+                nn.init.constant_(m.weight, 1)
+                nn.init.constant_(m.bias, 0)
+            elif isinstance(m, nn.BatchNorm1d):
+                nn.init.constant_(m.weight, 1)
+                nn.init.constant_(m.bias, 0)
+            elif isinstance(m, nn.Linear):
+                nn.init.normal_(m.weight, 0, 0.01)
+                if m.bias is not None:
+                    nn.init.constant_(m.bias, 0)
 
     def features(self, input):
         x_conv0 = self.conv0(input)
@@ -625,64 +633,44 @@ class NASNetAMobile(nn.Module):
         x_cell_15 = self.cell_15(x_cell_14, x_cell_13)
 
         x_cell_15 = self.relu(x_cell_15)
-        x_cell_15 = F.avg_pool2d(x_cell_15, x_cell_15.size()[2:])
+        x_cell_15 = F.avg_pool2d(x_cell_15, x_cell_15.size()[2:]) # global average pool
         x_cell_15 = x_cell_15.view(x_cell_15.size(0), -1)
         x_cell_15 = self.dropout(x_cell_15)
 
         return x_cell_15
 
     def forward(self, input):
-        f = self.features(input)
+        v = self.features(input)
 
         if not self.training:
-            return f
+            return v
 
-        y = self.classifier(f)
+        y = self.classifier(v)
 
         if self.loss == {'xent'}:
             return y
         elif self.loss == {'xent', 'htri'}:
-            return y, f
-        elif self.loss == {'cent'}:
-            return y, f
-        elif self.loss == {'ring'}:
-            return y, f
+            return y, v
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))
 
-"""Following code is not used"""
-def nasnetamobile(num_classes=1001, pretrained='imagenet'):
-    r"""NASNetALarge model architecture from the
-    `"NASNet" <https://arxiv.org/abs/1707.07012>`_ paper.
+
+def init_pretrained_weights(model, model_url):
     """
-    if pretrained:
-        settings = pretrained_settings['nasnetamobile'][pretrained]
-        assert num_classes == settings['num_classes'], \
-            "num_classes should be {}, but is {}".format(settings['num_classes'], num_classes)
+    Initialize model with pretrained weights.
+    Layers that don't match with pretrained layers in name or size are kept unchanged.
+    """
+    pretrain_dict = model_zoo.load_url(model_url)
+    model_dict = model.state_dict()
+    pretrain_dict = {k: v for k, v in pretrain_dict.items() if k in model_dict and model_dict[k].size() == v.size()}
+    model_dict.update(pretrain_dict)
+    model.load_state_dict(model_dict)
+    print("Initialized model with pretrained weights from {}".format(model_url))
 
-        # both 'imagenet'&'imagenet+background' are loaded from same parameters
-        model = NASNetAMobile(num_classes=num_classes)
-        model.load_state_dict(model_zoo.load_url(settings['url'], map_location=None))
 
-       # if pretrained == 'imagenet':
-       #     new_last_linear = nn.Linear(model.last_linear.in_features, 1000)
-       #     new_last_linear.weight.data = model.last_linear.weight.data[1:]
-       #     new_last_linear.bias.data = model.last_linear.bias.data[1:]
-       #     model.last_linear = new_last_linear
-
-        model.input_space = settings['input_space']
-        model.input_size = settings['input_size']
-        model.input_range = settings['input_range']
-
-        model.mean = settings['mean']
-        model.std = settings['std']
-    else:
-        settings = pretrained_settings['nasnetamobile']['imagenet']
-        model = NASNetAMobile(num_classes=num_classes)
-        model.input_space = settings['input_space']
-        model.input_size = settings['input_size']
-        model.input_range = settings['input_range']
-
-        model.mean = settings['mean']
-        model.std = settings['std']
+def nasnetamobile(num_classes, loss, pretrained='imagenet', **kwargs):
+    model = NASNetAMobile(num_classes, loss, **kwargs)
+    if pretrained == 'imagenet':
+        model_url = pretrained_settings['nasnetamobile']['imagenet']['url']
+        init_pretrained_weights(model, model_url)
     return model

@@ -146,7 +146,8 @@ class Fusion(nn.Module):
 
 
 class MuDeep(nn.Module):
-    """Multiscale deep neural network.
+    """
+    Multiscale deep neural network.
 
     Reference:
     Qian et al. Multi-scale Deep Learning Architectures for Person Re-identification. ICCV 2017.

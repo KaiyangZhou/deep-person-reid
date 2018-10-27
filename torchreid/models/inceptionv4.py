@@ -9,7 +9,8 @@ import os
 import sys
 
 
-__all__ = ['InceptionV4']
+__all__ = ['inceptionv4']
+
 
 """
 Code imported from https://github.com/Cadene/pretrained-models.pytorch
@@ -270,15 +271,17 @@ class Inception_C(nn.Module):
 
 
 class InceptionV4Base(nn.Module):
+    """
+    Inception-v4
 
-    def __init__(self, num_classes=1001):
+    Reference:
+    Szegedy et al. Inception-v4, Inception-ResNet and the Impact of Residual
+    Connections on Learning. AAAI 2017.
+    """
+    def __init__(self, num_classes, loss, **kwargs):
         super(InceptionV4Base, self).__init__()
-        # Special attributs
-        self.input_space = None
-        self.input_size = (299, 299, 3)
-        self.mean = None
-        self.std = None
-        # Modules
+        self.loss = loss
+
         self.features = nn.Sequential(
             BasicConv2d(3, 32, kernel_size=3, stride=2),
             BasicConv2d(32, 32, kernel_size=3, stride=1),
@@ -303,67 +306,43 @@ class InceptionV4Base(nn.Module):
             Inception_C(),
             Inception_C()
         )
-        self.avg_pool = nn.AvgPool2d(8, count_include_pad=False)
+        self.global_avgpool = nn.AdaptiveAvgPool2d(1)
         self.last_linear = nn.Linear(1536, num_classes)
 
-    def logits(self, features):
-        x = self.avg_pool(features)
-        x = x.view(x.size(0), -1)
-        x = self.last_linear(x) 
-        return x
-
-    def forward(self, input):
-        x = self.features(input)
-        x = self.logits(x)
-        return x
-
-
-def inceptionv4(num_classes=1000, pretrained='imagenet'):
-    if pretrained:
-        settings = pretrained_settings['inceptionv4'][pretrained]
-        assert num_classes == settings['num_classes'], \
-            "num_classes should be {}, but is {}".format(settings['num_classes'], num_classes)
-
-        # both 'imagenet'&'imagenet+background' are loaded from same parameters
-        model = InceptionV4Base(num_classes=1001)
-        model.load_state_dict(model_zoo.load_url(settings['url']))
-        
-        if pretrained == 'imagenet':
-            new_last_linear = nn.Linear(1536, 1000)
-            new_last_linear.weight.data = model.last_linear.weight.data[1:]
-            new_last_linear.bias.data = model.last_linear.bias.data[1:]
-            model.last_linear = new_last_linear
-        
-        model.input_space = settings['input_space']
-        model.input_size = settings['input_size']
-        model.input_range = settings['input_range']
-        model.mean = settings['mean']
-        model.std = settings['std']
-    else:
-        model = InceptionV4Base(num_classes=num_classes)
-    return model
-
-
-class InceptionV4(nn.Module):
-    def __init__(self, num_classes, loss={'xent'}, **kwargs):
-        super(InceptionV4, self).__init__()
-        self.loss = loss
-        base = inceptionv4()
-        self.features = base.features
-        self.classifier = nn.Linear(1536, num_classes)
-        self.feat_dim = 1536
-
     def forward(self, x):
-        x = self.features(x)
-        x = F.avg_pool2d(x, x.size()[2:])
-        f = x.view(x.size(0), -1)
+        f = self.features(x)
+        v = self.global_avgpool(f)
+        v = v.view(v.size(0), -1)
+
         if not self.training:
-            return f
-        y = self.classifier(f)
+            return v
+
+        y = self.classifier(v)
 
         if self.loss == {'xent'}:
             return y
         elif self.loss == {'xent', 'htri'}:
-            return y, f
+            return y, v
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))
+
+
+def init_pretrained_weights(model, model_url):
+    """
+    Initialize model with pretrained weights.
+    Layers that don't match with pretrained layers in name or size are kept unchanged.
+    """
+    pretrain_dict = model_zoo.load_url(model_url)
+    model_dict = model.state_dict()
+    pretrain_dict = {k: v for k, v in pretrain_dict.items() if k in model_dict and model_dict[k].size() == v.size()}
+    model_dict.update(pretrain_dict)
+    model.load_state_dict(model_dict)
+    print("Initialized model with pretrained weights from {}".format(model_url))
+
+
+def inceptionv4(num_classes, loss, pretrained='imagenet', **kwargs):
+    model = InceptionV4Base(num_classes, loss, **kwargs)
+    if pretrained == 'imagenet':
+        model_url = pretrained_settings['inceptionv4']['imagenet']['url']
+        init_pretrained_weights(model, model_url)
+    return model

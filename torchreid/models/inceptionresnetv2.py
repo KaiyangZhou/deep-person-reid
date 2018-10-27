@@ -275,9 +275,17 @@ def inceptionresnetv2(num_classes=1000, pretrained='imagenet'):
 
 
 class InceptionResNetV2(nn.Module):
+    """
+    Inception-ResNet-V2
+
+    Reference:
+    Szegedy et al. Inception-v4, Inception-ResNet and the Impact of Residual
+    Connections on Learning. AAAI 2017.
+    """
     def __init__(self, num_classes, loss={'xent'}, **kwargs):
         super(InceptionResNetV2, self).__init__()
         self.loss = loss
+        
         # Modules
         self.conv2d_1a = BasicConv2d(3, 32, kernel_size=3, stride=2)
         self.conv2d_2a = BasicConv2d(32, 32, kernel_size=3, stride=1)
@@ -334,24 +342,25 @@ class InceptionResNetV2(nn.Module):
             Block8(scale=0.20),
             Block8(scale=0.20)
         )
+        
         self.block8 = Block8(noReLU=True)
         self.conv2d_7b = BasicConv2d(2080, 1536, kernel_size=1, stride=1)
+        self.global_avgpool = nn.AdaptiveAvgPool2d(1)
         self.classifier = nn.Linear(1536, num_classes)
-        self.feat_dim = 1536
 
-        self.init_params()
+        self._load_imagenet_weights()
 
-    def init_params(self):
-        """Load ImageNet pretrained weights"""
+    def _load_imagenet_weights(self):
         settings = pretrained_settings['inceptionresnetv2']['imagenet']
-        pretrained_dict = model_zoo.load_url(settings['url'], map_location=None)
+        pretrain_dict = model_zoo.load_url(settings['url'])
         model_dict = self.state_dict()
-        pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
-        model_dict.update(pretrained_dict)
+        pretrain_dict = {k: v for k, v in pretrain_dict.items() if k in model_dict and model_dict[k].size() == v.size()}
+        model_dict.update(pretrain_dict)
         self.load_state_dict(model_dict)
+        print("Initialized model with pretrained weights from {}".format(settings['url']))
 
-    def features(self, input):
-        x = self.conv2d_1a(input)
+    def featuremaps(self, x):
+        x = self.conv2d_1a(x)
         x = self.conv2d_2a(x)
         x = self.conv2d_2b(x)
         x = self.maxpool_3a(x)
@@ -366,21 +375,21 @@ class InceptionResNetV2(nn.Module):
         x = self.repeat_2(x)
         x = self.block8(x)
         x = self.conv2d_7b(x)
-        x = F.avg_pool2d(x, x.size()[2:])
-        x = x.view(x.size(0), -1)
         return x
 
-    def forward(self, input):
-        x = self.features(input)
+    def forward(self, x):
+        f = self.featuremaps(x)
+        v = self.global_avgpool(f)
+        v = v.view(v.size(0), -1)
 
         if not self.training:
-            return x
+            return v
 
-        y = self.classifier(x)
+        y = self.classifier(v)
 
         if self.loss == {'xent'}:
             return y
         elif self.loss == {'xent', 'htri'}:
-            return y, x
+            return y, v
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))

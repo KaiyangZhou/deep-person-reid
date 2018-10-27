@@ -69,7 +69,8 @@ cfg = {
 
 
 class ShuffleNet(nn.Module):
-    """ShuffleNet
+    """
+    ShuffleNet
 
     Reference:
     Zhang et al. ShuffleNet: An Extremely Efficient Convolutional Neural
