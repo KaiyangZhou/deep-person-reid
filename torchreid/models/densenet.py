@@ -178,7 +178,7 @@ def init_pretrained_weights(model, model_url):
     Initialize model with pretrained weights.
     Layers that don't match with pretrained layers in name or size are kept unchanged.
     """
-    pretrain_dict = model_zoo.load_url(model_url, map_location=None)
+    pretrain_dict = model_zoo.load_url(model_url)
 
     # '.'s are no longer allowed in module names, but pervious _DenseLayer
     # has keys 'norm.1', 'relu.1', 'conv.1', 'norm.2', 'relu.2', 'conv.2'.
@@ -221,7 +221,6 @@ def densenet121(num_classes, loss, pretrained=True, **kwargs):
         dropout_p=None,
         **kwargs
     )
-
     if pretrained:
         init_pretrained_weights(model, model_urls['densenet121'])
     return model
@@ -238,7 +237,6 @@ def densenet121_fc512(num_classes, loss, pretrained=True, **kwargs):
         dropout_p=None,
         **kwargs
     )
-
     if pretrained:
         init_pretrained_weights(model, model_urls['densenet121'])
     return model

@@ -8,6 +8,7 @@ from .mudeep import *
 from .hacnn import *
 from .mobilenetv2 import *
 from .shufflenet import *
+from .squeezenet import *
 
 """
 from .resnext import *
@@ -37,6 +38,8 @@ __model_factory = {
     #'squeezenet': SqueezeNet, # https://github.com/pytorch/vision/blob/master/torchvision/models/squeezenet.py
     'mobilenetv2': MobileNetV2,
     'shufflenet': ShuffleNet,
+    'squeezenet1_0': squeezenet1_0,
+    'squeezenet1_1': squeezenet1_1,
     #'xception': Xception,
     #'inceptionv4': InceptionV4,
     #'nasnsetmobile': NASNetAMobile,
