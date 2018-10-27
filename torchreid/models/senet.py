@@ -441,7 +441,8 @@ def senet154(num_classes, loss, pretrained='imagenet', **kwargs):
         **kwargs
     )
     if pretrained == 'imagenet':
-        init_pretrained_weights(model, pretrained_settings['senet154']['imagenet']['url'])
+        model_url = pretrained_settings['senet154']['imagenet']['url']
+        init_pretrained_weights(model, model_url)
     return model
 
 
@@ -463,7 +464,8 @@ def se_resnet50(num_classes, loss, pretrained='imagenet', **kwargs):
         **kwargs
     )
     if pretrained == 'imagenet':
-        init_pretrained_weights(model, pretrained_settings['se_resnet50']['imagenet']['url'])
+        model_url = pretrained_settings['se_resnet50']['imagenet']['url']
+        init_pretrained_weights(model, model_url)
     return model
 
 
@@ -485,7 +487,8 @@ def se_resnet50_fc512(num_classes, loss, pretrained='imagenet', **kwargs):
         **kwargs
     )
     if pretrained == 'imagenet':
-        init_pretrained_weights(model, pretrained_settings['se_resnet50']['imagenet']['url'])
+        model_url = pretrained_settings['se_resnet50']['imagenet']['url']
+        init_pretrained_weights(model, model_url)
     return model
 
 
@@ -507,7 +510,8 @@ def se_resnet101(num_classes, loss, pretrained='imagenet', **kwargs):
         **kwargs
     )
     if pretrained == 'imagenet':
-        init_pretrained_weights(model, pretrained_settings['se_resnet101']['imagenet']['url'])
+        model_url = pretrained_settings['se_resnet101']['imagenet']['url']
+        init_pretrained_weights(model, model_url)
     return model
 
 
@@ -529,7 +533,8 @@ def se_resnet152(num_classes, loss, pretrained='imagenet', **kwargs):
         **kwargs
     )
     if pretrained == 'imagenet':
-        init_pretrained_weights(model, pretrained_settings['se_resnet152']['imagenet']['url'])
+        model_url = pretrained_settings['se_resnet152']['imagenet']['url']
+        init_pretrained_weights(model, model_url)
     return model
 
 
@@ -551,7 +556,8 @@ def se_resnext50_32x4d(num_classes, loss, pretrained='imagenet', **kwargs):
         **kwargs
     )
     if pretrained == 'imagenet':
-        init_pretrained_weights(model, pretrained_settings['se_resnext50_32x4d']['imagenet']['url'])
+        model_url = pretrained_settings['se_resnext50_32x4d']['imagenet']['url']
+        init_pretrained_weights(model, model_url)
     return model
 
 
@@ -573,5 +579,6 @@ def se_resnext101_32x4d(num_classes, loss, pretrained='imagenet', **kwargs):
         **kwargs
     )
     if pretrained == 'imagenet':
-        init_pretrained_weights(model, pretrained_settings['se_resnext101_32x4d']['imagenet']['url'])
+        model_url = pretrained_settings['se_resnext101_32x4d']['imagenet']['url']
+        init_pretrained_weights(model, model_url)
     return model
