@@ -173,12 +173,16 @@ class MuDeep(nn.Module):
         self.classifier = nn.Linear(4096, num_classes)
         self.feat_dim = 4096
 
-    def forward(self, x):
+    def featuremaps(self, x):
         x = self.block1(x)
         x = self.block2(x)
         x = self.block3(x)
         x = self.block4(x)
         x = self.block5(*x)
+        return x
+
+    def forward(self, x):
+        x = self.featuremaps(x)
         x = x.view(x.size(0), -1)
         x = self.fc(x)
         y = self.classifier(x)

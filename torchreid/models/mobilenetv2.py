@@ -98,7 +98,7 @@ class MobileNetV2(nn.Module):
         self.classifier = nn.Linear(1280, num_classes)
         self.feat_dim = 1280
 
-    def forward(self, x):
+    def featuremaps(self, x):
         x = self.conv1(x)
         x = self.block2(x)
         x = self.block3(x)
@@ -108,6 +108,10 @@ class MobileNetV2(nn.Module):
         x = self.block7(x)
         x = self.block8(x)
         x = self.conv9(x)
+        return x
+
+    def forward(self, x):
+        x = self.featuremaps(x)
         x = F.avg_pool2d(x, x.size()[2:]).view(x.size(0), -1)
         x = F.dropout(x, training=self.training)
 
