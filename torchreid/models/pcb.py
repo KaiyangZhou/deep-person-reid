@@ -163,11 +163,12 @@ class PCB(nn.Module):
     def forward(self, x):
         f = self.featuremaps(x)
         v_g = self.parts_avgpool(f)
-        v_h = self.conv5(self.dropout(v_g))
         
         if not self.training:
             v_g = F.normalize(v_g, p=2, dim=1)
             return v_g.view(v_g.size(0), -1)
+
+        v_h = self.conv5(self.dropout(v_g))
 
         y = []
         for i in range(self.parts):
