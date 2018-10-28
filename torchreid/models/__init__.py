@@ -16,6 +16,7 @@ from .squeezenet import *
 
 from .mudeep import *
 from .hacnn import *
+from .pcb import *
 
 
 __model_factory = {
@@ -45,6 +46,8 @@ __model_factory = {
     # reid-specific models
     'mudeep': MuDeep,
     'hacnn': HACNN,
+    'pcb_p6': pcb_p6,
+    'pcb_p4': pcb_p4,
 }
 
 
