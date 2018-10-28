@@ -146,7 +146,7 @@ class PCB(nn.Module):
         
         # pcb layers
         self.parts_avgpool = nn.AdaptiveAvgPool2d((self.parts, 1))
-        self.dropout = nn.Dropout(p=0.5)
+        #self.dropout = nn.Dropout(p=0.5)
         self.conv5 = DimReduceLayer(512 * block.expansion, reduced_dim, nonlinear=nonlinear)
         self.feature_dim = reduced_dim
         self.classifier = nn.ModuleList([nn.Linear(self.feature_dim, num_classes) for _ in range(self.parts)])
@@ -206,7 +206,8 @@ class PCB(nn.Module):
             v_g = F.normalize(v_g, p=2, dim=1)
             return v_g.view(v_g.size(0), -1)
 
-        v_h = self.conv5(self.dropout(v_g))
+        #v_g = self.dropout(v_g)
+        v_h = self.conv5(v_g)
 
         y = []
         for i in range(self.parts):
