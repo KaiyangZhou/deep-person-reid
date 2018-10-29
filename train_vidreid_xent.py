@@ -19,7 +19,7 @@ from torchreid import data_manager
 from torchreid.dataset_loader import ImageDataset, VideoDataset
 from torchreid import transforms as T
 from torchreid import models
-from torchreid.losses import CrossEntropyLabelSmooth
+from torchreid.losses import CrossEntropyLoss
 from torchreid.utils.iotools import save_checkpoint, check_isfile
 from torchreid.utils.avgmeter import AverageMeter
 from torchreid.utils.logger import Logger
@@ -169,10 +169,7 @@ def main():
     model = models.init_model(name=args.arch, num_classes=dataset.num_train_pids, loss={'xent'})
     print("Model size: {:.3f} M".format(count_num_param(model)))
 
-    if args.label_smooth:
-        criterion = CrossEntropyLabelSmooth(num_classes=dataset.num_train_pids, use_gpu=use_gpu)
-    else:
-        criterion = nn.CrossEntropyLoss()
+    criterion = CrossEntropyLoss(num_classes=dataset.num_train_pids, use_gpu=use_gpu, label_smooth=args.label_smooth)
     optimizer = init_optim(args.optim, model.parameters(), args.lr, args.weight_decay)
     scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=args.stepsize, gamma=args.gamma)
 
