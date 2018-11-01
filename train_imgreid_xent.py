@@ -17,7 +17,7 @@ from torch.optim import lr_scheduler
 
 from torchreid import data_manager
 from torchreid.dataset_loader import ImageDataset
-from torchreid import transforms as T
+from torchreid.transforms import build_transforms
 from torchreid import models
 from torchreid.losses import CrossEntropyLoss, DeepSupervision
 from torchreid.utils.iotools import save_checkpoint, check_isfile
@@ -135,18 +135,8 @@ def main():
         cuhk03_labeled=args.cuhk03_labeled, cuhk03_classic_split=args.cuhk03_classic_split,
     )
 
-    transform_train = T.Compose([
-        T.Random2DTranslation(args.height, args.width),
-        T.RandomHorizontalFlip(),
-        T.ToTensor(),
-        T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    ])
-
-    transform_test = T.Compose([
-        T.Resize((args.height, args.width)),
-        T.ToTensor(),
-        T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    ])
+    transform_train = build_transforms(args.height, args.width, is_train=True)
+    transform_test = build_transforms(args.height, args.width, is_train=False)
 
     pin_memory = True if use_gpu else False
 

@@ -2,6 +2,7 @@ from __future__ import absolute_import
 from __future__ import division
 
 from torchvision.transforms import *
+import torch
 
 from PIL import Image
 import random
@@ -13,8 +14,8 @@ class Random2DTranslation(object):
     With a probability, first increase image size to (1 + 1/8), and then perform random crop.
 
     Args:
-    - height (int): target height.
-    - width (int): target width.
+    - height (int): target image height.
+    - width (int): target image width.
     - p (float): probability of performing this transformation. Default: 0.5.
     """
     def __init__(self, height, width, p=0.5, interpolation=Image.BILINEAR):
@@ -39,3 +40,48 @@ class Random2DTranslation(object):
         y1 = int(round(random.uniform(0, y_maxrange)))
         croped_img = resized_img.crop((x1, y1, x1 + self.width, y1 + self.height))
         return croped_img
+
+
+def build_transforms(height, width, is_train, **kwargs):
+    """Build transforms
+
+    Args:
+    - height (int): target image height.
+    - width (int): target image width.
+    - is_train (bool): train or test phase.
+    """
+    
+    # use imagenet mean and std as default
+    imagenet_mean = [0.485, 0.456, 0.406]
+    imagenet_std = [0.229, 0.224, 0.225]
+    normalize = Normalize(mean=imagenet_mean, std=imagenet_std)
+
+    transforms = []
+
+    if is_train:
+        # build TRAIN transforms
+        transforms += [Random2DTranslation(height, width)]
+        transforms += [RandomHorizontalFlip()]
+        transforms += [ToTensor()]
+        transforms += [normalize]
+
+    else:
+        # build TEST transforms
+        if 'five_crop' in kwargs and kwargs['five_crop']:
+            transforms += [Resize((int(height * 1.125), int(width * 1.125)))]
+            transforms += [FiveCrop((height, width))]
+            transforms += [Lambda(lambda crops: torch.stack([normalize(ToTensor()(crop)) for crop in crops]))]
+        
+        elif 'ten_crop' in kwargs and kwargs['ten_crop']:
+            transforms += [Resize((int(height * 1.125), int(width * 1.125)))]
+            transforms += [TenCrop((height, width))]
+            transforms += [Lambda(lambda crops: torch.stack([normalize(ToTensor()(crop)) for crop in crops]))]
+        
+        else:
+            transforms += [Resize((height, width))]
+            transforms += [ToTensor()]
+            transforms += [normalize]
+
+    transforms = Compose(transforms)
+
+    return transforms
