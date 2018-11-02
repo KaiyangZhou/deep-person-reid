@@ -59,28 +59,13 @@ def build_transforms(height, width, is_train, **kwargs):
     transforms = []
 
     if is_train:
-        # build TRAIN transforms
         transforms += [Random2DTranslation(height, width)]
         transforms += [RandomHorizontalFlip()]
-        transforms += [ToTensor()]
-        transforms += [normalize]
-
     else:
-        # build TEST transforms
-        if 'five_crop' in kwargs and kwargs['five_crop']:
-            transforms += [Resize((int(height * 1.125), int(width * 1.125)))]
-            transforms += [FiveCrop((height, width))]
-            transforms += [Lambda(lambda crops: torch.stack([normalize(ToTensor()(crop)) for crop in crops]))]
-        
-        elif 'ten_crop' in kwargs and kwargs['ten_crop']:
-            transforms += [Resize((int(height * 1.125), int(width * 1.125)))]
-            transforms += [TenCrop((height, width))]
-            transforms += [Lambda(lambda crops: torch.stack([normalize(ToTensor()(crop)) for crop in crops]))]
-        
-        else:
-            transforms += [Resize((height, width))]
-            transforms += [ToTensor()]
-            transforms += [normalize]
+        transforms += [Resize((height, width))]
+    
+    transforms += [ToTensor()]
+    transforms += [normalize]
 
     transforms = Compose(transforms)
 
