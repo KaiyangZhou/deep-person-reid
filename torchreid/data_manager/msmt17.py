@@ -92,7 +92,7 @@ class MSMT17(object):
         for img_idx, img_info in enumerate(lines):
             img_path, pid = img_info.split(' ')
             pid = int(pid) # no need to relabel
-            camid = int(img_path.split('_')[2])
+            camid = int(img_path.split('_')[2]) - 1 # index starts from 0
             img_path = osp.join(dir_path, img_path)
             dataset.append((img_path, pid, camid))
             pid_container.add(pid)

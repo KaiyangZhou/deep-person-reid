@@ -140,7 +140,7 @@ class GRID(object):
                 for img_path in probe_img_paths:
                     img_name = osp.basename(img_path)
                     img_idx = int(img_name.split('_')[0])
-                    camid = int(img_name.split('_')[1])
+                    camid = int(img_name.split('_')[1]) - 1 # index starts from 0
                     if img_idx in train_idxs:
                         # add to train data
                         train.append((img_path, idx2label[img_idx], camid))
@@ -152,7 +152,7 @@ class GRID(object):
                 for img_path in gallery_img_paths:
                     img_name = osp.basename(img_path)
                     img_idx = int(img_name.split('_')[0])
-                    camid = int(img_name.split('_')[1])
+                    camid = int(img_name.split('_')[1]) - 1 # index starts from 0
                     if img_idx in train_idxs:
                         # add to train data
                         train.append((img_path, idx2label[img_idx], camid))

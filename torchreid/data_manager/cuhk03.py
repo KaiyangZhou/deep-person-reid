@@ -159,7 +159,8 @@ class CUHK03(object):
                 viewid = 1 if imgid < 5 else 2
                 img_name = '{:01d}_{:03d}_{:01d}_{:02d}.png'.format(campid+1, pid+1, viewid, imgid+1)
                 img_path = osp.join(save_dir, img_name)
-                imsave(img_path, img)
+                if not osp.isfile(img_path):
+                    imsave(img_path, img)
                 img_paths.append(img_path)
             return img_paths
 
@@ -174,7 +175,7 @@ class CUHK03(object):
                     img_paths = _process_images(camp[pid,:], campid, pid, imgs_dir)
                     assert len(img_paths) > 0, "campid{}-pid{} has no images".format(campid, pid)
                     meta_data.append((campid+1, pid+1, img_paths))
-                print("done camera pair {} with {} identities".format(campid+1, num_pids))
+                print("- done camera pair {} with {} identities".format(campid+1, num_pids))
             return meta_data
 
         meta_detected = _extract_img('detected')
@@ -188,13 +189,13 @@ class CUHK03(object):
                 
                 if [campid, pid] in test_split:
                     for img_path in img_paths:
-                        camid = int(osp.basename(img_path).split('_')[2])
+                        camid = int(osp.basename(img_path).split('_')[2]) - 1 # make it 0-based
                         test.append((img_path, num_test_pids, camid))
                     num_test_pids += 1
                     num_test_imgs += len(img_paths)
                 else:
                     for img_path in img_paths:
-                        camid = int(osp.basename(img_path).split('_')[2])
+                        camid = int(osp.basename(img_path).split('_')[2]) - 1 # make it 0-based
                         train.append((img_path, num_train_pids, camid))
                     num_train_pids += 1
                     num_train_imgs += len(img_paths)
@@ -233,7 +234,7 @@ class CUHK03(object):
             unique_pids = set()
             for idx in idxs:
                 img_name = filelist[idx][0]
-                camid = int(img_name.split('_')[2])
+                camid = int(img_name.split('_')[2]) - 1 # make it 0-based
                 pid = pids[idx]
                 if relabel: pid = pid2label[pid]
                 img_path = osp.join(img_dir, img_name)
