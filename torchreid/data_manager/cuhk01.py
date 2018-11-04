@@ -16,9 +16,10 @@ import h5py
 from scipy.misc import imsave
 
 from torchreid.utils.iotools import mkdir_if_missing, write_json, read_json
+from .bases import BaseImageDataset
 
 
-class CUHK01(object):
+class CUHK01(BaseImageDataset):
     """
     CUHK01
 
@@ -57,38 +58,18 @@ class CUHK01(object):
         train = [tuple(item) for item in train]
         query = [tuple(item) for item in query]
         gallery = [tuple(item) for item in gallery]
-        
-        num_train_pids = split['num_train_pids']
-        num_query_pids = split['num_query_pids']
-        num_gallery_pids = split['num_gallery_pids']
-        
-        num_train_imgs = len(train)
-        num_query_imgs = len(query)
-        num_gallery_imgs = len(gallery)
-
-        num_total_pids = num_train_pids + num_query_pids
-        num_total_imgs = num_train_imgs + num_query_imgs
 
         if verbose:
             print("=> CUHK01 loaded")
-            print("Dataset statistics:")
-            print("  ------------------------------")
-            print("  subset   | # ids | # images")
-            print("  ------------------------------")
-            print("  train    | {:5d} | {:8d}".format(num_train_pids, num_train_imgs))
-            print("  query    | {:5d} | {:8d}".format(num_query_pids, num_query_imgs))
-            print("  gallery  | {:5d} | {:8d}".format(num_gallery_pids, num_gallery_imgs))
-            print("  ------------------------------")
-            print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_imgs))
-            print("  ------------------------------")
+            self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
         self.query = query
         self.gallery = gallery
 
-        self.num_train_pids = num_train_pids
-        self.num_query_pids = num_query_pids
-        self.num_gallery_pids = num_gallery_pids
+        self.num_train_pids, self.num_train_imgs, self.num_train_cams = self.get_imagedata_info(self.train)
+        self.num_query_pids, self.num_query_imgs, self.num_query_cams = self.get_imagedata_info(self.query)
+        self.num_gallery_pids, self.num_gallery_imgs, self.num_gallery_cams = self.get_imagedata_info(self.gallery)
 
     def _extract_file(self):
         if not osp.exists(self.campus_dir):

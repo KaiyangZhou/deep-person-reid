@@ -16,8 +16,10 @@ import h5py
 from scipy.misc import imsave
 import copy
 
+from .bases import BaseImageDataset
 
-class SenseReID(object):
+
+class SenseReID(BaseImageDataset):
     """
     SenseReID
 
@@ -44,32 +46,20 @@ class SenseReID(object):
 
         self._check_before_run()
 
-        query, num_query_pids, num_query_imgs, query_pids_set = self._process_dir(self.query_dir)
-        gallery, num_gallery_pids, num_gallery_imgs, gallery_pids_set = self._process_dir(self.gallery_dir)
-
-        total_pids = query_pids_set | gallery_pids_set # set union
-        num_total_pids = len(total_pids)
-        num_total_imgs = num_query_imgs + num_gallery_imgs
+        query = self._process_dir(self.query_dir)
+        gallery = self._process_dir(self.gallery_dir)
 
         if verbose:
             print("=> SenseReID loaded (test only)")
-            print("Dataset statistics:")
-            print("  ------------------------------")
-            print("  subset   | # ids | # images")
-            print("  ------------------------------")
-            print("  query    | {:5d} | {:8d}".format(num_query_pids, num_query_imgs))
-            print("  gallery  | {:5d} | {:8d}".format(num_gallery_pids, num_gallery_imgs))
-            print("  ------------------------------")
-            print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_imgs))
-            print("  ------------------------------")
+            self.print_dataset_statistics(query, query, gallery)
 
         self.train = copy.deepcopy(query) # only used to initialize trainloader
         self.query = query
         self.gallery = gallery
 
-        self.num_train_pids = num_query_pids # only used to initialize reid convnet
-        self.num_query_pids = num_query_pids
-        self.num_gallery_pids = num_gallery_pids
+        self.num_train_pids, self.num_train_imgs, self.num_train_cams = self.get_imagedata_info(self.train)
+        self.num_query_pids, self.num_query_imgs, self.num_query_cams = self.get_imagedata_info(self.query)
+        self.num_gallery_pids, self.num_gallery_imgs, self.num_gallery_cams = self.get_imagedata_info(self.gallery)
 
     def _check_before_run(self):
         """Check if all files are available before going deeper"""
@@ -83,16 +73,11 @@ class SenseReID(object):
     def _process_dir(self, dir_path):
         img_paths = glob.glob(osp.join(dir_path, '*.jpg'))
         dataset = []
-        pid_container = set()
 
         for img_path in img_paths:
             img_name = osp.splitext(osp.basename(img_path))[0]
             pid, camid = img_name.split('_')
             pid, camid = int(pid), int(camid)
             dataset.append((img_path, pid, camid))
-            pid_container.add(pid)
-
-        num_pids = len(pid_container)
-        num_imgs = len(dataset)
         
-        return dataset, num_pids, num_imgs, pid_container
+        return dataset

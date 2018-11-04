@@ -15,8 +15,10 @@ import numpy as np
 import h5py
 from scipy.misc import imsave
 
+from .bases import BaseVideoDataset
 
-class Mars(object):
+
+class Mars(BaseVideoDataset):
     """
     MARS
 
@@ -53,44 +55,21 @@ class Mars(object):
         gallery_IDX = [i for i in range(track_test.shape[0]) if i not in query_IDX]
         track_gallery = track_test[gallery_IDX,:]
 
-        train, num_train_tracklets, num_train_pids, num_train_imgs = \
-          self._process_data(train_names, track_train, home_dir='bbox_train', relabel=True, min_seq_len=min_seq_len)
-
-        query, num_query_tracklets, num_query_pids, num_query_imgs = \
-          self._process_data(test_names, track_query, home_dir='bbox_test', relabel=False, min_seq_len=min_seq_len)
-
-        gallery, num_gallery_tracklets, num_gallery_pids, num_gallery_imgs = \
-          self._process_data(test_names, track_gallery, home_dir='bbox_test', relabel=False, min_seq_len=min_seq_len)
-
-        num_imgs_per_tracklet = num_train_imgs + num_query_imgs + num_gallery_imgs
-        min_num = np.min(num_imgs_per_tracklet)
-        max_num = np.max(num_imgs_per_tracklet)
-        avg_num = np.mean(num_imgs_per_tracklet)
-
-        num_total_pids = num_train_pids + num_query_pids
-        num_total_tracklets = num_train_tracklets + num_query_tracklets + num_gallery_tracklets
+        train = self._process_data(train_names, track_train, home_dir='bbox_train', relabel=True, min_seq_len=min_seq_len)
+        query = self._process_data(test_names, track_query, home_dir='bbox_test', relabel=False, min_seq_len=min_seq_len)
+        gallery = self._process_data(test_names, track_gallery, home_dir='bbox_test', relabel=False, min_seq_len=min_seq_len)
 
         if verbose:
             print("=> MARS loaded")
-            print("Dataset statistics:")
-            print("  ------------------------------")
-            print("  subset   | # ids | # tracklets")
-            print("  ------------------------------")
-            print("  train    | {:5d} | {:8d}".format(num_train_pids, num_train_tracklets))
-            print("  query    | {:5d} | {:8d}".format(num_query_pids, num_query_tracklets))
-            print("  gallery  | {:5d} | {:8d}".format(num_gallery_pids, num_gallery_tracklets))
-            print("  ------------------------------")
-            print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_tracklets))
-            print("  number of images per tracklet: {} ~ {}, average {:.1f}".format(min_num, max_num, avg_num))
-            print("  ------------------------------")
+            self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
         self.query = query
         self.gallery = gallery
 
-        self.num_train_pids = num_train_pids
-        self.num_query_pids = num_query_pids
-        self.num_gallery_pids = num_gallery_pids
+        self.num_train_pids, _, self.num_train_cams = self.get_videodata_info(self.train)
+        self.num_query_pids, _, self.num_query_cams = self.get_videodata_info(self.query)
+        self.num_gallery_pids, _, self.num_gallery_cams = self.get_videodata_info(self.gallery)
 
     def _check_before_run(self):
         """Check if all files are available before going deeper"""
@@ -123,7 +102,6 @@ class Mars(object):
 
         if relabel: pid2label = {pid:label for label, pid in enumerate(pid_list)}
         tracklets = []
-        num_imgs_per_tracklet = []
 
         for tracklet_idx in range(num_tracklets):
             data = meta_data[tracklet_idx,...]
@@ -132,7 +110,7 @@ class Mars(object):
             assert 1 <= camid <= 6
             if relabel: pid = pid2label[pid]
             camid -= 1 # index starts from 0
-            img_names = names[start_index-1:end_index]
+            img_names = names[start_index - 1:end_index]
 
             # make sure image names correspond to the same person
             pnames = [img_name[:4] for img_name in img_names]
@@ -147,8 +125,5 @@ class Mars(object):
             if len(img_paths) >= min_seq_len:
                 img_paths = tuple(img_paths)
                 tracklets.append((img_paths, pid, camid))
-                num_imgs_per_tracklet.append(len(img_paths))
 
-        num_tracklets = len(tracklets)
-
-        return tracklets, num_tracklets, num_pids, num_imgs_per_tracklet
+        return tracklets

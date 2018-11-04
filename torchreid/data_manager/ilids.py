@@ -16,9 +16,10 @@ import h5py
 from scipy.misc import imsave
 
 from torchreid.utils.iotools import mkdir_if_missing, write_json, read_json
+from .bases import BaseImageDataset
 
 
-class iLIDS(object):
+class iLIDS(BaseImageDataset):
     """
     iLIDS (for single shot setting)
 
@@ -56,33 +57,21 @@ class iLIDS(object):
         train_dirs, test_dirs = split['train'], split['test']
         print("# train identites: {}, # test identites {}".format(len(train_dirs), len(test_dirs)))
 
-        train, num_train_imgs, num_train_pids = self._process_data(train_dirs, cam1=True, cam2=True)
-        query, num_query_imgs, num_query_pids = self._process_data(test_dirs, cam1=True, cam2=False)
-        gallery, num_gallery_imgs, num_gallery_pids = self._process_data(test_dirs, cam1=False, cam2=True)
-
-        num_total_pids = num_train_pids + num_query_pids
-        num_total_imgs = num_train_imgs + num_query_imgs
+        train = self._process_data(train_dirs, cam1=True, cam2=True)
+        query = self._process_data(test_dirs, cam1=True, cam2=False)
+        gallery = self._process_data(test_dirs, cam1=False, cam2=True)
 
         if verbose:
             print("=> iLIDS (single-shot) loaded")
-            print("Dataset statistics:")
-            print("  ------------------------------")
-            print("  subset   | # ids | # images")
-            print("  ------------------------------")
-            print("  train    | {:5d} | {:8d}".format(num_train_pids, num_train_imgs))
-            print("  query    | {:5d} | {:8d}".format(num_query_pids, num_query_imgs))
-            print("  gallery  | {:5d} | {:8d}".format(num_gallery_pids, num_gallery_imgs))
-            print("  ------------------------------")
-            print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_imgs))
-            print("  ------------------------------")
+            self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
         self.query = query
         self.gallery = gallery
 
-        self.num_train_pids = num_train_pids
-        self.num_query_pids = num_query_pids
-        self.num_gallery_pids = num_gallery_pids
+        self.num_train_pids, self.num_train_imgs, self.num_train_cams = self.get_imagedata_info(self.train)
+        self.num_query_pids, self.num_query_imgs, self.num_query_cams = self.get_imagedata_info(self.query)
+        self.num_gallery_pids, self.num_gallery_imgs, self.num_gallery_cams = self.get_imagedata_info(self.gallery)
 
     def _download_data(self):
         if osp.exists(self.dataset_dir):
@@ -174,7 +163,4 @@ class iLIDS(object):
                 pid = dirname2pid[dirname]
                 dataset.append((img_path, pid, 1))
 
-        num_imgs = len(dataset)
-        num_pids = len(dirnames)
-
-        return dataset, num_imgs, num_pids
+        return dataset

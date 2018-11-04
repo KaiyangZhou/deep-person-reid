@@ -15,8 +15,10 @@ import numpy as np
 import h5py
 from scipy.misc import imsave
 
+from .bases import BaseImageDataset
 
-class Market1501(object):
+
+class Market1501(BaseImageDataset):
     """
     Market1501
 
@@ -40,32 +42,21 @@ class Market1501(object):
 
         self._check_before_run()
 
-        train, num_train_pids, num_train_imgs = self._process_dir(self.train_dir, relabel=True)
-        query, num_query_pids, num_query_imgs = self._process_dir(self.query_dir, relabel=False)
-        gallery, num_gallery_pids, num_gallery_imgs = self._process_dir(self.gallery_dir, relabel=False)
-        num_total_pids = num_train_pids + num_query_pids
-        num_total_imgs = num_train_imgs + num_query_imgs + num_gallery_imgs
+        train = self._process_dir(self.train_dir, relabel=True)
+        query = self._process_dir(self.query_dir, relabel=False)
+        gallery = self._process_dir(self.gallery_dir, relabel=False)
 
         if verbose:
             print("=> Market1501 loaded")
-            print("Dataset statistics:")
-            print("  ------------------------------")
-            print("  subset   | # ids | # images")
-            print("  ------------------------------")
-            print("  train    | {:5d} | {:8d}".format(num_train_pids, num_train_imgs))
-            print("  query    | {:5d} | {:8d}".format(num_query_pids, num_query_imgs))
-            print("  gallery  | {:5d} | {:8d}".format(num_gallery_pids, num_gallery_imgs))
-            print("  ------------------------------")
-            print("  total    | {:5d} | {:8d}".format(num_total_pids, num_total_imgs))
-            print("  ------------------------------")
+            self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
         self.query = query
         self.gallery = gallery
 
-        self.num_train_pids = num_train_pids
-        self.num_query_pids = num_query_pids
-        self.num_gallery_pids = num_gallery_pids
+        self.num_train_pids, self.num_train_imgs, self.num_train_cams = self.get_imagedata_info(self.train)
+        self.num_query_pids, self.num_query_imgs, self.num_query_cams = self.get_imagedata_info(self.query)
+        self.num_gallery_pids, self.num_gallery_imgs, self.num_gallery_cams = self.get_imagedata_info(self.gallery)
 
     def _check_before_run(self):
         """Check if all files are available before going deeper"""
@@ -99,6 +90,4 @@ class Market1501(object):
             if relabel: pid = pid2label[pid]
             dataset.append((img_path, pid, camid))
 
-        num_pids = len(pid_container)
-        num_imgs = len(dataset)
-        return dataset, num_pids, num_imgs
+        return dataset
