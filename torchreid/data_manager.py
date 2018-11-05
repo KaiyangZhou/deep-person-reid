@@ -66,3 +66,4 @@ class ImageDataManager(object):
         print("  # train cameras  : {}".format(self.num_train_cams))
         print("  test names       : {}".format(self.test_names))
         print("  *****************************************")
+        print("\n")
