@@ -6,14 +6,15 @@ import numpy as np
 import copy
 from collections import defaultdict
 import sys
+import warnings
 
 try:
     from torchreid.eval_lib.cython_eval import eval_market1501_wrap
     CYTHON_EVAL_AVAI = True
-    print("Cython evaluation is AVAILABLE")
+    print("Using Cython evaluation code as the backend")
 except ImportError:
     CYTHON_EVAL_AVAI = False
-    print("Warning: Cython evaluation is UNAVAILABLE")
+    warnings.warn("Cython evaluation is UNAVAILABLE, which is highly recommended")
 
 
 def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank, N=100):
