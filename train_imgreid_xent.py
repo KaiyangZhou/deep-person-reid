@@ -31,8 +31,8 @@ parser = argparse.ArgumentParser(description='Train image model with cross entro
 # Datasets
 parser.add_argument('--root', type=str, default='data',
                     help="root path to data directory")
-parser.add_argument('-s', '--source', type=str, default=['market1501'], nargs='+')
-parser.add_argument('-t', '--target', type=str, nargs='+')
+parser.add_argument('-s', '--source', type=str, required=True, nargs='+')
+parser.add_argument('-t', '--target', type=str, required=True, nargs='+')
 parser.add_argument('-j', '--workers', default=4, type=int,
                     help="number of data loading workers (default: 4)")
 parser.add_argument('--height', type=int, default=256,

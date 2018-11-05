@@ -14,7 +14,7 @@ class ImageDataManager(object):
                  workers, pin_memory, **kwargs):
 
         self.train_names = train_names
-        self.test_names = test_names if test_names is not None else train_names
+        self.test_names = test_names
         
         self.train = []
         self.num_train_pids = 0
