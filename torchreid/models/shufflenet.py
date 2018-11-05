@@ -17,7 +17,7 @@ class ChannelShuffle(nn.Module):
 
     def forward(self, x):
         b, c, h, w = x.size()
-        n = c / self.g
+        n = c // self.g
         # reshape
         x = x.view(b, self.g, n, h, w)
         # transpose
