@@ -41,10 +41,6 @@ __vidreid_factory = {
 }
 
 
-def get_names():
-    return list(__imgreid_factory.keys()) + list(__vidreid_factory.keys())
-
-
 def init_imgreid_dataset(name, **kwargs):
     if name not in list(__imgreid_factory.keys()):
         raise KeyError("Invalid dataset, got '{}', but expected to be one of {}".format(name, list(__imgreid_factory.keys())))
