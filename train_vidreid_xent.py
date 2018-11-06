@@ -15,7 +15,7 @@ import torch.backends.cudnn as cudnn
 from torch.utils.data import DataLoader
 from torch.optim import lr_scheduler
 
-from torchreid import data_manager
+from torchreid import datasets
 from torchreid.dataset_loader import ImageDataset, VideoDataset
 from torchreid.transforms import build_transforms
 from torchreid import models
@@ -33,8 +33,7 @@ parser = argparse.ArgumentParser(description='Train video model with cross entro
 # Datasets
 parser.add_argument('--root', type=str, default='data',
                     help="root path to data directory")
-parser.add_argument('-d', '--dataset', type=str, default='mars',
-                    choices=data_manager.get_names())
+parser.add_argument('-d', '--dataset', type=str, default='mars')
 parser.add_argument('-j', '--workers', default=4, type=int,
                     help="number of data loading workers (default: 4)")
 parser.add_argument('--height', type=int, default=256,
@@ -124,7 +123,7 @@ def main():
         print("Currently using CPU (GPU is highly recommended)")
 
     print("Initializing dataset {}".format(args.dataset))
-    dataset = data_manager.init_vidreid_dataset(root=args.root, name=args.dataset)
+    dataset = datasets.init_vidreid_dataset(root=args.root, name=args.dataset)
 
     transform_train = build_transforms(args.height, args.width, is_train=True)
     transform_test = build_transforms(args.height, args.width, is_train=False)
