@@ -17,7 +17,7 @@ def visualize_ranked_results(distmat, dataset, save_dir='log/ranked_results', to
 
     Args:
     - distmat: distance matrix of shape (num_query, num_gallery).
-    - dataset: has dataset.query and dataset.gallery, both are lists of (img_path, pid, camid);
+    - dataset: a 2-tuple containing (query, gallery), each contains a list of (img_path, pid, camid);
                for imgreid, img_path is a string, while for vidreid, img_path is a tuple containing
                a sequence of strings.
     - save_dir: directory to save output images.
@@ -29,8 +29,9 @@ def visualize_ranked_results(distmat, dataset, save_dir='log/ranked_results', to
     print("# query: {}\n# gallery {}".format(num_q, num_g))
     print("Saving images to '{}'".format(save_dir))
     
-    assert num_q == len(dataset.query)
-    assert num_g == len(dataset.gallery)
+    query, gallery = dataset
+    assert num_q == len(query)
+    assert num_g == len(gallery)
     
     indices = np.argsort(distmat, axis=1)
     mkdir_if_missing(save_dir)
@@ -52,14 +53,14 @@ def visualize_ranked_results(distmat, dataset, save_dir='log/ranked_results', to
             shutil.copy(src, dst)
 
     for q_idx in range(num_q):
-        qimg_path, qpid, qcamid = dataset.query[q_idx]
+        qimg_path, qpid, qcamid = query[q_idx]
         qdir = osp.join(save_dir, osp.basename(qimg_path))
         mkdir_if_missing(qdir)
         _cp_img_to(qimg_path, qdir, rank=0, prefix='query')
 
         rank_idx = 1
         for g_idx in indices[q_idx,:]:
-            gimg_path, gpid, gcamid = dataset.gallery[g_idx]
+            gimg_path, gpid, gcamid = gallery[g_idx]
             invalid = (qpid == gpid) & (qcamid == gcamid)
             if not invalid:
                 _cp_img_to(gimg_path, qdir, rank=rank_idx, prefix='gallery')
