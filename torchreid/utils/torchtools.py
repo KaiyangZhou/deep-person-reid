@@ -5,9 +5,16 @@ import torch
 import torch.nn as nn
 
 
-def adjust_learning_rate(optimizer, base_lr, epoch, stepsize, gamma=0.1):
-    # decay learning rate by 'gamma' for every 'stepsize'
-    lr = base_lr * (gamma ** (epoch // stepsize))
+def adjust_learning_rate(optimizer, base_lr, epoch, stepsize=20, gamma=0.1,
+                         linear_decay=False, final_lr=0, max_epoch=100):
+    if linear_decay:
+        # linearly decay learning rate from base_lr to final_lr
+        frac_done = epoch / max_epoch
+        lr = frac_done * final_lr + (1. - frac_done) * base_lr
+    else:
+        # decay learning rate by gamma for every stepsize
+        lr = base_lr * (gamma ** (epoch // stepsize))
+    
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 
