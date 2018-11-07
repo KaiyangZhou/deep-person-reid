@@ -5,13 +5,29 @@ from torch.utils.data import DataLoader
 
 from .dataset_loader import ImageDataset, VideoDataset
 from .datasets import init_imgreid_dataset, init_vidreid_dataset
+from .transforms import build_transforms
 
 
 class ImageDataManager(object):
 
-    def __init__(self, train_names, test_names, root, split_id,
-                 transform_train, transform_test, train_batch, test_batch,
-                 workers, pin_memory, **kwargs):
+    def __init__(self,
+                 use_gpu,
+                 train_names,
+                 test_names,
+                 root,
+                 split_id=0,
+                 height=256,
+                 width=128,
+                 train_batch_size=32,
+                 test_batch_size=100,
+                 workers=4,
+                 cuhk03_labeled=False,
+                 cuhk03_classic_split=False
+                 ):
+        pin_memory = True if use_gpu else False
+
+        transform_train = build_transforms(height, width, is_train=True)
+        transform_test = build_transforms(height, width, is_train=False)
 
         self.train_names = train_names
         self.test_names = test_names
@@ -23,7 +39,10 @@ class ImageDataManager(object):
         print("=> Initializing TRAIN datasets")
 
         for name in self.train_names:
-            dataset = init_imgreid_dataset(root=root, name=name, split_id=split_id, **kwargs)
+            dataset = init_imgreid_dataset(
+                root=root, name=name, split_id=split_id, cuhk03_labeled=cuhk03_labeled,
+                cuhk03_classic_split=cuhk03_classic_split
+            )
 
             for img_path, pid, camid in dataset.train:
                 pid += self.num_train_pids
@@ -35,7 +54,7 @@ class ImageDataManager(object):
 
         self.trainloader = DataLoader(
             ImageDataset(self.train, transform=transform_train),
-            batch_size=train_batch, shuffle=True, num_workers=workers,
+            batch_size=train_batch_size, shuffle=True, num_workers=workers,
             pin_memory=pin_memory, drop_last=True
         )
 
@@ -43,17 +62,20 @@ class ImageDataManager(object):
 
         self.testloader_dict = {name: {'query': None, 'gallery': None} for name in self.test_names}
         for name in self.test_names:
-            dataset = init_imgreid_dataset(root=root, name=name, split_id=split_id, **kwargs)
+            dataset = init_imgreid_dataset(
+                root=root, name=name, split_id=split_id, cuhk03_labeled=cuhk03_labeled,
+                cuhk03_classic_split=cuhk03_classic_split
+            )
 
             self.testloader_dict[name]['query'] = DataLoader(
                 ImageDataset(dataset.query, transform=transform_test),
-                batch_size=test_batch, shuffle=False, num_workers=workers,
+                batch_size=test_batch_size, shuffle=False, num_workers=workers,
                 pin_memory=pin_memory, drop_last=False
             )
 
             self.testloader_dict[name]['gallery'] = DataLoader(
                 ImageDataset(dataset.gallery, transform=transform_test),
-                batch_size=test_batch, shuffle=False, num_workers=workers,
+                batch_size=test_batch_size, shuffle=False, num_workers=workers,
                 pin_memory=pin_memory, drop_last=False
             )
 
@@ -71,9 +93,25 @@ class ImageDataManager(object):
 
 class VideoDataManager(object):
 
-    def __init__(self, train_names, test_names, root, split_id,
-                 transform_train, transform_test, train_batch, test_batch,
-                 workers, pin_memory, seq_len, sample, image_training=True, **kwargs):
+    def __init__(self,
+                 use_gpu,
+                 train_names,
+                 test_names,
+                 root,
+                 split_id=0,
+                 height=256,
+                 width=128,
+                 train_batch_size=32,
+                 test_batch_size=100,
+                 workers=4,
+                 seq_len=15,
+                 sample='evenly',
+                 image_training=True
+                 ):
+        pin_memory = True if use_gpu else False
+
+        transform_train = build_transforms(height, width, is_train=True)
+        transform_test = build_transforms(height, width, is_train=False)
 
         self.train_names = train_names
         self.test_names = test_names
@@ -85,7 +123,7 @@ class VideoDataManager(object):
         print("=> Initializing TRAIN datasets")
 
         for name in self.train_names:
-            dataset = init_vidreid_dataset(root=root, name=name, split_id=split_id, **kwargs)
+            dataset = init_vidreid_dataset(root=root, name=name, split_id=split_id)
 
             for img_paths, pid, camid in dataset.train:
                 pid += self.num_train_pids
@@ -104,14 +142,14 @@ class VideoDataManager(object):
             # each batch has image data of shape (batch, channel, height, width)
             self.trainloader = DataLoader(
                 ImageDataset(self.train, transform=transform_train),
-                batch_size=train_batch, shuffle=True, num_workers=workers,
+                batch_size=train_batch_size, shuffle=True, num_workers=workers,
                 pin_memory=pin_memory, drop_last=True
             )
         else:
             # each batch has image data of shape (batch, seq_len, channel, height, width)
             self.trainloader = DataLoader(
                 VideoDataset(self.train, seq_len=seq_len, sample=sample, transform=transform_test),
-                batch_size=train_batch, shuffle=True, num_workers=workers,
+                batch_size=train_batch_size, shuffle=True, num_workers=workers,
                 pin_memory=pin_memory, drop_last=True
             )
 
@@ -119,17 +157,17 @@ class VideoDataManager(object):
 
         self.testloader_dict = {name: {'query': None, 'gallery': None} for name in self.test_names}
         for name in self.test_names:
-            dataset = init_vidreid_dataset(root=root, name=name, split_id=split_id, **kwargs)
+            dataset = init_vidreid_dataset(root=root, name=name, split_id=split_id)
 
             self.testloader_dict[name]['query'] = DataLoader(
                 VideoDataset(dataset.query, seq_len=seq_len, sample=sample, transform=transform_test),
-                batch_size=test_batch, shuffle=False, num_workers=workers,
+                batch_size=test_batch_size, shuffle=False, num_workers=workers,
                 pin_memory=pin_memory, drop_last=False,
             )
 
             self.testloader_dict[name]['gallery'] = DataLoader(
                 VideoDataset(dataset.gallery, seq_len=seq_len, sample=sample, transform=transform_test),
-                batch_size=test_batch, shuffle=False, num_workers=workers,
+                batch_size=test_batch_size, shuffle=False, num_workers=workers,
                 pin_memory=pin_memory, drop_last=False,
             )
 

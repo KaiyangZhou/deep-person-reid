@@ -2,10 +2,7 @@ import argparse
 
 
 def argument_parser():
-    parser = argparse.ArgumentParser(
-        description='Universal argument parser',
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
-    )
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     
     # ************************************************************
     # Datasets (general)
@@ -48,6 +45,25 @@ def argument_parser():
     # ************************************************************
     parser.add_argument('--optim', type=str, default='adam',
                         help="optimization algorithm (see optimizers.py)")
+    parser.add_argument('--lr', default=0.0003, type=float,
+                        help="initial learning rate")
+    parser.add_argument('--weight-decay', default=5e-04, type=float,
+                        help="weight decay")   
+    # sgd
+    parser.add_argument('--momentum', default=0.9, type=float,
+                        help="momentum factor for sgd and rmsprop")
+    parser.add_argument('--sgd-dampening', default=0, type=float,
+                        help="sgd's dampening for momentum")
+    parser.add_argument('--sgd-nesterov', action='store_true',
+                        help="whether to enable sgd's Nesterov momentum")
+    # rmsprop
+    parser.add_argument('--rmsprop-alpha', default=0.99, type=float,
+                        help="rmsprop's smoothing constant")
+    # adam/amsgrad
+    parser.add_argument('--adam-beta1', default=0.9, type=float,
+                        help="exponential decay rate for adam's first moment")
+    parser.add_argument('--adam-beta2', default=0.999, type=float,
+                        help="exponential decay rate for adam's second moment")
     
     # ************************************************************
     # Training hyperparameters
@@ -56,18 +72,15 @@ def argument_parser():
                         help="maximum epochs to run")
     parser.add_argument('--start-epoch', default=0, type=int,
                         help="manual epoch number (useful when restart)")
-    parser.add_argument('--train-batch', default=32, type=int,
-                        help="train batch size")
-    parser.add_argument('--test-batch', default=100, type=int,
-                        help="test batch size")
-    parser.add_argument('--lr', default=0.0003, type=float,
-                        help="initial learning rate")
     parser.add_argument('--stepsize', default=[20, 40], nargs='+', type=int,
                         help="stepsize to decay learning rate")
     parser.add_argument('--gamma', default=0.1, type=float,
                         help="learning rate decay")
-    parser.add_argument('--weight-decay', default=5e-04, type=float,
-                        help="weight decay")
+
+    parser.add_argument('--train-batch-size', default=32, type=int,
+                        help="training batch size")
+    parser.add_argument('--test-batch-size', default=100, type=int,
+                        help="test batch size")
     
     parser.add_argument('--fixbase-epoch', default=0, type=int,
                         help="how many epochs to fix base network (only train randomly initialized classifier)")
@@ -75,7 +88,10 @@ def argument_parser():
                         help="learning rate when the base network is frozen")
     parser.add_argument('--freeze-bn', action='store_true',
                         help="freeze running statistics in BatchNorm layers during training")
-    
+
+    # ************************************************************
+    # Cross entropy loss-specific setting
+    # ************************************************************
     parser.add_argument('--label-smooth', action='store_true',
                         help="use label smoothing regularizer in cross entropy loss")
 
@@ -100,7 +116,7 @@ def argument_parser():
 
 
     # ************************************************************
-    # Test settings
+    # Test settings for video reid
     # ************************************************************
     parser.add_argument('--pool', type=str, default='avg', choices=['avg', 'max'],
                         help="how to pool features over a tracklet (for video reid)")
@@ -132,3 +148,61 @@ def argument_parser():
                         help="visualize ranked results, only available in evaluation mode")
 
     return parser
+
+
+def image_dataset_kwargs(parsed_args):
+    """
+    Build kwargs for ImageDataManager in data_manager.py from
+    the parsed command-line arguments.
+    """
+    return {
+        'train_names': parsed_args.source,
+        'test_names': parsed_args.target,
+        'root': parsed_args.root,
+        'split_id': parsed_args.split_id,
+        'height': parsed_args.height,
+        'width': parsed_args.width,
+        'train_batch_size': parsed_args.train_batch_size,
+        'test_batch_size': parsed_args.test_batch_size,
+        'workers': parsed_args.workers,
+        'cuhk03_labeled': parsed_args.cuhk03_labeled,
+        'cuhk03_classic_split': parsed_args.cuhk03_classic_split
+    }
+
+
+def video_dataset_kwargs(parsed_args):
+    """
+    Build kwargs for VideoDataManager in data_manager.py from
+    the parsed command-line arguments.
+    """
+    return {
+        'train_names': parsed_args.source,
+        'test_names': parsed_args.target,
+        'root': parsed_args.root,
+        'split_id': parsed_args.split_id,
+        'height': parsed_args.height,
+        'width': parsed_args.width,
+        'train_batch_size': parsed_args.train_batch_size,
+        'test_batch_size': parsed_args.test_batch_size,
+        'workers': parsed_args.workers,
+        'seq_len': parsed_args.seq_len,
+        'sample': parsed_args.sample
+    }
+
+
+def optimizer_kwargs(parsed_args):
+    """
+    Build kwargs for optimizer in optimizer.py from
+    the parsed command-line arguments.
+    """
+    return {
+        'optim': parsed_args.optim,
+        'lr': parsed_args.lr,
+        'weight_decay': parsed_args.weight_decay,
+        'momentum': parsed_args.momentum,
+        'sgd_dampening': parsed_args.sgd_dampening,
+        'sgd_nesterov': parsed_args.sgd_nesterov,
+        'rmsprop_alpha': parsed_args.rmsprop_alpha,
+        'adam_beta1': parsed_args.adam_beta1,
+        'adam_beta2': parsed_args.adam_beta2,
+    }

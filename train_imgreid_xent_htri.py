@@ -13,9 +13,8 @@ import torch.nn as nn
 import torch.backends.cudnn as cudnn
 from torch.optim import lr_scheduler
 
-from args import argument_parser
+from args import argument_parser, image_dataset_kwargs, optimizer_kwargs
 from torchreid.data_manager import ImageDataManager
-from torchreid.transforms import build_transforms
 from torchreid import models
 from torchreid.losses import CrossEntropyLoss, TripletLoss, DeepSupervision
 from torchreid.utils.iotools import save_checkpoint, check_isfile
@@ -25,7 +24,7 @@ from torchreid.utils.torchtools import count_num_param
 from torchreid.utils.reidtools import visualize_ranked_results
 from torchreid.eval_metrics import evaluate
 from torchreid.samplers import RandomIdentitySampler
-from torchreid.optimizers import init_optim
+from torchreid.optimizers import init_optimizer
 
 
 # global variables
@@ -40,11 +39,8 @@ def main():
     if not args.use_avai_gpus: os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_devices
     use_gpu = torch.cuda.is_available()
     if args.use_cpu: use_gpu = False
-
-    if not args.evaluate:
-        sys.stdout = Logger(osp.join(args.save_dir, 'log_train.txt'))
-    else:
-        sys.stdout = Logger(osp.join(args.save_dir, 'log_test.txt'))
+    log_name = 'log_test.txt' if args.evaluate else 'log_train.txt'
+    sys.stdout = Logger(osp.join(args.save_dir, log_name))
     print("==========\nArgs:{}\n==========".format(args))
 
     if use_gpu:
@@ -52,19 +48,9 @@ def main():
         cudnn.benchmark = True
         torch.cuda.manual_seed_all(args.seed)
     else:
-        print("Currently using CPU (GPU is highly recommended)")
+        print("Currently using CPU, however, GPU is highly recommended")
 
-    transform_train = build_transforms(args.height, args.width, is_train=True)
-    transform_test = build_transforms(args.height, args.width, is_train=False)
-
-    pin_memory = True if use_gpu else False
-
-    dm = ImageDataManager(
-        args.source, args.target, args.root, args.split_id, transform_train, transform_test,
-        args.train_batch, args.test_batch, args.workers, pin_memory,
-        cuhk03_labeled=args.cuhk03_labeled, cuhk03_classic_split=args.cuhk03_classic_split
-    )
-    
+    dm = ImageDataManager(use_gpu, **image_dataset_kwargs(args))
     trainloader = dm.trainloader
     testloader_dict = dm.testloader_dict
 
@@ -75,7 +61,7 @@ def main():
     criterion_xent = CrossEntropyLoss(num_classes=dm.num_train_pids, use_gpu=use_gpu, label_smooth=args.label_smooth)
     criterion_htri = TripletLoss(margin=args.margin)
     
-    optimizer = init_optim(args.optim, model.parameters(), args.lr, args.weight_decay)
+    optimizer = init_optimizer(model.parameters(), **optimizer_kwargs(args))
     scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=args.stepsize, gamma=args.gamma)
 
     if args.load_weights and check_isfile(args.load_weights):
