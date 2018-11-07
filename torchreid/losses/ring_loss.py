@@ -1,6 +1,8 @@
 from __future__ import absolute_import
 from __future__ import division
 
+import warnings
+
 import torch
 import torch.nn as nn
 
@@ -13,6 +15,7 @@ class RingLoss(nn.Module):
     """
     def __init__(self):
         super(RingLoss, self).__init__()
+        warnings.warn("This method is deprecated")
         self.radius = nn.Parameter(torch.ones(1, dtype=torch.float))
 
     def forward(self, x):
