@@ -204,5 +204,5 @@ def optimizer_kwargs(parsed_args):
         'sgd_nesterov': parsed_args.sgd_nesterov,
         'rmsprop_alpha': parsed_args.rmsprop_alpha,
         'adam_beta1': parsed_args.adam_beta1,
-        'adam_beta2': parsed_args.adam_beta2,
+        'adam_beta2': parsed_args.adam_beta2
     }
