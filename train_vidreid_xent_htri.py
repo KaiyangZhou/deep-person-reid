@@ -70,10 +70,10 @@ def main():
     testloader_dict = dm.testloader_dict
 
     print("Initializing model: {}".format(args.arch))
-    model = models.init_model(name=args.arch, num_classes=dataset.num_train_pids, loss={'xent', 'htri'})
+    model = models.init_model(name=args.arch, num_classes=dm.num_train_pids, loss={'xent', 'htri'})
     print("Model size: {:.3f} M".format(count_num_param(model)))
 
-    criterion = CrossEntropyLoss(num_classes=dataset.num_train_pids, use_gpu=use_gpu, label_smooth=args.label_smooth)
+    criterion = CrossEntropyLoss(num_classes=dm.num_train_pids, use_gpu=use_gpu, label_smooth=args.label_smooth)
     criterion_htri = TripletLoss(margin=args.margin)
 
     optimizer = init_optim(args.optim, model.parameters(), args.lr, args.weight_decay)
