@@ -51,8 +51,7 @@ def main():
         print("Currently using CPU, however, GPU is highly recommended")
 
     dm = ImageDataManager(use_gpu, **image_dataset_kwargs(args))
-    trainloader = dm.trainloader
-    testloader_dict = dm.testloader_dict
+    trainloader, testloader_dict = dm.return_dataloaders()
 
     print("Initializing model: {}".format(args.arch))
     model = models.init_model(name=args.arch, num_classes=dm.num_train_pids, loss={'xent', 'htri'})
