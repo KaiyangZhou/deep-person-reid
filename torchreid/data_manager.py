@@ -128,7 +128,7 @@ class VideoDataManager(object):
             )
 
             self.testloader_dict[name]['gallery'] = DataLoader(
-                VideoDataset(dataset.query, seq_len=seq_len, sample=sample, transform=transform_test),
+                VideoDataset(dataset.gallery, seq_len=seq_len, sample=sample, transform=transform_test),
                 batch_size=test_batch, shuffle=False, num_workers=workers,
                 pin_memory=pin_memory, drop_last=False,
             )
