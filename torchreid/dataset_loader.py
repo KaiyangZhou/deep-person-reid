@@ -97,7 +97,7 @@ class VideoDataset(Dataset):
             """
             indices = np.arange(num)
         else:
-            raise KeyError("Unknown sample method: {}. Expected one of {}".format(self.sample, self.sample_methods))
+            raise ValueError("Unknown sample method: {}. Expected one of {}".format(self.sample, self.sample_methods))
 
         imgs = []
         for index in indices:

@@ -31,4 +31,4 @@ def init_optimizer(params,
                                    alpha=rmsprop_alpha)
     
     else:
-        raise KeyError("Unsupported optimizer: {}".format(optim))
+        raise ValueError("Unsupported optimizer: {}".format(optim))
