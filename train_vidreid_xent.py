@@ -5,7 +5,6 @@ import os
 import sys
 import time
 import datetime
-import argparse
 import os.path as osp
 import numpy as np
 
@@ -15,7 +14,8 @@ import torch.backends.cudnn as cudnn
 from torch.utils.data import DataLoader
 from torch.optim import lr_scheduler
 
-from torchreid import datasets
+from args import argument_parser
+from torchreid.data_manager import VideoDataManager
 from torchreid.dataset_loader import ImageDataset, VideoDataset
 from torchreid.transforms import build_transforms
 from torchreid import models
@@ -29,80 +29,13 @@ from torchreid.eval_metrics import evaluate
 from torchreid.optimizers import init_optim
 
 
-parser = argparse.ArgumentParser(description='Train video model with cross entropy loss')
-# Datasets
-parser.add_argument('--root', type=str, default='data',
-                    help="root path to data directory")
-parser.add_argument('-d', '--dataset', type=str, default='mars')
-parser.add_argument('-j', '--workers', default=4, type=int,
-                    help="number of data loading workers (default: 4)")
-parser.add_argument('--height', type=int, default=256,
-                    help="height of an image (default: 256)")
-parser.add_argument('--width', type=int, default=128,
-                    help="width of an image (default: 128)")
-parser.add_argument('--seq-len', type=int, default=15,
-                    help="number of images to sample in a tracklet (default: 15)")
-# Optimization options
-parser.add_argument('--optim', type=str, default='adam',
-                    help="optimization algorithm (see optimizers.py)")
-parser.add_argument('--max-epoch', default=15, type=int,
-                    help="maximum epochs to run")
-parser.add_argument('--start-epoch', default=0, type=int,
-                    help="manual epoch number (useful on restarts)")
-parser.add_argument('--train-batch', default=32, type=int,
-                    help="train batch size")
-parser.add_argument('--test-batch', default=5, type=int,
-                    help="test batch size (number of tracklets)")
-parser.add_argument('--lr', '--learning-rate', default=0.0003, type=float,
-                    help="initial learning rate")
-parser.add_argument('--stepsize', default=[20, 40], nargs='+', type=int,
-                    help="stepsize to decay learning rate")
-parser.add_argument('--gamma', default=0.1, type=float,
-                    help="learning rate decay")
-parser.add_argument('--weight-decay', default=5e-04, type=float,
-                    help="weight decay (default: 5e-04)")
-parser.add_argument('--fixbase-epoch', default=0, type=int,
-                    help="epochs to fix base network (only train classifier, default: 0)")
-parser.add_argument('--fixbase-lr', default=0.0003, type=float,
-                    help="learning rate (when base network is frozen)")
-parser.add_argument('--freeze-bn', action='store_true',
-                    help="freeze running statistics in BatchNorm layers during training (default: False)")
-parser.add_argument('--label-smooth', action='store_true',
-                    help="use label smoothing regularizer in cross entropy loss")
-# Architecture
-parser.add_argument('-a', '--arch', type=str, default='resnet50', choices=models.get_names())
-parser.add_argument('--pool', type=str, default='avg', choices=['avg', 'max'])
-# Miscs
-parser.add_argument('--print-freq', type=int, default=10,
-                    help="print frequency")
-parser.add_argument('--seed', type=int, default=1,
-                    help="manual seed")
-parser.add_argument('--resume', type=str, default='', metavar='PATH')
-parser.add_argument('--load-weights', type=str, default='',
-                    help="load pretrained weights but ignores layers that don't match in size")
-parser.add_argument('--evaluate', action='store_true',
-                    help="evaluation only")
-parser.add_argument('--eval-step', type=int, default=-1,
-                    help="run evaluation for every N epochs (set to -1 to test after training)")
-parser.add_argument('--start-eval', type=int, default=0,
-                    help="start to evaluate after specific epoch")
-parser.add_argument('--save-dir', type=str, default='log')
-parser.add_argument('--use-cpu', action='store_true',
-                    help="use cpu")
-parser.add_argument('--gpu-devices', default='0', type=str,
-                    help='gpu device ids for CUDA_VISIBLE_DEVICES')
-parser.add_argument('--use-avai-gpus', action='store_true',
-                    help="use available gpus instead of specified devices (this is useful when using managed clusters)")
-parser.add_argument('--visualize-ranks', action='store_true',
-                    help="visualize ranked results, only available in evaluation mode (default: False)")
-
 # global variables
+parser = argument_parser()
 args = parser.parse_args()
-best_rank1 = -np.inf
 
 
 def main():
-    global args, best_rank1
+    global args
     
     torch.manual_seed(args.seed)
     if not args.use_avai_gpus: os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_devices
@@ -122,37 +55,18 @@ def main():
     else:
         print("Currently using CPU (GPU is highly recommended)")
 
-    print("Initializing dataset {}".format(args.dataset))
-    dataset = datasets.init_vidreid_dataset(root=args.root, name=args.dataset)
-
     transform_train = build_transforms(args.height, args.width, is_train=True)
     transform_test = build_transforms(args.height, args.width, is_train=False)
 
     pin_memory = True if use_gpu else False
 
-    # decompose tracklets into images
-    new_train = []
-    for img_paths, pid, camid in dataset.train:
-        for img_path in img_paths:
-            new_train.append((img_path, pid, camid))
-
-    trainloader = DataLoader(
-        ImageDataset(new_train, transform=transform_train),
-        batch_size=args.train_batch, shuffle=True, num_workers=args.workers,
-        pin_memory=pin_memory, drop_last=True,
+    dm = VideoDataManager(
+        args.source, args.target, args.root, args.split_id, transform_train, transform_test,
+        args.train_batch, args.test_batch, args.workers, pin_memory, args.seq_len, args.sample
     )
 
-    queryloader = DataLoader(
-        VideoDataset(dataset.query, seq_len=args.seq_len, sample='evenly', transform=transform_test),
-        batch_size=args.test_batch, shuffle=False, num_workers=args.workers,
-        pin_memory=pin_memory, drop_last=False,
-    )
-
-    galleryloader = DataLoader(
-        VideoDataset(dataset.gallery, seq_len=args.seq_len, sample='evenly', transform=transform_test),
-        batch_size=args.test_batch, shuffle=False, num_workers=args.workers,
-        pin_memory=pin_memory, drop_last=False,
-    )
+    trainloader = dm.trainloader
+    testloader_dict = dm.testloader_dict
 
     print("Initializing model: {}".format(args.arch))
     model = models.init_model(name=args.arch, num_classes=dataset.num_train_pids, loss={'xent'})
@@ -183,27 +97,31 @@ def main():
         checkpoint = torch.load(args.resume)
         model.load_state_dict(checkpoint['state_dict'])
         args.start_epoch = checkpoint['epoch'] + 1
-        best_rank1 = checkpoint['rank1']
         print("Loaded checkpoint from '{}'".format(args.resume))
-        print("- start_epoch: {}\n- rank1: {}".format(args.start_epoch, best_rank1))
+        print("- start_epoch: {}\n- rank1: {}".format(args.start_epoch, checkpoint['rank1']))
 
     if use_gpu:
         model = nn.DataParallel(model).cuda()
 
     if args.evaluate:
         print("Evaluate only")
-        distmat = test(model, queryloader, galleryloader, args.pool, use_gpu, return_distmat=True)
-        if args.visualize_ranks:
-            visualize_ranked_results(
-                distmat, dataset,
-                save_dir=osp.join(args.save_dir, 'ranked_results'),
-                topk=20,
-            )
+
+        for name in args.target:
+            print("Evaluating {} ...".format(name))
+            queryloader = testloader_dict[name]['query']
+            galleryloader = testloader_dict[name]['gallery']
+            distmat = test(model, queryloader, galleryloader, args.pool, use_gpu, return_distmat=True)
+        
+            if args.visualize_ranks:
+                visualize_ranked_results(
+                    distmat, dataset,
+                    save_dir=osp.join(args.save_dir, 'ranked_results', name),
+                    topk=20
+                )
         return
 
     start_time = time.time()
     train_time = 0
-    best_epoch = args.start_epoch
     print("==> Start training")
 
     if args.fixbase_epoch > 0:
@@ -226,12 +144,12 @@ def main():
         
         if (epoch + 1) > args.start_eval and args.eval_step > 0 and (epoch + 1) % args.eval_step == 0 or (epoch + 1) == args.max_epoch:
             print("==> Test")
-            rank1 = test(model, queryloader, galleryloader, args.pool, use_gpu)
-            is_best = rank1 > best_rank1
             
-            if is_best:
-                best_rank1 = rank1
-                best_epoch = epoch + 1
+            for name in args.target:
+                print("Evaluating {} ...".format(name))
+                queryloader = testloader_dict[name]['query']
+                galleryloader = testloader_dict[name]['gallery']
+                rank1 = test(model, queryloader, galleryloader, args.pool, use_gpu)
 
             if use_gpu:
                 state_dict = model.module.state_dict()
@@ -242,9 +160,7 @@ def main():
                 'state_dict': state_dict,
                 'rank1': rank1,
                 'epoch': epoch,
-            }, is_best, osp.join(args.save_dir, 'checkpoint_ep' + str(epoch + 1) + '.pth.tar'))
-
-    print("==> Best Rank-1 {:.1%}, achieved at epoch {}".format(best_rank1, best_epoch))
+            }, False, osp.join(args.save_dir, 'checkpoint_ep' + str(epoch + 1) + '.pth.tar'))
 
     elapsed = round(time.time() - start_time)
     elapsed = str(datetime.timedelta(seconds=elapsed))
