@@ -51,6 +51,7 @@ def main():
     else:
         print("Currently using CPU, however, GPU is highly recommended")
 
+    print("Initializing video data manager")
     dm = VideoDataManager(use_gpu, **video_dataset_kwargs(args))
     trainloader, testloader_dict = dm.return_dataloaders()
 
@@ -96,7 +97,7 @@ def main():
         
             if args.visualize_ranks:
                 visualize_ranked_results(
-                    distmat, dataset,
+                    distmat, dm.return_testdataset_by_name(name),
                     save_dir=osp.join(args.save_dir, 'ranked_results', name),
                     topk=20
                 )
