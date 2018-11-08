@@ -161,7 +161,7 @@ def image_dataset_kwargs(parsed_args):
         'test_batch_size': parsed_args.test_batch_size,
         'workers': parsed_args.workers,
         'train_sampler': parsed_args.train_sampler,
-        'num_instances': num_instances,
+        'num_instances': parsed_args.num_instances,
         'cuhk03_labeled': parsed_args.cuhk03_labeled,
         'cuhk03_classic_split': parsed_args.cuhk03_classic_split
     }
