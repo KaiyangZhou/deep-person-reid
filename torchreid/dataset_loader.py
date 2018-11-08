@@ -51,12 +51,12 @@ class VideoDataset(Dataset):
     """Video Person ReID Dataset.
     Note batch data has shape (batch, seq_len, channel, height, width).
     """
-    sample_methods = ['evenly', 'random', 'all']
+    _sample_methods = ['evenly', 'random', 'all']
 
-    def __init__(self, dataset, seq_len=15, sample='evenly', transform=None):
+    def __init__(self, dataset, seq_len=15, sample_method='evenly', transform=None):
         self.dataset = dataset
         self.seq_len = seq_len
-        self.sample = sample
+        self.sample_method = sample_method
         self.transform = transform
 
     def __len__(self):
@@ -66,7 +66,7 @@ class VideoDataset(Dataset):
         img_paths, pid, camid = self.dataset[index]
         num = len(img_paths)
 
-        if self.sample == 'random':
+        if self.sample_method == 'random':
             """
             Randomly sample seq_len items from num items,
             if num is smaller than seq_len, then replicate items
@@ -76,7 +76,8 @@ class VideoDataset(Dataset):
             indices = np.random.choice(indices, size=self.seq_len, replace=replace)
             # sort indices to keep temporal order (comment it to be order-agnostic)
             indices = np.sort(indices)
-        elif self.sample == 'evenly':
+        
+        elif self.sample_method == 'evenly':
             """
             Evenly sample seq_len items from num items.
             """
@@ -90,14 +91,16 @@ class VideoDataset(Dataset):
                 num_pads = self.seq_len - num
                 indices = np.concatenate([indices, np.ones(num_pads).astype(np.int32)*(num-1)])
             assert len(indices) == self.seq_len
-        elif self.sample == 'all':
+        
+        elif self.sample_method == 'all':
             """
             Sample all items, seq_len is useless now and batch_size needs
             to be set to 1.
             """
             indices = np.arange(num)
+        
         else:
-            raise ValueError("Unknown sample method: {}. Expected one of {}".format(self.sample, self.sample_methods))
+            raise ValueError("Unknown sample method: {}. Expected one of {}".format(self.sample_method, self._sample_methods))
 
         imgs = []
         for index in indices:
