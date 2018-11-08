@@ -19,7 +19,7 @@ from torchreid import models
 from torchreid.losses import CrossEntropyLoss, DeepSupervision
 from torchreid.utils.iotools import save_checkpoint, check_isfile
 from torchreid.utils.avgmeter import AverageMeter
-from torchreid.utils.logger import Logger
+from torchreid.utils.loggers import Logger, RankLogger
 from torchreid.utils.torchtools import set_bn_to_eval, count_num_param
 from torchreid.utils.reidtools import visualize_ranked_results
 from torchreid.eval_metrics import evaluate
@@ -91,7 +91,7 @@ def main():
     if args.evaluate:
         print("Evaluate only")
 
-        for name in args.target:
+        for name in args.target_names:
             print("Evaluating {} ...".format(name))
             queryloader = testloader_dict[name]['query']
             galleryloader = testloader_dict[name]['gallery']
@@ -106,6 +106,7 @@ def main():
         return
 
     start_time = time.time()
+    ranklogger = RankLogger(args.source_names, args.target_names)
     train_time = 0
     print("==> Start training")
 
@@ -130,11 +131,12 @@ def main():
         if (epoch + 1) > args.start_eval and args.eval_step > 0 and (epoch + 1) % args.eval_step == 0 or (epoch + 1) == args.max_epoch:
             print("==> Test")
             
-            for name in args.target:
+            for name in args.target_names:
                 print("Evaluating {} ...".format(name))
                 queryloader = testloader_dict[name]['query']
                 galleryloader = testloader_dict[name]['gallery']
                 rank1 = test(model, queryloader, galleryloader, use_gpu)
+                ranklogger.write(name, epoch + 1, rank1)
             
             if use_gpu:
                 state_dict = model.module.state_dict()
@@ -151,6 +153,7 @@ def main():
     elapsed = str(datetime.timedelta(seconds=elapsed))
     train_time = str(datetime.timedelta(seconds=train_time))
     print("Finished. Total elapsed time (h:m:s): {}. Training time (h:m:s): {}.".format(elapsed, train_time))
+    ranklogger.show_summary()
 
 
 def train(epoch, model, criterion, optimizer, trainloader, use_gpu, freeze_bn=False):
