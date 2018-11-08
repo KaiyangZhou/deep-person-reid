@@ -9,9 +9,9 @@ def argument_parser():
     # ************************************************************
     parser.add_argument('--root', type=str, default='data',
                         help="root path to data directory")
-    parser.add_argument('-s', '--source', type=str, required=True, nargs='+',
+    parser.add_argument('-s', '--source-names', type=str, required=True, nargs='+',
                         help="source datasets (delimited by space)")
-    parser.add_argument('-t', '--target', type=str, required=True, nargs='+',
+    parser.add_argument('-t', '--target-names', type=str, required=True, nargs='+',
                         help="target datasets (delimited by space)")
     parser.add_argument('-j', '--workers', default=4, type=int,
                         help="number of data loading workers (tips: 4 or 8 times number of gpus)")
@@ -27,7 +27,7 @@ def argument_parser():
     # ************************************************************
     parser.add_argument('--seq-len', type=int, default=15,
                         help="number of images to sample in a tracklet")
-    parser.add_argument('--sample', type=str, default='evenly',
+    parser.add_argument('--sample-method', type=str, default='evenly',
                         help="how to sample images from a tracklet")
     
     # ************************************************************
@@ -156,8 +156,8 @@ def image_dataset_kwargs(parsed_args):
     the parsed command-line arguments.
     """
     return {
-        'train_names': parsed_args.source,
-        'test_names': parsed_args.target,
+        'source_names': parsed_args.source_names,
+        'target_names': parsed_args.target_names,
         'root': parsed_args.root,
         'split_id': parsed_args.split_id,
         'height': parsed_args.height,
@@ -176,8 +176,8 @@ def video_dataset_kwargs(parsed_args):
     the parsed command-line arguments.
     """
     return {
-        'train_names': parsed_args.source,
-        'test_names': parsed_args.target,
+        'source_names': parsed_args.source_names,
+        'target_names': parsed_args.target_names,
         'root': parsed_args.root,
         'split_id': parsed_args.split_id,
         'height': parsed_args.height,
@@ -186,7 +186,7 @@ def video_dataset_kwargs(parsed_args):
         'test_batch_size': parsed_args.test_batch_size,
         'workers': parsed_args.workers,
         'seq_len': parsed_args.seq_len,
-        'sample': parsed_args.sample
+        'sample_method': parsed_args.sample_method
     }
 
 
