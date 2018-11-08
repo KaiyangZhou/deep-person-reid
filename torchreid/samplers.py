@@ -16,7 +16,7 @@ class RandomIdentitySampler(Sampler):
     randomly sample K instances, therefore batch size is N*K.
 
     Args:
-    - data_source (Dataset): dataset to sample from.
+    - data_source (list): dataset to sample from.
     - num_instances (int): number of instances per identity in a batch.
     - batch_size (int): number of examples in a batch.
     """
