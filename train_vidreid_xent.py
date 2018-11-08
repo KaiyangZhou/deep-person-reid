@@ -96,7 +96,7 @@ def main():
             print("Evaluating {} ...".format(name))
             queryloader = testloader_dict[name]['query']
             galleryloader = testloader_dict[name]['gallery']
-            distmat = test(model, queryloader, galleryloader, args.pool, use_gpu, return_distmat=True)
+            distmat = test(model, queryloader, galleryloader, args.pool_tracklet_features, use_gpu, return_distmat=True)
         
             if args.visualize_ranks:
                 visualize_ranked_results(
@@ -136,7 +136,7 @@ def main():
                 print("Evaluating {} ...".format(name))
                 queryloader = testloader_dict[name]['query']
                 galleryloader = testloader_dict[name]['gallery']
-                rank1 = test(model, queryloader, galleryloader, args.pool, use_gpu)
+                rank1 = test(model, queryloader, galleryloader, args.pool_tracklet_features, use_gpu)
                 ranklogger.write(name, epoch + 1, rank1)
 
             if use_gpu:
