@@ -3,7 +3,7 @@ data/
 log/
 saved-models/
 torchreid/eval_lib/eval.c
-.idea
+test.py
 
 # OS X
 .DS_Store
