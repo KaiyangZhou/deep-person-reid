@@ -63,11 +63,12 @@ def main():
     scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=args.stepsize, gamma=args.gamma)
 
     if args.fixbase_epoch > 0:
-        if hasattr(model, 'classifier') and isinstance(model.classifier, nn.Module):
+        """if hasattr(model, 'classifier') and isinstance(model.classifier, nn.Module):
             optimizer_tmp = init_optimizer(model.classifier.parameters(), **optimizer_kwargs(args))
         else:
             print("Warn: model has no attribute 'classifier' and fixbase_epoch is reset to 0")
-            args.fixbase_epoch = 0
+            args.fixbase_epoch = 0"""
+        raise NotImplementedError
 
     if args.load_weights and check_isfile(args.load_weights):
         # load pretrained weights but ignore layers that don't match in size
@@ -112,7 +113,7 @@ def main():
     print("==> Start training")
 
     if args.fixbase_epoch > 0:
-        print("Train classifier for {} epochs while keeping base network frozen".format(args.fixbase_epoch))
+        """print("Train classifier for {} epochs while keeping base network frozen".format(args.fixbase_epoch))
 
         for epoch in range(args.fixbase_epoch):
             start_train_time = time.time()
@@ -120,7 +121,8 @@ def main():
             train_time += round(time.time() - start_train_time)
 
         del optimizer_tmp
-        print("Now open all layers for training")
+        print("Now open all layers for training")"""
+        raise NotImplementedError
 
     for epoch in range(args.start_epoch, args.max_epoch):
         start_train_time = time.time()

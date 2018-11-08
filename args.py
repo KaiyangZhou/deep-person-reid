@@ -86,12 +86,10 @@ def argument_parser():
     parser.add_argument('--test-batch-size', default=100, type=int,
                         help="test batch size")
     
-    parser.add_argument('--fixbase-epoch', default=0, type=int,
+    parser.add_argument('--fixbase-epoch', type=int, default=0, 
                         help="how many epochs to fix base network (only train randomly initialized classifier)")
-    parser.add_argument('--fixbase-lr', default=0.0003, type=float,
-                        help="learning rate when the base network is frozen")
-    parser.add_argument('--freeze-bn', action='store_true',
-                        help="freeze running statistics in BatchNorm layers during training")
+    parser.add_argument('--open-layers', type=str, nargs='+', default=['classifier'],
+                        help="open specified layers for training while keeping others frozen")
 
     # ************************************************************
     # Cross entropy loss-specific setting

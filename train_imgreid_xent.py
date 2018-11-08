@@ -20,7 +20,7 @@ from torchreid.losses import CrossEntropyLoss, DeepSupervision
 from torchreid.utils.iotools import save_checkpoint, check_isfile
 from torchreid.utils.avgmeter import AverageMeter
 from torchreid.utils.loggers import Logger, RankLogger
-from torchreid.utils.torchtools import set_bn_to_eval, count_num_param
+from torchreid.utils.torchtools import count_num_param, open_all_layers, open_specified_layers
 from torchreid.utils.reidtools import visualize_ranked_results
 from torchreid.eval_metrics import evaluate
 from torchreid.optimizers import init_optimizer
@@ -61,12 +61,12 @@ def main():
     optimizer = init_optimizer(model.parameters(), **optimizer_kwargs(args))
     scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=args.stepsize, gamma=args.gamma)
 
-    if args.fixbase_epoch > 0:
+    """if args.fixbase_epoch > 0:
         if hasattr(model, 'classifier') and isinstance(model.classifier, nn.Module):
             optimizer_tmp = init_optimizer(model.classifier.parameters(), **optimizer_kwargs(args))
         else:
             print("Warn: model has no attribute 'classifier' and fixbase_epoch is reset to 0")
-            args.fixbase_epoch = 0
+            args.fixbase_epoch = 0"""
 
     if args.load_weights and check_isfile(args.load_weights):
         # load pretrained weights but ignore layers that don't match in size
@@ -111,15 +111,16 @@ def main():
     print("==> Start training")
 
     if args.fixbase_epoch > 0:
-        print("Train classifier for {} epochs while keeping base network frozen".format(args.fixbase_epoch))
+        print("Train {} for {} epochs while keeping other layers frozen".format(args.open_layers, args.fixbase_epoch))
+        initial_optim_state = optimizer.state_dict()
 
         for epoch in range(args.fixbase_epoch):
             start_train_time = time.time()
-            train(epoch, model, criterion, optimizer_tmp, trainloader, use_gpu, freeze_bn=True)
+            train(epoch, model, criterion, optimizer, trainloader, use_gpu, fixbase=True)
             train_time += round(time.time() - start_train_time)
 
-        del optimizer_tmp
         print("Now open all layers for training")
+        optimizer.load_state_dict(initial_optim_state)
 
     for epoch in range(args.start_epoch, args.max_epoch):
         start_train_time = time.time()
@@ -156,15 +157,17 @@ def main():
     ranklogger.show_summary()
 
 
-def train(epoch, model, criterion, optimizer, trainloader, use_gpu, freeze_bn=False):
+def train(epoch, model, criterion, optimizer, trainloader, use_gpu, fixbase=False):
     losses = AverageMeter()
     batch_time = AverageMeter()
     data_time = AverageMeter()
 
     model.train()
 
-    if freeze_bn or args.freeze_bn:
-        model.apply(set_bn_to_eval)
+    if fixbase:
+        open_specified_layers(model, args.open_layers)
+    else:
+        open_all_layers(model)
 
     end = time.time()
     for batch_idx, (imgs, pids, _) in enumerate(trainloader):
