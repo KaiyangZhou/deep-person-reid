@@ -21,6 +21,8 @@ def argument_parser():
                         help="width of an image")
     parser.add_argument('--split-id', type=int, default=0,
                         help="split index (note: 0-based)")
+    parser.add_argument('--train-sampler', type=str, default='',
+                        help="sampler for trainloader")
 
     # ************************************************************
     # Video datasets
@@ -29,6 +31,8 @@ def argument_parser():
                         help="number of images to sample in a tracklet")
     parser.add_argument('--sample-method', type=str, default='evenly',
                         help="how to sample images from a tracklet")
+    parser.add_argument('--pool-tracklet-features', type=str, default='avg', choices=['avg', 'max'],
+                        help="how to pool features over a tracklet (for video reid)")
     
     # ************************************************************
     # CUHK03-specific setting
@@ -113,13 +117,6 @@ def argument_parser():
     # Architecture
     # ************************************************************
     parser.add_argument('-a', '--arch', type=str, default='resnet50')
-
-
-    # ************************************************************
-    # Test settings for video reid
-    # ************************************************************
-    parser.add_argument('--pool', type=str, default='avg', choices=['avg', 'max'],
-                        help="how to pool features over a tracklet (for video reid)")
     
     # ************************************************************
     # Miscs
@@ -165,6 +162,8 @@ def image_dataset_kwargs(parsed_args):
         'train_batch_size': parsed_args.train_batch_size,
         'test_batch_size': parsed_args.test_batch_size,
         'workers': parsed_args.workers,
+        'train_sampler': parsed_args.train_sampler,
+        'num_instances': num_instances,
         'cuhk03_labeled': parsed_args.cuhk03_labeled,
         'cuhk03_classic_split': parsed_args.cuhk03_classic_split
     }
