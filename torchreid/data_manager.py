@@ -6,6 +6,7 @@ from torch.utils.data import DataLoader
 from .dataset_loader import ImageDataset, VideoDataset
 from .datasets import init_imgreid_dataset, init_vidreid_dataset
 from .transforms import build_transforms
+from .samplers import RandomIdentitySampler
 
 
 class BaseDataManager(object):
@@ -47,8 +48,10 @@ class ImageDataManager(BaseDataManager):
                  train_batch_size=32,
                  test_batch_size=100,
                  workers=4,
-                 cuhk03_labeled=False,
-                 cuhk03_classic_split=False
+                 train_sampler='',
+                 num_instances=4, # number of instances per identity (for RandomIdentitySampler)
+                 cuhk03_labeled=False, # use cuhk03's labeled or detected images
+                 cuhk03_classic_split=False # use cuhk03's classic split or 767/700 split
                  ):
         super(ImageDataManager, self).__init__()
         self.use_gpu = use_gpu
@@ -61,6 +64,7 @@ class ImageDataManager(BaseDataManager):
         self.train_batch_size = train_batch_size
         self.test_batch_size = test_batch_size
         self.workers = workers
+        self.train_sampler = train_sampler
         self.cuhk03_labeled = cuhk03_labeled
         self.cuhk03_classic_split = cuhk03_classic_split
         self.pin_memory = True if self.use_gpu else False
@@ -88,11 +92,20 @@ class ImageDataManager(BaseDataManager):
             self._num_train_pids += dataset.num_train_pids
             self._num_train_cams += dataset.num_train_cams
 
-        self.trainloader = DataLoader(
-            ImageDataset(self.train, transform=transform_train),
-            batch_size=self.train_batch_size, shuffle=True, num_workers=self.workers,
-            pin_memory=self.pin_memory, drop_last=True
-        )
+        if self.train_sampler == 'RandomIdentitySampler':
+            self.trainloader = DataLoader(
+                ImageDataset(self.train, transform=transform_train),
+                sampler=RandomIdentitySampler(self.train, self.train_batch_size, self.num_instances),
+                batch_size=self.train_batch_size, shuffle=False, num_workers=self.workers,
+                pin_memory=self.pin_memory, drop_last=True
+            )
+        
+        else:
+            self.trainloader = DataLoader(
+                ImageDataset(self.train, transform=transform_train),
+                batch_size=self.train_batch_size, shuffle=True, num_workers=self.workers,
+                pin_memory=self.pin_memory, drop_last=True
+            )
 
         print("=> Initializing TEST (target) datasets")
         self.testloader_dict = {name: {'query': None, 'gallery': None} for name in self.target_names}
