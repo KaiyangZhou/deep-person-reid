@@ -1,17 +1,18 @@
 # deep-person-reid
-[PyTorch](http://pytorch.org/) implementation of deep person re-identification models.
 
-We support
+## Introduction
+deep-person-reid is a [pytorch](http://pytorch.org/)-based framework for training deep person re-identification models.
+
+It has the following features:
 - multi-GPU training.
-- both image-based and video-based reid.
-- standard dataset splits used by most papers.
-- unified interface for different reid models.
-- easy dataset preparation.
+- both image reid and video reid.
+- standard dataset splits used by most research papers.
+- incredibly easy preparation of reid datasets.
+- implementations of state-of-the-art reid models.
 - end-to-end training and evaluation.
-- fast cython-based evaluation.
 - multi-dataset training.
 - visualization of ranked results.
-- state-of-the-art reid models.
+- state-of-the-art training techniques.
 
 ## Updates
 - xx-11-2018: xxx.
