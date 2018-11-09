@@ -5,7 +5,7 @@
 
 ### Image person reid
 | Model | # param (M) | Loss | Market1501  | DukeMTMC-reID | MSMT17 |
-| :---: | :---: | :---: | :---: | :---: | :---: |
+| :--- | :---: | :---: | :---: | :---: | :---: |
 | resnet50_fc512<sup>:dog:</sup> | xx | xent | xx | xx | xx |
 | mlfn<sup>:dog:</sup> | xx | xent | xx | xx | xx |
 | hacnn | xx | xent | xx | xx | xx |
