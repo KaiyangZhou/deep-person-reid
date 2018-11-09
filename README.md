@@ -61,6 +61,7 @@ Instructions regarding how to prepare (and do evaluation on) these datasets can 
 
 ### ReID-specific models
 - [MuDeep](https://arxiv.org/abs/1709.05165)
+- [ResNet-mid](https://arxiv.org/abs/1711.08106)
 - [HACNN](https://arxiv.org/abs/1802.08122)
 - [PCB](https://arxiv.org/abs/1711.09349)
 - [MLFN](https://arxiv.org/abs/1803.09132)
