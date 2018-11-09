@@ -3,7 +3,7 @@
 </p>
 
 ## Introduction
-deep-person-reid is a [pytorch](http://pytorch.org/)-based framework for training deep person re-identification models.
+Deep-person-reid is a [pytorch](http://pytorch.org/)-based framework for training and evaluating deep person re-identification models on reid benchmarks.
 
 It has the following features:
 - multi-GPU training.
@@ -19,11 +19,10 @@ It has the following features:
 ## Updates
 - xx-11-2018: xxx.
 
-## Get started
-1. `cd` to the folder where you want to download this repo.
-2. Run `git clone https://github.com/KaiyangZhou/deep-person-reid`.
-3. Install dependencies by `pip install -r requirements.txt` (if necessary).
-4. To accelerate evaluation (10x faster), you can use cython-based evaluation code (developed by [luzai](https://github.com/luzai)). First `cd` to `eval_lib`, then do `make` or `python setup.py build_ext -i`. After that, run `python test_cython_eval.py` to test if the package is successfully installed.
+## Installation
+1. Run `git clone https://github.com/KaiyangZhou/deep-person-reid`.
+2. Install dependencies by `pip install -r requirements.txt` (if necessary).
+3. To accelerate evaluation (10x faster), please use the cython-based evaluation code (developed by [luzai](https://github.com/luzai)). First `cd` to `torchreid/eval_lib`, then do `make` or `python setup.py build_ext -i`. After that, run `python test_cython_eval.py` to test if the package is successfully installed.
 
 ## Datasets
 Image-reid datasets:
@@ -69,10 +68,10 @@ Instructions regarding how to prepare (and do evaluation on) these datasets can 
 - [PCB](https://arxiv.org/abs/1711.09349)
 - [MLFN](https://arxiv.org/abs/1803.09132)
 
-Please refer to [torchreid/models/__init__.py](torchreid/models/__init__.py) for more details. In the [MODEL_ZOO](MODEL_ZOO.md), we provide pretrained models and the training scripts to reproduce the results.
+Please refer to [torchreid/models/\_\_init__.py](torchreid/models/__init__.py) for more details. In the [MODEL_ZOO](MODEL_ZOO.md), we provide pretrained models and the training scripts to reproduce the results.
 
 ## Losses
-- `xent`: cross entropy loss (with [label smoothing regularizer](https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Szegedy_Rethinking_the_Inception_CVPR_2016_paper.pdf)).
+- `xent`: cross entropy loss (enable the [label smoothing regularizer](https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Szegedy_Rethinking_the_Inception_CVPR_2016_paper.pdf) by `--label-smooth`).
 - `htri`: [hard mining triplet loss](https://arxiv.org/abs/1703.07737).
 
 ## Tutorial
@@ -125,22 +124,25 @@ For video reid, `test-batch-size` refers to the number of tracklets, so the real
 ### Test
 
 #### Evaluation mode
-Use `--evaluate` to switch to the evaluation mode. In doing so, no model training is performed. For example, you wanna load model weights at `path_to/resnet50.pth.tar` for `resnet50` and do evaluation on Market1501, you can do
+Use `--evaluate` to switch to the evaluation mode. In doing so, no model training is performed. For example, say you wanna load model weights at `path_to/resnet50.pth.tar` for `resnet50` and do evaluation on Market1501, you can do
 ```bash
 python train_imgreid_xent.py \
 -s market1501 \ # this does not matter any more
--t market1501 \ # you can add more datasets in the test list
+-t market1501 \ # you can add more datasets here for the test list
 --height 256 \
 --width 128 \
 --test-batch-size 100 \
 --evaluate \
 -a resnet50 \
 --load-weights path_to/resnet50.pth.tar \
---save-dir log/resnet50-eval
+--save-dir log/eval-resnet50 \
 --gpu-devices 0 \
 ```
 
-Note that `--load-weights` will discard layer weights that do not match the model layers in size.
+Note that `--load-weights` will discard layer weights in `path_to/resnet50.pth.tar` that do not match the original model layers in size.
+
+#### Evaluation frequency
+Use `--eval-freq` to control the evaluation frequency and `--start-eval` to indicate when to start counting the evaluation frequency.
 
 #### Visualize ranked results
 Ranked results can be visualized via `--visualize-ranks`, which works along with `--evaluate`. Ranked images will be saved in `save_dir/ranked_results` where `save_dir` is the directory you specify with `--save-dir`. This function is implemented in [torchreid/utils/reidtools.py](torchreid/utils/reidtools.py).
