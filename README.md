@@ -105,9 +105,13 @@ python train_imgreid_xent.py \
 `-s` and `-t` can take different strings of arbitrary length (delimited by space). For example, if you wanna train models on Market1501 + DukeMTMC-reID and test on both of them, you can use `-s market1501 dukemtmcreid` and `-t market1501 dukemtmcreid`. If say, you wanna test on a different dataset, e.g. MSMT17, then just do `-t msmt17`. Multi-dataset training is implemented for both image-reid and video-reid. Note that when `-t` takes multiple datasets, evaluation is performed on each dataset individually.
 
 #### Two-stepped transfer learning
-To finetune models pretrained on external large-scale datasets such as [ImageNet](http://www.image-net.org/), the [two-stepped training strategy](https://arxiv.org/abs/1611.05244) is useful. First, you freeze the base network and only train the randomly initialized layers (e.g. last linear classifier) for `--fixbase-epoch` epochs. Only the layers that are specified by `--open-layers` are set to the **train** mode and are allowed to be updated while other layers are frozen and set to the **eval** mode. Second, after the new layers are adapted to the old layers, all layers are opened to train for `--max-epoch` epochs.
+To finetune models pretrained on external large-scale datasets such as [ImageNet](http://www.image-net.org/), the [two-stepped training strategy](https://arxiv.org/abs/1611.05244) is useful.
 
-For example, to train the [resnet50](torchreid/models/resnet.py) with a `classifier` being initialized randomly, you can set `--fixbase-epoch 5` and `--open-layers classifier`. The layer names must align with the attribute names in the model, i.e. `self.classifier` exists in the model. See `open_specified_layers(model, open_layers)` in [torchreid/utils/torchtools.py](torchreid/utils/torchtools.py) for more details.
+First, the base network is frozen and only the randomly initialized layers (e.g. identity classification layer) are trained for `--fixbase-epoch` epochs. Specifically, the layers specified by `--open-layers` are set to the **train** mode and will be updated, while other layers are set to the **eval** mode and are frozen. See `open_specified_layers(model, open_layers)` in [torchreid/utils/torchtools.py](torchreid/utils/torchtools.py).
+
+Second, after the new layers are adapted to the old layers, all layers are set to the **train** mode and are trained for `--max-epoch` epochs. See `open_all_layers(model)` in [torchreid/utils/torchtools.py](torchreid/utils/torchtools.py)
+
+For example, to train the [resnet50](torchreid/models/resnet.py) with a `classifier` being initialized randomly, you can set `--fixbase-epoch 5` and `--open-layers classifier`. The layer names must align with the attribute names in the model, i.e. `self.classifier` exists in the model.
 
 #### Using hard mining triplet loss
 `htri` requires adding `--train-sampler RandomIdentitySampler`.
@@ -136,7 +140,7 @@ python train_imgreid_xent.py \
 Note that `--load-weights` will discard layer weights that do not match the model layers in size.
 
 #### Visualize ranked results
-Ranked results can be visualized via `--visualize-ranks`, which works along with `--evaluate`. Ranked images will be saved in `save_dir/ranked_results` where `save_dir` is the directory you specify with `--save-dir`.
+Ranked results can be visualized via `--visualize-ranks`, which works along with `--evaluate`. Ranked images will be saved in `save_dir/ranked_results` where `save_dir` is the directory you specify with `--save-dir`. This function is implemented in [torchreid/utils/reidtools.py](torchreid/utils/reidtools.py).
 
 <div align="center">
   <img src="imgs/ranked_results.jpg" alt="train" width="70%">
