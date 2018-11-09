@@ -23,7 +23,7 @@ We support
 4. To accelerate evaluation (10x faster), you can use cython-based evaluation code (developed by [luzai](https://github.com/luzai)). First `cd` to `eval_lib`, then do `make` or `python setup.py build_ext -i`. After that, run `python test_cython_eval.py` to test if the package is successfully installed.
 
 ## Datasets
-Image reid datasets:
+Image-reid datasets:
 - [Market1501](https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Zheng_Scalable_Person_Re-Identification_ICCV_2015_paper.pdf)
 - [CUHK03](https://www.cv-foundation.org/openaccess/content_cvpr_2014/papers/Li_DeepReID_Deep_Filter_2014_CVPR_paper.pdf)
 - [DukeMTMC-reID](https://arxiv.org/abs/1701.07717)
@@ -34,7 +34,7 @@ Image reid datasets:
 - [PRID450S](https://pdfs.semanticscholar.org/f62d/71e701c9fd021610e2076b5e0f5b2c7c86ca.pdf)
 - [SenseReID](http://openaccess.thecvf.com/content_cvpr_2017/papers/Zhao_Spindle_Net_Person_CVPR_2017_paper.pdf)
 
-Video reid datasets:
+Video-reid datasets:
 - [MARS](http://www.liangzheng.org/1320.pdf)
 - [iLIDS-VID](https://www.eecs.qmul.ac.uk/~sgg/papers/WangEtAl_ECCV14.pdf)
 - [PRID2011](https://pdfs.semanticscholar.org/4c1b/f0592be3e535faf256c95e27982db9b3d3d3.pdf)
@@ -66,10 +66,10 @@ Instructions regarding how to prepare (and do evaluation on) these datasets can 
 - [PCB](https://arxiv.org/abs/1711.09349)
 - [MLFN](https://arxiv.org/abs/1803.09132)
 
-In the [MODEL_ZOO](MODEL_ZOO.md), we provide pretrained models and the training scripts to reproduce the results.
+Please refer to [torchreid/models/__init__.py](torchreid/models/__init__.py) for more details. In the [MODEL_ZOO](MODEL_ZOO.md), we provide pretrained models and the training scripts to reproduce the results.
 
 ## Losses
-- `xent`: cross entropy loss (with label smoothing regularizer).
+- `xent`: cross entropy loss (with [label smoothing regularizer](https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Szegedy_Rethinking_the_Inception_CVPR_2016_paper.pdf)).
 - `htri`: [hard mining triplet loss](https://arxiv.org/abs/1703.07737).
 
 ## Tutorial
