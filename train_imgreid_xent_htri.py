@@ -160,7 +160,7 @@ def train(epoch, model, criterion_xent, criterion_htri, optimizer, trainloader, 
 
     model.train()
 
-    if fixbase:
+    if fixbase or args.fixbase:
         open_specified_layers(model, args.open_layers)
     else:
         open_all_layers(model)
