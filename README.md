@@ -24,21 +24,21 @@ We support
 
 ## Datasets
 Image reid datasets:
-- Market1501
-- CUHK03
-- DukeMTMC-reID
-- MSMT17
-- VIPeR
-- GRID
-- CUHK01
-- PRID450S
-- SenseReID
+- [Market1501](https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Zheng_Scalable_Person_Re-Identification_ICCV_2015_paper.pdf)
+- [CUHK03](https://www.cv-foundation.org/openaccess/content_cvpr_2014/papers/Li_DeepReID_Deep_Filter_2014_CVPR_paper.pdf)
+- [DukeMTMC-reID](https://arxiv.org/abs/1701.07717)
+- [MSMT17](https://arxiv.org/abs/1711.08565)
+- [VIPeR](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.331.7285&rep=rep1&type=pdf)
+- [GRID](http://www.eecs.qmul.ac.uk/~txiang/publications/LoyXiangGong_cvpr_2009.pdf)
+- [CUHK01](http://www.ee.cuhk.edu.hk/~xgwang/papers/liZWaccv12.pdf)
+- [PRID450S](https://pdfs.semanticscholar.org/f62d/71e701c9fd021610e2076b5e0f5b2c7c86ca.pdf)
+- [SenseReID](http://openaccess.thecvf.com/content_cvpr_2017/papers/Zhao_Spindle_Net_Person_CVPR_2017_paper.pdf)
 
 Video reid datasets:
-- MARS
-- iLIDS-VID
-- PRID2011
-- DukeMTMC-VideoReID
+- [MARS](http://www.liangzheng.org/1320.pdf)
+- [iLIDS-VID](https://www.eecs.qmul.ac.uk/~sgg/papers/WangEtAl_ECCV14.pdf)
+- [PRID2011](https://pdfs.semanticscholar.org/4c1b/f0592be3e535faf256c95e27982db9b3d3d3.pdf)
+- [DukeMTMC-VideoReID](http://openaccess.thecvf.com/content_cvpr_2018/papers/Wu_Exploit_the_Unknown_CVPR_2018_paper.pdf)
 
 Instructions regarding how to prepare (and do evaluation on) these datasets can be found in [DATASETS.md](DATASETS.md).
 
