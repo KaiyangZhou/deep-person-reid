@@ -61,13 +61,6 @@ def main():
     optimizer = init_optimizer(model.parameters(), **optimizer_kwargs(args))
     scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=args.stepsize, gamma=args.gamma)
 
-    """if args.fixbase_epoch > 0:
-        if hasattr(model, 'classifier') and isinstance(model.classifier, nn.Module):
-            optimizer_tmp = init_optimizer(model.classifier.parameters(), **optimizer_kwargs(args))
-        else:
-            print("Warn: model has no attribute 'classifier' and fixbase_epoch is reset to 0")
-            args.fixbase_epoch = 0"""
-
     if args.load_weights and check_isfile(args.load_weights):
         # load pretrained weights but ignore layers that don't match in size
         checkpoint = torch.load(args.load_weights)
@@ -119,7 +112,7 @@ def main():
             train(epoch, model, criterion, optimizer, trainloader, use_gpu, fixbase=True)
             train_time += round(time.time() - start_train_time)
 
-        print("Now open all layers for training")
+        print("Done. All layers are open to train for {} epochs".format(args.max_epoch))
         optimizer.load_state_dict(initial_optim_state)
 
     for epoch in range(args.start_epoch, args.max_epoch):

@@ -20,7 +20,7 @@ from torchreid.losses import CrossEntropyLoss, TripletLoss, DeepSupervision
 from torchreid.utils.iotools import save_checkpoint, check_isfile
 from torchreid.utils.avgmeter import AverageMeter
 from torchreid.utils.loggers import Logger, RankLogger
-from torchreid.utils.torchtools import count_num_param
+from torchreid.utils.torchtools import count_num_param, open_all_layers, open_specified_layers
 from torchreid.utils.reidtools import visualize_ranked_results
 from torchreid.eval_metrics import evaluate
 from torchreid.samplers import RandomIdentitySampler
@@ -106,6 +106,18 @@ def main():
     train_time = 0
     print("==> Start training")
 
+    if args.fixbase_epoch > 0:
+        print("Train {} for {} epochs while keeping other layers frozen".format(args.open_layers, args.fixbase_epoch))
+        initial_optim_state = optimizer.state_dict()
+
+        for epoch in range(args.fixbase_epoch):
+            start_train_time = time.time()
+            train(epoch, model, criterion_xent, criterion_htri, optimizer, trainloader, use_gpu, fixbase=True)
+            train_time += round(time.time() - start_train_time)
+
+        print("Done. All layers are open to train for {} epochs".format(args.max_epoch))
+        optimizer.load_state_dict(initial_optim_state)
+
     for epoch in range(args.start_epoch, args.max_epoch):
         start_train_time = time.time()
         train(epoch, model, criterion_xent, criterion_htri, optimizer, trainloader, use_gpu)
@@ -141,12 +153,17 @@ def main():
     ranklogger.show_summary()
 
 
-def train(epoch, model, criterion_xent, criterion_htri, optimizer, trainloader, use_gpu):
+def train(epoch, model, criterion_xent, criterion_htri, optimizer, trainloader, use_gpu, fixbase=False):
     losses = AverageMeter()
     batch_time = AverageMeter()
     data_time = AverageMeter()
 
     model.train()
+
+    if fixbase:
+        open_specified_layers(model, args.open_layers)
+    else:
+        open_all_layers(model)
 
     end = time.time()
     for batch_idx, (imgs, pids, _) in enumerate(trainloader):
