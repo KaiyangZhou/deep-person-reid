@@ -24,7 +24,6 @@ __model_factory = {
     # image classification models
     'resnet50': resnet50,
     'resnet50_fc512': resnet50_fc512,
-    'resnet50mid': resnet50mid,
     'resnext50_32x4d': resnext50_32x4d,
     'resnext101_32x4d': resnext101_32x4d,
     'se_resnet50': se_resnet50,
@@ -46,6 +45,7 @@ __model_factory = {
     'squeezenet1_1': squeezenet1_1,
     # reid-specific models
     'mudeep': MuDeep,
+    'resnet50mid': resnet50mid,
     'hacnn': HACNN,
     'pcb_p6': pcb_p6,
     'pcb_p4': pcb_p4,
