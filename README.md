@@ -1,4 +1,6 @@
-# deep-person-reid
+<div align="center">
+  <img src="imgs/deep-person-reid-logo.png" alt="logo" width="70%">
+</div>
 
 ## Introduction
 deep-person-reid is a [pytorch](http://pytorch.org/)-based framework for training deep person re-identification models.
@@ -144,7 +146,7 @@ Note that `--load-weights` will discard layer weights that do not match the mode
 Ranked results can be visualized via `--visualize-ranks`, which works along with `--evaluate`. Ranked images will be saved in `save_dir/ranked_results` where `save_dir` is the directory you specify with `--save-dir`. This function is implemented in [torchreid/utils/reidtools.py](torchreid/utils/reidtools.py).
 
 <div align="center">
-  <img src="imgs/ranked_results.jpg" alt="train" width="70%">
+  <img src="imgs/ranked_results.jpg" alt="ranked_results" width="70%">
 </div>
 
 
