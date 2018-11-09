@@ -117,6 +117,18 @@ def argument_parser():
     # Architecture
     # ************************************************************
     parser.add_argument('-a', '--arch', type=str, default='resnet50')
+
+    # ************************************************************
+    # Test settings
+    # ************************************************************
+    parser.add_argument('--load-weights', type=str, default='',
+                        help="load pretrained weights but ignore layers that don't match in size")
+    parser.add_argument('--evaluate', action='store_true',
+                        help="evaluate only")
+    parser.add_argument('--eval-step', type=int, default=-1,
+                        help="run evaluation for every N epochs (set to -1 to test only in the end)")
+    parser.add_argument('--start-eval', type=int, default=0,
+                        help="start to evaluate after a specific epoch")
     
     # ************************************************************
     # Miscs
@@ -125,16 +137,10 @@ def argument_parser():
                         help="print frequency")
     parser.add_argument('--seed', type=int, default=1,
                         help="manual seed")
-    parser.add_argument('--resume', type=str, default='', metavar='PATH')
-    parser.add_argument('--load-weights', type=str, default='',
-                        help="load pretrained weights but ignores layers that don't match in size")
-    parser.add_argument('--evaluate', action='store_true',
-                        help="evaluate only")
-    parser.add_argument('--eval-step', type=int, default=-1,
-                        help="run evaluation for every N epochs (set to -1 to test only in the end)")
-    parser.add_argument('--start-eval', type=int, default=0,
-                        help="start to evaluate after a specific epoch")
-    parser.add_argument('--save-dir', type=str, default='log')
+    parser.add_argument('--resume', type=str, default='', metavar='PATH',
+                        help="resume from a checkpoint")
+    parser.add_argument('--save-dir', type=str, default='log',
+                        help="path to save log and model weights")
     parser.add_argument('--use-cpu', action='store_true',
                         help="use cpu")
     parser.add_argument('--gpu-devices', default='0', type=str,
