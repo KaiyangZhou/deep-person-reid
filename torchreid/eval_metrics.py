@@ -17,15 +17,18 @@ except ImportError:
     warnings.warn("Cython evaluation is UNAVAILABLE, which is highly recommended")
 
 
-def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank, N=10):
+def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank):
     """Evaluation with cuhk03 metric
     Key: one image for each gallery identity is randomly sampled for each query identity.
-    Random sampling is performed N times.
+    Random sampling is performed num_repeats times.
     """
+    num_repeats = 10
     num_q, num_g = distmat.shape
+    
     if num_g < max_rank:
         max_rank = num_g
         print("Note: number of gallery samples is quite small, got {}".format(num_g))
+    
     indices = np.argsort(distmat, axis=1)
     matches = (g_pids[indices] == q_pids[:, np.newaxis]).astype(np.int32)
 
@@ -33,6 +36,7 @@ def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank, N=10):
     all_cmc = []
     all_AP = []
     num_valid_q = 0. # number of valid query
+    
     for q_idx in range(num_q):
         # get query pid and camid
         q_pid = q_pids[q_idx]
@@ -55,7 +59,7 @@ def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank, N=10):
             g_pids_dict[pid].append(idx)
 
         cmc, AP = 0., 0.
-        for repeat_idx in range(N):
+        for repeat_idx in range(num_repeats):
             mask = np.zeros(len(raw_cmc), dtype=np.bool)
             for _, idxs in g_pids_dict.items():
                 # randomly sample one image for each gallery person
@@ -71,8 +75,9 @@ def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank, N=10):
             tmp_cmc = [x / (i+1.) for i, x in enumerate(tmp_cmc)]
             tmp_cmc = np.asarray(tmp_cmc) * masked_raw_cmc
             AP += tmp_cmc.sum() / num_rel
-        cmc /= N
-        AP /= N
+        
+        cmc /= num_repeats
+        AP /= num_repeats
         all_cmc.append(cmc)
         all_AP.append(AP)
         num_valid_q += 1.
@@ -91,9 +96,11 @@ def eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank):
     Key: for each query identity, its gallery images from the same camera view are discarded.
     """
     num_q, num_g = distmat.shape
+    
     if num_g < max_rank:
         max_rank = num_g
         print("Note: number of gallery samples is quite small, got {}".format(num_g))
+    
     indices = np.argsort(distmat, axis=1)
     matches = (g_pids[indices] == q_pids[:, np.newaxis]).astype(np.int32)
 
@@ -101,6 +108,7 @@ def eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank):
     all_cmc = []
     all_AP = []
     num_valid_q = 0. # number of valid query
+    
     for q_idx in range(num_q):
         # get query pid and camid
         q_pid = q_pids[q_idx]
@@ -141,11 +149,15 @@ def eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank):
     return all_cmc, mAP
 
 
+def evaluate_py(distmat, q_pids, g_pids, q_camids, g_camids, max_rank, use_metric_cuhk03):
+    if use_metric_cuhk03:
+        return eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank)
+    else:
+        return eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank)
+
+
 def evaluate(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50, use_metric_cuhk03=False, use_cython=True):
     if use_cython and IS_CYTHON_AVAI:
         return evaluate_cy(distmat, q_pids, g_pids, q_camids, g_camids, max_rank, use_metric_cuhk03)
     else:
-        if use_metric_cuhk03:
-            return eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank)
-        else:
-            return eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank)
+        return evaluate_py(distmat, q_pids, g_pids, q_camids, g_camids, max_rank, use_metric_cuhk03)
