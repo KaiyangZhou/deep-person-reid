@@ -22,7 +22,7 @@ It has the following features:
 ## Installation
 1. Run `git clone https://github.com/KaiyangZhou/deep-person-reid`.
 2. Install dependencies by `pip install -r requirements.txt` (if necessary).
-3. To accelerate evaluation (10x faster), please use the cython-based evaluation code (developed by [luzai](https://github.com/luzai)). First `cd` to `torchreid/eval_lib`, then do `make` or `python setup.py build_ext -i`. After that, run `python test_cython_eval.py` to test if the package is successfully installed.
+3. To install the cython-based evaluation toolbox, `cd` to `torchreid/eval_cylib` and do `make`. As a result, `eval_metrics_cy.so` is generated under the same folder. Run `python test_cython.py` to test if the toolbox is installed successfully. (credit to [luzai](https://github.com/luzai))
 
 ## Datasets
 Image-reid datasets:
