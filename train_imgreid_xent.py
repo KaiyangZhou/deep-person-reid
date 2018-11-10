@@ -163,7 +163,7 @@ def train(epoch, model, criterion, optimizer, trainloader, use_gpu, fixbase=Fals
         open_all_layers(model)
 
     end = time.time()
-    for batch_idx, (imgs, pids, _) in enumerate(trainloader):
+    for batch_idx, (imgs, pids, _, _) in enumerate(trainloader):
         data_time.update(time.time() - end)
         
         if use_gpu:
@@ -200,7 +200,7 @@ def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20], retur
 
     with torch.no_grad():
         qf, q_pids, q_camids = [], [], []
-        for batch_idx, (imgs, pids, camids) in enumerate(queryloader):
+        for batch_idx, (imgs, pids, camids, _) in enumerate(queryloader):
             if use_gpu: imgs = imgs.cuda()
 
             end = time.time()
@@ -219,7 +219,7 @@ def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20], retur
 
         gf, g_pids, g_camids = [], [], []
         end = time.time()
-        for batch_idx, (imgs, pids, camids) in enumerate(galleryloader):
+        for batch_idx, (imgs, pids, camids, _) in enumerate(galleryloader):
             if use_gpu: imgs = imgs.cuda()
 
             end = time.time()

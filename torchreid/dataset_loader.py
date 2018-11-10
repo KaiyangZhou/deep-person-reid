@@ -44,7 +44,7 @@ class ImageDataset(Dataset):
         if self.transform is not None:
             img = self.transform(img)
         
-        return img, pid, camid
+        return img, pid, camid, img_path
 
 
 class VideoDataset(Dataset):

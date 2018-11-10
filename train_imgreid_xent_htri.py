@@ -166,7 +166,7 @@ def train(epoch, model, criterion_xent, criterion_htri, optimizer, trainloader, 
         open_all_layers(model)
 
     end = time.time()
-    for batch_idx, (imgs, pids, _) in enumerate(trainloader):
+    for batch_idx, (imgs, pids, _, _) in enumerate(trainloader):
         data_time.update(time.time() - end)
         
         if use_gpu:
@@ -216,7 +216,7 @@ def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20], retur
 
     with torch.no_grad():
         qf, q_pids, q_camids = [], [], []
-        for batch_idx, (imgs, pids, camids) in enumerate(queryloader):
+        for batch_idx, (imgs, pids, camids, _) in enumerate(queryloader):
             if use_gpu:
                 imgs = imgs.cuda()
 
@@ -235,7 +235,7 @@ def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20], retur
         print("Extracted features for query set, obtained {}-by-{} matrix".format(qf.size(0), qf.size(1)))
 
         gf, g_pids, g_camids = [], [], []
-        for batch_idx, (imgs, pids, camids) in enumerate(galleryloader):
+        for batch_idx, (imgs, pids, camids, _) in enumerate(galleryloader):
             if use_gpu:
                 imgs = imgs.cuda()
             
