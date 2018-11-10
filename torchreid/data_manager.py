@@ -65,6 +65,7 @@ class ImageDataManager(BaseDataManager):
         self.test_batch_size = test_batch_size
         self.workers = workers
         self.train_sampler = train_sampler
+        self.num_instances = num_instances
         self.cuhk03_labeled = cuhk03_labeled
         self.cuhk03_classic_split = cuhk03_classic_split
         self.pin_memory = True if self.use_gpu else False
