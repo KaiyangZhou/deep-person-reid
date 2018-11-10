@@ -17,10 +17,10 @@ except ImportError:
     warnings.warn("Cython evaluation is UNAVAILABLE, which is highly recommended")
 
 
-def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank, N=100):
+def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank, N=10):
     """Evaluation with cuhk03 metric
     Key: one image for each gallery identity is randomly sampled for each query identity.
-    Random sampling is performed N times (default: N=100).
+    Random sampling is performed N times.
     """
     num_q, num_g = distmat.shape
     if num_g < max_rank:
@@ -148,4 +148,4 @@ def evaluate(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50, use_metri
         if use_metric_cuhk03:
             return eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank)
         else:
-            eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank)
+            return eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank)
