@@ -2,7 +2,7 @@
 data/
 log/
 saved-models/
-torchreid/eval_lib/eval.c
+torchreid/eval_cylib/*.c
 debug.py
 
 # OS X
