@@ -17,7 +17,7 @@ It has the following features:
 - state-of-the-art training techniques.
 
 ## Updates
-- xx-11-2018: xxx.
+- 11-11-2018: Added multi-dataset training; Added cython code for cuhk03-style evaliation; Wrap dataloader construction to Image/Video-DataManager; Wrap argparse to [args.py](args.py); Added [MLFN (CVPR'18)](https://arxiv.org/abs/1803.09132).
 
 ## Installation
 1. Run `git clone https://github.com/KaiyangZhou/deep-person-reid`.
