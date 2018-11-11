@@ -3,16 +3,15 @@
 - Results are presented in the format of **Rank1 (mAP)**.
 - Classification layer is ignored when computing the model size.
 - Unless specified otherwise, the following [data augmentation techniques](torchreid/transforms.py) are used: (1) Random2DTranslation, and (2) RandomHorizontalFlip.
+- Click the highlighted results to download the model weights and the training scripts.
 
 ## Image person reid
 | Model | # param (M) | Loss | Input | market1501  | dukemtmcreid | msmt17 |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| resnet50<sup>:dog:</sup> |  | xent | (256, 128) | xx | xx | xx |
-| resnet50_fc512<sup>:dog:</sup> | 24.6 | xent | (256, 128) | xx | xx | xx |
-| densenet121_fc512<sup>:dog:</sup> | 7.5 | xent | (256, 128) | xx | xx | xx |
-| se_resnet50_fc512<sup>:dog:</sup> | 27.1 | xent | (256, 128) | xx | xx | xx |
-| squeezenet1_0_fc512<sup>:dog:</sup> | 1.0 | xent | (256, 128) | xx | xx | xx |
-| resnet50mid<sup>:dog:</sup> | 27.7 | xent | (256, 128) | xx | xx | xx |
-| mlfn<sup>:dog:</sup> | 32.5 | xent | (256, 128) | xx | xx | xx |
-| hacnn<sup></sup> | 3.7 | xent | (160, 64) | xx | xx | xx |
-| pcb_p6<sup>:dog:</sup> | 24.0 | xent | (384, 128) | xx | xx | xx |
+| resnet50<sup>:dog:</sup> | 23.5  | xent | (256, 128) | [87.9 (70.4)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_market_xent.zip) | [78.3 (58.9)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_duke_xent.zip) | [63.2 (33.9)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_msmt_xent.zip) |
+| resnet50_fc512<sup>:dog:</sup> | 24.6 | xent | (256, 128) | [90.8 (75.3)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_fc512_market_xent.zip) | [81.0 (64.0)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_fc512_duke_xent.zip) | [69.6 (38.4)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_fc512_msmt_xent.zip) |
+| densenet121_fc512<sup>:dog:</sup> | 7.5 | xent | (256, 128) | [87.8 (68.0)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_fc512_market_xent.zip) | [79.7 (58.8)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_fc512_duke_xent.zip) | [67.6 (35.0)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_fc512_msmt_xent.zip) |
+| se_resnet50_fc512<sup>:dog:</sup> | 27.1 | xent | (256, 128) | [91.9 (75.9)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/se_resnet50_fc512_market_xent.zip) | [81.5 (63.7)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/se_resnet50_fc512_duke_xent.zip) | [71.1 (39.8)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/se_resnet50_fc512_msmt_xent.zip) |
+| squeezenet1_0_fc512<sup>:dog:</sup> | 1.0 | xent | (256, 128) | [79.3 (52.2)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/squeezenet1_0_fc512_market_xent.zip) | [66.6 (42.6)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/squeezenet1_0_fc512_duke_xent.zip) | [44.1 (17.1)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/squeezenet1_0_fc512_msmt_xent.zip) |
+| resnet50mid<sup>:dog:</sup> | 27.7 | xent | (256, 128) | [90.2 (76.0)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50mid_market_xent.zip) | [81.6 (64.0)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50mid_duke_xent.zip) | [69.0 (38.0)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50mid_msmt_xent.zip) |
+| mlfn<sup>:dog:</sup> | 32.5 | xent | (256, 128) | [90.1 (74.3)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mlfn_market_xent.zip) | [81.1 (63.2)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mlfn_duke_xent.zip) | [66.4 (37.2)](http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mlfn_msmt_xent.zip) |
