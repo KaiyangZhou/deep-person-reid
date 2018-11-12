@@ -89,7 +89,7 @@ cpdef eval_cuhk03_cy(float[:,:] distmat, long[:] q_pids, long[:]g_pids,
             continue
 
         # cuhk03-specific setting
-        g_pids_dict = defaultdict(list)
+        g_pids_dict = defaultdict(list) # overhead!
         for g_idx in range(num_g_real):
             g_pids_dict[kept_g_pids[g_idx]].append(g_idx)
 
