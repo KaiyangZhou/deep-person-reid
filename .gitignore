@@ -2,8 +2,11 @@
 data/
 log/
 saved-models/
-torchreid/eval_cylib/*.c
 debug.py
+
+# cython eval code
+torchreid/eval_cylib/eval_metrics_cy.c
+torchreid/eval_cylib/*.html
 
 # OS X
 .DS_Store
