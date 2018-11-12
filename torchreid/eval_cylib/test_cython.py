@@ -27,7 +27,7 @@ import os.path as osp
 import numpy as np
 sys.path.insert(0, osp.dirname(osp.abspath(__file__)) + '/../..')
 from torchreid.eval_metrics import evaluate
-num_q = 10
+num_q = 30
 num_g = 300
 max_rank = 5
 distmat = np.random.rand(num_q, num_g) * 20
@@ -54,8 +54,8 @@ print("Cython is {} times faster than python\n".format(pytime / cytime))
 """
 print("=> Check precision")
 
-num_q = 10
-num_g = 200
+num_q = 30
+num_g = 300
 max_rank = 5
 distmat = np.random.rand(num_q, num_g) * 20
 q_pids = np.random.randint(0, num_q, size=num_q)

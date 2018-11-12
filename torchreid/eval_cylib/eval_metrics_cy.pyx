@@ -1,10 +1,21 @@
-from __future__ import print_function
-from __future__ import division
+# cython: boundscheck=False, wraparound=False, nonecheck=False, cdivision=True
 
+from __future__ import print_function
+
+import cython
 import numpy as np
+cimport numpy as np
 from collections import defaultdict
 import random
 
+
+"""
+Compiler directives:
+https://github.com/cython/cython/wiki/enhancements-compilerdirectives
+
+Cython tutorial:
+https://cython.readthedocs.io/en/latest/src/userguide/numpy_tutorial.html
+"""
 
 # Main interface
 cpdef evaluate_cy(distmat, q_pids, g_pids, q_camids, g_camids, max_rank, use_metric_cuhk03=False):
@@ -44,7 +55,7 @@ cpdef eval_cuhk03_cy(float[:,:] distmat, long[:] q_pids, long[:]g_pids,
         float[:] raw_cmc = np.zeros(num_g, dtype=np.float32) # binary vector, positions with value 1 are correct matches
         float[:] masked_raw_cmc = np.zeros(num_g, dtype=np.float32)
         float[:] cmc, masked_cmc
-        long num_g_real, num_g_real_masked, rank_i, rnd_idx
+        long num_g_real, num_g_real_masked, rank_idx, rnd_idx
         unsigned long meet_condition
         float AP
         long[:] kept_g_pids, mask
@@ -59,7 +70,8 @@ cpdef eval_cuhk03_cy(float[:,:] distmat, long[:] q_pids, long[:]g_pids,
         q_camid = q_camids[q_idx]
 
         # remove gallery samples that have the same pid and camid with query
-        order = indices[q_idx]
+        for g_idx in range(num_g):
+            order[g_idx] = indices[q_idx, g_idx]
         num_g_real = 0
         meet_condition = 0
         kept_g_pids = np.zeros(num_g, dtype=np.int64)
@@ -104,8 +116,8 @@ cpdef eval_cuhk03_cy(float[:,:] distmat, long[:] q_pids, long[:]g_pids,
                 if masked_cmc[g_idx] > 1:
                     masked_cmc[g_idx] = 1
 
-            for rank_i in range(max_rank):
-                cmc[rank_i] += masked_cmc[rank_i] / num_repeats
+            for rank_idx in range(max_rank):
+                cmc[rank_idx] += masked_cmc[rank_idx] / num_repeats
             
             # compute AP
             function_cumsum(masked_raw_cmc, tmp_cmc, num_g_real_masked)
@@ -117,17 +129,18 @@ cpdef eval_cuhk03_cy(float[:,:] distmat, long[:] q_pids, long[:]g_pids,
             AP += tmp_cmc_sum / num_rel
         
         all_AP[q_idx] = AP / num_repeats
-        all_cmc[q_idx] = cmc
+        for rank_idx in range(max_rank):
+            all_cmc[q_idx, rank_idx] = cmc[rank_idx]
         num_valid_q += 1.
 
     assert num_valid_q > 0, "Error: all query identities do not appear in gallery"
 
     # compute averaged cmc
     cdef float[:] avg_cmc = np.zeros(max_rank, dtype=np.float32)
-    for rank_i in range(max_rank):
+    for rank_idx in range(max_rank):
         for q_idx in range(num_q):
-            avg_cmc[rank_i] += all_cmc[q_idx, rank_i]
-        avg_cmc[rank_i] /= num_valid_q
+            avg_cmc[rank_idx] += all_cmc[q_idx, rank_idx]
+        avg_cmc[rank_idx] /= num_valid_q
     
     cdef float mAP = 0
     for q_idx in range(num_q):
@@ -161,7 +174,7 @@ cpdef eval_market1501_cy(float[:,:] distmat, long[:] q_pids, long[:]g_pids,
 
         float[:] raw_cmc = np.zeros(num_g, dtype=np.float32) # binary vector, positions with value 1 are correct matches
         float[:] cmc = np.zeros(num_g, dtype=np.float32)
-        long num_g_real
+        long num_g_real, rank_idx
         unsigned long meet_condition
 
         float num_rel
@@ -174,7 +187,8 @@ cpdef eval_market1501_cy(float[:,:] distmat, long[:] q_pids, long[:]g_pids,
         q_camid = q_camids[q_idx]
 
         # remove gallery samples that have the same pid and camid with query
-        order = indices[q_idx]
+        for g_idx in range(num_g):
+            order[g_idx] = indices[q_idx, g_idx]
         num_g_real = 0
         meet_condition = 0
         
@@ -195,7 +209,8 @@ cpdef eval_market1501_cy(float[:,:] distmat, long[:] q_pids, long[:]g_pids,
             if cmc[g_idx] > 1:
                 cmc[g_idx] = 1
 
-        all_cmc[q_idx] = cmc[:max_rank]
+        for rank_idx in range(max_rank):
+            all_cmc[q_idx, rank_idx] = cmc[rank_idx]
         num_valid_q += 1.
 
         # compute average precision
@@ -212,11 +227,10 @@ cpdef eval_market1501_cy(float[:,:] distmat, long[:] q_pids, long[:]g_pids,
 
     # compute averaged cmc
     cdef float[:] avg_cmc = np.zeros(max_rank, dtype=np.float32)
-    cdef long rank_i
-    for rank_i in range(max_rank):
+    for rank_idx in range(max_rank):
         for q_idx in range(num_q):
-            avg_cmc[rank_i] += all_cmc[q_idx, rank_i]
-        avg_cmc[rank_i] /= num_valid_q
+            avg_cmc[rank_idx] += all_cmc[q_idx, rank_idx]
+        avg_cmc[rank_idx] /= num_valid_q
     
     cdef float mAP = 0
     for q_idx in range(num_q):
@@ -227,7 +241,7 @@ cpdef eval_market1501_cy(float[:,:] distmat, long[:] q_pids, long[:]g_pids,
 
 
 # Compute the cumulative sum
-cpdef void function_cumsum(float[:] src, float[:] dst, long n):
+cdef void function_cumsum(cython.numeric[:] src, cython.numeric[:] dst, long n):
     cdef long i
     dst[0] = src[0]
     for i in range(1, n):
