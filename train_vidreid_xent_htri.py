@@ -106,7 +106,7 @@ def main():
     start_time = time.time()
     ranklogger = RankLogger(args.source_names, args.target_names)
     train_time = 0
-    print("==> Start training")
+    print("=> Start training")
 
     if args.fixbase_epoch > 0:
         print("Train {} for {} epochs while keeping other layers frozen".format(args.open_layers, args.fixbase_epoch))
@@ -128,7 +128,7 @@ def main():
         scheduler.step()
         
         if (epoch + 1) > args.start_eval and args.eval_freq > 0 and (epoch + 1) % args.eval_freq == 0 or (epoch + 1) == args.max_epoch:
-            print("==> Test")
+            print("=> Test")
             
             for name in args.target_names:
                 print("Evaluating {} ...".format(name))
@@ -267,7 +267,7 @@ def test(model, queryloader, galleryloader, pool, use_gpu, ranks=[1, 5, 10, 20],
 
         print("Extracted features for gallery set, obtained {}-by-{} matrix".format(gf.size(0), gf.size(1)))
     
-    print("==> BatchTime(s)/BatchSize(img): {:.3f}/{}".format(batch_time.avg, args.test_batch_size * args.seq_len))
+    print("=> BatchTime(s)/BatchSize(img): {:.3f}/{}".format(batch_time.avg, args.test_batch_size * args.seq_len))
 
     m, n = qf.size(0), gf.size(0)
     distmat = torch.pow(qf, 2).sum(dim=1, keepdim=True).expand(m, n) + \
