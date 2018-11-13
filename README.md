@@ -141,7 +141,7 @@ python train_imgreid_xent.py \
 --gpu-devices 0 \
 ```
 
-Note that `--load-weights` will discard layer weights in `path_to/resnet50.pth.tar` that do not match the original model layers in size.
+Note that `--load-weights` will discard layer weights in `path_to/resnet50.pth.tar` that do not match the original model layers in size. If you encounter the `UnicodeDecodeError` when loading checkpoints, please try [this solution](https://github.com/KaiyangZhou/deep-person-reid/issues/43#issuecomment-411266053).
 
 #### Evaluation frequency
 Use `--eval-freq` to control the evaluation frequency and `--start-eval` to indicate when to start counting the evaluation frequency.
