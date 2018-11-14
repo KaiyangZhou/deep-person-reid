@@ -86,8 +86,8 @@ def argument_parser():
     parser.add_argument('--test-batch-size', default=100, type=int,
                         help="test batch size")
     
-    parser.add_argument('--fixbase', action='store_true',
-                        help="always fix base network")
+    parser.add_argument('--always-fixbase', action='store_true',
+                        help="always fix base network and only train specified layers")
     parser.add_argument('--fixbase-epoch', type=int, default=0,
                         help="how many epochs to fix base network (only train randomly initialized classifier)")
     parser.add_argument('--open-layers', type=str, nargs='+', default=['classifier'],

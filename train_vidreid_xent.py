@@ -158,7 +158,7 @@ def train(epoch, model, criterion, optimizer, trainloader, use_gpu, fixbase=Fals
 
     model.train()
 
-    if fixbase or args.fixbase:
+    if fixbase or args.always_fixbase:
         open_specified_layers(model, args.open_layers)
     else:
         open_all_layers(model)
