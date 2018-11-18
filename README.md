@@ -7,7 +7,7 @@ Deep-person-reid is a [pytorch](http://pytorch.org/)-based framework for trainin
 
 It has the following features:
 - multi-GPU training.
-- both image reid and video reid.
+- support to both image reid and video reid.
 - standard dataset splits used by most research papers.
 - incredibly easy preparation of reid datasets.
 - implementations of state-of-the-art reid models.
@@ -17,7 +17,7 @@ It has the following features:
 - state-of-the-art training techniques.
 
 ## Updates
-- 11-11-2018 (**New**): Added multi-dataset training; Added cython code for cuhk03-style evaliation; Wrapped dataloader construction to Image/Video-DataManager; Wrapped argparse to [args.py](args.py); Added [MLFN (CVPR'18)](https://arxiv.org/abs/1803.09132).
+- 11-11-2018 (**New**): Added multi-dataset training; Added cython code for cuhk03-style evaluation; Wrapped dataloader construction to Image/Video-DataManager; Wrapped argparse to [args.py](args.py); Added [MLFN (CVPR'18)](https://arxiv.org/abs/1803.09132).
 
 ## Installation
 1. Run `git clone https://github.com/KaiyangZhou/deep-person-reid`.
@@ -42,9 +42,9 @@ Video-reid datasets:
 - [PRID2011](https://pdfs.semanticscholar.org/4c1b/f0592be3e535faf256c95e27982db9b3d3d3.pdf) (`prid2011`)
 - [DukeMTMC-VideoReID](http://openaccess.thecvf.com/content_cvpr_2018/papers/Wu_Exploit_the_Unknown_CVPR_2018_paper.pdf) (`dukemtmcvidreid`)
 
-The keys to use these datasets are enclosed in the parentheses. See [torchreid/datasets/\_\_init__.py](torchreid/datasets/__init__.py) for details. The data managers of image reid and video reid are implemented in [torchreid/data_manager.py](torchreid/data_manager.py).
+The keys to use these datasets are enclosed in the parentheses. See [torchreid/datasets/\_\_init__.py](torchreid/datasets/__init__.py) for details. The data managers of image-reid and video-reid are implemented in [torchreid/data_manager.py](torchreid/data_manager.py).
 
-Instructions regarding how to prepare (and do evaluation on) these datasets can be found in [DATASETS.md](DATASETS.md).
+Instructions regarding how to prepare and do evaluation on these datasets are provided in [DATASETS.md](DATASETS.md).
 
 
 ## Models
@@ -73,7 +73,7 @@ Instructions regarding how to prepare (and do evaluation on) these datasets can 
 Please refer to [torchreid/models/\_\_init__.py](torchreid/models/__init__.py) for the keys to build these models. In the [MODEL_ZOO](MODEL_ZOO.md), we provide pretrained model weights and the training scripts to reproduce the results.
 
 ## Losses
-- `xent`: cross entropy loss (enable the [label smoothing regularizer](https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Szegedy_Rethinking_the_Inception_CVPR_2016_paper.pdf) by `--label-smooth`).
+- `xent`: cross entropy loss (the [label smoothing regularizer](https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Szegedy_Rethinking_the_Inception_CVPR_2016_paper.pdf) can be enabled by `--label-smooth`).
 - `htri`: [hard mining triplet loss](https://arxiv.org/abs/1703.07737).
 
 ## Tutorial
@@ -106,16 +106,18 @@ python train_imgreid_xent.py \
 ```
 
 #### Multi-dataset training
-`-s` and `-t` can take different strings of arbitrary length (delimited by space). For example, if you wanna train models on Market1501 + DukeMTMC-reID and test on both of them, you can use `-s market1501 dukemtmcreid` and `-t market1501 dukemtmcreid`. If say, you wanna test on a different dataset, e.g. MSMT17, then just do `-t msmt17`. Multi-dataset training is implemented for both image-reid and video-reid. Note that when `-t` takes multiple datasets, evaluation is performed on each dataset individually.
+`-s` and `-t` can take different strings (i.e. dataset keys) of arbitrary length (delimited by space). For example, if you wanna train models on Market1501 + DukeMTMC-reID and test on both of them, you can use `-s market1501 dukemtmcreid` and `-t market1501 dukemtmcreid`. If say, you wanna test on a different dataset, e.g. MSMT17, then just do `-t msmt17`. Multi-dataset training is implemented for both image-reid and video-reid. Note that when `-t` takes multiple datasets, evaluation is performed on each specified dataset individually.
 
 #### Two-stepped transfer learning
-To finetune models pretrained on external large-scale datasets such as [ImageNet](http://www.image-net.org/), the [two-stepped training strategy](https://arxiv.org/abs/1611.05244) is useful.
+To finetune models pretrained on external large-scale datasets, such as [ImageNet](http://www.image-net.org/), the [two-stepped training strategy](https://arxiv.org/abs/1611.05244) is useful.
 
 First, the base network is frozen and only the randomly initialized layers (e.g. identity classification layer) are trained for `--fixbase-epoch` epochs. Specifically, the layers specified by `--open-layers` are set to the **train** mode and will be updated, while other layers are set to the **eval** mode and are frozen. See `open_specified_layers(model, open_layers)` in [torchreid/utils/torchtools.py](torchreid/utils/torchtools.py).
 
 Second, after the new layers are adapted to the old layers, all layers are set to the **train** mode and are trained for `--max-epoch` epochs. See `open_all_layers(model)` in [torchreid/utils/torchtools.py](torchreid/utils/torchtools.py)
 
-For example, to train the [resnet50](torchreid/models/resnet.py) with a `classifier` being initialized randomly, you can set `--fixbase-epoch 5` and `--open-layers classifier`. The layer names must align with the attribute names in the model, i.e. `self.classifier` exists in the model.
+For example, to train the randomly initialized classifier in [resnet50](torchreid/models/resnet.py) for 5 epochs before training all layers, do `--fixbase-epoch 5` and `--open-layers classifier`. Note that the layer names must align with the attribute names in the model (in this case, `self.classifier` exists in the model).
+
+In addition, there is an argument called `--always-fixbase`. Once activated, the base network will be frozen and only the specified layers with `--open-layers` will be trained for `--max-epoch` epochs.
 
 #### Using hard mining triplet loss
 `htri` requires adding `--train-sampler RandomIdentitySampler`.
@@ -126,7 +128,7 @@ For video reid, `test-batch-size` refers to the number of tracklets, so the real
 ### Test
 
 #### Evaluation mode
-Use `--evaluate` to switch to the evaluation mode. In doing so, no model training is performed. For example, say you wanna load model weights at `path_to/resnet50.pth.tar` for `resnet50` and do evaluation on Market1501, you can do
+Use `--evaluate` to switch to the evaluation mode. In doing so, **no** model training is performed. For example, say you wanna load pretrained model weights at `path_to/resnet50.pth.tar` for `resnet50` and do evaluation on Market1501, you can do
 ```bash
 python train_imgreid_xent.py \
 -s market1501 \ # this does not matter any more
@@ -141,13 +143,13 @@ python train_imgreid_xent.py \
 --gpu-devices 0 \
 ```
 
-Note that `--load-weights` will discard layer weights in `path_to/resnet50.pth.tar` that do not match the original model layers in size. If you encounter the `UnicodeDecodeError` when loading checkpoints, please try [this solution](https://github.com/KaiyangZhou/deep-person-reid/issues/43#issuecomment-411266053).
+Note that `--load-weights` will discard layer weights in `path_to/resnet50.pth.tar` that do not match the original model layers in size. If you encounter the `UnicodeDecodeError` problem when loading the checkpoints downloaded from the model zoo, please try [this solution](https://github.com/KaiyangZhou/deep-person-reid/issues/43#issuecomment-411266053).
 
 #### Evaluation frequency
-Use `--eval-freq` to control the evaluation frequency and `--start-eval` to indicate when to start counting the evaluation frequency.
+Use `--eval-freq` to control the evaluation frequency and `--start-eval` to indicate when to start counting the evaluation frequency. This is useful when you want to test the model for every `--eval-freq` epochs to diagnose the training.
 
 #### Visualize ranked results
-Ranked results can be visualized via `--visualize-ranks`, which works along with `--evaluate`. Ranked images will be saved in `save_dir/ranked_results` where `save_dir` is the directory you specify with `--save-dir`. This function is implemented in [torchreid/utils/reidtools.py](torchreid/utils/reidtools.py).
+Ranked results can be visualized via `--visualize-ranks`, which works along with `--evaluate`. Ranked images will be saved in `save_dir/ranked_results/dataset_name` where `save_dir` is the directory you specify with `--save-dir`. This function is implemented in [torchreid/utils/reidtools.py](torchreid/utils/reidtools.py).
 
 <p align="center">
   <img src="imgs/ranked_results.jpg" alt="ranked_results" width="600">
