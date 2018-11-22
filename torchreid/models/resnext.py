@@ -10,7 +10,7 @@ import torchvision
 import torch.utils.model_zoo as model_zoo
 
 
-__all__ = ['resnext50_32x4d', 'resnext101_32x4d']
+__all__ = ['resnext50_32x4d', 'resnext50_32x4d_fc512', 'resnext101_32x4d']
 
 
 model_urls = {
@@ -211,6 +211,24 @@ def resnext50_32x4d(num_classes, loss, pretrained='imagenet', **kwargs):
         base_width=4,
         last_stride=2,
         fc_dims=None,
+        dropout_p=None,
+        **kwargs
+    )
+    if pretrained == 'imagenet':
+        init_pretrained_weights(model, model_urls['resnext50_32x4d'])
+    return model
+
+
+def resnext50_32x4d_fc512(num_classes, loss, pretrained='imagenet', **kwargs):
+    model = ResNeXt(
+        num_classes=num_classes,
+        loss=loss,
+        block=ResNeXtBottleneck,
+        layers=[3, 4, 6, 3],
+        groups=32,
+        base_width=4,
+        last_stride=1,
+        fc_dims=[512],
         dropout_p=None,
         **kwargs
     )
