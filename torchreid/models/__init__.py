@@ -26,7 +26,6 @@ __model_factory = {
     'resnet50_fc512': resnet50_fc512,
     'resnext50_32x4d': resnext50_32x4d,
     'resnext50_32x4d_fc512': resnext50_32x4d_fc512,
-    'resnext101_32x4d': resnext101_32x4d,
     'se_resnet50': se_resnet50,
     'se_resnet50_fc512': se_resnet50_fc512,
     'se_resnet101': se_resnet101,
