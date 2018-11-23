@@ -17,7 +17,8 @@ It has the following features:
 - state-of-the-art training techniques.
 
 ## Updates
-- 11-11-2018 (**New**): Added multi-dataset training; Added cython code for cuhk03-style evaluation; Wrapped dataloader construction to Image/Video-DataManager; Wrapped argparse to [args.py](args.py); Added [MLFN (CVPR'18)](https://arxiv.org/abs/1803.09132).
+- 23-11-2018: Released imagenet-pretrained weights for [resnext50_32x4d](torchreid/models/resnext.py).
+- 11-11-2018: Added multi-dataset training; Added cython code for cuhk03-style evaluation; Wrapped dataloader construction to Image/Video-DataManager; Wrapped argparse to [args.py](args.py); Added [MLFN (CVPR'18)](https://arxiv.org/abs/1803.09132).
 
 ## Installation
 1. Run `git clone https://github.com/KaiyangZhou/deep-person-reid`.
