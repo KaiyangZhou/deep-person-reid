@@ -168,7 +168,7 @@ def train(epoch, model, criterion_xent, criterion_htri, optimizer, trainloader, 
         open_all_layers(model)
 
     end = time.time()
-    for batch_idx, (imgs, pids, _) in enumerate(trainloader):
+    for batch_idx, (imgs, pids, _, _) in enumerate(trainloader):
         data_time.update(time.time() - end)
         
         if use_gpu:

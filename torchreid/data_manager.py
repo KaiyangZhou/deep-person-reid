@@ -215,6 +215,7 @@ class VideoDataManager(BaseDataManager):
             )
         else:
             # each batch has image data of shape (batch, seq_len, channel, height, width)
+            # note: this requires new training scripts
             self.trainloader = DataLoader(
                 VideoDataset(self.train, seq_len=self.seq_len, sample_method=self.sample_method, transform=transform_test),
                 batch_size=self.train_batch_size, shuffle=True, num_workers=self.workers,
