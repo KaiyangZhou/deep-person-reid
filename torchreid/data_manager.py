@@ -206,7 +206,7 @@ class VideoDataManager(BaseDataManager):
             self._num_train_pids += dataset.num_train_pids
             self._num_train_cams += dataset.num_train_cams
 
-        if image_training:
+        if self.image_training:
             # each batch has image data of shape (batch, channel, height, width)
             self.trainloader = DataLoader(
                 ImageDataset(self.train, transform=transform_train),
