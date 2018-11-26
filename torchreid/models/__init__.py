@@ -39,7 +39,7 @@ __model_factory = {
     # lightweight models
     'nasnsetmobile': nasnetamobile,
     'mobilenetv2': MobileNetV2,
-    'shufflenet': ShuffleNet,
+    'shufflenet': shufflenet,
     'squeezenet1_0': squeezenet1_0,
     'squeezenet1_0_fc512': squeezenet1_0_fc512,
     'squeezenet1_1': squeezenet1_1,
