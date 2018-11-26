@@ -10,7 +10,7 @@ import torchvision
 import torch.utils.model_zoo as model_zoo
 
 
-__all__ = ['resnext50_32x4d', 'resnext50_32x4d_fc512', 'resnext101_32x4d']
+__all__ = ['resnext50_32x4d', 'resnext50_32x4d_fc512']
 
 
 model_urls = {
