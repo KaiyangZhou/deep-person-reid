@@ -83,8 +83,8 @@ Please refer to [torchreid/models/\_\_init__.py](torchreid/models/__init__.py) f
 Training methods are implemented in
 - `train_imgreid_xent.py`: train image-reid models with cross entropy loss.
 - `train_imgreid_xent_htri.py`: train image-reid models with hard mining triplet loss or the combination of hard mining triplet loss and cross entropy loss.
-- `train_imgreid_xent.py`: train video-reid models with cross entropy loss.
-- `train_imgreid_xent_htri.py`: train video-reid models with hard mining triplet loss or the combination of hard mining triplet loss and cross entropy loss.
+- `train_vidreid_xent.py`: train video-reid models with cross entropy loss.
+- `train_vidreid_xent_htri.py`: train video-reid models with hard mining triplet loss or the combination of hard mining triplet loss and cross entropy loss.
 
 Input arguments for the above training scripts are unified in [args.py](args.py).
 
