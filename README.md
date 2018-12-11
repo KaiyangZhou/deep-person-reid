@@ -125,7 +125,7 @@ In addition, there is an argument called `--always-fixbase`. Once activated, the
 `htri` requires adding `--train-sampler RandomIdentitySampler`.
 
 #### Training video-reid models
-For video reid, `test-batch-size` refers to the number of tracklets, so the real image batch size is `--test-batch-size * --seq-len`.
+For video reid, `test-batch-size` refers to the number of tracklets, so the real image batch size is `--test-batch-size * --seq-len`. As the training follows the image-based paradigm, the semantic meaning of `train-batch-size` does not change.
 
 ### Test
 
