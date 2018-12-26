@@ -68,7 +68,6 @@ class ImageDataManager(BaseDataManager):
         self.num_instances = num_instances
         self.cuhk03_labeled = cuhk03_labeled
         self.cuhk03_classic_split = cuhk03_classic_split
-        self.pin_memory = True if self.use_gpu else False
 
         # Build train and test transform functions
         transform_train = build_transforms(self.height, self.width, is_train=True)
@@ -98,14 +97,14 @@ class ImageDataManager(BaseDataManager):
                 ImageDataset(self.train, transform=transform_train),
                 sampler=RandomIdentitySampler(self.train, self.train_batch_size, self.num_instances),
                 batch_size=self.train_batch_size, shuffle=False, num_workers=self.workers,
-                pin_memory=self.pin_memory, drop_last=True
+                pin_memory=self.use_gpu, drop_last=True
             )
         
         else:
             self.trainloader = DataLoader(
                 ImageDataset(self.train, transform=transform_train),
                 batch_size=self.train_batch_size, shuffle=True, num_workers=self.workers,
-                pin_memory=self.pin_memory, drop_last=True
+                pin_memory=self.use_gpu, drop_last=True
             )
 
         print("=> Initializing TEST (target) datasets")
@@ -121,13 +120,13 @@ class ImageDataManager(BaseDataManager):
             self.testloader_dict[name]['query'] = DataLoader(
                 ImageDataset(dataset.query, transform=transform_test),
                 batch_size=self.test_batch_size, shuffle=False, num_workers=self.workers,
-                pin_memory=self.pin_memory, drop_last=False
+                pin_memory=self.use_gpu, drop_last=False
             )
 
             self.testloader_dict[name]['gallery'] = DataLoader(
                 ImageDataset(dataset.gallery, transform=transform_test),
                 batch_size=self.test_batch_size, shuffle=False, num_workers=self.workers,
-                pin_memory=self.pin_memory, drop_last=False
+                pin_memory=self.use_gpu, drop_last=False
             )
 
             self.testdataset_dict[name]['query'] = dataset.query
@@ -179,7 +178,6 @@ class VideoDataManager(BaseDataManager):
         self.seq_len = seq_len
         self.sample_method = sample_method
         self.image_training = image_training
-        self.pin_memory = True if self.use_gpu else False
 
         # Build train and test transform functions
         transform_train = build_transforms(self.height, self.width, is_train=True)
@@ -211,7 +209,7 @@ class VideoDataManager(BaseDataManager):
             self.trainloader = DataLoader(
                 ImageDataset(self.train, transform=transform_train),
                 batch_size=self.train_batch_size, shuffle=True, num_workers=self.workers,
-                pin_memory=self.pin_memory, drop_last=True
+                pin_memory=self.use_gpu, drop_last=True
             )
         else:
             # each batch has image data of shape (batch, seq_len, channel, height, width)
@@ -219,7 +217,7 @@ class VideoDataManager(BaseDataManager):
             self.trainloader = DataLoader(
                 VideoDataset(self.train, seq_len=self.seq_len, sample_method=self.sample_method, transform=transform_test),
                 batch_size=self.train_batch_size, shuffle=True, num_workers=self.workers,
-                pin_memory=self.pin_memory, drop_last=True
+                pin_memory=self.use_gpu, drop_last=True
             )
 
         print("=> Initializing TEST (target) datasets")
@@ -232,13 +230,13 @@ class VideoDataManager(BaseDataManager):
             self.testloader_dict[name]['query'] = DataLoader(
                 VideoDataset(dataset.query, seq_len=self.seq_len, sample_method=self.sample_method, transform=transform_test),
                 batch_size=self.test_batch_size, shuffle=False, num_workers=self.workers,
-                pin_memory=self.pin_memory, drop_last=False,
+                pin_memory=self.use_gpu, drop_last=False,
             )
 
             self.testloader_dict[name]['gallery'] = DataLoader(
                 VideoDataset(dataset.gallery, seq_len=self.seq_len, sample_method=self.sample_method, transform=transform_test),
                 batch_size=self.test_batch_size, shuffle=False, num_workers=self.workers,
-                pin_memory=self.pin_memory, drop_last=False,
+                pin_memory=self.use_gpu, drop_last=False,
             )
 
             self.testdataset_dict[name]['query'] = dataset.query
