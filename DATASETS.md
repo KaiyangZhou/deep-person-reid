@@ -164,8 +164,8 @@ dukemtmc-vidreid/
 
 # Dataset loaders
 These are implemented in `dataset_loader.py` where we have two main classes that subclass [torch.utils.data.Dataset](http://pytorch.org/docs/master/_modules/torch/utils/data/dataset.html#Dataset):
-* [ImageDataset](https://github.com/KaiyangZhou/deep-person-reid/blob/master/dataset_loader.py#L22): processes image-based person reid datasets.
-* [VideoDataset](https://github.com/KaiyangZhou/deep-person-reid/blob/master/dataset_loader.py#L38): processes video-based person reid datasets.
+* [ImageDataset](torchreid/dataset_loader.py): processes image-based person reid datasets.
+* [VideoDataset](torchreid/dataset_loader.py): processes video-based person reid datasets.
 
 These two classes are used for [torch.utils.data.DataLoader](http://pytorch.org/docs/master/_modules/torch/utils/data/dataloader.html#DataLoader) that can provide batched data. The data loader wich `ImageDataset` will output batch data of size `(batch, channel, height, width)`, while the data loader with `VideoDataset` will output batch data of size `(batch, sequence, channel, height, width)`.
 
