@@ -54,7 +54,10 @@ def visualize_ranked_results(distmat, dataset, save_dir='log/ranked_results', to
 
     for q_idx in range(num_q):
         qimg_path, qpid, qcamid = query[q_idx]
-        qdir = osp.join(save_dir, osp.basename(qimg_path))
+        if isinstance(qimg_path, tuple) or isinstance(qimg_path, list):
+            qdir = osp.join(save_dir, osp.basename(qimg_path[0]))
+        else:
+            qdir = osp.join(save_dir, osp.basename(qimg_path))
         mkdir_if_missing(qdir)
         _cp_img_to(qimg_path, qdir, rank=0, prefix='query')
 
