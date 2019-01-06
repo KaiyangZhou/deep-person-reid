@@ -1,3 +1,4 @@
+
 <p align="center">
   <img src="imgs/deep-person-reid-logo.png" alt="logo" width="260">
 </p>
@@ -7,22 +8,24 @@ Deep-person-reid is a [pytorch](http://pytorch.org/)-based framework for trainin
 
 It has the following features:
 - multi-GPU training.
-- support to both image reid and video reid.
-- standard dataset splits used by most research papers.
+- support both image reid and video reid.
 - incredibly easy preparation of reid datasets.
-- implementations of state-of-the-art reid models.
+- standard split protocol used by most research papers.
 - end-to-end training and evaluation.
+- implementations of state-of-the-art reid models.
+- access to pretrained reid models.
 - multi-dataset training.
 - visualization of ranked results.
 - state-of-the-art training techniques.
 
 ## Updates
+- 06-01-2019: Released [Awesome-ReID](AWESOME_REID.md), a collection of ReID-related research with links to codes and perps.
 - 26-11-2018: Released pretrained weights (imagenet & reid) for [shufflenet](torchreid/models/shufflenet.py).
 - 23-11-2018: Released imagenet-pretrained weights for [resnext50_32x4d](torchreid/models/resnext.py).
 - 11-11-2018: Added multi-dataset training; Added cython code for cuhk03-style evaluation; Wrapped dataloader construction to Image/Video-DataManager; Wrapped argparse to [args.py](args.py); Added [MLFN (CVPR'18)](https://arxiv.org/abs/1803.09132).
 
 ## Installation
-1. Run `git clone https://github.com/KaiyangZhou/deep-person-reid`.
+1. `cd` to your preferred directory and run `git clone https://github.com/KaiyangZhou/deep-person-reid`.
 2. Install dependencies by `pip install -r requirements.txt` (if necessary).
 3. To install the cython-based evaluation toolbox, `cd` to `torchreid/eval_cylib` and do `make`. As a result, `eval_metrics_cy.so` is generated under the same folder. Run `python test_cython.py` to test if the toolbox is installed successfully. (credit to [luzai](https://github.com/luzai))
 
@@ -111,15 +114,15 @@ python train_imgreid_xent.py \
 `-s` and `-t` can take different strings (i.e. dataset keys) of arbitrary length (delimited by space). For example, if you wanna train models on Market1501 + DukeMTMC-reID and test on both of them, you can use `-s market1501 dukemtmcreid` and `-t market1501 dukemtmcreid`. If say, you wanna test on a different dataset, e.g. MSMT17, then just do `-t msmt17`. Multi-dataset training is implemented for both image-reid and video-reid. Note that when `-t` takes multiple datasets, evaluation is performed on each specified dataset individually.
 
 #### Two-stepped transfer learning
-To finetune models pretrained on external large-scale datasets, such as [ImageNet](http://www.image-net.org/), the [two-stepped training strategy](https://arxiv.org/abs/1611.05244) is useful.
+To finetune models pretrained on external large-scale datasets, such as [ImageNet](http://www.image-net.org/), the [two-stepped training strategy](https://arxiv.org/abs/1611.05244) is recommended. This can be achieved by `--fixbase-epoch` and `--open-layers`. The pipeline goes as follows.
 
-First, the base network is frozen and only the randomly initialized layers (e.g. identity classification layer) are trained for `--fixbase-epoch` epochs. Specifically, the layers specified by `--open-layers` are set to the **train** mode and will be updated, while other layers are set to the **eval** mode and are frozen. See `open_specified_layers(model, open_layers)` in [torchreid/utils/torchtools.py](torchreid/utils/torchtools.py).
+First, the base network is frozen and the randomly initialized layers (e.g. identity classification layer) are trained for `--fixbase-epoch` epochs. Specifically, the layers specified by `--open-layers` are set to the **train** mode and will be updated, while other layers are set to the **eval** mode and are frozen. See `open_specified_layers(model, open_layers)` in [torchreid/utils/torchtools.py](torchreid/utils/torchtools.py).
 
-Second, after the new layers are adapted to the old layers, all layers are set to the **train** mode and are trained for `--max-epoch` epochs. See `open_all_layers(model)` in [torchreid/utils/torchtools.py](torchreid/utils/torchtools.py)
+Second, after the new layers are adapted to the old (well-initialized) layers, all layers are set to the **train** mode (via `open_all_layers(model)`) and are trained for `--max-epoch` epochs.
 
 For example, to train the randomly initialized classifier in [resnet50](torchreid/models/resnet.py) for 5 epochs before training all layers, do `--fixbase-epoch 5` and `--open-layers classifier`. Note that the layer names must align with the attribute names in the model (in this case, `self.classifier` exists in the model).
 
-In addition, there is an argument called `--always-fixbase`. Once activated, the base network will be frozen and only the specified layers with `--open-layers` will be trained for `--max-epoch` epochs.
+In addition, there is an argument called `--always-fixbase`. Once activated, the base network will be frozen and only the specified layers with `--open-layers` will be trained.
 
 #### Using hard mining triplet loss
 `htri` requires adding `--train-sampler RandomIdentitySampler`.
@@ -148,18 +151,14 @@ python train_imgreid_xent.py \
 Note that `--load-weights` will discard layer weights in `path_to/resnet50.pth.tar` that do not match the original model layers in size. If you encounter the `UnicodeDecodeError` problem when loading the checkpoints downloaded from the model zoo, please try [this solution](https://github.com/KaiyangZhou/deep-person-reid/issues/43#issuecomment-411266053).
 
 #### Evaluation frequency
-Use `--eval-freq` to control the evaluation frequency and `--start-eval` to indicate when to start counting the evaluation frequency. This is useful when you want to test the model for every `--eval-freq` epochs to diagnose the training.
+Use `--eval-freq` to control the evaluation frequency and `--start-eval` to indicate when to start counting the evaluation frequency. This is useful when you want to test the model for every `--eval-freq` epochs to diagnose the training (the cython evaluation code is really fast, e.g. evaluation on Market1501 can be done in less than 10s).
 
 #### Visualize ranked results
-Ranked results can be visualized via `--visualize-ranks`, which works along with `--evaluate`. Ranked images will be saved in `save_dir/ranked_results/dataset_name` where `save_dir` is the directory you specify with `--save-dir`. This function is implemented in [torchreid/utils/reidtools.py](torchreid/utils/reidtools.py).
+To visualize the ranked results, you can use `--visualize-ranks`, which works along with `--evaluate`. The ranked images will be saved in `save_dir/ranked_results/dataset_name` where `save_dir` is the directory you specify with `--save-dir`. This function is implemented in [torchreid/utils/reidtools.py](torchreid/utils/reidtools.py).
 
 <p align="center">
   <img src="imgs/ranked_results.jpg" alt="ranked_results" width="600">
 </p>
-
-
-## Misc
-- [Related person ReID projects](RELATED_PROJECTS.md).
 
 
 ## Citation
