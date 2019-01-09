@@ -22,6 +22,7 @@ from torchreid.utils.avgmeter import AverageMeter
 from torchreid.utils.loggers import Logger, RankLogger
 from torchreid.utils.torchtools import count_num_param, open_all_layers, open_specified_layers
 from torchreid.utils.reidtools import visualize_ranked_results
+from torchreid.utils.generaltools import set_random_seed
 from torchreid.eval_metrics import evaluate
 from torchreid.samplers import RandomIdentitySampler
 from torchreid.optimizers import init_optimizer
@@ -35,8 +36,7 @@ args = parser.parse_args()
 def main():
     global args
     
-    torch.manual_seed(args.seed)
-    np.random.seed(args.seed)
+    set_random_seed(args.seed)
     if not args.use_avai_gpus: os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_devices
     use_gpu = torch.cuda.is_available()
     if args.use_cpu: use_gpu = False
@@ -47,7 +47,6 @@ def main():
     if use_gpu:
         print("Currently using GPU {}".format(args.gpu_devices))
         cudnn.benchmark = True
-        torch.cuda.manual_seed_all(args.seed)
     else:
         print("Currently using CPU, however, GPU is highly recommended")
 
