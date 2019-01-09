@@ -35,8 +35,8 @@ class VIPeR(BaseImageDataset):
     dataset_dir = 'viper'
 
     def __init__(self, root='data', split_id=0, verbose=True, **kwargs):
-        super(VIPeR, self).__init__()
-        self.dataset_dir = osp.join(root, self.dataset_dir)
+        super(VIPeR, self).__init__(root)
+        self.dataset_dir = osp.join(self.root, self.dataset_dir)
         self.dataset_url = 'http://users.soe.ucsc.edu/~manduchi/VIPeR.v1.0.zip'
         self.cam_a_path = osp.join(self.dataset_dir, 'VIPeR', 'cam_a')
         self.cam_b_path = osp.join(self.dataset_dir, 'VIPeR', 'cam_b')

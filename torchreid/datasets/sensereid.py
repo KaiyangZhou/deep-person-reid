@@ -39,8 +39,8 @@ class SenseReID(BaseImageDataset):
     dataset_dir = 'sensereid'
 
     def __init__(self, root='data', verbose=True, **kwargs):
-        super(SenseReID, self).__init__()
-        self.dataset_dir = osp.join(root, self.dataset_dir)
+        super(SenseReID, self).__init__(root)
+        self.dataset_dir = osp.join(self.root, self.dataset_dir)
         self.query_dir = osp.join(self.dataset_dir, 'SenseReID', 'test_probe')
         self.gallery_dir = osp.join(self.dataset_dir, 'SenseReID', 'test_gallery')
 

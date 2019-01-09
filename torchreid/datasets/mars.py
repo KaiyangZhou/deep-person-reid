@@ -35,7 +35,8 @@ class Mars(BaseVideoDataset):
     dataset_dir = 'mars'
 
     def __init__(self, root='data', min_seq_len=0, verbose=True, **kwargs):
-        self.dataset_dir = osp.join(root, self.dataset_dir)
+        super(Mars, self).__init__(root)
+        self.dataset_dir = osp.join(self.root, self.dataset_dir)
         self.train_name_path = osp.join(self.dataset_dir, 'info/train_name.txt')
         self.test_name_path = osp.join(self.dataset_dir, 'info/test_name.txt')
         self.track_train_info_path = osp.join(self.dataset_dir, 'info/tracks_train_info.mat')

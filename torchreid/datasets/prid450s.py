@@ -36,8 +36,8 @@ class PRID450S(BaseImageDataset):
     dataset_dir = 'prid450s'
 
     def __init__(self, root='data', split_id=0, min_seq_len=0, verbose=True, **kwargs):
-        super(PRID450S, self).__init__()
-        self.dataset_dir = osp.join(root, self.dataset_dir)
+        super(PRID450S, self).__init__(root)
+        self.dataset_dir = osp.join(self.root, self.dataset_dir)
         self.dataset_url = 'https://files.icg.tugraz.at/f/8c709245bb/?raw=1'
         self.split_path = osp.join(self.dataset_dir, 'splits.json')
         self.cam_a_path = osp.join(self.dataset_dir, 'cam_a')

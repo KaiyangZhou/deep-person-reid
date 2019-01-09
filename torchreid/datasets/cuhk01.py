@@ -36,8 +36,8 @@ class CUHK01(BaseImageDataset):
     dataset_dir = 'cuhk01'
 
     def __init__(self, root='data', split_id=0, verbose=True, **kwargs):
-        super(CUHK01, self).__init__()
-        self.dataset_dir = osp.join(root, self.dataset_dir)
+        super(CUHK01, self).__init__(root)
+        self.dataset_dir = osp.join(self.root, self.dataset_dir)
         self.zip_path = osp.join(self.dataset_dir, 'CUHK01.zip')
         self.campus_dir = osp.join(self.dataset_dir, 'campus')
         self.split_path = osp.join(self.dataset_dir, 'splits.json')

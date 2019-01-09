@@ -1,6 +1,8 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
+import os
+import os.path as osp
 import numpy as np
 
 
@@ -8,6 +10,8 @@ class BaseDataset(object):
     """
     Base class of reid dataset
     """
+    def __init__(self, root):
+        self.root = osp.expanduser(root)
 
     def get_imagedata_info(self, data):
         pids, cams = [], []

@@ -36,7 +36,8 @@ class PRID2011(BaseVideoDataset):
     dataset_dir = 'prid2011'
 
     def __init__(self, root='data', split_id=0, min_seq_len=0, verbose=True, **kwargs):
-        self.dataset_dir = osp.join(root, self.dataset_dir)
+        super(PRID2011, self).__init__(root)
+        self.dataset_dir = osp.join(self.root, self.dataset_dir)
         self.split_path = osp.join(self.dataset_dir, 'splits_prid2011.json')
         self.cam_a_path = osp.join(self.dataset_dir, 'prid_2011', 'multi_shot', 'cam_a')
         self.cam_b_path = osp.join(self.dataset_dir, 'prid_2011', 'multi_shot', 'cam_b')

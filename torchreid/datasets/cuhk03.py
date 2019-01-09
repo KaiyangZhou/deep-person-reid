@@ -41,8 +41,8 @@ class CUHK03(BaseImageDataset):
     dataset_dir = 'cuhk03'
 
     def __init__(self, root='data', split_id=0, cuhk03_labeled=False, cuhk03_classic_split=False, verbose=True, **kwargs):
-        super(CUHK03, self).__init__()
-        self.dataset_dir = osp.join(root, self.dataset_dir)
+        super(CUHK03, self).__init__(root)
+        self.dataset_dir = osp.join(self.root, self.dataset_dir)
         self.data_dir = osp.join(self.dataset_dir, 'cuhk03_release')
         self.raw_mat_path = osp.join(self.data_dir, 'cuhk-03.mat')
         

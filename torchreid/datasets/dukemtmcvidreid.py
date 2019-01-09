@@ -36,7 +36,8 @@ class DukeMTMCVidReID(BaseVideoDataset):
     dataset_dir = 'dukemtmc-vidreid'
 
     def __init__(self, root='data', min_seq_len=0, verbose=True, **kwargs):
-        self.dataset_dir = osp.join(root, self.dataset_dir)
+        super(DukeMTMCVidReID, self).__init__(root)
+        self.dataset_dir = osp.join(self.root, self.dataset_dir)
         self.dataset_url = 'http://vision.cs.duke.edu/DukeMTMC/data/misc/DukeMTMC-VideoReID.zip'
         self.train_dir = osp.join(self.dataset_dir, 'DukeMTMC-VideoReID/train')
         self.query_dir = osp.join(self.dataset_dir, 'DukeMTMC-VideoReID/query')

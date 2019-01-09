@@ -36,8 +36,8 @@ class iLIDS(BaseImageDataset):
     dataset_dir = 'ilids-vid'
 
     def __init__(self, root='data', split_id=0, verbose=True, **kwargs):
-        super(iLIDS, self).__init__()
-        self.dataset_dir = osp.join(root, self.dataset_dir)
+        super(iLIDS, self).__init__(root)
+        self.dataset_dir = osp.join(self.root, self.dataset_dir)
         self.dataset_url = 'http://www.eecs.qmul.ac.uk/~xiatian/iLIDS-VID/iLIDS-VID.tar'
         self.data_dir = osp.join(self.dataset_dir, 'i-LIDS-VID')
         self.split_dir = osp.join(self.dataset_dir, 'train-test people splits')
