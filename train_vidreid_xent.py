@@ -36,6 +36,7 @@ def main():
     global args
     
     torch.manual_seed(args.seed)
+    np.random.seed(args.seed)
     if not args.use_avai_gpus: os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_devices
     use_gpu = torch.cuda.is_available()
     if args.use_cpu: use_gpu = False
