@@ -35,7 +35,7 @@ def argument_parser():
                         help="how to pool features over a tracklet (for video reid)")
     
     # ************************************************************
-    # dataset-specific setting
+    # Dataset-specific setting
     # ************************************************************
     parser.add_argument('--cuhk03-labeled', action='store_true',
                         help="use labeled images, if false, use detected images")
