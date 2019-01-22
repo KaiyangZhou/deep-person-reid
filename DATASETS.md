@@ -53,15 +53,16 @@ dukemtmc-reid/
 
 **MSMT17**:
 10. Create a directory named `msmt17/` under `data/`.
-11. Download the dataset `MSMT17_V1.tar.gz` from http://www.pkuvmc.com/publications/msmt17.html to `data/msmt17/`. Extract the file under the same folder, so you will have
+11. Download the dataset (e.g. `MSMT17_V1.tar.gz`) from http://www.pkuvmc.com/publications/msmt17.html to `data/msmt17/`. Extract the file under the same folder, you need to have
 ```
 msmt17/
-    MSMT17_V1.tar.gz # (do whatever you want with this .tar file)
-    MSMT17_V1/
+    MSMT17_V1/ # different versions might differ in folder name
         train/
         test/
         list_train.txt
-        ... (totally six .txt files)
+        list_query.txt
+        list_gallery.txt
+        list_val.txt
 ```
 12. Use `msmt17` as the key for this dataset.
 
