@@ -51,7 +51,8 @@ class ImageDataManager(BaseDataManager):
                  train_sampler='',
                  num_instances=4, # number of instances per identity (for RandomIdentitySampler)
                  cuhk03_labeled=False, # use cuhk03's labeled or detected images
-                 cuhk03_classic_split=False # use cuhk03's classic split or 767/700 split
+                 cuhk03_classic_split=False, # use cuhk03's classic split or 767/700 split
+                 market1501_500k=False, # add 500k distractors to the gallery set for market1501
                  ):
         super(ImageDataManager, self).__init__()
         self.use_gpu = use_gpu
@@ -81,7 +82,7 @@ class ImageDataManager(BaseDataManager):
         for name in self.source_names:
             dataset = init_imgreid_dataset(
                 root=self.root, name=name, split_id=self.split_id, cuhk03_labeled=self.cuhk03_labeled,
-                cuhk03_classic_split=self.cuhk03_classic_split
+                cuhk03_classic_split=self.cuhk03_classic_split, market1501_500k=market1501_500k
             )
 
             for img_path, pid, camid in dataset.train:
@@ -114,7 +115,7 @@ class ImageDataManager(BaseDataManager):
         for name in self.target_names:
             dataset = init_imgreid_dataset(
                 root=self.root, name=name, split_id=self.split_id, cuhk03_labeled=self.cuhk03_labeled,
-                cuhk03_classic_split=self.cuhk03_classic_split
+                cuhk03_classic_split=self.cuhk03_classic_split, market1501_500k=market1501_500k
             )
 
             self.testloader_dict[name]['query'] = DataLoader(

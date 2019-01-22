@@ -26,11 +26,12 @@ market1501/
     ...
 ```
 3. Use `market1501` as the key to load Market1501.
+4. To use the extra 500K distractors (i.e. Market1501 + 500K), go to the **Market-1501+500k Dataset** section at http://www.liangzheng.org/Project/project_reid.html, download the zip file (`distractors_500k.zip`), and extract it under `market1501/`. As a result, you will have a folder named `images/`. Use `--market1501-500k` to add these extra images to the gallery set.
 
 **CUHK03**:
-1. Create a folder named `cuhk03/` under `data/`.
-2. Download the dataset to `data/cuhk03/` from http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html and extract `cuhk03_release.zip`, so you will have `data/cuhk03/cuhk03_release`.
-3. Download the new split (767/700) from [person-re-ranking](https://github.com/zhunzhong07/person-re-ranking/tree/master/evaluation/data/CUHK03). What you need are `cuhk03_new_protocol_config_detected.mat` and `cuhk03_new_protocol_config_labeled.mat`; put these two mat files under `data/cuhk03`. Finally, the data structure should look like
+5. Create a folder named `cuhk03/` under `data/`.
+6. Download the dataset to `data/cuhk03/` from http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html and extract `cuhk03_release.zip`, so you will have `data/cuhk03/cuhk03_release`.
+7. Download the new split (767/700) from [person-re-ranking](https://github.com/zhunzhong07/person-re-ranking/tree/master/evaluation/data/CUHK03). What you need are `cuhk03_new_protocol_config_detected.mat` and `cuhk03_new_protocol_config_labeled.mat`; put these two mat files under `data/cuhk03`. Finally, the data structure should look like
 ```
 cuhk03/
     cuhk03_release/
@@ -38,11 +39,11 @@ cuhk03/
     cuhk03_new_protocol_config_labeled.mat
     ...
 ```
-4. Use `cuhk03` as the dataset key. In the default mode, we load data using the new split (767/700). If you wanna use the original (20) splits (1367/100), please specify with `--cuhk03-classic-split`. As the CMC is computed differently from Market1501 for the 1367/100 split (see [here](http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html)), you need to specify `--use-metric-cuhk03` to activate the corresponding metric for fair comparison with some methods that adopt the original splits. In addition, we support both `labeled` and `detected` modes. The default mode loads `detected` images. Specify `--cuhk03-labeled` if you wanna train and test on `labeled` images.
+8. Use `cuhk03` as the dataset key. In the default mode, we load data using the new split (767/700). If you wanna use the original (20) splits (1367/100), please specify with `--cuhk03-classic-split`. As the CMC is computed differently from Market1501 for the 1367/100 split (see [here](http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html)), you need to specify `--use-metric-cuhk03` to activate the corresponding metric for fair comparison with some methods that adopt the original splits. In addition, we support both `labeled` and `detected` modes. The default mode loads `detected` images. Specify `--cuhk03-labeled` if you wanna train and test on `labeled` images.
 
 
 **DukeMTMC-reID**:
-1. The process is automated so you can simply do `-s dukemtmcreid -t dukemtmcreid`. The final folder structure looks like
+9. The process is automated so you can simply do `-s dukemtmcreid -t dukemtmcreid`. The final folder structure looks like
 ```
 dukemtmc-reid/
     DukeMTMC-reid.zip # (you can delete this zip file, it is ok)
@@ -51,8 +52,8 @@ dukemtmc-reid/
 
 
 **MSMT17**:
-1. Create a directory named `msmt17/` under `data/`.
-2. Download the dataset `MSMT17_V1.tar.gz` from http://www.pkuvmc.com/publications/msmt17.html to `data/msmt17/`. Extract the file under the same folder, so you will have
+10. Create a directory named `msmt17/` under `data/`.
+11. Download the dataset `MSMT17_V1.tar.gz` from http://www.pkuvmc.com/publications/msmt17.html to `data/msmt17/`. Extract the file under the same folder, so you will have
 ```
 msmt17/
     MSMT17_V1.tar.gz # (do whatever you want with this .tar file)
@@ -62,10 +63,10 @@ msmt17/
         list_train.txt
         ... (totally six .txt files)
 ```
-3. Use `msmt17` as the key for this dataset.
+12. Use `msmt17` as the key for this dataset.
 
 **VIPeR**:
-1. The code supports automatic download and formatting. Just use `-s viper -t viper`. The final data structure would look like:
+13. The code supports automatic download and formatting. Just use `-s viper -t viper`. The final data structure would look like:
 ```
 viper/
     VIPeR/
@@ -74,7 +75,7 @@ viper/
 ```
 
 **GRID**:
-1. The code supports automatic download and formatting. Just use `-s grid -t grid`. The final data structure would look like:
+14. The code supports automatic download and formatting. Just use `-s grid -t grid`. The final data structure would look like:
 ```
 grid/
     underground_reid/
@@ -83,13 +84,13 @@ grid/
 ```
 
 **CUHK01**:
-1. Create `cuhk01/` under `data/`.
-2. Download `CUHK01.zip` from http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html and place it in `cuhk01/`.
-3. Do `-s cuhk01 -t cuhk01` to use the data.
+15. Create `cuhk01/` under `data/`.
+16. Download `CUHK01.zip` from http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html and place it in `cuhk01/`.
+17. Do `-s cuhk01 -t cuhk01` to use the data.
 
 
 **PRID450S**:
-1. The code supports automatic download and formatting. Just use `-s prid450s -t prid450s`. The final data structure would look like:
+18. The code supports automatic download and formatting. Just use `-s prid450s -t prid450s`. The final data structure would look like:
 ```
 prid450s/
     cam_a/
@@ -100,15 +101,15 @@ prid450s/
 
 
 **SenseReID**:
-1. Create `sensereid/` under `data/`.
-2. Download the dataset from this [link](https://drive.google.com/file/d/0B56OfSrVI8hubVJLTzkwV2VaOWM/view) and extract to `sensereid/`. The final folder structure should look like
+19. Create `sensereid/` under `data/`.
+20. Download the dataset from this [link](https://drive.google.com/file/d/0B56OfSrVI8hubVJLTzkwV2VaOWM/view) and extract to `sensereid/`. The final folder structure should look like
 ```
 sensereid/
     SenseReID/
         test_probe/
         test_gallery/
 ```
-3. The command for using SenseReID is `-t sensereid`. Note that SenseReID is for test purpose only so training images are unavailable. Please use `--evaluate` along with `-t sensereid`.
+21. The command for using SenseReID is `-t sensereid`. Note that SenseReID is for test purpose only so training images are unavailable. Please use `--evaluate` along with `-t sensereid`.
 
 
 ## Video ReID

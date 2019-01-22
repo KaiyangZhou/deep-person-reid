@@ -33,18 +33,22 @@ class Market1501(BaseImageDataset):
     """
     dataset_dir = 'market1501'
 
-    def __init__(self, root='data', verbose=True, **kwargs):
+    def __init__(self, root='data', verbose=True, market1501_500k=False, **kwargs):
         super(Market1501, self).__init__(root)
         self.dataset_dir = osp.join(self.root, self.dataset_dir)
         self.train_dir = osp.join(self.dataset_dir, 'bounding_box_train')
         self.query_dir = osp.join(self.dataset_dir, 'query')
         self.gallery_dir = osp.join(self.dataset_dir, 'bounding_box_test')
+        self.extra_gallery_dir = osp.join(self.dataset_dir, 'images')
+        self.market1501_500k = market1501_500k
 
         self._check_before_run()
 
         train = self._process_dir(self.train_dir, relabel=True)
         query = self._process_dir(self.query_dir, relabel=False)
         gallery = self._process_dir(self.gallery_dir, relabel=False)
+        if self.market1501_500k:
+            gallery += self._process_dir(self.extra_gallery_dir, relabel=False)
 
         if verbose:
             print("=> Market1501 loaded")
@@ -68,6 +72,8 @@ class Market1501(BaseImageDataset):
             raise RuntimeError("'{}' is not available".format(self.query_dir))
         if not osp.exists(self.gallery_dir):
             raise RuntimeError("'{}' is not available".format(self.gallery_dir))
+        if self.market1501_500k and not osp.exists(self.extra_gallery_dir):
+            raise RuntimeError("'{}' is not available".format(self.extra_gallery_dir))
 
     def _process_dir(self, dir_path, relabel=False):
         img_paths = glob.glob(osp.join(dir_path, '*.jpg'))
