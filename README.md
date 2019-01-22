@@ -19,6 +19,7 @@ It has the following features:
 - state-of-the-art training techniques.
 
 ## Updates
+- 22-01-2019: Added [Market1501+500K](https://github.com/KaiyangZhou/deep-person-reid/issues/107).
 - 06-01-2019: Released [Awesome-ReID](AWESOME_REID.md), a collection of ReID-related research with links to codes and papers.
 - 26-11-2018: Released pretrained weights (imagenet & reid) for [shufflenet](torchreid/models/shufflenet.py).
 - 23-11-2018: Released imagenet-pretrained weights for [resnext50_32x4d](torchreid/models/resnext.py).
