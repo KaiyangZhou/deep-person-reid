@@ -22,7 +22,7 @@ from .bases import BaseImageDataset
 # Log:
 # 22.01.2019: v1 and v2 only differ in dir names
 _TRAIN_DIR_KEY = 'train_dir'
-_TEST_DIR_KEY = 'train_dir'
+_TEST_DIR_KEY = 'test_dir'
 _VERSION = {
     'MSMT17_V1': {
         _TRAIN_DIR_KEY: 'train',
@@ -57,8 +57,8 @@ class MSMT17(BaseImageDataset):
         has_main_dir = False
         for main_dir in _VERSION:
             if osp.exists(osp.join(self.dataset_dir, main_dir)):
-                train_dir = _VERSION[main_dir][TRAIN_DIR_KEY]
-                test_dir = _VERSION[main_dir][TEST_DIR_KEY]
+                train_dir = _VERSION[main_dir][_TRAIN_DIR_KEY]
+                test_dir = _VERSION[main_dir][_TEST_DIR_KEY]
                 has_main_dir = True
                 break
         assert has_main_dir, "Dataset folder not found"
