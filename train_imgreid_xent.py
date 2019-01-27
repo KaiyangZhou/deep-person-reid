@@ -20,7 +20,7 @@ from torchreid.losses import CrossEntropyLoss, DeepSupervision
 from torchreid.utils.iotools import save_checkpoint, check_isfile
 from torchreid.utils.avgmeter import AverageMeter
 from torchreid.utils.loggers import Logger, RankLogger
-from torchreid.utils.torchtools import count_num_param, open_all_layers, open_specified_layers
+from torchreid.utils.torchtools import count_num_param, open_all_layers, open_specified_layers, accuracy
 from torchreid.utils.reidtools import visualize_ranked_results
 from torchreid.utils.generaltools import set_random_seed
 from torchreid.eval_metrics import evaluate
@@ -152,6 +152,7 @@ def main():
 
 def train(epoch, model, criterion, optimizer, trainloader, use_gpu, fixbase=False):
     losses = AverageMeter()
+    accs = AverageMeter()
     batch_time = AverageMeter()
     data_time = AverageMeter()
 
@@ -181,14 +182,20 @@ def train(epoch, model, criterion, optimizer, trainloader, use_gpu, fixbase=Fals
         batch_time.update(time.time() - end)
 
         losses.update(loss.item(), pids.size(0))
+        accs.update(accuracy(outputs, pids)[0])
 
         if (batch_idx + 1) % args.print_freq == 0:
             print('Epoch: [{0}][{1}/{2}]\t'
                   'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                   'Data {data_time.val:.4f} ({data_time.avg:.4f})\t'
-                  'Loss {loss.val:.4f} ({loss.avg:.4f})\t'.format(
-                   epoch + 1, batch_idx + 1, len(trainloader), batch_time=batch_time,
-                   data_time=data_time, loss=losses))
+                  'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
+                  'Acc {acc.val:.2f} ({acc.avg:.2f})\t'.format(
+                   epoch + 1, batch_idx + 1, len(trainloader),
+                   batch_time=batch_time,
+                   data_time=data_time,
+                   loss=losses,
+                   acc=accs
+            ))
         
         end = time.time()
 
