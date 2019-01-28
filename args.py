@@ -21,7 +21,7 @@ def argument_parser():
                         help="width of an image")
     parser.add_argument('--split-id', type=int, default=0,
                         help="split index (note: 0-based)")
-    parser.add_argument('--train-sampler', type=str, default='',
+    parser.add_argument('--train-sampler', type=str, default='RandomSampler',
                         help="sampler for trainloader")
 
     # ************************************************************
@@ -194,6 +194,8 @@ def video_dataset_kwargs(parsed_args):
         'train_batch_size': parsed_args.train_batch_size,
         'test_batch_size': parsed_args.test_batch_size,
         'workers': parsed_args.workers,
+        'train_sampler': parsed_args.train_sampler,
+        'num_instances': parsed_args.num_instances,
         'seq_len': parsed_args.seq_len,
         'sample_method': parsed_args.sample_method
     }

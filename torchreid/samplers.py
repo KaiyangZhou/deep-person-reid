@@ -7,7 +7,7 @@ import copy
 import random
 
 import torch
-from torch.utils.data.sampler import Sampler
+from torch.utils.data.sampler import Sampler, RandomSampler
 
 
 class RandomIdentitySampler(Sampler):
@@ -69,3 +69,26 @@ class RandomIdentitySampler(Sampler):
 
     def __len__(self):
         return self.length
+
+
+def build_train_sampler(data_source,
+                        train_sampler,
+                        train_batch_size,
+                        num_instances,
+                        **kwargs):
+    """Build sampler for training
+
+    Args:
+    - data_source (list): list of (img_path, pid, camid).
+    - train_sampler (str): sampler name (default: RandomSampler).
+    - train_batch_size (int): batch size during training.
+    - num_instances (int): number of instances per identity in a batch (for RandomIdentitySampler).
+    """
+
+    if train_sampler == 'RandomIdentitySampler':
+        sampler = RandomIdentitySampler(data_source, train_batch_size, num_instances)
+    
+    else:
+        sampler = RandomSampler(data_source)
+
+    return sampler

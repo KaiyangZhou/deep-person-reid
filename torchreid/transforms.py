@@ -42,7 +42,10 @@ class Random2DTranslation(object):
         return croped_img
 
 
-def build_transforms(height, width, is_train, **kwargs):
+def build_transforms(height,
+                     width,
+                     is_train,
+                     **kwargs):
     """Build transforms
 
     Args:
