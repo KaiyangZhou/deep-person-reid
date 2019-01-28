@@ -69,6 +69,7 @@ class ImageDataManager(BaseDataManager):
         self.num_instances = num_instances
         self.cuhk03_labeled = cuhk03_labeled
         self.cuhk03_classic_split = cuhk03_classic_split
+        self.market1501_500k = market1501_500k
 
         # Build train and test transform functions
         transform_train = build_transforms(self.height, self.width, is_train=True)
@@ -82,7 +83,7 @@ class ImageDataManager(BaseDataManager):
         for name in self.source_names:
             dataset = init_imgreid_dataset(
                 root=self.root, name=name, split_id=self.split_id, cuhk03_labeled=self.cuhk03_labeled,
-                cuhk03_classic_split=self.cuhk03_classic_split, market1501_500k=market1501_500k
+                cuhk03_classic_split=self.cuhk03_classic_split, market1501_500k=self.market1501_500k
             )
 
             for img_path, pid, camid in dataset.train:
@@ -115,7 +116,7 @@ class ImageDataManager(BaseDataManager):
         for name in self.target_names:
             dataset = init_imgreid_dataset(
                 root=self.root, name=name, split_id=self.split_id, cuhk03_labeled=self.cuhk03_labeled,
-                cuhk03_classic_split=self.cuhk03_classic_split, market1501_500k=market1501_500k
+                cuhk03_classic_split=self.cuhk03_classic_split, market1501_500k=self.market1501_500k
             )
 
             self.testloader_dict[name]['query'] = DataLoader(
