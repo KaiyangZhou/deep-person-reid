@@ -41,21 +41,21 @@ def main():
     if args.use_cpu: use_gpu = False
     log_name = 'log_test.txt' if args.evaluate else 'log_train.txt'
     sys.stdout = Logger(osp.join(args.save_dir, log_name))
-    print("==========\nArgs:{}\n==========".format(args))
+    print('==========\nArgs:{}\n=========='.format(args))
 
     if use_gpu:
-        print("Currently using GPU {}".format(args.gpu_devices))
+        print('Currently using GPU {}'.format(args.gpu_devices))
         cudnn.benchmark = True
     else:
-        print("Currently using CPU, however, GPU is highly recommended")
+        print('Currently using CPU, however, GPU is highly recommended')
 
-    print("Initializing image data manager")
+    print('Initializing image data manager')
     dm = ImageDataManager(use_gpu, **image_dataset_kwargs(args))
     trainloader, testloader_dict = dm.return_dataloaders()
 
-    print("Initializing model: {}".format(args.arch))
+    print('Initializing model: {}'.format(args.arch))
     model = models.init_model(name=args.arch, num_classes=dm.num_train_pids, loss={'xent'}, use_gpu=use_gpu)
-    print("Model size: {:.3f} M".format(count_num_param(model)))
+    print('Model size: {:.3f} M'.format(count_num_param(model)))
 
     criterion = CrossEntropyLoss(num_classes=dm.num_train_pids, use_gpu=use_gpu, label_smooth=args.label_smooth)
     optimizer = init_optimizer(model.parameters(), **optimizer_kwargs(args))
@@ -69,23 +69,23 @@ def main():
         pretrain_dict = {k: v for k, v in pretrain_dict.items() if k in model_dict and model_dict[k].size() == v.size()}
         model_dict.update(pretrain_dict)
         model.load_state_dict(model_dict)
-        print("Loaded pretrained weights from '{}'".format(args.load_weights))
+        print('Loaded pretrained weights from "{}"'.format(args.load_weights))
 
     if args.resume and check_isfile(args.resume):
         checkpoint = torch.load(args.resume)
         model.load_state_dict(checkpoint['state_dict'])
         args.start_epoch = checkpoint['epoch'] + 1
-        print("Loaded checkpoint from '{}'".format(args.resume))
-        print("- start_epoch: {}\n- rank1: {}".format(args.start_epoch, checkpoint['rank1']))
+        print('Loaded checkpoint from "{}"'.format(args.resume))
+        print('- start_epoch: {}\n- rank1: {}'.format(args.start_epoch, checkpoint['rank1']))
 
     if use_gpu:
         model = nn.DataParallel(model).cuda()
 
     if args.evaluate:
-        print("Evaluate only")
+        print('Evaluate only')
 
         for name in args.target_names:
-            print("Evaluating {} ...".format(name))
+            print('Evaluating {} ...'.format(name))
             queryloader = testloader_dict[name]['query']
             galleryloader = testloader_dict[name]['gallery']
             distmat = test(model, queryloader, galleryloader, use_gpu, return_distmat=True)
@@ -101,10 +101,10 @@ def main():
     start_time = time.time()
     ranklogger = RankLogger(args.source_names, args.target_names)
     train_time = 0
-    print("=> Start training")
+    print('=> Start training')
 
     if args.fixbase_epoch > 0:
-        print("Train {} for {} epochs while keeping other layers frozen".format(args.open_layers, args.fixbase_epoch))
+        print('Train {} for {} epochs while keeping other layers frozen'.format(args.open_layers, args.fixbase_epoch))
         initial_optim_state = optimizer.state_dict()
 
         for epoch in range(args.fixbase_epoch):
@@ -112,7 +112,7 @@ def main():
             train(epoch, model, criterion, optimizer, trainloader, use_gpu, fixbase=True)
             train_time += round(time.time() - start_train_time)
 
-        print("Done. All layers are open to train for {} epochs".format(args.max_epoch))
+        print('Done. All layers are open to train for {} epochs'.format(args.max_epoch))
         optimizer.load_state_dict(initial_optim_state)
 
     for epoch in range(args.start_epoch, args.max_epoch):
@@ -123,10 +123,10 @@ def main():
         scheduler.step()
         
         if (epoch + 1) > args.start_eval and args.eval_freq > 0 and (epoch + 1) % args.eval_freq == 0 or (epoch + 1) == args.max_epoch:
-            print("=> Test")
+            print('=> Test')
             
             for name in args.target_names:
-                print("Evaluating {} ...".format(name))
+                print('Evaluating {} ...'.format(name))
                 queryloader = testloader_dict[name]['query']
                 galleryloader = testloader_dict[name]['gallery']
                 rank1 = test(model, queryloader, galleryloader, use_gpu)
@@ -146,7 +146,7 @@ def main():
     elapsed = round(time.time() - start_time)
     elapsed = str(datetime.timedelta(seconds=elapsed))
     train_time = str(datetime.timedelta(seconds=train_time))
-    print("Finished. Total elapsed time (h:m:s): {}. Training time (h:m:s): {}.".format(elapsed, train_time))
+    print('Finished. Total elapsed time (h:m:s): {}. Training time (h:m:s): {}.'.format(elapsed, train_time))
     ranklogger.show_summary()
 
 
@@ -222,7 +222,7 @@ def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20], retur
         q_pids = np.asarray(q_pids)
         q_camids = np.asarray(q_camids)
 
-        print("Extracted features for query set, obtained {}-by-{} matrix".format(qf.size(0), qf.size(1)))
+        print('Extracted features for query set, obtained {}-by-{} matrix'.format(qf.size(0), qf.size(1)))
 
         gf, g_pids, g_camids = [], [], []
         end = time.time()
@@ -241,9 +241,9 @@ def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20], retur
         g_pids = np.asarray(g_pids)
         g_camids = np.asarray(g_camids)
 
-        print("Extracted features for gallery set, obtained {}-by-{} matrix".format(gf.size(0), gf.size(1)))
+        print('Extracted features for gallery set, obtained {}-by-{} matrix'.format(gf.size(0), gf.size(1)))
 
-    print("=> BatchTime(s)/BatchSize(img): {:.3f}/{}".format(batch_time.avg, args.test_batch_size))
+    print('=> BatchTime(s)/BatchSize(img): {:.3f}/{}'.format(batch_time.avg, args.test_batch_size))
 
     m, n = qf.size(0), gf.size(0)
     distmat = torch.pow(qf, 2).sum(dim=1, keepdim=True).expand(m, n) + \
@@ -251,15 +251,15 @@ def test(model, queryloader, galleryloader, use_gpu, ranks=[1, 5, 10, 20], retur
     distmat.addmm_(1, -2, qf, gf.t())
     distmat = distmat.numpy()
 
-    print("Computing CMC and mAP")
+    print('Computing CMC and mAP')
     cmc, mAP = evaluate(distmat, q_pids, g_pids, q_camids, g_camids, use_metric_cuhk03=args.use_metric_cuhk03)
 
-    print("Results ----------")
-    print("mAP: {:.1%}".format(mAP))
-    print("CMC curve")
+    print('Results ----------')
+    print('mAP: {:.1%}'.format(mAP))
+    print('CMC curve')
     for r in ranks:
-        print("Rank-{:<3}: {:.1%}".format(r, cmc[r-1]))
-    print("------------------")
+        print('Rank-{:<3}: {:.1%}'.format(r, cmc[r-1]))
+    print('------------------')
 
     if return_distmat:
         return distmat

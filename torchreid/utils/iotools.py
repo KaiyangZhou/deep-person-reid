@@ -21,7 +21,7 @@ def mkdir_if_missing(directory):
 def check_isfile(path):
     isfile = osp.isfile(path)
     if not isfile:
-        print("=> Warning: no file found at '{}' (ignored)".format(path))
+        print('=> Warning: no file found at "{}" (ignored)'.format(path))
     return isfile
 
 

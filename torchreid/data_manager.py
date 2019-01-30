@@ -56,7 +56,7 @@ class ImageDataManager(BaseDataManager):
                  ):
         super(ImageDataManager, self).__init__()
 
-        print("=> Initializing TRAIN (source) datasets")
+        print('=> Initializing TRAIN (source) datasets')
         train = []
         self._num_train_pids = 0
         self._num_train_cams = 0
@@ -88,7 +88,7 @@ class ImageDataManager(BaseDataManager):
             pin_memory=use_gpu, drop_last=True
         )
 
-        print("=> Initializing TEST (target) datasets")
+        print('=> Initializing TEST (target) datasets')
         self.testloader_dict = {name: {'query': None, 'gallery': None} for name in target_names}
         self.testdataset_dict = {name: {'query': None, 'gallery': None} for name in target_names}
 
@@ -115,16 +115,16 @@ class ImageDataManager(BaseDataManager):
             self.testdataset_dict[name]['query'] = dataset.query
             self.testdataset_dict[name]['gallery'] = dataset.gallery
 
-        print("\n")
-        print("  **************** Summary ****************")
-        print("  train names      : {}".format(source_names))
-        print("  # train datasets : {}".format(len(source_names)))
-        print("  # train ids      : {}".format(self.num_train_pids))
-        print("  # train images   : {}".format(len(train)))
-        print("  # train cameras  : {}".format(self.num_train_cams))
-        print("  test names       : {}".format(target_names))
-        print("  *****************************************")
-        print("\n")
+        print('\n')
+        print('  **************** Summary ****************')
+        print('  train names      : {}'.format(source_names))
+        print('  # train datasets : {}'.format(len(source_names)))
+        print('  # train ids      : {}'.format(self.num_train_pids))
+        print('  # train images   : {}'.format(len(train)))
+        print('  # train cameras  : {}'.format(self.num_train_cams))
+        print('  test names       : {}'.format(target_names))
+        print('  *****************************************')
+        print('\n')
 
 
 class VideoDataManager(BaseDataManager):
@@ -151,7 +151,7 @@ class VideoDataManager(BaseDataManager):
                  ):
         super(VideoDataManager, self).__init__()
 
-        print("=> Initializing TRAIN (source) datasets")
+        print('=> Initializing TRAIN (source) datasets')
         train = []
         self._num_train_pids = 0
         self._num_train_cams = 0
@@ -196,7 +196,7 @@ class VideoDataManager(BaseDataManager):
                 pin_memory=use_gpu, drop_last=True
             )
 
-        print("=> Initializing TEST (target) datasets")
+        print('=> Initializing TEST (target) datasets')
         self.testloader_dict = {name: {'query': None, 'gallery': None} for name in target_names}
         self.testdataset_dict = {name: {'query': None, 'gallery': None} for name in target_names}
 
@@ -220,16 +220,16 @@ class VideoDataManager(BaseDataManager):
             self.testdataset_dict[name]['query'] = dataset.query
             self.testdataset_dict[name]['gallery'] = dataset.gallery
 
-        print("\n")
-        print("  **************** Summary ****************")
-        print("  train names       : {}".format(source_names))
-        print("  # train datasets  : {}".format(len(source_names)))
-        print("  # train ids       : {}".format(self.num_train_pids))
+        print('\n')
+        print('  **************** Summary ****************')
+        print('  train names       : {}'.format(source_names))
+        print('  # train datasets  : {}'.format(len(source_names)))
+        print('  # train ids       : {}'.format(self.num_train_pids))
         if image_training:
-            print("  # train images   : {}".format(len(train)))
+            print('  # train images   : {}'.format(len(train)))
         else:
-            print("  # train tracklets: {}".format(len(train)))
-        print("  # train cameras   : {}".format(self.num_train_cams))
-        print("  test names        : {}".format(target_names))
-        print("  *****************************************")
-        print("\n")
+            print('  # train tracklets: {}'.format(len(train)))
+        print('  # train cameras   : {}'.format(self.num_train_cams))
+        print('  test names        : {}'.format(target_names))
+        print('  *****************************************')
+        print('\n')

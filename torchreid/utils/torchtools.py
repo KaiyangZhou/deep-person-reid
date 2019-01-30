@@ -53,7 +53,7 @@ def open_specified_layers(model, open_layers):
         model = model.module
 
     for layer in open_layers:
-        assert hasattr(model, layer), "'{}' is not an attribute of the model, please provide the correct name".format(layer)
+        assert hasattr(model, layer), '"{}" is not an attribute of the model, please provide the correct name'.format(layer)
 
     for name, module in model.named_children():
         if name in open_layers:

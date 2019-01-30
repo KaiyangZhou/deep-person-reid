@@ -69,16 +69,16 @@ class CUHK03(BaseImageDataset):
             split_path = self.split_classic_det_json_path if cuhk03_classic_split else self.split_new_det_json_path
 
         splits = read_json(split_path)
-        assert split_id < len(splits), "Condition split_id ({}) < len(splits) ({}) is false".format(split_id, len(splits))
+        assert split_id < len(splits), 'Condition split_id ({}) < len(splits) ({}) is false'.format(split_id, len(splits))
         split = splits[split_id]
-        print("Split index = {}".format(split_id))
+        print('Split index = {}'.format(split_id))
 
         train = split['train']
         query = split['query']
         gallery = split['gallery']
 
         if verbose:
-            print("=> CUHK03 ({}) loaded".format(image_type))
+            print('=> CUHK03 ({}) loaded'.format(image_type))
             self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
@@ -92,15 +92,15 @@ class CUHK03(BaseImageDataset):
     def _check_before_run(self):
         """Check if all files are available before going deeper"""
         if not osp.exists(self.dataset_dir):
-            raise RuntimeError("'{}' is not available".format(self.dataset_dir))
+            raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
         if not osp.exists(self.data_dir):
-            raise RuntimeError("'{}' is not available".format(self.data_dir))
+            raise RuntimeError('"{}" is not available'.format(self.data_dir))
         if not osp.exists(self.raw_mat_path):
-            raise RuntimeError("'{}' is not available".format(self.raw_mat_path))
+            raise RuntimeError('"{}" is not available'.format(self.raw_mat_path))
         if not osp.exists(self.split_new_det_mat_path):
-            raise RuntimeError("'{}' is not available".format(self.split_new_det_mat_path))
+            raise RuntimeError('"{}" is not available'.format(self.split_new_det_mat_path))
         if not osp.exists(self.split_new_lab_mat_path):
-            raise RuntimeError("'{}' is not available".format(self.split_new_lab_mat_path))
+            raise RuntimeError('"{}" is not available'.format(self.split_new_lab_mat_path))
 
     def _preprocess(self):
         """
@@ -109,7 +109,7 @@ class CUHK03(BaseImageDataset):
         2. Create 20 classic splits. (Li et al. CVPR'14)
         3. Create new split. (Zhong et al. CVPR'17)
         """
-        print("Note: if root path is changed, the previously generated json files need to be re-generated (delete them first)")
+        print('Note: if root path is changed, the previously generated json files need to be re-generated (delete them first)')
         if osp.exists(self.imgs_labeled_dir) and \
            osp.exists(self.imgs_detected_dir) and \
            osp.exists(self.split_classic_det_json_path) and \
@@ -121,7 +121,7 @@ class CUHK03(BaseImageDataset):
         mkdir_if_missing(self.imgs_detected_dir)
         mkdir_if_missing(self.imgs_labeled_dir)
 
-        print("Extract image data from {} and save as png".format(self.raw_mat_path))
+        print('Extract image data from {} and save as png'.format(self.raw_mat_path))
         mat = h5py.File(self.raw_mat_path, 'r')
 
         def _deref(ref):
@@ -147,7 +147,7 @@ class CUHK03(BaseImageDataset):
             return img_paths
 
         def _extract_img(name):
-            print("Processing {} images (extract and save) ...".format(name))
+            print('Processing {} images (extract and save) ...'.format(name))
             meta_data = []
             imgs_dir = self.imgs_detected_dir if name == 'detected' else self.imgs_labeled_dir
             for campid, camp_ref in enumerate(mat[name][0]):
@@ -155,9 +155,9 @@ class CUHK03(BaseImageDataset):
                 num_pids = camp.shape[0]
                 for pid in range(num_pids):
                     img_paths = _process_images(camp[pid,:], campid, pid, imgs_dir)
-                    assert len(img_paths) > 0, "campid{}-pid{} has no images".format(campid, pid)
+                    assert len(img_paths) > 0, 'campid{}-pid{} has no images'.format(campid, pid)
                     meta_data.append((campid+1, pid+1, img_paths))
-                print("- done camera pair {} with {} identities".format(campid+1, num_pids))
+                print('- done camera pair {} with {} identities'.format(campid+1, num_pids))
             return meta_data
 
         meta_detected = _extract_img('detected')
@@ -183,7 +183,7 @@ class CUHK03(BaseImageDataset):
                     num_train_imgs += len(img_paths)
             return train, num_train_pids, num_train_imgs, test, num_test_pids, num_test_imgs
 
-        print("Creating classic splits (# = 20) ...")
+        print('Creating classic splits (# = 20) ...')
         splits_classic_det, splits_classic_lab = [], []
         for split_ref in mat['testsets'][0]:
             test_split = _deref(split_ref).tolist()
@@ -237,7 +237,7 @@ class CUHK03(BaseImageDataset):
             gallery_info = _extract_set(filelist, pids, pid2label, gallery_idxs, img_dir, relabel=False)
             return train_info, query_info, gallery_info
 
-        print("Creating new splits for detected images (767/700) ...")
+        print('Creating new splits for detected images (767/700) ...')
         train_info, query_info, gallery_info = _extract_new_split(
             loadmat(self.split_new_det_mat_path),
             self.imgs_detected_dir,
@@ -250,7 +250,7 @@ class CUHK03(BaseImageDataset):
         }]
         write_json(splits, self.split_new_det_json_path)
 
-        print("Creating new splits for labeled images (767/700) ...")
+        print('Creating new splits for labeled images (767/700) ...')
         train_info, query_info, gallery_info = _extract_new_split(
             loadmat(self.split_new_lab_mat_path),
             self.imgs_labeled_dir,

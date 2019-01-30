@@ -65,9 +65,9 @@ class RankLogger(object):
         self.logger[name]['rank1'].append(rank1)
 
     def show_summary(self):
-        print("=> Show summary")
+        print('=> Show summary')
         for name in self.target_names:
             from_where = 'source' if name in self.source_names else 'target'
-            print("{} ({})".format(name, from_where))
+            print('{} ({})'.format(name, from_where))
             for epoch, rank1 in zip(self.logger[name]['epoch'], self.logger[name]['rank1']):
-                print("- epoch {}\t rank1 {:.1%}".format(epoch, rank1))
+                print('- epoch {}\t rank1 {:.1%}'.format(epoch, rank1))

@@ -37,7 +37,7 @@ cpdef eval_cuhk03_cy(float[:,:] distmat, long[:] q_pids, long[:]g_pids,
 
     if num_g < max_rank:
         max_rank = num_g
-        print("Note: number of gallery samples is quite small, got {}".format(num_g))
+        print('Note: number of gallery samples is quite small, got {}'.format(num_g))
     
     cdef:
         long num_repeats = 10
@@ -133,7 +133,7 @@ cpdef eval_cuhk03_cy(float[:,:] distmat, long[:] q_pids, long[:]g_pids,
             all_cmc[q_idx, rank_idx] = cmc[rank_idx]
         num_valid_q += 1.
 
-    assert num_valid_q > 0, "Error: all query identities do not appear in gallery"
+    assert num_valid_q > 0, 'Error: all query identities do not appear in gallery'
 
     # compute averaged cmc
     cdef float[:] avg_cmc = np.zeros(max_rank, dtype=np.float32)
@@ -158,7 +158,7 @@ cpdef eval_market1501_cy(float[:,:] distmat, long[:] q_pids, long[:]g_pids,
 
     if num_g < max_rank:
         max_rank = num_g
-        print("Note: number of gallery samples is quite small, got {}".format(num_g))
+        print('Note: number of gallery samples is quite small, got {}'.format(num_g))
     
     cdef:
         long[:,:] indices = np.argsort(distmat, axis=1)
@@ -223,7 +223,7 @@ cpdef eval_market1501_cy(float[:,:] distmat, long[:] q_pids, long[:]g_pids,
             num_rel += raw_cmc[g_idx]
         all_AP[q_idx] = tmp_cmc_sum / num_rel
 
-    assert num_valid_q > 0, "Error: all query identities do not appear in gallery"
+    assert num_valid_q > 0, 'Error: all query identities do not appear in gallery'
 
     # compute averaged cmc
     cdef float[:] avg_cmc = np.zeros(max_rank, dtype=np.float32)

@@ -48,7 +48,7 @@ class CUHK01(BaseImageDataset):
         self._prepare_split()
         splits = read_json(self.split_path)
         if split_id >= len(splits):
-            raise ValueError("split_id exceeds range, received {}, but expected between 0 and {}".format(split_id, len(splits)-1))
+            raise ValueError('split_id exceeds range, received {}, but expected between 0 and {}'.format(split_id, len(splits)-1))
         split = splits[split_id]
 
         train = split['train']
@@ -60,7 +60,7 @@ class CUHK01(BaseImageDataset):
         gallery = [tuple(item) for item in gallery]
 
         if verbose:
-            print("=> CUHK01 loaded")
+            print('=> CUHK01 loaded')
             self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
@@ -73,18 +73,18 @@ class CUHK01(BaseImageDataset):
 
     def _extract_file(self):
         if not osp.exists(self.campus_dir):
-            print("Extracting files")
+            print('Extracting files')
             zip_ref = zipfile.ZipFile(self.zip_path, 'r')
             zip_ref.extractall(self.dataset_dir)
             zip_ref.close()
-        print("Files extracted")
+        print('Files extracted')
 
     def _check_before_run(self):
         """Check if all files are available before going deeper"""
         if not osp.exists(self.dataset_dir):
-            raise RuntimeError("'{}' is not available".format(self.dataset_dir))
+            raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
         if not osp.exists(self.campus_dir):
-            raise RuntimeError("'{}' is not available".format(self.campus_dir))
+            raise RuntimeError('"{}" is not available'.format(self.campus_dir))
 
     def _prepare_split(self):
         """
@@ -93,7 +93,7 @@ class CUHK01(BaseImageDataset):
         view and camera 3&4 are considered the same view.
         """
         if not osp.exists(self.split_path):
-            print("Creating 10 random splits of train ids and test ids")
+            print('Creating 10 random splits of train ids and test ids')
             img_paths = sorted(glob.glob(osp.join(self.campus_dir, '*.png')))
             img_list = []
             pid_container = set()
@@ -142,8 +142,8 @@ class CUHK01(BaseImageDataset):
                          }
                 splits.append(split)
 
-            print("Totally {} splits are created".format(len(splits)))
+            print('Totally {} splits are created'.format(len(splits)))
             write_json(splits, self.split_path)
-            print("Split file saved to {}".format(self.split_path))
+            print('Split file saved to {}'.format(self.split_path))
 
-        print("Splits created")
+        print('Splits created')

@@ -19,7 +19,7 @@ Note: you might encounter the following error:
 This is normal because the inputs are random numbers. Just try again.
 """
 
-print("*** Compare running time ***")
+print('*** Compare running time ***')
 
 setup = '''
 import sys
@@ -37,19 +37,19 @@ q_camids = np.random.randint(0, 5, size=num_q)
 g_camids = np.random.randint(0, 5, size=num_g)
 '''
 
-print("=> Using market1501's metric")
+print('=> Using market1501\'s metric')
 pytime = timeit.timeit('evaluate(distmat, q_pids, g_pids, q_camids, g_camids, max_rank, use_cython=False)', setup=setup, number=20)
 cytime = timeit.timeit('evaluate(distmat, q_pids, g_pids, q_camids, g_camids, max_rank, use_cython=True)', setup=setup, number=20)
-print("Python time: {} s".format(pytime))
-print("Cython time: {} s".format(cytime))
-print("Cython is {} times faster than python\n".format(pytime / cytime))
+print('Python time: {} s'.format(pytime))
+print('Cython time: {} s'.format(cytime))
+print('Cython is {} times faster than python\n'.format(pytime / cytime))
 
-print("=> Using cuhk03's metric")
+print('=> Using cuhk03\'s metric')
 pytime = timeit.timeit('evaluate(distmat, q_pids, g_pids, q_camids, g_camids, max_rank, use_metric_cuhk03=True, use_cython=False)', setup=setup, number=20)
 cytime = timeit.timeit('evaluate(distmat, q_pids, g_pids, q_camids, g_camids, max_rank, use_metric_cuhk03=True, use_cython=True)', setup=setup, number=20)
-print("Python time: {} s".format(pytime))
-print("Cython time: {} s".format(cytime))
-print("Cython is {} times faster than python\n".format(pytime / cytime))
+print('Python time: {} s'.format(pytime))
+print('Cython time: {} s'.format(cytime))
+print('Cython is {} times faster than python\n'.format(pytime / cytime))
 
 """
 print("=> Check precision")

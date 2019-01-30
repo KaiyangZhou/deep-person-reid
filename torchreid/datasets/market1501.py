@@ -51,7 +51,7 @@ class Market1501(BaseImageDataset):
             gallery += self._process_dir(self.extra_gallery_dir, relabel=False)
 
         if verbose:
-            print("=> Market1501 loaded")
+            print('=> Market1501 loaded')
             self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
@@ -65,15 +65,15 @@ class Market1501(BaseImageDataset):
     def _check_before_run(self):
         """Check if all files are available before going deeper"""
         if not osp.exists(self.dataset_dir):
-            raise RuntimeError("'{}' is not available".format(self.dataset_dir))
+            raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
         if not osp.exists(self.train_dir):
-            raise RuntimeError("'{}' is not available".format(self.train_dir))
+            raise RuntimeError('"{}" is not available'.format(self.train_dir))
         if not osp.exists(self.query_dir):
-            raise RuntimeError("'{}' is not available".format(self.query_dir))
+            raise RuntimeError('"{}" is not available'.format(self.query_dir))
         if not osp.exists(self.gallery_dir):
-            raise RuntimeError("'{}' is not available".format(self.gallery_dir))
+            raise RuntimeError('"{}" is not available'.format(self.gallery_dir))
         if self.market1501_500k and not osp.exists(self.extra_gallery_dir):
-            raise RuntimeError("'{}' is not available".format(self.extra_gallery_dir))
+            raise RuntimeError('"{}" is not available'.format(self.extra_gallery_dir))
 
     def _process_dir(self, dir_path, relabel=False):
         img_paths = glob.glob(osp.join(dir_path, '*.jpg'))

@@ -61,7 +61,7 @@ class MSMT17(BaseImageDataset):
                 test_dir = _VERSION[main_dir][_TEST_DIR_KEY]
                 has_main_dir = True
                 break
-        assert has_main_dir, "Dataset folder not found"
+        assert has_main_dir, 'Dataset folder not found'
         self.train_dir = osp.join(self.dataset_dir, main_dir, train_dir)
         self.test_dir = osp.join(self.dataset_dir, main_dir, test_dir)
         self.list_train_path = osp.join(self.dataset_dir, main_dir, 'list_train.txt')
@@ -80,7 +80,7 @@ class MSMT17(BaseImageDataset):
         #num_train_imgs += num_val_imgs
 
         if verbose:
-            print("=> MSMT17 loaded")
+            print('=> MSMT17 loaded')
             self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
@@ -94,11 +94,11 @@ class MSMT17(BaseImageDataset):
     def _check_before_run(self):
         """Check if all files are available before going deeper"""
         if not osp.exists(self.dataset_dir):
-            raise RuntimeError("'{}' is not available".format(self.dataset_dir))
+            raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
         if not osp.exists(self.train_dir):
-            raise RuntimeError("'{}' is not available".format(self.train_dir))
+            raise RuntimeError('"{}" is not available'.format(self.train_dir))
         if not osp.exists(self.test_dir):
-            raise RuntimeError("'{}' is not available".format(self.test_dir))
+            raise RuntimeError('"{}" is not available'.format(self.test_dir))
 
     def _process_dir(self, dir_path, list_path):
         with open(list_path, 'r') as txt:
@@ -115,5 +115,5 @@ class MSMT17(BaseImageDataset):
         num_pids = len(pid_container)
         # check if pid starts from 0 and increments with 1
         for idx, pid in enumerate(pid_container):
-            assert idx == pid, "See code comment for explanation"
+            assert idx == pid, 'See code comment for explanation'
         return dataset

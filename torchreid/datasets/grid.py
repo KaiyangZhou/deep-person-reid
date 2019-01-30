@@ -50,7 +50,7 @@ class GRID(BaseImageDataset):
         self._prepare_split()
         splits = read_json(self.split_path)
         if split_id >= len(splits):
-            raise ValueError("split_id exceeds range, received {}, but expected between 0 and {}".format(split_id, len(splits)-1))
+            raise ValueError('split_id exceeds range, received {}, but expected between 0 and {}'.format(split_id, len(splits)-1))
         split = splits[split_id]
 
         train = split['train']
@@ -62,7 +62,7 @@ class GRID(BaseImageDataset):
         gallery = [tuple(item) for item in gallery]
 
         if verbose:
-            print("=> GRID loaded")
+            print('=> GRID loaded')
             self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
@@ -76,34 +76,34 @@ class GRID(BaseImageDataset):
     def _check_before_run(self):
         """Check if all files are available before going deeper"""
         if not osp.exists(self.dataset_dir):
-            raise RuntimeError("'{}' is not available".format(self.dataset_dir))
+            raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
         if not osp.exists(self.probe_path):
-            raise RuntimeError("'{}' is not available".format(self.probe_path))
+            raise RuntimeError('"{}" is not available'.format(self.probe_path))
         if not osp.exists(self.gallery_path):
-            raise RuntimeError("'{}' is not available".format(self.gallery_path))
+            raise RuntimeError('"{}" is not available'.format(self.gallery_path))
         if not osp.exists(self.split_mat_path):
-            raise RuntimeError("'{}' is not available".format(self.split_mat_path))
+            raise RuntimeError('"{}" is not available'.format(self.split_mat_path))
 
     def _download_data(self):
         if osp.exists(self.dataset_dir):
-            print("This dataset has been downloaded.")
+            print('This dataset has been downloaded.')
             return
 
-        print("Creating directory {}".format(self.dataset_dir))
+        print('Creating directory {}'.format(self.dataset_dir))
         mkdir_if_missing(self.dataset_dir)
         fpath = osp.join(self.dataset_dir, osp.basename(self.dataset_url))
 
-        print("Downloading GRID dataset")
+        print('Downloading GRID dataset')
         urllib.urlretrieve(self.dataset_url, fpath)
 
-        print("Extracting files")
+        print('Extracting files')
         zip_ref = zipfile.ZipFile(fpath, 'r')
         zip_ref.extractall(self.dataset_dir)
         zip_ref.close()
 
     def _prepare_split(self):
         if not osp.exists(self.split_path):
-            print("Creating 10 random splits")
+            print('Creating 10 random splits')
             split_mat = loadmat(self.split_mat_path)
             trainIdxAll = split_mat['trainIdxAll'][0] # length = 10
             probe_img_paths = sorted(glob.glob(osp.join(self.probe_path, '*.jpeg')))
@@ -148,8 +148,8 @@ class GRID(BaseImageDataset):
                          }
                 splits.append(split)
             
-            print("Totally {} splits are created".format(len(splits)))
+            print('Totally {} splits are created'.format(len(splits)))
             write_json(splits, self.split_path)
-            print("Split file saved to {}".format(self.split_path))
+            print('Split file saved to {}'.format(self.split_path))
 
-        print("Splits created")
+        print('Splits created')

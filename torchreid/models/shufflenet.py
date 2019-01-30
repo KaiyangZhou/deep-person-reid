@@ -37,7 +37,7 @@ class ChannelShuffle(nn.Module):
 class Bottleneck(nn.Module):
     def __init__(self, in_channels, out_channels, stride, num_groups, group_conv1x1=True):
         super(Bottleneck, self).__init__()
-        assert stride in [1, 2], "Warning: stride must be either 1 or 2"
+        assert stride in [1, 2], 'Warning: stride must be either 1 or 2'
         self.stride = stride
         mid_channels = out_channels // 4
         if stride == 2: out_channels -= in_channels
@@ -139,7 +139,7 @@ class ShuffleNet(nn.Module):
         elif self.loss == {'xent', 'htri'}:
             return y, x
         else:
-            raise KeyError("Unsupported loss: {}".format(self.loss))
+            raise KeyError('Unsupported loss: {}'.format(self.loss))
 
 
 def init_pretrained_weights(model, model_url):
@@ -152,7 +152,7 @@ def init_pretrained_weights(model, model_url):
     pretrain_dict = {k: v for k, v in pretrain_dict.items() if k in model_dict and model_dict[k].size() == v.size()}
     model_dict.update(pretrain_dict)
     model.load_state_dict(model_dict)
-    print("Initialized model with pretrained weights from {}".format(model_url))
+    print('Initialized model with pretrained weights from {}'.format(model_url))
 
 
 def shufflenet(num_classes, loss, pretrained='imagenet', **kwargs):

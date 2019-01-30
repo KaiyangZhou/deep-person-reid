@@ -52,7 +52,7 @@ class DukeMTMCreID(BaseImageDataset):
         gallery = self._process_dir(self.gallery_dir, relabel=False)
 
         if verbose:
-            print("=> DukeMTMC-reID loaded")
+            print('=> DukeMTMC-reID loaded')
             self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
@@ -65,17 +65,17 @@ class DukeMTMCreID(BaseImageDataset):
 
     def _download_data(self):
         if osp.exists(self.dataset_dir):
-            print("This dataset has been downloaded.")
+            print('This dataset has been downloaded.')
             return
 
-        print("Creating directory {}".format(self.dataset_dir))
+        print('Creating directory {}'.format(self.dataset_dir))
         mkdir_if_missing(self.dataset_dir)
         fpath = osp.join(self.dataset_dir, osp.basename(self.dataset_url))
 
-        print("Downloading DukeMTMC-reID dataset")
+        print('Downloading DukeMTMC-reID dataset')
         urllib.urlretrieve(self.dataset_url, fpath)
 
-        print("Extracting files")
+        print('Extracting files')
         zip_ref = zipfile.ZipFile(fpath, 'r')
         zip_ref.extractall(self.dataset_dir)
         zip_ref.close()
@@ -83,13 +83,13 @@ class DukeMTMCreID(BaseImageDataset):
     def _check_before_run(self):
         """Check if all files are available before going deeper"""
         if not osp.exists(self.dataset_dir):
-            raise RuntimeError("'{}' is not available".format(self.dataset_dir))
+            raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
         if not osp.exists(self.train_dir):
-            raise RuntimeError("'{}' is not available".format(self.train_dir))
+            raise RuntimeError('"{}" is not available'.format(self.train_dir))
         if not osp.exists(self.query_dir):
-            raise RuntimeError("'{}' is not available".format(self.query_dir))
+            raise RuntimeError('"{}" is not available'.format(self.query_dir))
         if not osp.exists(self.gallery_dir):
-            raise RuntimeError("'{}' is not available".format(self.gallery_dir))
+            raise RuntimeError('"{}" is not available'.format(self.gallery_dir))
 
     def _process_dir(self, dir_path, relabel=False):
         img_paths = glob.glob(osp.join(dir_path, '*.jpg'))

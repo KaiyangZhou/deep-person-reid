@@ -59,8 +59,8 @@ class SqueezeNet(nn.Module):
         self.feature_dim = 512
 
         if version not in [1.0, 1.1]:
-            raise ValueError("Unsupported SqueezeNet version {version}:"
-                             "1.0 or 1.1 expected".format(version=version))
+            raise ValueError('Unsupported SqueezeNet version {version}:'
+                             '1.0 or 1.1 expected'.format(version=version))
 
         if version == 1.0:
             self.features = nn.Sequential(
@@ -114,7 +114,7 @@ class SqueezeNet(nn.Module):
             self.feature_dim = input_dim
             return None
         
-        assert isinstance(fc_dims, (list, tuple)), "fc_dims must be either list or tuple, but got {}".format(type(fc_dims))
+        assert isinstance(fc_dims, (list, tuple)), 'fc_dims must be either list or tuple, but got {}'.format(type(fc_dims))
         
         layers = []
         for dim in fc_dims:
@@ -164,7 +164,7 @@ class SqueezeNet(nn.Module):
         elif self.loss == {'xent', 'htri'}:
             return y, v
         else:
-            raise KeyError("Unsupported loss: {}".format(self.loss))
+            raise KeyError('Unsupported loss: {}'.format(self.loss))
 
 
 def init_pretrained_weights(model, model_url):
@@ -177,7 +177,7 @@ def init_pretrained_weights(model, model_url):
     pretrain_dict = {k: v for k, v in pretrain_dict.items() if k in model_dict and model_dict[k].size() == v.size()}
     model_dict.update(pretrain_dict)
     model.load_state_dict(model_dict)
-    print("Initialized model with pretrained weights from {}".format(model_url))
+    print('Initialized model with pretrained weights from {}'.format(model_url))
 
 
 def squeezenet1_0(num_classes, loss, pretrained=True, **kwargs):

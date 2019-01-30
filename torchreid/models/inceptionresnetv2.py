@@ -248,7 +248,7 @@ def inceptionresnetv2(num_classes=1000, pretrained='imagenet'):
     if pretrained:
         settings = pretrained_settings['inceptionresnetv2'][pretrained]
         assert num_classes == settings['num_classes'], \
-            "num_classes should be {}, but is {}".format(settings['num_classes'], num_classes)
+            'num_classes should be {}, but is {}'.format(settings['num_classes'], num_classes)
 
         # both 'imagenet'&'imagenet+background' are loaded from same parameters
         model = InceptionResNetV2(num_classes=1001)
@@ -357,7 +357,7 @@ class InceptionResNetV2(nn.Module):
         pretrain_dict = {k: v for k, v in pretrain_dict.items() if k in model_dict and model_dict[k].size() == v.size()}
         model_dict.update(pretrain_dict)
         self.load_state_dict(model_dict)
-        print("Initialized model with pretrained weights from {}".format(settings['url']))
+        print('Initialized model with pretrained weights from {}'.format(settings['url']))
 
     def featuremaps(self, x):
         x = self.conv2d_1a(x)
@@ -392,4 +392,4 @@ class InceptionResNetV2(nn.Module):
         elif self.loss == {'xent', 'htri'}:
             return y, v
         else:
-            raise KeyError("Unsupported loss: {}".format(self.loss))
+            raise KeyError('Unsupported loss: {}'.format(self.loss))

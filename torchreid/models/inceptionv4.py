@@ -324,7 +324,7 @@ class InceptionV4Base(nn.Module):
         elif self.loss == {'xent', 'htri'}:
             return y, v
         else:
-            raise KeyError("Unsupported loss: {}".format(self.loss))
+            raise KeyError('Unsupported loss: {}'.format(self.loss))
 
 
 def init_pretrained_weights(model, model_url):
@@ -337,7 +337,7 @@ def init_pretrained_weights(model, model_url):
     pretrain_dict = {k: v for k, v in pretrain_dict.items() if k in model_dict and model_dict[k].size() == v.size()}
     model_dict.update(pretrain_dict)
     model.load_state_dict(model_dict)
-    print("Initialized model with pretrained weights from {}".format(model_url))
+    print('Initialized model with pretrained weights from {}'.format(model_url))
 
 
 def inceptionv4(num_classes, loss, pretrained='imagenet', **kwargs):

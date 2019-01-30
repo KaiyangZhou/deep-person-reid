@@ -61,7 +61,7 @@ class Mars(BaseVideoDataset):
         gallery = self._process_data(test_names, track_gallery, home_dir='bbox_test', relabel=False, min_seq_len=min_seq_len)
 
         if verbose:
-            print("=> MARS loaded")
+            print('=> MARS loaded')
             self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
@@ -75,17 +75,17 @@ class Mars(BaseVideoDataset):
     def _check_before_run(self):
         """Check if all files are available before going deeper"""
         if not osp.exists(self.dataset_dir):
-            raise RuntimeError("'{}' is not available".format(self.dataset_dir))
+            raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
         if not osp.exists(self.train_name_path):
-            raise RuntimeError("'{}' is not available".format(self.train_name_path))
+            raise RuntimeError('"{}" is not available'.format(self.train_name_path))
         if not osp.exists(self.test_name_path):
-            raise RuntimeError("'{}' is not available".format(self.test_name_path))
+            raise RuntimeError('"{}" is not available'.format(self.test_name_path))
         if not osp.exists(self.track_train_info_path):
-            raise RuntimeError("'{}' is not available".format(self.track_train_info_path))
+            raise RuntimeError('"{}" is not available'.format(self.track_train_info_path))
         if not osp.exists(self.track_test_info_path):
-            raise RuntimeError("'{}' is not available".format(self.track_test_info_path))
+            raise RuntimeError('"{}" is not available'.format(self.track_test_info_path))
         if not osp.exists(self.query_IDX_path):
-            raise RuntimeError("'{}' is not available".format(self.query_IDX_path))
+            raise RuntimeError('"{}" is not available'.format(self.query_IDX_path))
 
     def _get_names(self, fpath):
         names = []
@@ -115,11 +115,11 @@ class Mars(BaseVideoDataset):
 
             # make sure image names correspond to the same person
             pnames = [img_name[:4] for img_name in img_names]
-            assert len(set(pnames)) == 1, "Error: a single tracklet contains different person images"
+            assert len(set(pnames)) == 1, 'Error: a single tracklet contains different person images'
 
             # make sure all images are captured under the same camera
             camnames = [img_name[5] for img_name in img_names]
-            assert len(set(camnames)) == 1, "Error: images are captured under different cameras!"
+            assert len(set(camnames)) == 1, 'Error: images are captured under different cameras!'
 
             # append image names with directory information
             img_paths = [osp.join(self.dataset_dir, home_dir, img_name[:4], img_name) for img_name in img_names]

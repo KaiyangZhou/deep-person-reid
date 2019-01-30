@@ -125,4 +125,4 @@ class MobileNetV2(nn.Module):
         elif self.loss == {'xent', 'htri'}:
             return y, x
         else:
-            raise KeyError("Unsupported loss: {}".format(self.loss))
+            raise KeyError('Unsupported loss: {}'.format(self.loss))

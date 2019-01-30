@@ -49,7 +49,7 @@ class PRID450S(BaseImageDataset):
         self._prepare_split()
         splits = read_json(self.split_path)
         if split_id >= len(splits):
-            raise ValueError("split_id exceeds range, received {}, but expected between 0 and {}".format(split_id, len(splits)-1))
+            raise ValueError('split_id exceeds range, received {}, but expected between 0 and {}'.format(split_id, len(splits)-1))
         split = splits[split_id]
 
         train = split['train']
@@ -61,7 +61,7 @@ class PRID450S(BaseImageDataset):
         gallery = [tuple(item) for item in gallery]
 
         if verbose:
-            print("=> PRID450S loaded")
+            print('=> PRID450S loaded')
             self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
@@ -75,25 +75,25 @@ class PRID450S(BaseImageDataset):
     def _check_before_run(self):
         """Check if all files are available before going deeper"""
         if not osp.exists(self.dataset_dir):
-            raise RuntimeError("'{}' is not available".format(self.dataset_dir))
+            raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
         if not osp.exists(self.cam_a_path):
-            raise RuntimeError("'{}' is not available".format(self.cam_a_path))
+            raise RuntimeError('"{}" is not available'.format(self.cam_a_path))
         if not osp.exists(self.cam_b_path):
-            raise RuntimeError("'{}' is not available".format(self.cam_b_path))
+            raise RuntimeError('"{}" is not available'.format(self.cam_b_path))
 
     def _download_data(self):
         if osp.exists(self.dataset_dir):
-            print("This dataset has been downloaded.")
+            print('This dataset has been downloaded.')
             return
 
-        print("Creating directory {}".format(self.dataset_dir))
+        print('Creating directory {}'.format(self.dataset_dir))
         mkdir_if_missing(self.dataset_dir)
         fpath = osp.join(self.dataset_dir, 'prid_450s.zip')
 
-        print("Downloading PRID450S dataset")
+        print('Downloading PRID450S dataset')
         urllib.urlretrieve(self.dataset_url, fpath)
 
-        print("Extracting files")
+        print('Extracting files')
         zip_ref = zipfile.ZipFile(fpath, 'r')
         zip_ref.extractall(self.dataset_dir)
         zip_ref.close()
@@ -141,8 +141,8 @@ class PRID450S(BaseImageDataset):
                          }
                 splits.append(split)
 
-            print("Totally {} splits are created".format(len(splits)))
+            print('Totally {} splits are created'.format(len(splits)))
             write_json(splits, self.split_path)
-            print("Split file saved to {}".format(self.split_path))
+            print('Split file saved to {}'.format(self.split_path))
 
-        print("Splits created")
+        print('Splits created')

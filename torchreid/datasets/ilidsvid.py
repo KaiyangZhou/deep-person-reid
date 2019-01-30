@@ -52,17 +52,17 @@ class iLIDSVID(BaseVideoDataset):
         self._prepare_split()
         splits = read_json(self.split_path)
         if split_id >= len(splits):
-            raise ValueError("split_id exceeds range, received {}, but expected between 0 and {}".format(split_id, len(splits)-1))
+            raise ValueError('split_id exceeds range, received {}, but expected between 0 and {}'.format(split_id, len(splits)-1))
         split = splits[split_id]
         train_dirs, test_dirs = split['train'], split['test']
-        print("# train identites: {}, # test identites {}".format(len(train_dirs), len(test_dirs)))
+        print('# train identites: {}, # test identites {}'.format(len(train_dirs), len(test_dirs)))
 
         train = self._process_data(train_dirs, cam1=True, cam2=True)
         query = self._process_data(test_dirs, cam1=True, cam2=False)
         gallery = self._process_data(test_dirs, cam1=False, cam2=True)
 
         if verbose:
-            print("=> iLIDS-VID loaded")
+            print('=> iLIDS-VID loaded')
             self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
@@ -75,16 +75,16 @@ class iLIDSVID(BaseVideoDataset):
 
     def _download_data(self):
         if osp.exists(self.dataset_dir):
-            print("This dataset has been downloaded.")
+            print('This dataset has been downloaded.')
             return
 
         mkdir_if_missing(self.dataset_dir)
         fpath = osp.join(self.dataset_dir, osp.basename(self.dataset_url))
 
-        print("Downloading iLIDS-VID dataset")
+        print('Downloading iLIDS-VID dataset')
         urllib.urlretrieve(self.dataset_url, fpath)
 
-        print("Extracting files")
+        print('Extracting files')
         tar = tarfile.open(fpath)
         tar.extractall(path=self.dataset_dir)
         tar.close()
@@ -92,15 +92,15 @@ class iLIDSVID(BaseVideoDataset):
     def _check_before_run(self):
         """Check if all files are available before going deeper"""
         if not osp.exists(self.dataset_dir):
-            raise RuntimeError("'{}' is not available".format(self.dataset_dir))
+            raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
         if not osp.exists(self.data_dir):
-            raise RuntimeError("'{}' is not available".format(self.data_dir))
+            raise RuntimeError('"{}" is not available'.format(self.data_dir))
         if not osp.exists(self.split_dir):
-            raise RuntimeError("'{}' is not available".format(self.split_dir))
+            raise RuntimeError('"{}" is not available'.format(self.split_dir))
 
     def _prepare_split(self):
         if not osp.exists(self.split_path):
-            print("Creating splits ...")
+            print('Creating splits ...')
             mat_split_data = loadmat(self.split_mat_path)['ls_set']
             
             num_splits = mat_split_data.shape[0]
@@ -136,11 +136,11 @@ class iLIDSVID(BaseVideoDataset):
                 split = {'train': train_dirs, 'test': test_dirs}
                 splits.append(split)
 
-            print("Totally {} splits are created, following Wang et al. ECCV'14".format(len(splits)))
-            print("Split file is saved to {}".format(self.split_path))
+            print('Totally {} splits are created, following Wang et al. ECCV\'14'.format(len(splits)))
+            print('Split file is saved to {}'.format(self.split_path))
             write_json(splits, self.split_path)
 
-        print("Splits created")
+        print('Splits created')
 
     def _process_data(self, dirnames, cam1=True, cam2=True):
         tracklets = []
