@@ -58,6 +58,7 @@ def main():
     print('Initializing model: {}'.format(args.arch))
     model = models.init_model(name=args.arch, num_classes=dm.num_train_pids, loss={'xent', 'htri'})
     print('Model size: {:.3f} M'.format(count_num_param(model)))
+    if use_gpu: model = nn.DataParallel(model).cuda()
 
     criterion = CrossEntropyLoss(num_classes=dm.num_train_pids, use_gpu=use_gpu, label_smooth=args.label_smooth)
     criterion_htri = TripletLoss(margin=args.margin)
@@ -75,9 +76,6 @@ def main():
         best_rank1 = checkpoint['rank1']
         print('Loaded checkpoint from "{}"'.format(args.resume))
         print('- start_epoch: {}\n- rank1: {}'.format(args.start_epoch, best_rank1))
-
-    if use_gpu:
-        model = nn.DataParallel(model).cuda()
 
     if args.evaluate:
         print('Evaluate only')
