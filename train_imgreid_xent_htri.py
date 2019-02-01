@@ -57,14 +57,7 @@ def main():
     print('Initializing model: {}'.format(args.arch))
     model = models.init_model(name=args.arch, num_classes=dm.num_train_pids, loss={'xent', 'htri'})
     print('Model size: {:.3f} M'.format(count_num_param(model)))
-    if use_gpu: model = nn.DataParallel(model).cuda()
-
-    criterion_xent = CrossEntropyLoss(num_classes=dm.num_train_pids, use_gpu=use_gpu, label_smooth=args.label_smooth)
-    criterion_htri = TripletLoss(margin=args.margin)
     
-    optimizer = init_optimizer(model.parameters(), **optimizer_kwargs(args))
-    scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=args.stepsize, gamma=args.gamma)
-
     if args.load_weights and check_isfile(args.load_weights):
         load_pretrained_weights(model, args.load_weights)
 
@@ -74,6 +67,13 @@ def main():
         args.start_epoch = checkpoint['epoch'] + 1
         print('Loaded checkpoint from "{}"'.format(args.resume))
         print('- start_epoch: {}\n- rank1: {}'.format(args.start_epoch, checkpoint['rank1']))
+
+    model = nn.DataParallel(model).cuda() if use_gpu else model
+
+    criterion_xent = CrossEntropyLoss(num_classes=dm.num_train_pids, use_gpu=use_gpu, label_smooth=args.label_smooth)
+    criterion_htri = TripletLoss(margin=args.margin)
+    optimizer = init_optimizer(model.parameters(), **optimizer_kwargs(args))
+    scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=args.stepsize, gamma=args.gamma)
 
     if args.evaluate:
         print('Evaluate only')
