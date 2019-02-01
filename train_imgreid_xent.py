@@ -20,7 +20,7 @@ from torchreid.losses import CrossEntropyLoss, DeepSupervision
 from torchreid.utils.iotools import save_checkpoint, check_isfile
 from torchreid.utils.avgmeter import AverageMeter
 from torchreid.utils.loggers import Logger, RankLogger
-from torchreid.utils.torchtools import count_num_param, open_all_layers, open_specified_layers, accuracy
+from torchreid.utils.torchtools import count_num_param, open_all_layers, open_specified_layers, accuracy, load_pretrained_weights
 from torchreid.utils.reidtools import visualize_ranked_results
 from torchreid.utils.generaltools import set_random_seed
 from torchreid.eval_metrics import evaluate
@@ -62,14 +62,7 @@ def main():
     scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=args.stepsize, gamma=args.gamma)
 
     if args.load_weights and check_isfile(args.load_weights):
-        # load pretrained weights but ignore layers that don't match in size
-        checkpoint = torch.load(args.load_weights)
-        pretrain_dict = checkpoint['state_dict']
-        model_dict = model.state_dict()
-        pretrain_dict = {k: v for k, v in pretrain_dict.items() if k in model_dict and model_dict[k].size() == v.size()}
-        model_dict.update(pretrain_dict)
-        model.load_state_dict(model_dict)
-        print('Loaded pretrained weights from "{}"'.format(args.load_weights))
+        load_pretrained_weights(model, args.load_weights)
 
     if args.resume and check_isfile(args.resume):
         checkpoint = torch.load(args.resume)
