@@ -102,6 +102,12 @@ def accuracy(output, target, topk=(1,)):
 
 
 def load_pretrained_weights(model, weight_path):
+    """Load pretrianed weights to model
+
+    Args:
+    - model (nn.Module): network model, which must not be nn.DataParallel
+    - weight_path (str): path to pretrained weights
+    """
     checkpoint = torch.load(weight_path)
     if 'state_dict' in checkpoint:
         state_dict = checkpoint['state_dict']
@@ -111,6 +117,10 @@ def load_pretrained_weights(model, weight_path):
     new_state_dict = OrderedDict()
     matched_layers, discarded_layers = [], []
     for k, v in state_dict.items():
+        # If the pretrained state_dict was saved as nn.DataParallel,
+        # keys would contain "module.", which should be ignored.
+        if k.startswith('module.'):
+            k = k[7:]
         if k in model_dict and model_dict[k].size() == v.size():
             new_state_dict[k] = v
             matched_layers.append(k)
@@ -119,7 +129,7 @@ def load_pretrained_weights(model, weight_path):
     model_dict.update(new_state_dict)
     model.load_state_dict(model_dict)
     if len(matched_layers) == 0:
-        print('ERROR: the pretrained weights "{}" cannot be loaded, please check the key names manually (ignored and continue)'.format(weight_path))
+        print('** ERROR: the pretrained weights "{}" cannot be loaded, please check the key names manually (ignored and continue)'.format(weight_path))
     else:
         print('Successfully loaded pretrained weights from "{}"'.format(weight_path))
         if len(discarded_layers) > 0:
