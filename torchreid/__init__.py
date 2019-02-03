@@ -8,4 +8,4 @@ Github page: https://github.com/KaiyangZhou/deep-person-reid
 """
 
 __author__ = 'Kaiyang Zhou'
-__email__  = 'k.zhou@qmul.ac.uk'
+__homepage__ = 'https://kaiyangzhou.github.io/'
