@@ -71,7 +71,7 @@ def main():
     model = nn.DataParallel(model).cuda() if use_gpu else model
 
     criterion = CrossEntropyLoss(num_classes=dm.num_train_pids, use_gpu=use_gpu, label_smooth=args.label_smooth)
-    optimizer = init_optimizer(model.parameters(), **optimizer_kwargs(args))
+    optimizer = init_optimizer(model, **optimizer_kwargs(args))
     scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=args.stepsize, gamma=args.gamma)
 
     if args.evaluate:
