@@ -104,6 +104,8 @@ def accuracy(output, target, topk=(1,)):
 def load_pretrained_weights(model, weight_path):
     """Load pretrianed weights to model
 
+    Incompatible layers (unmatched in name or size) will be ignored
+
     Args:
     - model (nn.Module): network model, which must not be nn.DataParallel
     - weight_path (str): path to pretrained weights
