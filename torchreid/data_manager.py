@@ -49,6 +49,7 @@ class ImageDataManager(BaseDataManager):
                  test_batch_size=100,
                  workers=4,
                  train_sampler='',
+                 augdata_re=False, # use random erasing for data augmentation
                  num_instances=4, # number of instances per identity (for RandomIdentitySampler)
                  cuhk03_labeled=False, # use cuhk03's labeled or detected images
                  cuhk03_classic_split=False, # use cuhk03's classic split or 767/700 split
@@ -75,7 +76,8 @@ class ImageDataManager(BaseDataManager):
             self._num_train_pids += dataset.num_train_pids
             self._num_train_cams += dataset.num_train_cams
 
-        transform_train = build_transforms(height, width, is_train=True)
+        transform_train, transform_test = build_transforms(height, width, augdata_re=augdata_re)
+        
         train_sampler = build_train_sampler(
             train, train_sampler,
             train_batch_size=train_batch_size,
@@ -91,8 +93,6 @@ class ImageDataManager(BaseDataManager):
         print('=> Initializing TEST (target) datasets')
         self.testloader_dict = {name: {'query': None, 'gallery': None} for name in target_names}
         self.testdataset_dict = {name: {'query': None, 'gallery': None} for name in target_names}
-
-        transform_test = build_transforms(height, width, is_train=False)
         
         for name in target_names:
             dataset = init_imgreid_dataset(
@@ -144,6 +144,7 @@ class VideoDataManager(BaseDataManager):
                  test_batch_size=100,
                  workers=4,
                  train_sampler='',
+                 augdata_re=False, # use random erasing for data augmentation
                  num_instances=4,
                  seq_len=15,
                  sample_method='evenly',
@@ -172,7 +173,7 @@ class VideoDataManager(BaseDataManager):
             self._num_train_pids += dataset.num_train_pids
             self._num_train_cams += dataset.num_train_cams
 
-        transform_train = build_transforms(height, width, is_train=True)
+        transform_train, transform_test = build_transforms(height, width, augdata_re=augdata_re)
         train_sampler = build_train_sampler(
             train, train_sampler,
             train_batch_size=train_batch_size,
@@ -199,8 +200,6 @@ class VideoDataManager(BaseDataManager):
         print('=> Initializing TEST (target) datasets')
         self.testloader_dict = {name: {'query': None, 'gallery': None} for name in target_names}
         self.testdataset_dict = {name: {'query': None, 'gallery': None} for name in target_names}
-
-        transform_test = build_transforms(height, width, is_train=False)
 
         for name in target_names:
             dataset = init_vidreid_dataset(root=root, name=name, split_id=split_id)
