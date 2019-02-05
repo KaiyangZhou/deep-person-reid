@@ -118,8 +118,6 @@ def argument_parser():
                         help='margin for triplet loss')
     parser.add_argument('--num-instances', type=int, default=4,
                         help='number of instances per identity')
-    parser.add_argument('--htri-only', action='store_true',
-                        help='only use hard triplet loss')
     parser.add_argument('--lambda-xent', type=float, default=1,
                         help='weight to balance cross entropy loss')
     parser.add_argument('--lambda-htri', type=float, default=1,
