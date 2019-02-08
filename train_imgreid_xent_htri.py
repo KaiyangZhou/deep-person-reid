@@ -11,9 +11,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.backends.cudnn as cudnn
-from torch.optim import lr_scheduler
 
-from args import argument_parser, image_dataset_kwargs, optimizer_kwargs
+from args import argument_parser, image_dataset_kwargs, optimizer_kwargs, lr_scheduler_kwargs
 from torchreid.data_manager import ImageDataManager
 from torchreid import models
 from torchreid.losses import CrossEntropyLoss, TripletLoss, DeepSupervision
@@ -26,6 +25,7 @@ from torchreid.utils.generaltools import set_random_seed
 from torchreid.eval_metrics import evaluate
 from torchreid.samplers import RandomIdentitySampler
 from torchreid.optimizers import init_optimizer
+from torchreid.lr_schedulers import init_lr_scheduler
 
 
 # global variables
@@ -73,7 +73,7 @@ def main():
     criterion_xent = CrossEntropyLoss(num_classes=dm.num_train_pids, use_gpu=use_gpu, label_smooth=args.label_smooth)
     criterion_htri = TripletLoss(margin=args.margin)
     optimizer = init_optimizer(model, **optimizer_kwargs(args))
-    scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=args.stepsize, gamma=args.gamma)
+    scheduler = init_lr_scheduler(optimizer, **lr_scheduler_kwargs(args))
 
     if args.evaluate:
         print('Evaluate only')

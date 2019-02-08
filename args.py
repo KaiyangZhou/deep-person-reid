@@ -81,10 +81,6 @@ def argument_parser():
                         help='maximum epochs to run')
     parser.add_argument('--start-epoch', default=0, type=int,
                         help='manual epoch number (useful when restart)')
-    parser.add_argument('--stepsize', default=[20, 40], nargs='+', type=int,
-                        help='stepsize to decay learning rate')
-    parser.add_argument('--gamma', default=0.1, type=float,
-                        help='learning rate decay')
 
     parser.add_argument('--train-batch-size', default=32, type=int,
                         help='training batch size')
@@ -104,6 +100,16 @@ def argument_parser():
                         help='newly added layers with default lr')
     parser.add_argument('--base-lr-mult', type=float, default=0.1,
                         help='learning rate multiplier for base layers')
+
+    # ************************************************************
+    # Learning rate scheduler options
+    # ************************************************************
+    parser.add_argument('--lr-scheduler', type=str, default='multi_step',
+                        help='learning rate scheduler (see lr_schedulers.py)')
+    parser.add_argument('--stepsize', default=[20, 40], nargs='+', type=int,
+                        help='stepsize to decay learning rate')
+    parser.add_argument('--gamma', default=0.1, type=float,
+                        help='learning rate decay')
 
     # ************************************************************
     # Cross entropy loss-specific setting
@@ -212,7 +218,7 @@ def video_dataset_kwargs(parsed_args):
 
 def optimizer_kwargs(parsed_args):
     """
-    Build kwargs for optimizer in optimizer.py from
+    Build kwargs for optimizer in optimizers.py from
     the parsed command-line arguments.
     """
     return {
@@ -228,4 +234,16 @@ def optimizer_kwargs(parsed_args):
         'staged_lr': parsed_args.staged_lr,
         'new_layers': parsed_args.new_layers,
         'base_lr_mult': parsed_args.base_lr_mult,
+    }
+
+
+def lr_scheduler_kwargs(parsed_args):
+    """
+    Build kwargs for lr_scheduler in lr_schedulers.py from
+    the parsed command-line arguments.
+    """
+    return {
+        'lr_scheduler': parsed_args.lr_scheduler,
+        'stepsize': parsed_args.stepsize,
+        'gamma': parsed_args.gamma,
     }
