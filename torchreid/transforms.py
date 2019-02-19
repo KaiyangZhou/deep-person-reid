@@ -20,6 +20,7 @@ class Random2DTranslation(object):
     - width (int): target image width.
     - p (float): probability of performing this transformation. Default: 0.5.
     """
+    
     def __init__(self, height, width, p=0.5, interpolation=Image.BILINEAR):
         self.height = height
         self.width = width
@@ -56,7 +57,8 @@ class RandomErasing(object):
     -------------------------------------------------------------------------------------
     Origin: https://github.com/zhunzhong07/Random-Erasing
     '''
-    def __init__(self, probability = 0.5, sl = 0.02, sh = 0.4, r1 = 0.3, mean=[0.4914, 0.4822, 0.4465]):
+    
+    def __init__(self, probability=0.5, sl=0.02, sh=0.4, r1=0.3, mean=[0.4914, 0.4822, 0.4465]):
         self.probability = probability
         self.mean = mean
         self.sl = sl
@@ -91,9 +93,40 @@ class RandomErasing(object):
         return img
 
 
+class ColorAugmentation(object):
+    """
+    Randomly alter the intensities of RGB channels
+
+    Reference:
+    Krizhevsky et al. ImageNet Classification with Deep ConvolutionalNeural Networks. NIPS 2012.
+    """
+    
+    def __init__(self, p=0.5):
+        self.p = p
+        self.eig_vec = torch.Tensor([
+            [0.4009, 0.7192, -0.5675],
+            [-0.8140, -0.0045, -0.5808],
+            [0.4203, -0.6948, -0.5836],
+        ])
+        self.eig_val = torch.Tensor([[0.2175, 0.0188, 0.0045]])
+
+    def _check_input(self, tensor):
+        assert tensor.dim() == 3 and tensor.size(0) == 3
+
+    def __call__(self, tensor):
+        if random.uniform(0, 1) > self.p:
+            return tensor
+        alpha = torch.normal(mean=torch.zeros_like(self.eig_val)) * 0.1
+        quatity = torch.mm(self.eig_val * alpha, self.eig_vec)
+        tensor = tensor + quatity.view(3, 1, 1)
+        return tensor
+
+
 def build_transforms(height,
                      width,
-                     augdata_re=False, # use random erasing for data augmentation
+                     random_erase=False, # use random erasing for data augmentation
+                     color_jitter=False, # randomly change the brightness, contrast and saturation
+                     color_aug=False, # randomly alter the intensities of RGB channels
                      **kwargs):
     # use imagenet mean and std as default
     # TODO: compute dataset-specific mean and std
@@ -105,9 +138,13 @@ def build_transforms(height,
     transform_train = []
     transform_train += [Random2DTranslation(height, width)]
     transform_train += [RandomHorizontalFlip()]
+    if color_jitter:
+        transform_train += [ColorJitter(brightness=0.2, contrast=0.15, saturation=0, hue=0)]
     transform_train += [ToTensor()]
+    if color_aug:
+        transform_train += [ColorAugmentation()]
     transform_train += [normalize]
-    if augdata_re:
+    if random_erase:
         transform_train += [RandomErasing()]
     transform_train = Compose(transform_train)
 

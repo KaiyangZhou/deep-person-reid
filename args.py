@@ -15,16 +15,24 @@ def argument_parser():
                         help='target datasets (delimited by space)')
     parser.add_argument('-j', '--workers', default=4, type=int,
                         help='number of data loading workers (tips: 4 or 8 times number of gpus)')
+    parser.add_argument('--split-id', type=int, default=0,
+                        help='split index (note: 0-based)')
     parser.add_argument('--height', type=int, default=256,
                         help='height of an image')
     parser.add_argument('--width', type=int, default=128,
                         help='width of an image')
-    parser.add_argument('--split-id', type=int, default=0,
-                        help='split index (note: 0-based)')
     parser.add_argument('--train-sampler', type=str, default='RandomSampler',
                         help='sampler for trainloader')
-    parser.add_argument('--augdata-re', action='store_true',
+    
+    # ************************************************************
+    # Data augmentation
+    # ************************************************************ 
+    parser.add_argument('--random-erase', action='store_true',
                         help='use random erasing for data augmentation')
+    parser.add_argument('--color-jitter', action='store_true',
+                        help='randomly change the brightness, contrast and saturation')
+    parser.add_argument('--color-aug', action='store_true',
+                        help='randomly alter the intensities of RGB channels')
 
     # ************************************************************
     # Video datasets
@@ -191,7 +199,9 @@ def image_dataset_kwargs(parsed_args):
         'cuhk03_labeled': parsed_args.cuhk03_labeled,
         'cuhk03_classic_split': parsed_args.cuhk03_classic_split,
         'market1501_500k': parsed_args.market1501_500k,
-        'augdata_re': parsed_args.augdata_re,
+        'random_erase': parsed_args.random_erase,
+        'color_jitter': parsed_args.color_jitter,
+        'color_aug': parsed_args.color_aug,
     }
 
 
@@ -214,7 +224,9 @@ def video_dataset_kwargs(parsed_args):
         'num_instances': parsed_args.num_instances,
         'seq_len': parsed_args.seq_len,
         'sample_method': parsed_args.sample_method,
-        'augdata_re': parsed_args.augdata_re,
+        'random_erase': parsed_args.random_erase,
+        'color_jitter': parsed_args.color_jitter,
+        'color_aug': parsed_args.color_aug,
     }
 
 
