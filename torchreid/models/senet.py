@@ -427,7 +427,7 @@ def init_pretrained_weights(model, model_url):
     print('Initialized model with pretrained weights from {}'.format(model_url))
 
 
-def senet154(num_classes, loss, pretrained='imagenet', **kwargs):
+def senet154(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     model = SENet(
         num_classes=num_classes,
         loss=loss,
@@ -440,13 +440,13 @@ def senet154(num_classes, loss, pretrained='imagenet', **kwargs):
         fc_dims=None,
         **kwargs
     )
-    if pretrained == 'imagenet':
+    if pretrained:
         model_url = pretrained_settings['senet154']['imagenet']['url']
         init_pretrained_weights(model, model_url)
     return model
 
 
-def se_resnet50(num_classes, loss, pretrained='imagenet', **kwargs):
+def se_resnet50(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     model = SENet(
         num_classes=num_classes,
         loss=loss,
@@ -463,13 +463,13 @@ def se_resnet50(num_classes, loss, pretrained='imagenet', **kwargs):
         fc_dims=None,
         **kwargs
     )
-    if pretrained == 'imagenet':
+    if pretrained:
         model_url = pretrained_settings['se_resnet50']['imagenet']['url']
         init_pretrained_weights(model, model_url)
     return model
 
 
-def se_resnet50_fc512(num_classes, loss, pretrained='imagenet', **kwargs):
+def se_resnet50_fc512(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     model = SENet(
         num_classes=num_classes,
         loss=loss,
@@ -486,13 +486,13 @@ def se_resnet50_fc512(num_classes, loss, pretrained='imagenet', **kwargs):
         fc_dims=[512],
         **kwargs
     )
-    if pretrained == 'imagenet':
+    if pretrained:
         model_url = pretrained_settings['se_resnet50']['imagenet']['url']
         init_pretrained_weights(model, model_url)
     return model
 
 
-def se_resnet101(num_classes, loss, pretrained='imagenet', **kwargs):
+def se_resnet101(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     model = SENet(
         num_classes=num_classes,
         loss=loss,
@@ -509,13 +509,13 @@ def se_resnet101(num_classes, loss, pretrained='imagenet', **kwargs):
         fc_dims=None,
         **kwargs
     )
-    if pretrained == 'imagenet':
+    if pretrained:
         model_url = pretrained_settings['se_resnet101']['imagenet']['url']
         init_pretrained_weights(model, model_url)
     return model
 
 
-def se_resnet152(num_classes, loss, pretrained='imagenet', **kwargs):
+def se_resnet152(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     model = SENet(
         num_classes=num_classes,
         loss=loss,
@@ -532,13 +532,13 @@ def se_resnet152(num_classes, loss, pretrained='imagenet', **kwargs):
         fc_dims=None,
         **kwargs
     )
-    if pretrained == 'imagenet':
+    if pretrained:
         model_url = pretrained_settings['se_resnet152']['imagenet']['url']
         init_pretrained_weights(model, model_url)
     return model
 
 
-def se_resnext50_32x4d(num_classes, loss, pretrained='imagenet', **kwargs):
+def se_resnext50_32x4d(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     model = SENet(
         num_classes=num_classes,
         loss=loss,
@@ -555,13 +555,13 @@ def se_resnext50_32x4d(num_classes, loss, pretrained='imagenet', **kwargs):
         fc_dims=None,
         **kwargs
     )
-    if pretrained == 'imagenet':
+    if pretrained:
         model_url = pretrained_settings['se_resnext50_32x4d']['imagenet']['url']
         init_pretrained_weights(model, model_url)
     return model
 
 
-def se_resnext101_32x4d(num_classes, loss, pretrained='imagenet', **kwargs):
+def se_resnext101_32x4d(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     model = SENet(
         num_classes=num_classes,
         loss=loss,
@@ -578,7 +578,7 @@ def se_resnext101_32x4d(num_classes, loss, pretrained='imagenet', **kwargs):
         fc_dims=None,
         **kwargs
     )
-    if pretrained == 'imagenet':
+    if pretrained:
         model_url = pretrained_settings['se_resnext101_32x4d']['imagenet']['url']
         init_pretrained_weights(model, model_url)
     return model

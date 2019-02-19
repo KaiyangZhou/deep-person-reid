@@ -14,7 +14,7 @@ Code imported from https://github.com/Cadene/pretrained-models.pytorch
 """
 
 
-__all__ = ['InceptionResNetV2']
+__all__ = ['inceptionresnetv2']
 
 
 pretrained_settings = {
@@ -348,9 +348,7 @@ class InceptionResNetV2(nn.Module):
         self.global_avgpool = nn.AdaptiveAvgPool2d(1)
         self.classifier = nn.Linear(1536, num_classes)
 
-        self._load_imagenet_weights()
-
-    def _load_imagenet_weights(self):
+    def load_imagenet_weights(self):
         settings = pretrained_settings['inceptionresnetv2']['imagenet']
         pretrain_dict = model_zoo.load_url(settings['url'])
         model_dict = self.state_dict()
@@ -393,3 +391,14 @@ class InceptionResNetV2(nn.Module):
             return y, v
         else:
             raise KeyError('Unsupported loss: {}'.format(self.loss))
+
+
+def inceptionresnetv2(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+    model = InceptionResNetV2(
+        num_classes=num_classes,
+        loss=loss,
+        **kwargs
+    )
+    if pretrained:
+        model.load_imagenet_weights()
+    return model

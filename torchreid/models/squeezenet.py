@@ -180,7 +180,7 @@ def init_pretrained_weights(model, model_url):
     print('Initialized model with pretrained weights from {}'.format(model_url))
 
 
-def squeezenet1_0(num_classes, loss, pretrained=True, **kwargs):
+def squeezenet1_0(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     model = SqueezeNet(
         num_classes, loss,
         version=1.0,
@@ -193,7 +193,7 @@ def squeezenet1_0(num_classes, loss, pretrained=True, **kwargs):
     return model
 
 
-def squeezenet1_0_fc512(num_classes, loss, pretrained=True, **kwargs):
+def squeezenet1_0_fc512(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     model = SqueezeNet(
         num_classes, loss,
         version=1.0,
@@ -206,7 +206,7 @@ def squeezenet1_0_fc512(num_classes, loss, pretrained=True, **kwargs):
     return model
 
 
-def squeezenet1_1(num_classes, loss, pretrained=True, **kwargs):
+def squeezenet1_1(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     model = SqueezeNet(
         num_classes, loss,
         version=1.1,

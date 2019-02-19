@@ -210,7 +210,7 @@ densenet161: num_init_features=96, growth_rate=48, block_config=(6, 12, 36, 24)
 """
 
 
-def densenet121(num_classes, loss, pretrained='imagenet', **kwargs):
+def densenet121(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     model = DenseNet(
         num_classes=num_classes,
         loss=loss,
@@ -221,12 +221,12 @@ def densenet121(num_classes, loss, pretrained='imagenet', **kwargs):
         dropout_p=None,
         **kwargs
     )
-    if pretrained == 'imagenet':
+    if pretrained:
         init_pretrained_weights(model, model_urls['densenet121'])
     return model
 
 
-def densenet121_fc512(num_classes, loss, pretrained='imagenet', **kwargs):
+def densenet121_fc512(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     model = DenseNet(
         num_classes=num_classes,
         loss=loss,
@@ -237,6 +237,6 @@ def densenet121_fc512(num_classes, loss, pretrained='imagenet', **kwargs):
         dropout_p=None,
         **kwargs
     )
-    if pretrained == 'imagenet':
+    if pretrained:
         init_pretrained_weights(model, model_urls['densenet121'])
     return model

@@ -256,7 +256,7 @@ resnet152: block=Bottleneck, layers=[3, 8, 36, 3]
 """
 
 
-def resnet50mid(num_classes, loss, pretrained='imagenet', **kwargs):
+def resnet50mid(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     model = ResNet(
         num_classes=num_classes,
         loss=loss,
@@ -266,6 +266,6 @@ def resnet50mid(num_classes, loss, pretrained='imagenet', **kwargs):
         fc_dims=[1024],
         **kwargs
     )
-    if pretrained == 'imagenet':
+    if pretrained:
         init_pretrained_weights(model, model_urls['resnet50'])
     return model

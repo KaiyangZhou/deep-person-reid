@@ -33,7 +33,7 @@ __model_factory = {
     'se_resnext101_32x4d': se_resnext101_32x4d,
     'densenet121': densenet121,
     'densenet121_fc512': densenet121_fc512,
-    'inceptionresnetv2': InceptionResNetV2,
+    'inceptionresnetv2': inceptionresnetv2,
     'inceptionv4': inceptionv4,
     'xception': xception,
     # lightweight models

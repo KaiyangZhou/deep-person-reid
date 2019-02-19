@@ -203,8 +203,8 @@ def init_pretrained_weights(model, model_url):
     print('Initialized model with pretrained weights from {}'.format(model_url))
 
 
-def mlfn(num_classes, loss, pretrained='imagenet', **kwargs):
+def mlfn(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     model = MLFN(num_classes, loss, **kwargs)
-    if pretrained == 'imagenet':
+    if pretrained:
         init_pretrained_weights(model, model_urls['imagenet'])
     return model

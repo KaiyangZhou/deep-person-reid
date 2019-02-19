@@ -340,9 +340,9 @@ def init_pretrained_weights(model, model_url):
     print('Initialized model with pretrained weights from {}'.format(model_url))
 
 
-def inceptionv4(num_classes, loss, pretrained='imagenet', **kwargs):
+def inceptionv4(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     model = InceptionV4Base(num_classes, loss, **kwargs)
-    if pretrained == 'imagenet':
+    if pretrained:
         model_url = pretrained_settings['inceptionv4']['imagenet']['url']
         init_pretrained_weights(model, model_url)
     return model

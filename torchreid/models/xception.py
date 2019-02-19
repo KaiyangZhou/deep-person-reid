@@ -251,14 +251,14 @@ def init_pretrained_weights(model, model_url):
     print('Initialized model with pretrained weights from {}'.format(model_url))
 
 
-def xception(num_classes, loss, pretrained='imagenet', **kwargs):
+def xception(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     model = Xception(
         num_classes, loss,
         fc_dims=None,
         dropout_p=None,
         **kwargs
     )
-    if pretrained == 'imagenet':
+    if pretrained:
         model_url = pretrained_settings['xception']['imagenet']['url']
         init_pretrained_weights(model, model_url)
     return model

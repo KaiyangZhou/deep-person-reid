@@ -200,7 +200,7 @@ def init_pretrained_weights(model, model_url):
     print('Initialized model with pretrained weights from {}'.format(model_url))
 
 
-def resnext50_32x4d(num_classes, loss, pretrained='imagenet', **kwargs):
+def resnext50_32x4d(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     model = ResNeXt(
         num_classes=num_classes,
         loss=loss,
@@ -213,12 +213,12 @@ def resnext50_32x4d(num_classes, loss, pretrained='imagenet', **kwargs):
         dropout_p=None,
         **kwargs
     )
-    if pretrained == 'imagenet':
+    if pretrained:
         init_pretrained_weights(model, model_urls['resnext50_32x4d'])
     return model
 
 
-def resnext50_32x4d_fc512(num_classes, loss, pretrained='imagenet', **kwargs):
+def resnext50_32x4d_fc512(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     model = ResNeXt(
         num_classes=num_classes,
         loss=loss,
@@ -231,6 +231,6 @@ def resnext50_32x4d_fc512(num_classes, loss, pretrained='imagenet', **kwargs):
         dropout_p=None,
         **kwargs
     )
-    if pretrained == 'imagenet':
+    if pretrained:
         init_pretrained_weights(model, model_urls['resnext50_32x4d'])
     return model

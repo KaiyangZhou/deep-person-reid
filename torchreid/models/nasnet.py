@@ -668,9 +668,9 @@ def init_pretrained_weights(model, model_url):
     print('Initialized model with pretrained weights from {}'.format(model_url))
 
 
-def nasnetamobile(num_classes, loss, pretrained='imagenet', **kwargs):
+def nasnetamobile(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     model = NASNetAMobile(num_classes, loss, **kwargs)
-    if pretrained == 'imagenet':
+    if pretrained:
         model_url = pretrained_settings['nasnetamobile']['imagenet']['url']
         init_pretrained_weights(model, model_url)
     return model
