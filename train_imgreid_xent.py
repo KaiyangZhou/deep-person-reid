@@ -54,7 +54,7 @@ def main():
     trainloader, testloader_dict = dm.return_dataloaders()
 
     print('Initializing model: {}'.format(args.arch))
-    model = models.init_model(name=args.arch, num_classes=dm.num_train_pids, loss={'xent'}, use_gpu=use_gpu)
+    model = models.init_model(name=args.arch, num_classes=dm.num_train_pids, loss={'xent'}, pretrained=not args.no_pretrained, use_gpu=use_gpu)
     print('Model size: {:.3f} M'.format(count_num_param(model)))
 
     if args.load_weights and check_isfile(args.load_weights):
