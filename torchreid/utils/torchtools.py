@@ -3,9 +3,44 @@ from __future__ import print_function
 from __future__ import division
 
 from collections import OrderedDict
+import shutil
+import warnings
 
 import torch
 import torch.nn as nn
+
+from .iotools import mkdir_if_missing
+
+
+def save_checkpoint(state, save_dir, is_best=False):
+    mkdir_if_missing(save_dir)
+    # remove 'module.' in state_dict's keys if necessary
+    state_dict = state['state_dict']
+    new_state_dict = OrderedDict()
+    for k, v in state_dict.items():
+        if k.startswith('module.'):
+            k = k[7:]
+        new_state_dict[k] = v
+    state['state_dict'] = new_state_dict
+    # save
+    epoch = state['epoch']
+    fpath = osp.join(save_dir, 'model.pth.tar-' + str(epoch))
+    torch.save(state, fpath)
+    if is_best:
+        shutil.copy(fpath, osp.join(osp.dirname(fpath), 'best_model.pth.tar'))
+
+
+def resume_from_checkpoint(ckpt_path, model, optimizer=None):
+    print('Loading checkpoint from "{}"'.format(ckpt_path))
+    ckpt = torch.load(ckpt_path)
+    model.load_state_dict(ckpt['state_dict'])
+    print('Loaded model weights')
+    if optimizer is not None:
+        optimizer.load_state_dict(ckpt['optimizer'])
+        print('Loaded optimizer')
+    start_epoch = ckpt['epoch']
+    print('Epoch will start from {} (previous rank1 = {})'.format(start_epoch, ckpt['rank1']))
+    return start_epoch
 
 
 def adjust_learning_rate(optimizer, base_lr, epoch, stepsize=20, gamma=0.1,
@@ -131,8 +166,8 @@ def load_pretrained_weights(model, weight_path):
     model_dict.update(new_state_dict)
     model.load_state_dict(model_dict)
     if len(matched_layers) == 0:
-        print('** ERROR: the pretrained weights "{}" cannot be loaded, please check the key names manually (ignored and continue)'.format(weight_path))
+        warnings.warn('The pretrained weights "{}" cannot be loaded, please check the key names manually (** ignored and continue **)'.format(weight_path))
     else:
         print('Successfully loaded pretrained weights from "{}"'.format(weight_path))
         if len(discarded_layers) > 0:
-            print("* The following layers are discarded due to unmatched keys or layer size: {}".format(discarded_layers))
+            print("** The following layers are discarded due to unmatched keys or layer size: {}".format(discarded_layers))
