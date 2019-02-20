@@ -11,10 +11,10 @@ import warnings
 try:
     from torchreid.eval_cylib.eval_metrics_cy import evaluate_cy
     IS_CYTHON_AVAI = True
-    print("Using Cython evaluation code as the backend")
+    print('Using Cython evaluation code as the backend')
 except ImportError:
     IS_CYTHON_AVAI = False
-    warnings.warn("Cython evaluation is UNAVAILABLE, which is highly recommended")
+    warnings.warn('Cython evaluation is UNAVAILABLE, which is highly recommended')
 
 
 def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank):
@@ -27,7 +27,7 @@ def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank):
     
     if num_g < max_rank:
         max_rank = num_g
-        print("Note: number of gallery samples is quite small, got {}".format(num_g))
+        print('Note: number of gallery samples is quite small, got {}'.format(num_g))
     
     indices = np.argsort(distmat, axis=1)
     matches = (g_pids[indices] == q_pids[:, np.newaxis]).astype(np.int32)
@@ -82,7 +82,7 @@ def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank):
         all_AP.append(AP)
         num_valid_q += 1.
 
-    assert num_valid_q > 0, "Error: all query identities do not appear in gallery"
+    assert num_valid_q > 0, 'Error: all query identities do not appear in gallery'
 
     all_cmc = np.asarray(all_cmc).astype(np.float32)
     all_cmc = all_cmc.sum(0) / num_valid_q
@@ -99,7 +99,7 @@ def eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank):
     
     if num_g < max_rank:
         max_rank = num_g
-        print("Note: number of gallery samples is quite small, got {}".format(num_g))
+        print('Note: number of gallery samples is quite small, got {}'.format(num_g))
     
     indices = np.argsort(distmat, axis=1)
     matches = (g_pids[indices] == q_pids[:, np.newaxis]).astype(np.int32)
@@ -140,7 +140,7 @@ def eval_market1501(distmat, q_pids, g_pids, q_camids, g_camids, max_rank):
         AP = tmp_cmc.sum() / num_rel
         all_AP.append(AP)
 
-    assert num_valid_q > 0, "Error: all query identities do not appear in gallery"
+    assert num_valid_q > 0, 'Error: all query identities do not appear in gallery'
 
     all_cmc = np.asarray(all_cmc).astype(np.float32)
     all_cmc = all_cmc.sum(0) / num_valid_q
