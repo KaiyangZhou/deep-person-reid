@@ -65,7 +65,7 @@ class RankLogger(object):
         self.logger[name]['rank1'].append(rank1)
 
     def show_summary(self):
-        print('=> Show summary')
+        print('=> Show performance summary')
         for name in self.target_names:
             from_where = 'source' if name in self.source_names else 'target'
             print('{} ({})'.format(name, from_where))

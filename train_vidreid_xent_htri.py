@@ -91,9 +91,8 @@ def main():
                 )
         return
 
-    start_time = time.time()
+    time_start = time.time()
     ranklogger = RankLogger(args.source_names, args.target_names)
-    train_time = 0
     print('=> Start training')
 
     if args.fixbase_epoch > 0:
@@ -101,17 +100,13 @@ def main():
         initial_optim_state = optimizer.state_dict()
 
         for epoch in range(args.fixbase_epoch):
-            start_train_time = time.time()
             train(epoch, model, criterion_xent, criterion_htri, optimizer, trainloader, use_gpu, fixbase=True)
-            train_time += round(time.time() - start_train_time)
 
         print('Done. All layers are open to train for {} epochs'.format(args.max_epoch))
         optimizer.load_state_dict(initial_optim_state)
 
     for epoch in range(args.start_epoch, args.max_epoch):
-        start_train_time = time.time()
         train(epoch, model, criterion_xent, criterion_htri, optimizer, trainloader, use_gpu)
-        train_time += round(time.time() - start_train_time)
         
         scheduler.step()
         
@@ -133,10 +128,9 @@ def main():
                 'optimizer': optimizer.state_dict(),
             }, args.save_dir)
 
-    elapsed = round(time.time() - start_time)
+    elapsed = round(time.time() - time_start)
     elapsed = str(datetime.timedelta(seconds=elapsed))
-    train_time = str(datetime.timedelta(seconds=train_time))
-    print('Finished. Total elapsed time (h:m:s): {}. Training time (h:m:s): {}.'.format(elapsed, train_time))
+    print('Elapsed {}'.format(elapsed))
     ranklogger.show_summary()
 
 
