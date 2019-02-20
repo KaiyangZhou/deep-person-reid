@@ -43,7 +43,7 @@ def resume_from_checkpoint(ckpt_path, model, optimizer=None):
         optimizer.load_state_dict(ckpt['optimizer'])
         print('Loaded optimizer')
     start_epoch = ckpt['epoch']
-    print('Epoch will start from {} (previous rank1 = {:.1%})'.format(start_epoch, ckpt['rank1']))
+    print('** previous epoch = {}\t previous rank1 = {:.1%}'.format(start_epoch, ckpt['rank1']))
     return start_epoch
 
 
