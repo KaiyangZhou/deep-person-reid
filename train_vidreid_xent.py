@@ -7,6 +7,7 @@ import time
 import datetime
 import os.path as osp
 import numpy as np
+import warnings
 
 import torch
 import torch.nn as nn
@@ -49,7 +50,7 @@ def main():
         print('Currently using GPU {}'.format(args.gpu_devices))
         cudnn.benchmark = True
     else:
-        print('Currently using CPU, however, GPU is highly recommended')
+        warnings.warn('Currently using CPU, however, GPU is highly recommended')
 
     print('Initializing video data manager')
     dm = VideoDataManager(use_gpu, **video_dataset_kwargs(args))
