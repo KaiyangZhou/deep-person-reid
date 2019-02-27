@@ -19,6 +19,7 @@ It has the following features:
 - state-of-the-art training techniques.
 
 ## Updates
+- 27-02-2019: Added QMUL-iLIDS and PRID. See [this issue](https://github.com/KaiyangZhou/deep-person-reid/issues/115) for details.
 - 03-02-2019: [Added random erasing and staged learning rate training](https://github.com/KaiyangZhou/deep-person-reid/issues/110).
 - 22-01-2019: Added [Market1501+500K](https://github.com/KaiyangZhou/deep-person-reid/issues/107).
 - 06-01-2019: Released [Awesome-ReID](AWESOME_REID.md), a collection of ReID-related research with links to codes and papers.
@@ -44,6 +45,8 @@ Image-reid datasets:
 - [CUHK01](http://www.ee.cuhk.edu.hk/~xgwang/papers/liZWaccv12.pdf) (`cuhk01`)
 - [PRID450S](https://pdfs.semanticscholar.org/f62d/71e701c9fd021610e2076b5e0f5b2c7c86ca.pdf) (`prid450s`)
 - [SenseReID](http://openaccess.thecvf.com/content_cvpr_2017/papers/Zhao_Spindle_Net_Person_CVPR_2017_paper.pdf) (`sensereid`)
+- [QMUL-iLIDS](http://www.eecs.qmul.ac.uk/~sgg/papers/ZhengGongXiang_BMVC09.pdf) (`ilids`)
+- [PRID](https://pdfs.semanticscholar.org/4c1b/f0592be3e535faf256c95e27982db9b3d3d3.pdf) (`prid`)
 
 Video-reid datasets:
 - [MARS](http://www.liangzheng.org/1320.pdf) (`mars`)
