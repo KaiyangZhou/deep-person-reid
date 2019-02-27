@@ -43,11 +43,11 @@ class Mars(BaseVideoDataset):
         self.track_test_info_path = osp.join(self.dataset_dir, 'info/tracks_test_info.mat')
         self.query_IDX_path = osp.join(self.dataset_dir, 'info/query_IDX.mat')
 
-        self._check_before_run()
+        self.check_before_run()
 
         # prepare meta data
-        train_names = self._get_names(self.train_name_path)
-        test_names = self._get_names(self.test_name_path)
+        train_names = self.get_names(self.train_name_path)
+        test_names = self.get_names(self.test_name_path)
         track_train = loadmat(self.track_train_info_path)['track_train_info'] # numpy.ndarray (8298, 4)
         track_test = loadmat(self.track_test_info_path)['track_test_info'] # numpy.ndarray (12180, 4)
         query_IDX = loadmat(self.query_IDX_path)['query_IDX'].squeeze() # numpy.ndarray (1980,)
@@ -56,9 +56,9 @@ class Mars(BaseVideoDataset):
         gallery_IDX = [i for i in range(track_test.shape[0]) if i not in query_IDX]
         track_gallery = track_test[gallery_IDX,:]
 
-        train = self._process_data(train_names, track_train, home_dir='bbox_train', relabel=True, min_seq_len=min_seq_len)
-        query = self._process_data(test_names, track_query, home_dir='bbox_test', relabel=False, min_seq_len=min_seq_len)
-        gallery = self._process_data(test_names, track_gallery, home_dir='bbox_test', relabel=False, min_seq_len=min_seq_len)
+        train = self.process_data(train_names, track_train, home_dir='bbox_train', relabel=True, min_seq_len=min_seq_len)
+        query = self.process_data(test_names, track_query, home_dir='bbox_test', relabel=False, min_seq_len=min_seq_len)
+        gallery = self.process_data(test_names, track_gallery, home_dir='bbox_test', relabel=False, min_seq_len=min_seq_len)
 
         if verbose:
             print('=> MARS loaded')
@@ -72,7 +72,7 @@ class Mars(BaseVideoDataset):
         self.num_query_pids, _, self.num_query_cams = self.get_videodata_info(self.query)
         self.num_gallery_pids, _, self.num_gallery_cams = self.get_videodata_info(self.gallery)
 
-    def _check_before_run(self):
+    def check_before_run(self):
         """Check if all files are available before going deeper"""
         if not osp.exists(self.dataset_dir):
             raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
@@ -87,7 +87,7 @@ class Mars(BaseVideoDataset):
         if not osp.exists(self.query_IDX_path):
             raise RuntimeError('"{}" is not available'.format(self.query_IDX_path))
 
-    def _get_names(self, fpath):
+    def get_names(self, fpath):
         names = []
         with open(fpath, 'r') as f:
             for line in f:
@@ -95,7 +95,7 @@ class Mars(BaseVideoDataset):
                 names.append(new_line)
         return names
 
-    def _process_data(self, names, meta_data, home_dir=None, relabel=False, min_seq_len=0):
+    def process_data(self, names, meta_data, home_dir=None, relabel=False, min_seq_len=0):
         assert home_dir in ['bbox_train', 'bbox_test']
         num_tracklets = meta_data.shape[0]
         pid_list = list(set(meta_data[:,2].tolist()))

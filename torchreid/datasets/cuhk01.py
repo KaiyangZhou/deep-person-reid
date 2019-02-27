@@ -42,10 +42,10 @@ class CUHK01(BaseImageDataset):
         self.campus_dir = osp.join(self.dataset_dir, 'campus')
         self.split_path = osp.join(self.dataset_dir, 'splits.json')
 
-        self._extract_file()
-        self._check_before_run()
+        self.extract_file()
+        self.check_before_run()
 
-        self._prepare_split()
+        self.prepare_split()
         splits = read_json(self.split_path)
         if split_id >= len(splits):
             raise ValueError('split_id exceeds range, received {}, but expected between 0 and {}'.format(split_id, len(splits)-1))
@@ -71,7 +71,7 @@ class CUHK01(BaseImageDataset):
         self.num_query_pids, self.num_query_imgs, self.num_query_cams = self.get_imagedata_info(self.query)
         self.num_gallery_pids, self.num_gallery_imgs, self.num_gallery_cams = self.get_imagedata_info(self.gallery)
 
-    def _extract_file(self):
+    def extract_file(self):
         if not osp.exists(self.campus_dir):
             print('Extracting files')
             zip_ref = zipfile.ZipFile(self.zip_path, 'r')
@@ -79,14 +79,14 @@ class CUHK01(BaseImageDataset):
             zip_ref.close()
         print('Files extracted')
 
-    def _check_before_run(self):
+    def check_before_run(self):
         """Check if all files are available before going deeper"""
         if not osp.exists(self.dataset_dir):
             raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
         if not osp.exists(self.campus_dir):
             raise RuntimeError('"{}" is not available'.format(self.campus_dir))
 
-    def _prepare_split(self):
+    def prepare_split(self):
         """
         Image name format: 0001001.png, where first four digits represent identity
         and last four digits represent cameras. Camera 1&2 are considered the same

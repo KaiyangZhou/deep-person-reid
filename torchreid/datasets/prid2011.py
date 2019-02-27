@@ -42,7 +42,7 @@ class PRID2011(BaseVideoDataset):
         self.cam_a_path = osp.join(self.dataset_dir, 'prid_2011', 'multi_shot', 'cam_a')
         self.cam_b_path = osp.join(self.dataset_dir, 'prid_2011', 'multi_shot', 'cam_b')
 
-        self._check_before_run()
+        self.check_before_run()
         splits = read_json(self.split_path)
         if split_id >=  len(splits):
             raise ValueError('split_id exceeds range, received {}, but expected between 0 and {}'.format(split_id, len(splits)-1))
@@ -50,9 +50,9 @@ class PRID2011(BaseVideoDataset):
         train_dirs, test_dirs = split['train'], split['test']
         print('# train identites: {}, # test identites {}'.format(len(train_dirs), len(test_dirs)))
 
-        train = self._process_data(train_dirs, cam1=True, cam2=True)
-        query = self._process_data(test_dirs, cam1=True, cam2=False)
-        gallery = self._process_data(test_dirs, cam1=False, cam2=True)
+        train = self.process_dir(train_dirs, cam1=True, cam2=True)
+        query = self.process_dir(test_dirs, cam1=True, cam2=False)
+        gallery = self.process_dir(test_dirs, cam1=False, cam2=True)
 
         if verbose:
             print('=> PRID2011 loaded')
@@ -66,12 +66,12 @@ class PRID2011(BaseVideoDataset):
         self.num_query_pids, _, self.num_query_cams = self.get_videodata_info(self.query)
         self.num_gallery_pids, _, self.num_gallery_cams = self.get_videodata_info(self.gallery)
 
-    def _check_before_run(self):
+    def check_before_run(self):
         """Check if all files are available before going deeper"""
         if not osp.exists(self.dataset_dir):
             raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
 
-    def _process_data(self, dirnames, cam1=True, cam2=True):
+    def process_dir(self, dirnames, cam1=True, cam2=True):
         tracklets = []
         dirname2pid = {dirname:i for i, dirname in enumerate(dirnames)}
         

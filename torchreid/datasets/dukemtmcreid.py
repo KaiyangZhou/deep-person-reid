@@ -44,12 +44,12 @@ class DukeMTMCreID(BaseImageDataset):
         self.query_dir = osp.join(self.dataset_dir, 'DukeMTMC-reID/query')
         self.gallery_dir = osp.join(self.dataset_dir, 'DukeMTMC-reID/bounding_box_test')
 
-        self._download_data()
-        self._check_before_run()
+        self.download_data()
+        self.check_before_run()
 
-        train = self._process_dir(self.train_dir, relabel=True)
-        query = self._process_dir(self.query_dir, relabel=False)
-        gallery = self._process_dir(self.gallery_dir, relabel=False)
+        train = self.process_dir(self.train_dir, relabel=True)
+        query = self.process_dir(self.query_dir, relabel=False)
+        gallery = self.process_dir(self.gallery_dir, relabel=False)
 
         if verbose:
             print('=> DukeMTMC-reID loaded')
@@ -63,7 +63,7 @@ class DukeMTMCreID(BaseImageDataset):
         self.num_query_pids, self.num_query_imgs, self.num_query_cams = self.get_imagedata_info(self.query)
         self.num_gallery_pids, self.num_gallery_imgs, self.num_gallery_cams = self.get_imagedata_info(self.gallery)
 
-    def _download_data(self):
+    def download_data(self):
         if osp.exists(self.dataset_dir):
             print('This dataset has been downloaded.')
             return
@@ -80,7 +80,7 @@ class DukeMTMCreID(BaseImageDataset):
         zip_ref.extractall(self.dataset_dir)
         zip_ref.close()
 
-    def _check_before_run(self):
+    def check_before_run(self):
         """Check if all files are available before going deeper"""
         if not osp.exists(self.dataset_dir):
             raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
@@ -91,7 +91,7 @@ class DukeMTMCreID(BaseImageDataset):
         if not osp.exists(self.gallery_dir):
             raise RuntimeError('"{}" is not available'.format(self.gallery_dir))
 
-    def _process_dir(self, dir_path, relabel=False):
+    def process_dir(self, dir_path, relabel=False):
         img_paths = glob.glob(osp.join(dir_path, '*.jpg'))
         pattern = re.compile(r'([-\d]+)_c(\d)')
 

@@ -58,8 +58,8 @@ class CUHK03(BaseImageDataset):
         self.split_new_det_mat_path = osp.join(self.dataset_dir, 'cuhk03_new_protocol_config_detected.mat')
         self.split_new_lab_mat_path = osp.join(self.dataset_dir, 'cuhk03_new_protocol_config_labeled.mat')
 
-        self._check_before_run()
-        self._preprocess()
+        self.check_before_run()
+        self.preprocess()
 
         if cuhk03_labeled:
             image_type = 'labeled'
@@ -89,7 +89,7 @@ class CUHK03(BaseImageDataset):
         self.num_query_pids, self.num_query_imgs, self.num_query_cams = self.get_imagedata_info(self.query)
         self.num_gallery_pids, self.num_gallery_imgs, self.num_gallery_cams = self.get_imagedata_info(self.gallery)
 
-    def _check_before_run(self):
+    def check_before_run(self):
         """Check if all files are available before going deeper"""
         if not osp.exists(self.dataset_dir):
             raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
@@ -102,7 +102,7 @@ class CUHK03(BaseImageDataset):
         if not osp.exists(self.split_new_lab_mat_path):
             raise RuntimeError('"{}" is not available'.format(self.split_new_lab_mat_path))
 
-    def _preprocess(self):
+    def preprocess(self):
         """
         This function is a bit complex and ugly, what it does is
         1. Extract data from cuhk-03.mat and save as png images.

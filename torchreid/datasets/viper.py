@@ -42,10 +42,10 @@ class VIPeR(BaseImageDataset):
         self.cam_b_path = osp.join(self.dataset_dir, 'VIPeR', 'cam_b')
         self.split_path = osp.join(self.dataset_dir, 'splits.json')
 
-        self._download_data()
-        self._check_before_run()
+        self.download_data()
+        self.check_before_run()
         
-        self._prepare_split()
+        self.prepare_split()
         splits = read_json(self.split_path)
         if split_id >= len(splits):
             raise ValueError('split_id exceeds range, received {}, but expected between 0 and {}'.format(split_id, len(splits)-1))
@@ -71,7 +71,7 @@ class VIPeR(BaseImageDataset):
         self.num_query_pids, self.num_query_imgs, self.num_query_cams = self.get_imagedata_info(self.query)
         self.num_gallery_pids, self.num_gallery_imgs, self.num_gallery_cams = self.get_imagedata_info(self.gallery)
 
-    def _download_data(self):
+    def download_data(self):
         if osp.exists(self.dataset_dir):
             print('This dataset has been downloaded.')
             return
@@ -88,7 +88,7 @@ class VIPeR(BaseImageDataset):
         zip_ref.extractall(self.dataset_dir)
         zip_ref.close()
 
-    def _check_before_run(self):
+    def check_before_run(self):
         """Check if all files are available before going deeper"""
         if not osp.exists(self.dataset_dir):
             raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
@@ -97,7 +97,7 @@ class VIPeR(BaseImageDataset):
         if not osp.exists(self.cam_b_path):
             raise RuntimeError('"{}" is not available'.format(self.cam_b_path))
 
-    def _prepare_split(self):
+    def prepare_split(self):
         if not osp.exists(self.split_path):
             print('Creating 10 random splits of train ids and test ids')
 
