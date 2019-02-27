@@ -14,6 +14,9 @@ from scipy.io import loadmat
 import numpy as np
 import h5py
 from scipy.misc import imsave
+from collections import defaultdict
+import copy
+import random
 
 from torchreid.utils.iotools import mkdir_if_missing, write_json, read_json
 from .bases import BaseImageDataset
@@ -21,48 +24,38 @@ from .bases import BaseImageDataset
 
 class iLIDS(BaseImageDataset):
     """
-    iLIDS (for single shot setting)
+    QMUL-iLIDS
 
     Reference:
-    Wang et al. Person Re-Identification by Video Ranking. ECCV 2014.
-
-    URL: http://www.eecs.qmul.ac.uk/~xiatian/downloads_qmul_iLIDS-VID_ReID_dataset.html
+    Zheng et al. Associating Groups of People. BMVC 2009.
     
     Dataset statistics:
-    # identities: 300
-    # images: 600
-    # cameras: 2
+    # identities: 119
+    # images: 476
+    # cameras: 8 (not explicitly provided)
     """
-    dataset_dir = 'ilids-vid'
+    dataset_dir = 'ilids'
 
     def __init__(self, root='data', split_id=0, verbose=True, **kwargs):
         super(iLIDS, self).__init__(root)
         self.dataset_dir = osp.join(self.root, self.dataset_dir)
-        self.dataset_url = 'http://www.eecs.qmul.ac.uk/~xiatian/iLIDS-VID/iLIDS-VID.tar'
-        self.data_dir = osp.join(self.dataset_dir, 'i-LIDS-VID')
-        self.split_dir = osp.join(self.dataset_dir, 'train-test people splits')
-        self.split_mat_path = osp.join(self.split_dir, 'train_test_splits_ilidsvid.mat')
+        self.dataset_url = 'http://www.eecs.qmul.ac.uk/~jason/data/i-LIDS_Pedestrian.tgz'
+        self.data_dir = osp.join(self.dataset_dir, 'i-LIDS_Pedestrian/Persons')
         self.split_path = osp.join(self.dataset_dir, 'splits.json')
-        self.cam_1_path = osp.join(self.dataset_dir, 'i-LIDS-VID/images/cam1') # differ from video
-        self.cam_2_path = osp.join(self.dataset_dir, 'i-LIDS-VID/images/cam2')
 
-        self._download_data()
-        self._check_before_run()
+        self.download_data()
+        self.check_before_run()
 
-        self._prepare_split()
+        self.prepare_split()
         splits = read_json(self.split_path)
         if split_id >= len(splits):
             raise ValueError('split_id exceeds range, received {}, but expected between 0 and {}'.format(split_id, len(splits)-1))
         split = splits[split_id]
-        train_dirs, test_dirs = split['train'], split['test']
-        print('# train identites: {}, # test identites {}'.format(len(train_dirs), len(test_dirs)))
 
-        train = self._process_data(train_dirs, cam1=True, cam2=True)
-        query = self._process_data(test_dirs, cam1=True, cam2=False)
-        gallery = self._process_data(test_dirs, cam1=False, cam2=True)
+        train, query, gallery = self.process_split(split)
 
         if verbose:
-            print('=> iLIDS (single-shot) loaded')
+            print('=> iLIDS loaded')
             self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
@@ -73,7 +66,7 @@ class iLIDS(BaseImageDataset):
         self.num_query_pids, self.num_query_imgs, self.num_query_cams = self.get_imagedata_info(self.query)
         self.num_gallery_pids, self.num_gallery_imgs, self.num_gallery_cams = self.get_imagedata_info(self.gallery)
 
-    def _download_data(self):
+    def download_data(self):
         if osp.exists(self.dataset_dir):
             print('This dataset has been downloaded.')
             return
@@ -81,7 +74,7 @@ class iLIDS(BaseImageDataset):
         mkdir_if_missing(self.dataset_dir)
         fpath = osp.join(self.dataset_dir, osp.basename(self.dataset_url))
 
-        print('Downloading iLIDS-VID dataset')
+        print('Downloading QMUL-iLIDS dataset')
         urllib.urlretrieve(self.dataset_url, fpath)
 
         print('Extracting files')
@@ -89,78 +82,94 @@ class iLIDS(BaseImageDataset):
         tar.extractall(path=self.dataset_dir)
         tar.close()
 
-    def _check_before_run(self):
+    def check_before_run(self):
         """Check if all files are available before going deeper"""
         if not osp.exists(self.dataset_dir):
             raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
         if not osp.exists(self.data_dir):
             raise RuntimeError('"{}" is not available'.format(self.data_dir))
-        if not osp.exists(self.split_dir):
-            raise RuntimeError('"{}" is not available'.format(self.split_dir))
 
-    def _prepare_split(self):
+    def prepare_split(self):
         if not osp.exists(self.split_path):
             print('Creating splits ...')
-            mat_split_data = loadmat(self.split_mat_path)['ls_set']
             
-            num_splits = mat_split_data.shape[0]
-            num_total_ids = mat_split_data.shape[1]
-            assert num_splits == 10
-            assert num_total_ids == 300
-            num_ids_each = num_total_ids // 2
+            # read image paths
+            paths = glob.glob(osp.join(self.data_dir, '*.jpg'))
+            img_names = [osp.basename(path) for path in paths]
+            num_imgs = len(img_names)
+            assert num_imgs == 476, 'There should be 476 images, but got {}, please check the data'.format(num_imgs)
 
-            # pids in mat_split_data are indices, so we need to transform them
-            # to real pids
-            person_cam1_dirs = sorted(glob.glob(osp.join(self.cam_1_path, '*')))
-            person_cam2_dirs = sorted(glob.glob(osp.join(self.cam_2_path, '*')))
+            # store image names
+            # image naming format:
+            #   the first four digits denote the person ID
+            #   the last four digits denote the sequence index
+            pid_dict = defaultdict(list)
+            for img_name in img_names:
+                pid = int(img_name[:4])
+                pid_dict[pid].append(img_name)
+            pids = list(pid_dict.keys())
+            num_pids = len(pids)
+            assert num_pids == 119, 'There should be 119 identities, but got {}, please check the data'.format(num_pids)
 
-            person_cam1_dirs = [osp.basename(item) for item in person_cam1_dirs]
-            person_cam2_dirs = [osp.basename(item) for item in person_cam2_dirs]
-
-            # make sure persons in one camera view can be found in the other camera view
-            assert set(person_cam1_dirs) == set(person_cam2_dirs)
+            num_train_pids = int(num_pids * 0.5)
+            num_test_pids = num_pids - num_train_pids # supposed to be 60
 
             splits = []
-            for i_split in range(num_splits):
-                # first 50% for testing and the remaining for training, following Wang et al. ECCV'14.
-                train_idxs = sorted(list(mat_split_data[i_split,num_ids_each:]))
-                test_idxs = sorted(list(mat_split_data[i_split,:num_ids_each]))
-                
-                train_idxs = [int(i)-1 for i in train_idxs]
-                test_idxs = [int(i)-1 for i in test_idxs]
-                
-                # transform pids to person dir names
-                train_dirs = [person_cam1_dirs[i] for i in train_idxs]
-                test_dirs = [person_cam1_dirs[i] for i in test_idxs]
-                
-                split = {'train': train_dirs, 'test': test_dirs}
+            for _ in range(10):
+                # randomly choose num_train_pids train IDs and num_test_pids test IDs
+                pids_copy = copy.deepcopy(pids)
+                random.shuffle(pids_copy)
+                train_pids = pids_copy[:num_train_pids]
+                test_pids = pids_copy[num_train_pids:]
+
+                # store image names
+                train = []
+                query = []
+                gallery = []
+
+                # for train IDs, all images are used in the train set.
+                for pid in train_pids:
+                    img_names = pid_dict[pid]
+                    train.extend(img_names)
+
+                # for each test ID, randomly choose two images, one for
+                # query and the other one for gallery.
+                for pid in test_pids:
+                    img_names = pid_dict[pid]
+                    samples = random.sample(img_names, 2)
+                    query.append(samples[0])
+                    gallery.append(samples[1])
+
+                split = {'train': train, 'query': query, 'gallery': gallery}
                 splits.append(split)
 
-            print('Totally {} splits are created, following Wang et al. ECCV\'14'.format(len(splits)))
-            print('Split file is saved to {}'.format(self.split_path))
+            print('Totally {} splits are created'.format(len(splits)))
             write_json(splits, self.split_path)
+            print('Split file is saved to {}'.format(self.split_path))
 
-    def _process_data(self, dirnames, cam1=True, cam2=True):
-        dirname2pid = {dirname:i for i, dirname in enumerate(dirnames)}
-        dataset = []
-        
-        for i, dirname in enumerate(dirnames):
-            if cam1:
-                pdir = osp.join(self.cam_1_path, dirname)
-                img_path = glob.glob(osp.join(pdir, '*.png'))
-                # only one image is available in one folder
-                assert len(img_path) == 1
-                img_path = img_path[0]
-                pid = dirname2pid[dirname]
-                dataset.append((img_path, pid, 0))
+    def get_pid2label(self, img_names):
+        pid_container = set()
+        for img_name in img_names:
+            pid = int(img_name[:4])
+            pid_container.add(pid)
+        pid2label = {pid: label for label, pid in enumerate(pid_container)}
+        return pid2label
 
-            if cam2:
-                pdir = osp.join(self.cam_2_path, dirname)
-                img_path = glob.glob(osp.join(pdir, '*.png'))
-                # only one image is available in one folder
-                assert len(img_path) == 1
-                img_path = img_path[0]
-                pid = dirname2pid[dirname]
-                dataset.append((img_path, pid, 1))
+    def parse_img_names(self, img_names, pid2label=None):
+        output = []
+        for img_name in img_names:
+            pid = int(img_name[:4])
+            if pid2label is not None:
+                pid = pid2label[pid]
+            camid = int(img_name[4:7]) - 1 # 0-based
+            img_path = osp.join(self.data_dir, img_name)
+            output.append((img_path, pid, camid))
+        return output
 
-        return dataset
+    def process_split(self, split):
+        train, query, gallery = [], [], []
+        train_pid2label = self.get_pid2label(split['train'])
+        train = self.parse_img_names(split['train'], train_pid2label)
+        query = self.parse_img_names(split['query'])
+        gallery = self.parse_img_names(split['gallery'])
+        return train, query, gallery
