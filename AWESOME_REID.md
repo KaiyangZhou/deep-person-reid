@@ -13,6 +13,7 @@ Here is a collection of ReID-related research with links to codes and papers. Yo
 - Spatial-Temporal Person Re-identification. [[paper](https://arxiv.org/abs/1812.03282)][[code](https://github.com/Wanggcong/Spatial-Temporal-Re-identification)]
 - Horizontal Pyramid Matching for Person Re-identification. [[paper](https://arxiv.org/abs/1804.05275)][[code](https://github.com/OasisYang/HPM)]
 - Backbone Can Not be Trained at Once: Rolling Back to Pre-trained Network for Person Re-identification. [[paper](https://arxiv.org/abs/1901.06140)][[code](https://github.com/youngminPIL/rollback)]
+- A Bottom-Up Clustering Approach to Unsupervised Person Re-identification. [[paper](https://vana77.github.io/vana77.github.io/images/AAAI19.pdf)][[code](https://github.com/vana77/Bottom-up-Clustering-Person-Re-identification)]
 
 ### NeurIPS 2018
 - FD-GAN: Pose-guided Feature Distilling GAN for Robust Person Re-identification. [[paper](https://arxiv.org/abs/1810.02936)][[code](https://github.com/yxgeee/FD-GAN)]
