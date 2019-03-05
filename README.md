@@ -19,6 +19,7 @@ It has the following features:
 - state-of-the-art training techniques.
 
 ## Updates
+- 05-03-2019: [Updated MobileNetV2; Added ImageNet-pretrained and ReID-trained models](https://github.com/KaiyangZhou/deep-person-reid/issues/116#issuecomment-469642881).
 - 27-02-2019: Added QMUL-iLIDS and PRID. See [this issue](https://github.com/KaiyangZhou/deep-person-reid/issues/115) for details.
 - 03-02-2019: [Added random erasing and staged learning rate training](https://github.com/KaiyangZhou/deep-person-reid/issues/110).
 - 22-01-2019: Added [Market1501+500K](https://github.com/KaiyangZhou/deep-person-reid/issues/107).
