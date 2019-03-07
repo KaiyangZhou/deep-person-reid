@@ -94,7 +94,6 @@ cpdef eval_cuhk03_cy(float[:,:] distmat, long[:] q_pids, long[:]g_pids,
             g_pids_dict[kept_g_pids[g_idx]].append(g_idx)
 
         cmc = np.zeros(max_rank, dtype=np.float32)
-        AP = 0.
         for _ in range(num_repeats):
             mask = np.zeros(num_g_real, dtype=np.int64)
             
@@ -118,19 +117,18 @@ cpdef eval_cuhk03_cy(float[:,:] distmat, long[:] q_pids, long[:]g_pids,
 
             for rank_idx in range(max_rank):
                 cmc[rank_idx] += masked_cmc[rank_idx] / num_repeats
-            
-            # compute AP
-            function_cumsum(masked_raw_cmc, tmp_cmc, num_g_real_masked)
-            num_rel = 0
-            tmp_cmc_sum = 0
-            for g_idx in range(num_g_real_masked):
-                tmp_cmc_sum += (tmp_cmc[g_idx] / (g_idx + 1.)) * masked_raw_cmc[g_idx]
-                num_rel += masked_raw_cmc[g_idx]
-            AP += tmp_cmc_sum / num_rel
         
-        all_AP[q_idx] = AP / num_repeats
         for rank_idx in range(max_rank):
             all_cmc[q_idx, rank_idx] = cmc[rank_idx]
+        # compute average precision
+        # reference: https://en.wikipedia.org/wiki/Evaluation_measures_(information_retrieval)#Average_precision
+        function_cumsum(raw_cmc, tmp_cmc, num_g_real)
+        num_rel = 0
+        tmp_cmc_sum = 0
+        for g_idx in range(num_g_real):
+            tmp_cmc_sum += (tmp_cmc[g_idx] / (g_idx + 1.)) * raw_cmc[g_idx]
+            num_rel += raw_cmc[g_idx]
+        all_AP[q_idx] = tmp_cmc_sum / num_rel
         num_valid_q += 1.
 
     assert num_valid_q > 0, 'Error: all query identities do not appear in gallery'

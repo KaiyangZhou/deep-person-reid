@@ -58,7 +58,7 @@ def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank):
         for idx, pid in enumerate(kept_g_pids):
             g_pids_dict[pid].append(idx)
 
-        cmc, AP = 0., 0.
+        cmc = 0.
         for repeat_idx in range(num_repeats):
             mask = np.zeros(len(raw_cmc), dtype=np.bool)
             for _, idxs in g_pids_dict.items():
@@ -69,16 +69,15 @@ def eval_cuhk03(distmat, q_pids, g_pids, q_camids, g_camids, max_rank):
             _cmc = masked_raw_cmc.cumsum()
             _cmc[_cmc > 1] = 1
             cmc += _cmc[:max_rank].astype(np.float32)
-            # compute AP
-            num_rel = masked_raw_cmc.sum()
-            tmp_cmc = masked_raw_cmc.cumsum()
-            tmp_cmc = [x / (i+1.) for i, x in enumerate(tmp_cmc)]
-            tmp_cmc = np.asarray(tmp_cmc) * masked_raw_cmc
-            AP += tmp_cmc.sum() / num_rel
         
         cmc /= num_repeats
-        AP /= num_repeats
         all_cmc.append(cmc)
+        # compute AP
+        num_rel = raw_cmc.sum()
+        tmp_cmc = raw_cmc.cumsum()
+        tmp_cmc = [x / (i+1.) for i, x in enumerate(tmp_cmc)]
+        tmp_cmc = np.asarray(tmp_cmc) * raw_cmc
+        AP = tmp_cmc.sum() / num_rel
         all_AP.append(AP)
         num_valid_q += 1.
 
