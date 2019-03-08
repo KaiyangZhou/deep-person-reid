@@ -7,6 +7,8 @@ import shutil
 import warnings
 import os
 import os.path as osp
+from functools import partial
+import pickle
 
 import torch
 import torch.nn as nn
@@ -34,16 +36,32 @@ def save_checkpoint(state, save_dir, is_best=False, remove_module_from_keys=Fals
         shutil.copy(fpath, osp.join(osp.dirname(fpath), 'best_model.pth.tar'))
 
 
-def resume_from_checkpoint(ckpt_path, model, optimizer=None):
-    print('Loading checkpoint from "{}"'.format(ckpt_path))
-    ckpt = torch.load(ckpt_path)
-    model.load_state_dict(ckpt['state_dict'])
+def load_checkpoint(fpath):
+    map_location = None if torch.cuda.is_available() else 'cpu'
+    try:
+        checkpoint = torch.load(fpath, map_location=map_location)
+    except UnicodeDecodeError:
+        pickle.load = partial(pickle.load, encoding="latin1")
+        pickle.Unpickler = partial(pickle.Unpickler, encoding="latin1")
+        checkpoint = torch.load(fpath, pickle_module=pickle, map_location=map_location)
+    except Exception:
+        print('Unable to load checkpoint from "{}"'.format(fpath))
+        raise
+    return checkpoint
+
+
+def resume_from_checkpoint(fpath, model, optimizer=None):
+    print('Loading checkpoint from "{}"'.format(fpath))
+    checkpoint = load_checkpoint(fpath)
+    model.load_state_dict(checkpoint['state_dict'])
     print('Loaded model weights')
-    if optimizer is not None:
-        optimizer.load_state_dict(ckpt['optimizer'])
+    if optimizer is not None and 'optimizer' in checkpoint.keys():
+        optimizer.load_state_dict(checkpoint['optimizer'])
         print('Loaded optimizer')
-    start_epoch = ckpt['epoch']
-    print('** previous epoch = {}\t previous rank1 = {:.1%}'.format(start_epoch, ckpt['rank1']))
+    start_epoch = checkpoint['epoch']
+    print('Last epoch = {}'.format(start_epoch))
+    if 'rank1' in checkpoint.keys():
+        print('Last rank1 = {:.1%}'.format(checkpoint['rank1']))
     return start_epoch
 
 
@@ -149,7 +167,7 @@ def load_pretrained_weights(model, weight_path):
     - model (nn.Module): network model, which must not be nn.DataParallel
     - weight_path (str): path to pretrained weights
     """
-    checkpoint = torch.load(weight_path)
+    checkpoint = load_checkpoint(weight_path)
     if 'state_dict' in checkpoint:
         state_dict = checkpoint['state_dict']
     else:
@@ -170,8 +188,12 @@ def load_pretrained_weights(model, weight_path):
     model_dict.update(new_state_dict)
     model.load_state_dict(model_dict)
     if len(matched_layers) == 0:
-        warnings.warn('The pretrained weights "{}" cannot be loaded, please check the key names manually (** ignored and continue **)'.format(weight_path))
+        warnings.warn(
+            'The pretrained weights "{}" cannot be loaded, '
+            'please check the key names manually '
+            '(** ignored and continue **)'.format(weight_path))
     else:
         print('Successfully loaded pretrained weights from "{}"'.format(weight_path))
         if len(discarded_layers) > 0:
-            print("** The following layers are discarded due to unmatched keys or layer size: {}".format(discarded_layers))
+            print('** The following layers are discarded '
+                  'due to unmatched keys or layer size: {}'.format(discarded_layers))
