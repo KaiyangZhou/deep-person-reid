@@ -3,18 +3,17 @@
   <img src="imgs/deep-person-reid-logo.png" alt="logo" width="260">
 </p>
 
-## Introduction
-Deep-person-reid is a [pytorch](http://pytorch.org/)-based framework for training and evaluating deep person re-identification models on reid benchmarks.
+This project aims to provide an efficient framework for training and evaluating deep person re-identification models in [Pytorch](http://pytorch.org/).
 
-It has the following features:
+**Highlights**
 - multi-GPU training.
 - support both image reid and video reid.
 - incredibly easy preparation of reid datasets.
+- multi-dataset training.
 - standard split protocol used by most research papers.
 - end-to-end training and evaluation.
 - implementations of state-of-the-art reid models.
 - access to pretrained reid models.
-- multi-dataset training.
 - visualization of ranked results.
 - state-of-the-art training techniques.
 
@@ -28,7 +27,7 @@ It has the following features:
 - 23-11-2018: Released imagenet-pretrained weights for [resnext50_32x4d](torchreid/models/resnext.py).
 - 11-11-2018: Added multi-dataset training; Added cython code for cuhk03-style evaluation; Wrapped dataloader construction to Image/Video-DataManager; Wrapped argparse to [args.py](args.py); Added [MLFN (CVPR'18)](https://arxiv.org/abs/1803.09132).
 
-Note: Some changes will be discussed in [issues](https://github.com/KaiyangZhou/deep-person-reid/issues).
+Note: Some changes will only be discussed in [issues](https://github.com/KaiyangZhou/deep-person-reid/issues). Please check issues with [new_feature](https://github.com/KaiyangZhou/deep-person-reid/issues?q=label%3Anew_feature) tag.
 
 ## Installation
 1. `cd` to your preferred directory and run `git clone https://github.com/KaiyangZhou/deep-person-reid`.
