@@ -19,6 +19,7 @@ class CrossEntropyLoss(nn.Module):
     - use_gpu (bool): whether to use gpu devices
     - label_smooth (bool): whether to apply label smoothing, if False, epsilon = 0
     """
+    
     def __init__(self, num_classes, epsilon=0.1, use_gpu=True, label_smooth=True):
         super(CrossEntropyLoss, self).__init__()
         self.num_classes = num_classes
