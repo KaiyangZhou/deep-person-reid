@@ -4,8 +4,6 @@ from __future__ import print_function
 
 from .cross_entropy_loss import CrossEntropyLoss
 from .hard_mine_triplet_loss import TripletLoss
-from .center_loss import CenterLoss
-from .ring_loss import RingLoss
 
 
 def DeepSupervision(criterion, xs, y):
