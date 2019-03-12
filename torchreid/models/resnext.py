@@ -14,8 +14,8 @@ __all__ = ['resnext50_32x4d', 'resnext50_32x4d_fc512']
 
 
 model_urls = {
-    # training epoch = 90, top1 = 75.4
-    'resnext50_32x4d': 'http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/imagenet-pretrained/resnext50_32x4d-107c7573.pth.tar',
+    # top1 = 76.3
+    'resnext50_32x4d': 'http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/imagenet-pretrained/resnext50_32x4d-453b60f8.pth',
 }
 
 
