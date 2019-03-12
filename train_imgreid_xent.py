@@ -41,7 +41,7 @@ def main():
     if not args.use_avai_gpus: os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_devices
     use_gpu = torch.cuda.is_available()
     if args.use_cpu: use_gpu = False
-    log_name = 'log_test.txt' if args.evaluate else 'log_train.txt'
+    log_name = 'test.log' if args.evaluate else 'train.log'
     sys.stdout = Logger(osp.join(args.save_dir, log_name))
     print('==========\nArgs:{}\n=========='.format(args))
 
@@ -168,7 +168,7 @@ def train(epoch, model, criterion, optimizer, trainloader, use_gpu, fixbase=Fals
         if (batch_idx + 1) % args.print_freq == 0:
             print('Epoch: [{0}][{1}/{2}]\t'
                   'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
-                  'Data {data_time.val:.4f} ({data_time.avg:.4f})\t'
+                  'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
                   'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
                   'Acc {acc.val:.2f} ({acc.avg:.2f})\t'.format(
                    epoch + 1, batch_idx + 1, len(trainloader),
