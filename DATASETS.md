@@ -38,7 +38,7 @@ cuhk03/
     cuhk03_new_protocol_config_labeled.mat
     ...
 ```
-- Use `cuhk03` as the dataset key. In the default mode, we load data using the new split (767/700). If you wanna use the original (20) splits (1367/100), please specify with `--cuhk03-classic-split`. As the CMC is computed differently from Market1501 for the 1367/100 split (see [here](http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html)), you need to specify `--use-metric-cuhk03` to activate the corresponding metric for fair comparison with some methods that adopt the original splits. In addition, we support both `labeled` and `detected` modes. The default mode loads `detected` images. Specify `--cuhk03-labeled` if you wanna train and test on `labeled` images.
+- Use `cuhk03` as the dataset key. In the default mode, we load data using the new split (767/700). If you wanna use the original (20) splits (1367/100), please specify with `--cuhk03-classic-split`. As the CMC is computed differently from Market1501 for the 1367/100 split (see [here](http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html)), you need to specify `--use-metric-cuhk03` to activate the *single-gallery-shot* metric for fair comparison with some methods that adopt the old splits (do not need to report `mAP`). In addition, we support both `labeled` and `detected` modes. The default mode loads `detected` images. Specify `--cuhk03-labeled` if you wanna train and test on `labeled` images.
 
 
 **DukeMTMC-reID**:
