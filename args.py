@@ -23,6 +23,8 @@ def argument_parser():
                         help='width of an image')
     parser.add_argument('--train-sampler', type=str, default='RandomSampler',
                         help='sampler for trainloader')
+    parser.add_argument('--combineall', action='store_true',
+                        help='combine all data in a dataset (train+query+gallery) for training')
     
     # ************************************************************
     # Data augmentation
@@ -191,6 +193,7 @@ def image_dataset_kwargs(parsed_args):
         'split_id': parsed_args.split_id,
         'height': parsed_args.height,
         'width': parsed_args.width,
+        'combineall': parsed_args.combineall,
         'train_batch_size': parsed_args.train_batch_size,
         'test_batch_size': parsed_args.test_batch_size,
         'workers': parsed_args.workers,
@@ -217,6 +220,7 @@ def video_dataset_kwargs(parsed_args):
         'split_id': parsed_args.split_id,
         'height': parsed_args.height,
         'width': parsed_args.width,
+        'combineall': parsed_args.combineall,
         'train_batch_size': parsed_args.train_batch_size,
         'test_batch_size': parsed_args.test_batch_size,
         'workers': parsed_args.workers,

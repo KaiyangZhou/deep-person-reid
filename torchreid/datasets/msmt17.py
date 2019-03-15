@@ -80,14 +80,15 @@ class MSMT17(BaseImageDataset):
         query = self.process_dir(self.test_dir, self.list_query_path)
         gallery = self.process_dir(self.test_dir, self.list_gallery_path)
 
-        # To fairly compare with published methods, don't use val images for training
-        #train += val
-        #num_train_imgs += num_val_imgs
+        # Note: to fairly compare with published methods on the conventional ReID setting,
+        #       do not add val images to the training set.
+        if 'combineall' in kwargs and kwargs['combineall']:
+            train += val
 
-        self.init_attributes(train, query, gallery)
+        self.init_attributes(train, query, gallery, **kwargs)
 
         if verbose:
-            self.print_dataset_statistics(train, query, gallery)
+            self.print_dataset_statistics(self.train, self.query, self.gallery)
     def process_dir(self, dir_path, list_path):
         with open(list_path, 'r') as txt:
             lines = txt.readlines()

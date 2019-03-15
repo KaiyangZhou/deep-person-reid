@@ -4,6 +4,7 @@ from __future__ import print_function
 import os
 import os.path as osp
 import numpy as np
+import copy
 
 
 class BaseDataset(object):
@@ -32,12 +33,38 @@ class BaseDataset(object):
     def get_num_cams(self, data):
         return self.extract_data_info(data)[2]
 
-    def init_attributes(self, train, query, gallery):
+    def init_attributes(self, train, query, gallery, combineall=False, **kwargs):
+        """Initialize class attributes
+
+        Args:
+            train (list): contains a list of (img_path, pid, camid)
+            query (list): contains a list of (img_path, pid, camid)
+            gallery (list): contains a list of (img_path, pid, camid)
+            combineall (bool): if set to True, combine all data for training, default is False
+
+        Notes:
+            This method has to be called (at the end) in each dataset class.
+        """
         self._train = train
         self._query = query
         self._gallery = gallery
         self._num_train_pids = self.get_num_pids(train)
         self._num_train_cams = self.get_num_cams(train)
+
+        if combineall:
+            self._train = self.combine_all(train, query, gallery)
+            self._num_train_pids = self.get_num_pids(self.train)
+
+    def combine_all(self, train, query, gallery):
+        """Combine all data for training
+
+        Notes:
+            1. In general, we assume that all query identities appear in gallery set.
+            2. All pids in train have been relabeled (starts from 0)
+            3. pid=0 (background) and pid=-1 (junk) are discarded.
+            4. Camera views remain the same across train, query and gallery.
+        """
+        raise NotImplementedError
 
     @property
     def train(self):
@@ -72,16 +99,38 @@ class BaseImageDataset(BaseDataset):
     """Base class of image-reid dataset"""
 
     def extract_data_info(self, data):
-        pids, cams = [], []
+        pids = set()
+        cams = set()
         for _, pid, camid in data:
-            pids += [pid]
-            cams += [camid]
-        pids = set(pids)
-        cams = set(cams)
+            pids.add(pid)
+            cams.add(camid)
         num_pids = len(pids)
         num_cams = len(cams)
         num_imgs = len(data)
         return num_pids, num_imgs, num_cams
+
+    def combine_all(self, train, query, gallery):
+        combined = copy.deepcopy(train)
+
+        # relabel pids in gallery
+        g_pids = set()
+        for _, pid, _ in gallery:
+            if pid==0 or pid==-1:
+                continue
+            g_pids.add(pid)
+        pid2label = {pid: i for i, pid in enumerate(g_pids)}
+
+        def _combine_data(data):
+            for img_path, pid, camid in data:
+                if pid==0 or pid==-1:
+                    continue
+                pid = pid2label[pid] + self.num_train_pids
+                combined.append((img_path, pid, camid))
+
+        _combine_data(query)
+        _combine_data(gallery)
+
+        return combined
 
     def print_dataset_statistics(self, train, query, gallery):
         num_train_pids, num_train_imgs, num_train_cams = self.extract_data_info(train)
@@ -102,13 +151,13 @@ class BaseVideoDataset(BaseDataset):
     """Base class of video-reid dataset"""
 
     def extract_data_info(self, data, return_tracklet_stats=False):
-        pids, cams, tracklet_stats = [], [], []
+        pids = set()
+        cams = set()
+        tracklet_stats = []
         for img_paths, pid, camid in data:
-            pids += [pid]
-            cams += [camid]
+            pids.add(pid)
+            cams.add(camid)
             tracklet_stats += [len(img_paths)]
-        pids = set(pids)
-        cams = set(cams)
         num_pids = len(pids)
         num_cams = len(cams)
         num_tracklets = len(data)

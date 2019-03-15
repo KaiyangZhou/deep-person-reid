@@ -54,10 +54,10 @@ class SenseReID(BaseImageDataset):
         gallery = self.process_dir(self.gallery_dir)
         train = copy.deepcopy(query) # dummy variable
 
-        self.init_attributes(train, query, gallery)
+        self.init_attributes(train, query, gallery, **kwargs)
 
         if verbose:
-            self.print_dataset_statistics(train, query, gallery)
+            self.print_dataset_statistics(self.train, self.query, self.gallery)
 
     def process_dir(self, dir_path):
         img_paths = glob.glob(osp.join(dir_path, '*.jpg'))

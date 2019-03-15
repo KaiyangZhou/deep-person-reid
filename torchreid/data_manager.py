@@ -19,6 +19,7 @@ class BaseDataManager(object):
                  split_id=0,
                  height=256,
                  width=128,
+                 combineall=False, # combine all data in a dataset for training
                  train_batch_size=32,
                  test_batch_size=100,
                  workers=4,
@@ -36,6 +37,7 @@ class BaseDataManager(object):
         self.split_id = split_id
         self.height = height
         self.width = width
+        self.combineall = combineall
         self.train_batch_size = train_batch_size
         self.test_batch_size = test_batch_size
         self.workers = workers
@@ -97,6 +99,7 @@ class ImageDataManager(BaseDataManager):
                 root=self.root,
                 name=name,
                 split_id=self.split_id,
+                combineall=self.combineall,
                 cuhk03_labeled=self.cuhk03_labeled,
                 cuhk03_classic_split=self.cuhk03_classic_split,
                 market1501_500k=self.market1501_500k
@@ -136,6 +139,7 @@ class ImageDataManager(BaseDataManager):
                 root=self.root,
                 name=name,
                 split_id=self.split_id,
+                combineall=self.combineall,
                 cuhk03_labeled=self.cuhk03_labeled,
                 cuhk03_classic_split=self.cuhk03_classic_split,
                 market1501_500k=self.market1501_500k
@@ -196,7 +200,7 @@ class VideoDataManager(BaseDataManager):
         self._num_train_cams = 0
 
         for name in self.source_names:
-            dataset = init_vidreid_dataset(root=self.root, name=name, split_id=self.split_id)
+            dataset = init_vidreid_dataset(root=self.root, name=name, split_id=self.split_id, combineall=self.combineall)
 
             for img_paths, pid, camid in dataset.train:
                 pid += self._num_train_pids
@@ -251,7 +255,7 @@ class VideoDataManager(BaseDataManager):
         self.testdataset_dict = {name: {'query': None, 'gallery': None} for name in target_names}
 
         for name in self.target_names:
-            dataset = init_vidreid_dataset(root=self.root, name=name, split_id=self.split_id)
+            dataset = init_vidreid_dataset(root=self.root, name=name, split_id=self.split_id, combineall=self.combineall,)
 
             self.testloader_dict[name]['query'] = DataLoader(
                 VideoDataset(

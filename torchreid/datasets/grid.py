@@ -67,10 +67,10 @@ class GRID(BaseImageDataset):
         query = [tuple(item) for item in query]
         gallery = [tuple(item) for item in gallery]
 
-        self.init_attributes(train, query, gallery)
+        self.init_attributes(train, query, gallery, **kwargs)
 
         if verbose:
-            self.print_dataset_statistics(train, query, gallery)
+            self.print_dataset_statistics(self.train, self.query, self.gallery)
 
     def download_data(self):
         if osp.exists(self.dataset_dir):

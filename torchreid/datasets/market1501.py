@@ -57,10 +57,10 @@ class Market1501(BaseImageDataset):
         if self.market1501_500k:
             gallery += self.process_dir(self.extra_gallery_dir, relabel=False)
 
-        self.init_attributes(train, query, gallery)
+        self.init_attributes(train, query, gallery, **kwargs)
 
         if verbose:
-            self.print_dataset_statistics(train, query, gallery)
+            self.print_dataset_statistics(self.train, self.query, self.gallery)
 
     def process_dir(self, dir_path, relabel=False):
         img_paths = glob.glob(osp.join(dir_path, '*.jpg'))

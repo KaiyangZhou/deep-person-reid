@@ -65,10 +65,10 @@ class iLIDSVID(BaseVideoDataset):
         query = self.process_data(test_dirs, cam1=True, cam2=False)
         gallery = self.process_data(test_dirs, cam1=False, cam2=True)
 
-        self.init_attributes(train, query, gallery)
+        self.init_attributes(train, query, gallery, **kwargs)
 
         if verbose:
-            self.print_dataset_statistics(train, query, gallery)
+            self.print_dataset_statistics(self.train, self.query, self.gallery)
 
     def download_data(self):
         if osp.exists(self.dataset_dir):
