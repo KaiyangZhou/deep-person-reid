@@ -20,8 +20,7 @@ from .bases import BaseVideoDataset
 
 
 class PRID2011(BaseVideoDataset):
-    """
-    PRID2011
+    """PRID2011
 
     Reference:
     Hirzer et al. Person Re-Identification by Descriptive and Discriminative Classification. SCIA 2011.
@@ -39,23 +38,27 @@ class PRID2011(BaseVideoDataset):
         super(PRID2011, self).__init__(root)
         self.dataset_dir = osp.join(self.root, self.dataset_dir)
         self.split_path = osp.join(self.dataset_dir, 'splits_prid2011.json')
-        self.cam_a_path = osp.join(self.dataset_dir, 'prid_2011', 'multi_shot', 'cam_a')
-        self.cam_b_path = osp.join(self.dataset_dir, 'prid_2011', 'multi_shot', 'cam_b')
+        self.cam_a_dir = osp.join(self.dataset_dir, 'prid_2011', 'multi_shot', 'cam_a')
+        self.cam_b_dir = osp.join(self.dataset_dir, 'prid_2011', 'multi_shot', 'cam_b')
 
-        self.check_before_run()
+        required_files = [
+            self.dataset_dir,
+            self.cam_a_dir,
+            self.cam_b_dir
+        ]
+        self.check_before_run(required_files)
+
         splits = read_json(self.split_path)
         if split_id >=  len(splits):
             raise ValueError('split_id exceeds range, received {}, but expected between 0 and {}'.format(split_id, len(splits)-1))
         split = splits[split_id]
         train_dirs, test_dirs = split['train'], split['test']
-        print('# train identites: {}, # test identites {}'.format(len(train_dirs), len(test_dirs)))
 
         train = self.process_dir(train_dirs, cam1=True, cam2=True)
         query = self.process_dir(test_dirs, cam1=True, cam2=False)
         gallery = self.process_dir(test_dirs, cam1=False, cam2=True)
 
         if verbose:
-            print('=> PRID2011 loaded')
             self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
@@ -66,18 +69,13 @@ class PRID2011(BaseVideoDataset):
         self.num_query_pids, _, self.num_query_cams = self.get_videodata_info(self.query)
         self.num_gallery_pids, _, self.num_gallery_cams = self.get_videodata_info(self.gallery)
 
-    def check_before_run(self):
-        """Check if all files are available before going deeper"""
-        if not osp.exists(self.dataset_dir):
-            raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
-
     def process_dir(self, dirnames, cam1=True, cam2=True):
         tracklets = []
         dirname2pid = {dirname:i for i, dirname in enumerate(dirnames)}
         
         for dirname in dirnames:
             if cam1:
-                person_dir = osp.join(self.cam_a_path, dirname)
+                person_dir = osp.join(self.cam_a_dir, dirname)
                 img_names = glob.glob(osp.join(person_dir, '*.png'))
                 assert len(img_names) > 0
                 img_names = tuple(img_names)
@@ -85,7 +83,7 @@ class PRID2011(BaseVideoDataset):
                 tracklets.append((img_names, pid, 0))
 
             if cam2:
-                person_dir = osp.join(self.cam_b_path, dirname)
+                person_dir = osp.join(self.cam_b_dir, dirname)
                 img_names = glob.glob(osp.join(person_dir, '*.png'))
                 assert len(img_names) > 0
                 img_names = tuple(img_names)

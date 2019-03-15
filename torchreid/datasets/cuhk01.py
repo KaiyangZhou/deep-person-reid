@@ -20,8 +20,7 @@ from .bases import BaseImageDataset
 
 
 class CUHK01(BaseImageDataset):
-    """
-    CUHK01
+    """CUHK01
 
     Reference:
     Li et al. Human Reidentification with Transferred Metric Learning. ACCV 2012.
@@ -43,7 +42,12 @@ class CUHK01(BaseImageDataset):
         self.split_path = osp.join(self.dataset_dir, 'splits.json')
 
         self.extract_file()
-        self.check_before_run()
+        
+        required_files = [
+            self.dataset_dir,
+            self.campus_dir
+        ]
+        self.check_before_run(required_files)
 
         self.prepare_split()
         splits = read_json(self.split_path)
@@ -60,7 +64,6 @@ class CUHK01(BaseImageDataset):
         gallery = [tuple(item) for item in gallery]
 
         if verbose:
-            print('=> CUHK01 loaded')
             self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
@@ -77,14 +80,6 @@ class CUHK01(BaseImageDataset):
             zip_ref = zipfile.ZipFile(self.zip_path, 'r')
             zip_ref.extractall(self.dataset_dir)
             zip_ref.close()
-        print('Files extracted')
-
-    def check_before_run(self):
-        """Check if all files are available before going deeper"""
-        if not osp.exists(self.dataset_dir):
-            raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
-        if not osp.exists(self.campus_dir):
-            raise RuntimeError('"{}" is not available'.format(self.campus_dir))
 
     def prepare_split(self):
         """
@@ -116,7 +111,6 @@ class CUHK01(BaseImageDataset):
                 idx2label = {idx: label for label, idx in enumerate(train_idxs)}
 
                 train, test_a, test_b = [], [], []
-
                 for img_path, pid, camid in img_list:
                     if pid in train_idxs:
                         train.append((img_path, idx2label[pid], camid))
@@ -127,23 +121,27 @@ class CUHK01(BaseImageDataset):
                             test_b.append((img_path, pid, camid))
 
                 # use cameraA as query and cameraB as gallery
-                split = {'train': train, 'query': test_a, 'gallery': test_b,
-                         'num_train_pids': num_train_pids,
-                         'num_query_pids': num_pids - num_train_pids,
-                         'num_gallery_pids': num_pids - num_train_pids,
-                         }
+                split = {
+                    'train': train,
+                    'query': test_a,
+                    'gallery': test_b,
+                    'num_train_pids': num_train_pids,
+                    'num_query_pids': num_pids - num_train_pids,
+                    'num_gallery_pids': num_pids - num_train_pids
+                }
                 splits.append(split)
 
                 # use cameraB as query and cameraA as gallery
-                split = {'train': train, 'query': test_b, 'gallery': test_a,
-                         'num_train_pids': num_train_pids,
-                         'num_query_pids': num_pids - num_train_pids,
-                         'num_gallery_pids': num_pids - num_train_pids,
-                         }
+                split = {
+                    'train': train,
+                    'query': test_b,
+                    'gallery': test_a,
+                    'num_train_pids': num_train_pids,
+                    'num_query_pids': num_pids - num_train_pids,
+                    'num_gallery_pids': num_pids - num_train_pids
+                }
                 splits.append(split)
 
             print('Totally {} splits are created'.format(len(splits)))
             write_json(splits, self.split_path)
             print('Split file saved to {}'.format(self.split_path))
-
-        print('Splits created')

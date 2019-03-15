@@ -20,8 +20,7 @@ from .bases import BaseImageDataset
 
 
 class PRID450S(BaseImageDataset):
-    """
-    PRID450S
+    """PRID450S
 
     Reference:
     Roth et al. Mahalanobis Distance Learning for Person Re-Identification. PR 2014.
@@ -40,11 +39,17 @@ class PRID450S(BaseImageDataset):
         self.dataset_dir = osp.join(self.root, self.dataset_dir)
         self.dataset_url = 'https://files.icg.tugraz.at/f/8c709245bb/?raw=1'
         self.split_path = osp.join(self.dataset_dir, 'splits.json')
-        self.cam_a_path = osp.join(self.dataset_dir, 'cam_a')
-        self.cam_b_path = osp.join(self.dataset_dir, 'cam_b')
+        self.cam_a_dir = osp.join(self.dataset_dir, 'cam_a')
+        self.cam_b_dir = osp.join(self.dataset_dir, 'cam_b')
 
         self.download_data()
-        self.check_before_run()
+        
+        required_files = [
+            self.dataset_dir,
+            self.cam_a_dir,
+            self.cam_b_dir
+        ]
+        self.check_before_run(required_files)
 
         self.prepare_split()
         splits = read_json(self.split_path)
@@ -61,7 +66,6 @@ class PRID450S(BaseImageDataset):
         gallery = [tuple(item) for item in gallery]
 
         if verbose:
-            print('=> PRID450S loaded')
             self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
@@ -72,18 +76,8 @@ class PRID450S(BaseImageDataset):
         self.num_query_pids, self.num_query_imgs, self.num_query_cams = self.get_imagedata_info(self.query)
         self.num_gallery_pids, self.num_gallery_imgs, self.num_gallery_cams = self.get_imagedata_info(self.gallery)
 
-    def check_before_run(self):
-        """Check if all files are available before going deeper"""
-        if not osp.exists(self.dataset_dir):
-            raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
-        if not osp.exists(self.cam_a_path):
-            raise RuntimeError('"{}" is not available'.format(self.cam_a_path))
-        if not osp.exists(self.cam_b_path):
-            raise RuntimeError('"{}" is not available'.format(self.cam_b_path))
-
     def download_data(self):
         if osp.exists(self.dataset_dir):
-            print('This dataset has been downloaded.')
             return
 
         print('Creating directory {}'.format(self.dataset_dir))
@@ -100,8 +94,8 @@ class PRID450S(BaseImageDataset):
 
     def prepare_split(self):
         if not osp.exists(self.split_path):
-            cam_a_imgs = sorted(glob.glob(osp.join(self.cam_a_path, 'img_*.png')))
-            cam_b_imgs = sorted(glob.glob(osp.join(self.cam_b_path, 'img_*.png')))
+            cam_a_imgs = sorted(glob.glob(osp.join(self.cam_a_dir, 'img_*.png')))
+            cam_b_imgs = sorted(glob.glob(osp.join(self.cam_b_dir, 'img_*.png')))
             assert len(cam_a_imgs) == len(cam_b_imgs)
 
             num_pids = len(cam_a_imgs)
@@ -134,15 +128,16 @@ class PRID450S(BaseImageDataset):
                     else:
                         test.append((img_path, img_idx, 1))
 
-                split = {'train': train, 'query': test, 'gallery': test,
-                         'num_train_pids': num_train_pids,
-                         'num_query_pids': num_pids - num_train_pids,
-                         'num_gallery_pids': num_pids - num_train_pids,
-                         }
+                split = {
+                    'train': train,
+                    'query': test,
+                    'gallery': test,
+                    'num_train_pids': num_train_pids,
+                    'num_query_pids': num_pids - num_train_pids,
+                    'num_gallery_pids': num_pids - num_train_pids
+                }
                 splits.append(split)
 
             print('Totally {} splits are created'.format(len(splits)))
             write_json(splits, self.split_path)
             print('Split file saved to {}'.format(self.split_path))
-
-        print('Splits created')

@@ -7,11 +7,16 @@ import numpy as np
 
 
 class BaseDataset(object):
-    """
-    Base class of reid dataset
-    """
+    """Base class of reid dataset"""
+    
     def __init__(self, root):
         self.root = osp.expanduser(root)
+
+    def check_before_run(self, required_files):
+        """Check if required files exist before going deeper"""
+        for f in required_files:
+            if not osp.exists(f):
+                raise RuntimeError('"{}" is not found'.format(f))
 
     def get_imagedata_info(self, data):
         pids, cams = [], []
@@ -45,16 +50,14 @@ class BaseDataset(object):
 
 
 class BaseImageDataset(BaseDataset):
-    """
-    Base class of image reid dataset
-    """
+    """Base class of image-reid dataset"""
 
     def print_dataset_statistics(self, train, query, gallery):
         num_train_pids, num_train_imgs, num_train_cams = self.get_imagedata_info(train)
         num_query_pids, num_query_imgs, num_query_cams = self.get_imagedata_info(query)
         num_gallery_pids, num_gallery_imgs, num_gallery_cams = self.get_imagedata_info(gallery)
 
-        print('Image Dataset statistics:')
+        print('=> Loaded {}'.format(self.__class__.__name__))
         print('  ----------------------------------------')
         print('  subset   | # ids | # images | # cameras')
         print('  ----------------------------------------')
@@ -65,9 +68,7 @@ class BaseImageDataset(BaseDataset):
 
 
 class BaseVideoDataset(BaseDataset):
-    """
-    Base class of video reid dataset
-    """
+    """Base class of video-reid dataset"""
 
     def print_dataset_statistics(self, train, query, gallery):
         num_train_pids, num_train_tracklets, num_train_cams, train_tracklet_stats = \
@@ -84,7 +85,7 @@ class BaseVideoDataset(BaseDataset):
         max_num = np.max(tracklet_stats)
         avg_num = np.mean(tracklet_stats)
 
-        print('Video Dataset statistics:')
+        print('=> Loaded {}'.format(self.__class__.__name__))
         print('  -------------------------------------------')
         print('  subset   | # ids | # tracklets | # cameras')
         print('  -------------------------------------------')

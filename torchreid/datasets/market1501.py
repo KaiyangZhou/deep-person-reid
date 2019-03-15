@@ -19,8 +19,7 @@ from .bases import BaseImageDataset
 
 
 class Market1501(BaseImageDataset):
-    """
-    Market1501
+    """Market1501
 
     Reference:
     Zheng et al. Scalable Person Re-identification: A Benchmark. ICCV 2015.
@@ -42,7 +41,15 @@ class Market1501(BaseImageDataset):
         self.extra_gallery_dir = osp.join(self.dataset_dir, 'images')
         self.market1501_500k = market1501_500k
 
-        self.check_before_run()
+        required_files = [
+            self.dataset_dir,
+            self.train_dir,
+            self.query_dir,
+            self.gallery_dir
+        ]
+        if self.market1501_500k:
+            required_files.append(self.extra_gallery_dir)
+        self.check_before_run(required_files)
 
         train = self.process_dir(self.train_dir, relabel=True)
         query = self.process_dir(self.query_dir, relabel=False)
@@ -51,7 +58,6 @@ class Market1501(BaseImageDataset):
             gallery += self.process_dir(self.extra_gallery_dir, relabel=False)
 
         if verbose:
-            print('=> Market1501 loaded')
             self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
@@ -62,19 +68,6 @@ class Market1501(BaseImageDataset):
         self.num_query_pids, self.num_query_imgs, self.num_query_cams = self.get_imagedata_info(self.query)
         self.num_gallery_pids, self.num_gallery_imgs, self.num_gallery_cams = self.get_imagedata_info(self.gallery)
 
-    def check_before_run(self):
-        """Check if all files are available before going deeper"""
-        if not osp.exists(self.dataset_dir):
-            raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
-        if not osp.exists(self.train_dir):
-            raise RuntimeError('"{}" is not available'.format(self.train_dir))
-        if not osp.exists(self.query_dir):
-            raise RuntimeError('"{}" is not available'.format(self.query_dir))
-        if not osp.exists(self.gallery_dir):
-            raise RuntimeError('"{}" is not available'.format(self.gallery_dir))
-        if self.market1501_500k and not osp.exists(self.extra_gallery_dir):
-            raise RuntimeError('"{}" is not available'.format(self.extra_gallery_dir))
-
     def process_dir(self, dir_path, relabel=False):
         img_paths = glob.glob(osp.join(dir_path, '*.jpg'))
         pattern = re.compile(r'([-\d]+)_c(\d)')
@@ -82,18 +75,21 @@ class Market1501(BaseImageDataset):
         pid_container = set()
         for img_path in img_paths:
             pid, _ = map(int, pattern.search(img_path).groups())
-            if pid == -1: continue  # junk images are just ignored
+            if pid == -1:
+                continue # junk images are just ignored
             pid_container.add(pid)
         pid2label = {pid:label for label, pid in enumerate(pid_container)}
 
         dataset = []
         for img_path in img_paths:
             pid, camid = map(int, pattern.search(img_path).groups())
-            if pid == -1: continue  # junk images are just ignored
+            if pid == -1:
+                continue # junk images are just ignored
             assert 0 <= pid <= 1501  # pid == 0 means background
             assert 1 <= camid <= 6
             camid -= 1 # index starts from 0
-            if relabel: pid = pid2label[pid]
+            if relabel:
+                pid = pid2label[pid]
             dataset.append((img_path, pid, camid))
 
         return dataset

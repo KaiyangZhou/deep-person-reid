@@ -20,8 +20,7 @@ from .bases import BaseImageDataset
 
 
 class SenseReID(BaseImageDataset):
-    """
-    SenseReID
+    """SenseReID
 
     This dataset is used for test purpose only.
 
@@ -44,13 +43,17 @@ class SenseReID(BaseImageDataset):
         self.query_dir = osp.join(self.dataset_dir, 'SenseReID', 'test_probe')
         self.gallery_dir = osp.join(self.dataset_dir, 'SenseReID', 'test_gallery')
 
-        self.check_before_run()
+        required_files = [
+            self.dataset_dir,
+            self.query_dir,
+            self.gallery_dir
+        ]
+        self.check_before_run(required_files)
 
         query = self.process_dir(self.query_dir)
         gallery = self.process_dir(self.gallery_dir)
 
         if verbose:
-            print('=> SenseReID loaded (test only)')
             self.print_dataset_statistics(query, query, gallery)
 
         self.train = copy.deepcopy(query) # only used to initialize trainloader
@@ -60,15 +63,6 @@ class SenseReID(BaseImageDataset):
         self.num_train_pids, self.num_train_imgs, self.num_train_cams = self.get_imagedata_info(self.train)
         self.num_query_pids, self.num_query_imgs, self.num_query_cams = self.get_imagedata_info(self.query)
         self.num_gallery_pids, self.num_gallery_imgs, self.num_gallery_cams = self.get_imagedata_info(self.gallery)
-
-    def check_before_run(self):
-        """Check if all files are available before going deeper"""
-        if not osp.exists(self.dataset_dir):
-            raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
-        if not osp.exists(self.query_dir):
-            raise RuntimeError('"{}" is not available'.format(self.query_dir))
-        if not osp.exists(self.gallery_dir):
-            raise RuntimeError('"{}" is not available'.format(self.gallery_dir))
 
     def process_dir(self, dir_path):
         img_paths = glob.glob(osp.join(dir_path, '*.jpg'))

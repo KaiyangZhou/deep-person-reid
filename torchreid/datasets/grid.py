@@ -20,8 +20,7 @@ from .bases import BaseImageDataset
 
 
 class GRID(BaseImageDataset):
-    """
-    GRID
+    """GRID
 
     Reference:
     Loy et al. Multi-camera activity correlation analysis. CVPR 2009.
@@ -45,7 +44,14 @@ class GRID(BaseImageDataset):
         self.split_path = osp.join(self.dataset_dir, 'splits.json')
 
         self.download_data()
-        self.check_before_run()
+        
+        required_files = [
+            self.dataset_dir,
+            self.probe_path,
+            self.gallery_path,
+            self.split_mat_path
+        ]
+        self.check_before_run(required_files)
 
         self.prepare_split()
         splits = read_json(self.split_path)
@@ -62,7 +68,6 @@ class GRID(BaseImageDataset):
         gallery = [tuple(item) for item in gallery]
 
         if verbose:
-            print('=> GRID loaded')
             self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
@@ -73,20 +78,8 @@ class GRID(BaseImageDataset):
         self.num_query_pids, self.num_query_imgs, self.num_query_cams = self.get_imagedata_info(self.query)
         self.num_gallery_pids, self.num_gallery_imgs, self.num_gallery_cams = self.get_imagedata_info(self.gallery)
 
-    def check_before_run(self):
-        """Check if all files are available before going deeper"""
-        if not osp.exists(self.dataset_dir):
-            raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
-        if not osp.exists(self.probe_path):
-            raise RuntimeError('"{}" is not available'.format(self.probe_path))
-        if not osp.exists(self.gallery_path):
-            raise RuntimeError('"{}" is not available'.format(self.gallery_path))
-        if not osp.exists(self.split_mat_path):
-            raise RuntimeError('"{}" is not available'.format(self.split_mat_path))
-
     def download_data(self):
         if osp.exists(self.dataset_dir):
-            print('This dataset has been downloaded.')
             return
 
         print('Creating directory {}'.format(self.dataset_dir))
@@ -123,10 +116,8 @@ class GRID(BaseImageDataset):
                     img_idx = int(img_name.split('_')[0])
                     camid = int(img_name.split('_')[1]) - 1 # index starts from 0
                     if img_idx in train_idxs:
-                        # add to train data
                         train.append((img_path, idx2label[img_idx], camid))
                     else:
-                        # add to query data
                         query.append((img_path, img_idx, camid))
                 
                 # process gallery folder
@@ -135,21 +126,20 @@ class GRID(BaseImageDataset):
                     img_idx = int(img_name.split('_')[0])
                     camid = int(img_name.split('_')[1]) - 1 # index starts from 0
                     if img_idx in train_idxs:
-                        # add to train data
                         train.append((img_path, idx2label[img_idx], camid))
                     else:
-                        # add to gallery data
                         gallery.append((img_path, img_idx, camid))
 
-                split = {'train': train, 'query': query, 'gallery': gallery,
-                         'num_train_pids': 125,
-                         'num_query_pids': 125,
-                         'num_gallery_pids': 900,
-                         }
+                split = {
+                    'train': train,
+                    'query': query,
+                    'gallery': gallery,
+                    'num_train_pids': 125,
+                    'num_query_pids': 125,
+                    'num_gallery_pids': 900
+                }
                 splits.append(split)
             
             print('Totally {} splits are created'.format(len(splits)))
             write_json(splits, self.split_path)
             print('Split file saved to {}'.format(self.split_path))
-
-        print('Splits created')

@@ -23,8 +23,7 @@ from .bases import BaseImageDataset
 
 
 class iLIDS(BaseImageDataset):
-    """
-    QMUL-iLIDS
+    """QMUL-iLIDS
 
     Reference:
     Zheng et al. Associating Groups of People. BMVC 2009.
@@ -44,7 +43,12 @@ class iLIDS(BaseImageDataset):
         self.split_path = osp.join(self.dataset_dir, 'splits.json')
 
         self.download_data()
-        self.check_before_run()
+        
+        required_files = [
+            self.dataset_dir,
+            self.data_dir
+        ]
+        self.check_before_run(required_files)
 
         self.prepare_split()
         splits = read_json(self.split_path)
@@ -55,7 +59,6 @@ class iLIDS(BaseImageDataset):
         train, query, gallery = self.process_split(split)
 
         if verbose:
-            print('=> iLIDS loaded')
             self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
@@ -68,7 +71,6 @@ class iLIDS(BaseImageDataset):
 
     def download_data(self):
         if osp.exists(self.dataset_dir):
-            print('This dataset has been downloaded.')
             return
 
         mkdir_if_missing(self.dataset_dir)
@@ -82,18 +84,10 @@ class iLIDS(BaseImageDataset):
         tar.extractall(path=self.dataset_dir)
         tar.close()
 
-    def check_before_run(self):
-        """Check if all files are available before going deeper"""
-        if not osp.exists(self.dataset_dir):
-            raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
-        if not osp.exists(self.data_dir):
-            raise RuntimeError('"{}" is not available'.format(self.data_dir))
-
     def prepare_split(self):
         if not osp.exists(self.split_path):
             print('Creating splits ...')
             
-            # read image paths
             paths = glob.glob(osp.join(self.data_dir, '*.jpg'))
             img_names = [osp.basename(path) for path in paths]
             num_imgs = len(img_names)
@@ -122,7 +116,6 @@ class iLIDS(BaseImageDataset):
                 train_pids = pids_copy[:num_train_pids]
                 test_pids = pids_copy[num_train_pids:]
 
-                # store image names
                 train = []
                 query = []
                 gallery = []

@@ -23,8 +23,7 @@ from .bases import BaseImageDataset
 
 
 class PRID(BaseImageDataset):
-    """
-    PRID (single-shot version of prid-2011)
+    """PRID (single-shot version of prid-2011)
 
     Reference:
     Hirzer et al. Person Re-Identification by Descriptive and Discriminative Classification. SCIA 2011.
@@ -46,7 +45,12 @@ class PRID(BaseImageDataset):
         self.cam_b_dir = osp.join(self.dataset_dir, 'prid_2011', 'single_shot', 'cam_b')
         self.split_path = osp.join(self.dataset_dir, 'splits_single_shot.json')
 
-        self.check_before_run()
+        required_files = [
+            self.dataset_dir,
+            self.cam_a_dir,
+            self.cam_b_dir
+        ]
+        self.check_before_run(required_files)
 
         self.prepare_split()
         splits = read_json(self.split_path)
@@ -57,7 +61,6 @@ class PRID(BaseImageDataset):
         train, query, gallery = self.process_split(split)
 
         if verbose:
-            print('=> PRID loaded')
             self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
@@ -67,15 +70,6 @@ class PRID(BaseImageDataset):
         self.num_train_pids, self.num_train_imgs, self.num_train_cams = self.get_imagedata_info(self.train)
         self.num_query_pids, self.num_query_imgs, self.num_query_cams = self.get_imagedata_info(self.query)
         self.num_gallery_pids, self.num_gallery_imgs, self.num_gallery_cams = self.get_imagedata_info(self.gallery)
-
-    def check_before_run(self):
-        """Check if all files are available before going deeper"""
-        if not osp.exists(self.dataset_dir):
-            raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
-        if not osp.exists(self.cam_a_dir):
-            raise RuntimeError('"{}" is not available'.format(self.cam_a_dir))
-        if not osp.exists(self.cam_b_dir):
-            raise RuntimeError('"{}" is not available'.format(self.cam_b_dir))
 
     def prepare_split(self):
         if not osp.exists(self.split_path):

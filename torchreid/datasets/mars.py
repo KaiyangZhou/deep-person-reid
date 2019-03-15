@@ -19,8 +19,7 @@ from .bases import BaseVideoDataset
 
 
 class Mars(BaseVideoDataset):
-    """
-    MARS
+    """MARS
 
     Reference:
     Zheng et al. MARS: A Video Benchmark for Large-Scale Person Re-identification. ECCV 2016.
@@ -43,9 +42,16 @@ class Mars(BaseVideoDataset):
         self.track_test_info_path = osp.join(self.dataset_dir, 'info/tracks_test_info.mat')
         self.query_IDX_path = osp.join(self.dataset_dir, 'info/query_IDX.mat')
 
-        self.check_before_run()
+        required_files = [
+            self.dataset_dir,
+            self.train_name_path,
+            self.test_name_path,
+            self.track_train_info_path,
+            self.track_test_info_path,
+            self.query_IDX_path
+        ]
+        self.check_before_run(required_files)
 
-        # prepare meta data
         train_names = self.get_names(self.train_name_path)
         test_names = self.get_names(self.test_name_path)
         track_train = loadmat(self.track_train_info_path)['track_train_info'] # numpy.ndarray (8298, 4)
@@ -61,7 +67,6 @@ class Mars(BaseVideoDataset):
         gallery = self.process_data(test_names, track_gallery, home_dir='bbox_test', relabel=False, min_seq_len=min_seq_len)
 
         if verbose:
-            print('=> MARS loaded')
             self.print_dataset_statistics(train, query, gallery)
 
         self.train = train
@@ -71,21 +76,6 @@ class Mars(BaseVideoDataset):
         self.num_train_pids, _, self.num_train_cams = self.get_videodata_info(self.train)
         self.num_query_pids, _, self.num_query_cams = self.get_videodata_info(self.query)
         self.num_gallery_pids, _, self.num_gallery_cams = self.get_videodata_info(self.gallery)
-
-    def check_before_run(self):
-        """Check if all files are available before going deeper"""
-        if not osp.exists(self.dataset_dir):
-            raise RuntimeError('"{}" is not available'.format(self.dataset_dir))
-        if not osp.exists(self.train_name_path):
-            raise RuntimeError('"{}" is not available'.format(self.train_name_path))
-        if not osp.exists(self.test_name_path):
-            raise RuntimeError('"{}" is not available'.format(self.test_name_path))
-        if not osp.exists(self.track_train_info_path):
-            raise RuntimeError('"{}" is not available'.format(self.track_train_info_path))
-        if not osp.exists(self.track_test_info_path):
-            raise RuntimeError('"{}" is not available'.format(self.track_test_info_path))
-        if not osp.exists(self.query_IDX_path):
-            raise RuntimeError('"{}" is not available'.format(self.query_IDX_path))
 
     def get_names(self, fpath):
         names = []
@@ -107,7 +97,8 @@ class Mars(BaseVideoDataset):
         for tracklet_idx in range(num_tracklets):
             data = meta_data[tracklet_idx,...]
             start_index, end_index, pid, camid = data
-            if pid == -1: continue # junk images are just ignored
+            if pid == -1:
+                continue # junk images are just ignored
             assert 1 <= camid <= 6
             if relabel: pid = pid2label[pid]
             camid -= 1 # index starts from 0
