@@ -31,7 +31,7 @@ __imgreid_factory = {
     'prid450s': PRID450S,
     'ilids': iLIDS,
     'sensereid': SenseReID,
-    'prid': PRID,
+    'prid': PRID
 }
 
 
@@ -39,17 +39,19 @@ __vidreid_factory = {
     'mars': Mars,
     'ilidsvid': iLIDSVID,
     'prid2011': PRID2011,
-    'dukemtmcvidreid': DukeMTMCVidReID,
+    'dukemtmcvidreid': DukeMTMCVidReID
 }
 
 
 def init_imgreid_dataset(name, **kwargs):
-    if name not in list(__imgreid_factory.keys()):
-        raise KeyError('Invalid dataset, got "{}", but expected to be one of {}'.format(name, list(__imgreid_factory.keys())))
+    avai_datasets = list(__imgreid_factory.keys())
+    if name not in avai_datasets:
+        raise RuntimeError('Invalid dataset name. Received "{}", but expected to be one of {}'.format(name, avai_datasets))
     return __imgreid_factory[name](**kwargs)
 
 
 def init_vidreid_dataset(name, **kwargs):
-    if name not in list(__vidreid_factory.keys()):
-        raise KeyError('Invalid dataset, got "{}", but expected to be one of {}'.format(name, list(__vidreid_factory.keys())))
+    avai_datasets = list(__vidreid_factory.keys())
+    if name not in avai_datasets:
+        raise RuntimeError('Invalid dataset name. Received "{}", but expected to be one of {}'.format(name, avai_datasets))
     return __vidreid_factory[name](**kwargs)

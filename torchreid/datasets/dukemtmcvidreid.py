@@ -60,16 +60,10 @@ class DukeMTMCVidReID(BaseVideoDataset):
         query = self.process_dir(self.query_dir, self.split_query_json_path, relabel=False)
         gallery = self.process_dir(self.gallery_dir, self.split_gallery_json_path, relabel=False)
 
+        self.init_attributes(train, query, gallery)
+
         if verbose:
             self.print_dataset_statistics(train, query, gallery)
-
-        self.train = train
-        self.query = query
-        self.gallery = gallery
-
-        self.num_train_pids, _, self.num_train_cams = self.get_videodata_info(self.train)
-        self.num_query_pids, _, self.num_query_cams = self.get_videodata_info(self.query)
-        self.num_gallery_pids, _, self.num_gallery_cams = self.get_videodata_info(self.gallery)
 
     def download_data(self):
         if osp.exists(self.dataset_dir):

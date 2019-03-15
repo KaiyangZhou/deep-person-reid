@@ -57,16 +57,10 @@ class Market1501(BaseImageDataset):
         if self.market1501_500k:
             gallery += self.process_dir(self.extra_gallery_dir, relabel=False)
 
+        self.init_attributes(train, query, gallery)
+
         if verbose:
             self.print_dataset_statistics(train, query, gallery)
-
-        self.train = train
-        self.query = query
-        self.gallery = gallery
-
-        self.num_train_pids, self.num_train_imgs, self.num_train_cams = self.get_imagedata_info(self.train)
-        self.num_query_pids, self.num_query_imgs, self.num_query_cams = self.get_imagedata_info(self.query)
-        self.num_gallery_pids, self.num_gallery_imgs, self.num_gallery_cams = self.get_imagedata_info(self.gallery)
 
     def process_dir(self, dir_path, relabel=False):
         img_paths = glob.glob(osp.join(dir_path, '*.jpg'))

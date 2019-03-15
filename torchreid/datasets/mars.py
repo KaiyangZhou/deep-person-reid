@@ -66,16 +66,10 @@ class Mars(BaseVideoDataset):
         query = self.process_data(test_names, track_query, home_dir='bbox_test', relabel=False, min_seq_len=min_seq_len)
         gallery = self.process_data(test_names, track_gallery, home_dir='bbox_test', relabel=False, min_seq_len=min_seq_len)
 
+        self.init_attributes(train, query, gallery)
+
         if verbose:
             self.print_dataset_statistics(train, query, gallery)
-
-        self.train = train
-        self.query = query
-        self.gallery = gallery
-
-        self.num_train_pids, _, self.num_train_cams = self.get_videodata_info(self.train)
-        self.num_query_pids, _, self.num_query_cams = self.get_videodata_info(self.query)
-        self.num_gallery_pids, _, self.num_gallery_cams = self.get_videodata_info(self.gallery)
 
     def get_names(self, fpath):
         names = []

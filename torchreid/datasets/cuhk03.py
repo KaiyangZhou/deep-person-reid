@@ -81,16 +81,10 @@ class CUHK03(BaseImageDataset):
         query = split['query']
         gallery = split['gallery']
 
+        self.init_attributes(train, query, gallery)
+
         if verbose:
             self.print_dataset_statistics(train, query, gallery)
-
-        self.train = train
-        self.query = query
-        self.gallery = gallery
-
-        self.num_train_pids, self.num_train_imgs, self.num_train_cams = self.get_imagedata_info(self.train)
-        self.num_query_pids, self.num_query_imgs, self.num_query_cams = self.get_imagedata_info(self.query)
-        self.num_gallery_pids, self.num_gallery_imgs, self.num_gallery_cams = self.get_imagedata_info(self.gallery)
 
     def preprocess_split(self):
         """

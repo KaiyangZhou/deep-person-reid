@@ -58,16 +58,10 @@ class PRID2011(BaseVideoDataset):
         query = self.process_dir(test_dirs, cam1=True, cam2=False)
         gallery = self.process_dir(test_dirs, cam1=False, cam2=True)
 
+        self.init_attributes(train, query, gallery)
+
         if verbose:
             self.print_dataset_statistics(train, query, gallery)
-
-        self.train = train
-        self.query = query
-        self.gallery = gallery
-
-        self.num_train_pids, _, self.num_train_cams = self.get_videodata_info(self.train)
-        self.num_query_pids, _, self.num_query_cams = self.get_videodata_info(self.query)
-        self.num_gallery_pids, _, self.num_gallery_cams = self.get_videodata_info(self.gallery)
 
     def process_dir(self, dirnames, cam1=True, cam2=True):
         tracklets = []
