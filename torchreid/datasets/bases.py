@@ -21,7 +21,8 @@ class BaseDataset(object):
     def extract_data_info(self, data):
         """Extract info from data list
 
-        Return: num_pids, num_imgs, num_cams, optional
+        Args:
+            data (list): contains a list of (img_path, pid, camid)
         """
         raise NotImplementedError
 
@@ -37,9 +38,6 @@ class BaseDataset(object):
         self._gallery = gallery
         self._num_train_pids = self.get_num_pids(train)
         self._num_train_cams = self.get_num_cams(train)
-
-    def print_dataset_statistics(self):
-        raise NotImplementedError
 
     @property
     def train(self):
@@ -65,6 +63,9 @@ class BaseDataset(object):
     def num_train_cams(self):
         # number of train camera views
         return self._num_train_cams
+
+    def print_dataset_statistics(self):
+        raise NotImplementedError
 
 
 class BaseImageDataset(BaseDataset):
