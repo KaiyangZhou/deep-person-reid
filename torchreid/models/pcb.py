@@ -98,6 +98,7 @@ class Bottleneck(nn.Module):
 
 
 class DimReduceLayer(nn.Module):
+    
     def __init__(self, in_channels, out_channels, nonlinear):
         super(DimReduceLayer, self).__init__()
         layers = []
@@ -116,13 +117,13 @@ class DimReduceLayer(nn.Module):
 
 
 class PCB(nn.Module):
-    """
-    Part-based Convolutional Baseline
+    """Part-based Convolutional Baseline
 
     Reference:
     Sun et al. Beyond Part Models: Person Retrieval with Refined
     Part Pooling (and A Strong Convolutional Baseline). ECCV 2018.
     """
+    
     def __init__(self, num_classes, loss, block, layers,
                  parts=6,
                  reduced_dim=256,
@@ -226,8 +227,8 @@ class PCB(nn.Module):
 
 
 def init_pretrained_weights(model, model_url):
-    """
-    Initialize model with pretrained weights.
+    """Initializes model with pretrained weights.
+    
     Layers that don't match with pretrained layers in name or size are kept unchanged.
     """
     pretrain_dict = model_zoo.load_url(model_url)

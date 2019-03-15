@@ -12,13 +12,16 @@ from torchvision.transforms import *
 
 
 class Random2DTranslation(object):
-    """
-    With a probability, first increase image size to (1 + 1/8), and then perform random crop.
+    """Randomly translates the input image with a probability.
+
+    Specifically, given a predefined shape (height, width), the input is first
+    resized with the factor of 1.25, leading to (height*1.25, width*1.25), then
+    a random crop is performed. Such operation is done with a probability.
 
     Args:
-    - height (int): target image height.
-    - width (int): target image width.
-    - p (float): probability of performing this transformation. Default: 0.5.
+        height (int): target image height.
+        width (int): target image width.
+        p (float): probability of performing this transformation. Default: 0.5.
     """
     
     def __init__(self, height, width, p=0.5, interpolation=Image.BILINEAR):
@@ -28,10 +31,6 @@ class Random2DTranslation(object):
         self.interpolation = interpolation
 
     def __call__(self, img):
-        """
-        Args:
-        - img (PIL Image): Image to be cropped.
-        """
         if random.uniform(0, 1) > self.p:
             return img.resize((self.width, self.height), self.interpolation)
         
@@ -46,7 +45,8 @@ class Random2DTranslation(object):
 
 
 class RandomErasing(object):
-    '''
+    '''Randomly erases an image patch.
+
     Class that performs Random Erasing in Random Erasing Data Augmentation by Zhong et al. 
     -------------------------------------------------------------------------------------
     probability: The probability that the operation will be performed.
@@ -55,7 +55,8 @@ class RandomErasing(object):
     r1: min aspect ratio
     mean: erasing value
     -------------------------------------------------------------------------------------
-    Origin: https://github.com/zhunzhong07/Random-Erasing
+    
+    Imported from https://github.com/zhunzhong07/Random-Erasing
     '''
     
     def __init__(self, probability=0.5, sl=0.02, sh=0.4, r1=0.3, mean=[0.4914, 0.4822, 0.4465]):
@@ -66,7 +67,6 @@ class RandomErasing(object):
         self.r1 = r1
        
     def __call__(self, img):
-
         if random.uniform(0, 1) > self.probability:
             return img
 
@@ -94,8 +94,7 @@ class RandomErasing(object):
 
 
 class ColorAugmentation(object):
-    """
-    Randomly alter the intensities of RGB channels
+    """Randomly alters the intensities of RGB channels.
 
     Reference:
     Krizhevsky et al. ImageNet Classification with Deep ConvolutionalNeural Networks. NIPS 2012.
@@ -122,14 +121,16 @@ class ColorAugmentation(object):
         return tensor
 
 
-def build_transforms(height,
-                     width,
-                     random_erase=False, # use random erasing for data augmentation
-                     color_jitter=False, # randomly change the brightness, contrast and saturation
-                     color_aug=False, # randomly alter the intensities of RGB channels
-                     **kwargs):
+def build_transforms(
+    height,
+    width,
+    random_erase=False, # use random erasing for data augmentation
+    color_jitter=False, # randomly change the brightness, contrast and saturation
+    color_aug=False, # randomly alter the intensities of RGB channels
+    **kwargs
+    ):
+    
     # use imagenet mean and std as default
-    # TODO: compute dataset-specific mean and std
     imagenet_mean = [0.485, 0.456, 0.406]
     imagenet_std = [0.229, 0.224, 0.225]
     normalize = Normalize(mean=imagenet_mean, std=imagenet_std)

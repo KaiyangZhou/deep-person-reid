@@ -98,13 +98,13 @@ class Bottleneck(nn.Module):
 
 
 class ResNet(nn.Module):
-    """
-    Residual network + mid-level features.
+    """Residual network + mid-level features.
     
     Reference:
     Yu et al. The Devil is in the Middle: Exploiting Mid-level Representations for
     Cross-Domain Instance Matching. arXiv:1711.08106.
     """
+    
     def __init__(self, num_classes, loss, block, layers,
                  last_stride=2,
                  fc_dims=None,
@@ -150,13 +150,12 @@ class ResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def _construct_fc_layer(self, fc_dims, input_dim, dropout_p=None):
-        """
-        Construct fully connected layer
+        """Constructs fully connected layer
 
-        - fc_dims (list or tuple): dimensions of fc layers, if None,
-                                   no fc layers are constructed
-        - input_dim (int): input dimension
-        - dropout_p (float): dropout probability, if None, dropout is unused
+        Args:
+            fc_dims (list or tuple): dimensions of fc layers, if None, no fc layers are constructed
+            input_dim (int): input dimension
+            dropout_p (float): dropout probability, if None, dropout is unused
         """
         if fc_dims is None:
             self.feature_dim = input_dim
@@ -233,8 +232,8 @@ class ResNet(nn.Module):
 
 
 def init_pretrained_weights(model, model_url):
-    """
-    Initialize model with pretrained weights.
+    """Initializes model with pretrained weights.
+    
     Layers that don't match with pretrained layers in name or size are kept unchanged.
     """
     pretrain_dict = model_zoo.load_url(model_url)

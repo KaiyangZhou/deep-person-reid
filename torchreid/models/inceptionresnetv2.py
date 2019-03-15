@@ -275,13 +275,13 @@ def inceptionresnetv2(num_classes=1000, pretrained='imagenet'):
 
 
 class InceptionResNetV2(nn.Module):
-    """
-    Inception-ResNet-V2
+    """Inception-ResNet-V2
 
     Reference:
     Szegedy et al. Inception-v4, Inception-ResNet and the Impact of Residual
     Connections on Learning. AAAI 2017.
     """
+    
     def __init__(self, num_classes, loss={'xent'}, **kwargs):
         super(InceptionResNetV2, self).__init__()
         self.loss = loss

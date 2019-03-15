@@ -10,18 +10,17 @@ from .iotools import mkdir_if_missing
 
 
 def visualize_ranked_results(distmat, dataset, save_dir='log/ranked_results', topk=20):
-    """
-    Visualize ranked results
+    """Visualizes ranked results
 
     Support both imgreid and vidreid
 
     Args:
-    - distmat: distance matrix of shape (num_query, num_gallery).
-    - dataset: a 2-tuple containing (query, gallery), each contains a list of (img_path, pid, camid);
-               for imgreid, img_path is a string, while for vidreid, img_path is a tuple containing
-               a sequence of strings.
-    - save_dir: directory to save output images.
-    - topk: int, denoting top-k images in the rank list to be visualized.
+        distmat: distance matrix of shape (num_query, num_gallery).
+        dataset: a 2-tuple containing (query, gallery), each contains a list of (img_path, pid, camid);
+            for imgreid, img_path is a string, while for vidreid, img_path is a tuple containing
+            a sequence of strings.
+        save_dir: directory to save output images.
+        topk: int, denoting top-k images in the rank list to be visualized.
     """
     num_q, num_g = distmat.shape
 
@@ -38,10 +37,11 @@ def visualize_ranked_results(distmat, dataset, save_dir='log/ranked_results', to
 
     def _cp_img_to(src, dst, rank, prefix):
         """
-        - src: image path or tuple (for vidreid)
-        - dst: target directory
-        - rank: int, denoting ranked position, starting from 1
-        - prefix: string
+        Args:
+            src: image path or tuple (for vidreid)
+            dst: target directory
+            rank: int, denoting ranked position, starting from 1
+            prefix: string
         """
         if isinstance(src, tuple) or isinstance(src, list):
             dst = osp.join(dst, prefix + '_top' + str(rank).zfill(3))

@@ -8,9 +8,9 @@ from .iotools import mkdir_if_missing
 
 
 class Logger(object):
-    """
-    Write console output to external text file.
-    Code imported from https://github.com/Cysu/open-reid/blob/master/reid/utils/logging.py.
+    """Writes console output to external text file.
+
+    Imported from https://github.com/Cysu/open-reid/blob/master/reid/utils/logging.py.
     """  
     def __init__(self, fpath=None):
         self.console = sys.stdout
@@ -46,14 +46,13 @@ class Logger(object):
 
 
 class RankLogger(object):
-    """
-    RankLogger records the rank1 matching accuracy obtained for each
+    """Records the rank1 matching accuracy obtained for each
     test dataset at specified evaluation steps and provides a function
     to show the summarized results, which are convenient for analysis.
 
     Args:
-    - source_names (list): list of strings (names) of source datasets.
-    - target_names (list): list of strings (names) of target datasets.
+        source_names (list): list of strings (names) of source datasets.
+        target_names (list): list of strings (names) of target datasets.
     """
     def __init__(self, source_names, target_names):
         self.source_names = source_names

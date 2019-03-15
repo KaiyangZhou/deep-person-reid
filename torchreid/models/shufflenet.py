@@ -18,6 +18,7 @@ model_urls = {
 
 
 class ChannelShuffle(nn.Module):
+    
     def __init__(self, num_groups):
         super(ChannelShuffle, self).__init__()
         self.g = num_groups
@@ -35,6 +36,7 @@ class ChannelShuffle(nn.Module):
 
 
 class Bottleneck(nn.Module):
+    
     def __init__(self, in_channels, out_channels, stride, num_groups, group_conv1x1=True):
         super(Bottleneck, self).__init__()
         assert stride in [1, 2], 'Warning: stride must be either 1 or 2'
@@ -76,13 +78,13 @@ cfg = {
 
 
 class ShuffleNet(nn.Module):
-    """
-    ShuffleNet
+    """ShuffleNet
 
     Reference:
     Zhang et al. ShuffleNet: An Extremely Efficient Convolutional Neural
     Network for Mobile Devices. CVPR 2018.
     """
+    
     def __init__(self, num_classes, loss={'xent'}, num_groups=3, **kwargs):
         super(ShuffleNet, self).__init__()
         self.loss = loss
@@ -143,8 +145,8 @@ class ShuffleNet(nn.Module):
 
 
 def init_pretrained_weights(model, model_url):
-    """
-    Initialize model with pretrained weights.
+    """Initializes model with pretrained weights.
+    
     Layers that don't match with pretrained layers in name or size are kept unchanged.
     """
     pretrain_dict = model_zoo.load_url(model_url)

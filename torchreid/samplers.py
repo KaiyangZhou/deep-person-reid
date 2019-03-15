@@ -11,14 +11,12 @@ from torch.utils.data.sampler import Sampler, RandomSampler
 
 
 class RandomIdentitySampler(Sampler):
-    """
-    Randomly sample N identities, then for each identity,
-    randomly sample K instances, therefore batch size is N*K.
+    """Randomly samples N identities each with K instances.
 
     Args:
-    - data_source (list): list of (img_path, pid, camid).
-    - num_instances (int): number of instances per identity in a batch.
-    - batch_size (int): number of examples in a batch.
+        data_source (list): contains a list of (img_path, pid, camid).
+        batch_size (int): number of examples in a batch.
+        num_instances (int): number of instances per identity in a batch.
     """
     def __init__(self, data_source, batch_size, num_instances):
         self.data_source = data_source
@@ -71,20 +69,15 @@ class RandomIdentitySampler(Sampler):
         return self.length
 
 
-def build_train_sampler(data_source,
-                        train_sampler,
-                        train_batch_size,
-                        num_instances,
-                        **kwargs):
-    """Build sampler for training
+def build_train_sampler(data_source, train_sampler, train_batch_size, num_instances, **kwargs):
+    """Builds a training sampler.
 
     Args:
-    - data_source (list): list of (img_path, pid, camid).
-    - train_sampler (str): sampler name (default: RandomSampler).
-    - train_batch_size (int): batch size during training.
-    - num_instances (int): number of instances per identity in a batch (for RandomIdentitySampler).
+        data_source (list): contains a list of (img_path, pid, camid).
+        train_sampler (str): sampler name (default: RandomSampler).
+        train_batch_size (int): training batch size.
+        num_instances (int): number of instances per identity in a batch (for RandomIdentitySampler).
     """
-
     if train_sampler == 'RandomIdentitySampler':
         sampler = RandomIdentitySampler(data_source, train_batch_size, num_instances)
     

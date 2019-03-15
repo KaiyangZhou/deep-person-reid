@@ -11,15 +11,16 @@ __all__ = ['HACNN']
 
 
 class ConvBlock(nn.Module):
-    """Basic convolutional block:
+    """Basic convolutional block.
+    
     convolution + batch normalization + relu.
 
-    Args (following http://pytorch.org/docs/master/nn.html#torch.nn.Conv2d):
-    - in_c (int): number of input channels.
-    - out_c (int): number of output channels.
-    - k (int or tuple): kernel size.
-    - s (int or tuple): stride.
-    - p (int or tuple): padding.
+    Args:
+        in_c (int): number of input channels.
+        out_c (int): number of output channels.
+        k (int or tuple): kernel size.
+        s (int or tuple): stride.
+        p (int or tuple): padding.
     """
     def __init__(self, in_c, out_c, k, s=1, p=0):
         super(ConvBlock, self).__init__()
@@ -31,11 +32,7 @@ class ConvBlock(nn.Module):
 
 
 class InceptionA(nn.Module):
-    """
-    Args:
-    - in_channels (int): number of input channels
-    - out_channels (int): number of output channels AFTER concatenation
-    """
+
     def __init__(self, in_channels, out_channels):
         super(InceptionA, self).__init__()
         mid_channels = out_channels // 4
@@ -67,11 +64,7 @@ class InceptionA(nn.Module):
 
 
 class InceptionB(nn.Module):
-    """
-    Args:
-    - in_channels (int): number of input channels
-    - out_channels (int): number of output channels AFTER concatenation
-    """
+
     def __init__(self, in_channels, out_channels):
         super(InceptionB, self).__init__()
         mid_channels = out_channels // 4
@@ -100,6 +93,7 @@ class InceptionB(nn.Module):
 
 class SpatialAttn(nn.Module):
     """Spatial Attention (Sec. 3.1.I.1)"""
+    
     def __init__(self):
         super(SpatialAttn, self).__init__()
         self.conv1 = ConvBlock(1, 1, 3, s=2, p=1)
@@ -119,6 +113,7 @@ class SpatialAttn(nn.Module):
 
 class ChannelAttn(nn.Module):
     """Channel Attention (Sec. 3.1.I.2)"""
+    
     def __init__(self, in_channels, reduction_rate=16):
         super(ChannelAttn, self).__init__()
         assert in_channels%reduction_rate == 0
@@ -136,9 +131,12 @@ class ChannelAttn(nn.Module):
 
 class SoftAttn(nn.Module):
     """Soft Attention (Sec. 3.1.I)
+    
     Aim: Spatial Attention + Channel Attention
+    
     Output: attention maps with shape identical to input.
     """
+    
     def __init__(self, in_channels):
         super(SoftAttn, self).__init__()
         self.spatial_attn = SpatialAttn()
@@ -155,6 +153,7 @@ class SoftAttn(nn.Module):
 
 class HardAttn(nn.Module):
     """Hard Attention (Sec. 3.1.II)"""
+    
     def __init__(self, in_channels):
         super(HardAttn, self).__init__()
         self.fc = nn.Linear(in_channels, 4*2)
@@ -175,6 +174,7 @@ class HardAttn(nn.Module):
 
 class HarmAttn(nn.Module):
     """Harmonious Attention (Sec. 3.1)"""
+    
     def __init__(self, in_channels):
         super(HarmAttn, self).__init__()
         self.soft_attn = SoftAttn(in_channels)
@@ -187,18 +187,18 @@ class HarmAttn(nn.Module):
 
 
 class HACNN(nn.Module):
-    """
-    Harmonious Attention Convolutional Neural Network
+    """Harmonious Attention Convolutional Neural Network.
 
     Reference:
     Li et al. Harmonious Attention Network for Person Re-identification. CVPR 2018.
 
     Args:
-    - num_classes (int): number of classes to predict
-    - nchannels (list): number of channels AFTER concatenation
-    - feat_dim (int): feature dimension for a single stream
-    - learn_region (bool): whether to learn region features (i.e. local branch)
+        num_classes (int): number of classes to predict
+        nchannels (list): number of channels AFTER concatenation
+        feat_dim (int): feature dimension for a single stream
+        learn_region (bool): whether to learn region features (i.e. local branch)
     """
+    
     def __init__(self, num_classes, loss={'xent'}, nchannels=[128, 256, 384], feat_dim=512, learn_region=True, use_gpu=True, **kwargs):
         super(HACNN, self).__init__()
         self.loss = loss
@@ -260,17 +260,17 @@ class HACNN(nn.Module):
         self.scale_factors.append(torch.tensor([[1, 0], [0, 0.25]], dtype=torch.float))
 
     def stn(self, x, theta):
-        """Perform spatial transform
-        - x: (batch, channel, height, width)
-        - theta: (batch, 2, 3)
+        """Performs spatial transform
+        
+        x: (batch, channel, height, width)
+        theta: (batch, 2, 3)
         """
         grid = F.affine_grid(theta, x.size())
         x = F.grid_sample(x, grid)
         return x
 
     def transform_theta(self, theta_i, region_idx):
-        """Transform theta to include (s_w, s_h),
-        resulting in (batch, 2, 3)"""
+        """Transforms theta to include (s_w, s_h), resulting in (batch, 2, 3)"""
         scale_factors = self.scale_factors[region_idx]
         theta = torch.zeros(theta_i.size(0), 2, 3)
         theta[:,:,:2] = scale_factors

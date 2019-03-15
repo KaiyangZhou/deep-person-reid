@@ -19,18 +19,20 @@ model_urls = {
 
 
 class ConvBlock(nn.Module):
-    """Basic convolutional block:
+    """Basic convolutional block.
+    
     convolution (bias discarded) + batch normalization + relu6.
 
-    Args (following http://pytorch.org/docs/master/nn.html#torch.nn.Conv2d):
+    Args:
         in_c (int): number of input channels.
         out_c (int): number of output channels.
         k (int or tuple): kernel size.
         s (int or tuple): stride.
         p (int or tuple): padding.
         g (int): number of blocked connections from input channels
-                 to output channels (default: 1).
+            to output channels (default: 1).
     """
+    
     def __init__(self, in_c, out_c, k, s=1, p=0, g=1):
         super(ConvBlock, self).__init__()
         self.conv = nn.Conv2d(in_c, out_c, k, stride=s, padding=p, bias=False, groups=g)
@@ -41,6 +43,7 @@ class ConvBlock(nn.Module):
 
 
 class Bottleneck(nn.Module):
+    
     def __init__(self, in_channels, out_channels, expansion_factor, stride=1):
         super(Bottleneck, self).__init__()
         mid_channels = in_channels * expansion_factor
@@ -63,8 +66,7 @@ class Bottleneck(nn.Module):
 
 
 class MobileNetV2(nn.Module):
-    """
-    MobileNetV2
+    """MobileNetV2
 
     Reference:
     Sandler et al. MobileNetV2: Inverted Residuals and Linear Bottlenecks. CVPR 2018.
@@ -106,13 +108,12 @@ class MobileNetV2(nn.Module):
         return nn.Sequential(*layers)
 
     def _construct_fc_layer(self, fc_dims, input_dim, dropout_p=None):
-        """
-        Construct fully connected layer
+        """Constructs fully connected layer.
 
-        - fc_dims (list or tuple): dimensions of fc layers, if None,
-                                   no fc layers are constructed
-        - input_dim (int): input dimension
-        - dropout_p (float): dropout probability, if None, dropout is unused
+        Args:
+            fc_dims (list or tuple): dimensions of fc layers, if None, no fc layers are constructed
+            input_dim (int): input dimension
+            dropout_p (float): dropout probability, if None, dropout is unused
         """
         if fc_dims is None:
             self.feature_dim = input_dim
@@ -184,8 +185,8 @@ class MobileNetV2(nn.Module):
 
 
 def init_pretrained_weights(model, model_url):
-    """
-    Initialize model with pretrained weights.
+    """Initializes model with pretrained weights.
+    
     Layers that don't match with pretrained layers in name or size are kept unchanged.
     """
     pretrain_dict = model_zoo.load_url(model_url)

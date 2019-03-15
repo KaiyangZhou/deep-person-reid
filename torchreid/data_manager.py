@@ -11,25 +11,26 @@ from .samplers import build_train_sampler
 
 class BaseDataManager(object):
 
-    def __init__(self,
-                 use_gpu,
-                 source_names,
-                 target_names,
-                 root='data',
-                 split_id=0,
-                 height=256,
-                 width=128,
-                 combineall=False, # combine all data in a dataset for training
-                 train_batch_size=32,
-                 test_batch_size=100,
-                 workers=4,
-                 train_sampler='',
-                 random_erase=False, # use random erasing for data augmentation
-                 color_jitter=False, # randomly change the brightness, contrast and saturation
-                 color_aug=False, # randomly alter the intensities of RGB channels
-                 num_instances=4, # number of instances per identity (for RandomIdentitySampler)
-                 **kwargs
-                 ):
+    def __init__(
+        self,
+        use_gpu,
+        source_names,
+        target_names,
+        root='data',
+        split_id=0,
+        height=256,
+        width=128,
+        combineall=False, # combine all data in a dataset for training
+        train_batch_size=32,
+        test_batch_size=100,
+        workers=4,
+        train_sampler='',
+        random_erase=False, # use random erasing for data augmentation
+        color_jitter=False, # randomly change the brightness, contrast and saturation
+        color_aug=False, # randomly alter the intensities of RGB channels
+        num_instances=4, # number of instances per identity (for RandomIdentitySampler)
+        **kwargs
+        ):
         self.use_gpu = use_gpu
         self.source_names = source_names
         self.target_names = target_names
@@ -75,15 +76,16 @@ class BaseDataManager(object):
 
 class ImageDataManager(BaseDataManager):
 
-    def __init__(self,
-                 use_gpu,
-                 source_names,
-                 target_names,
-                 cuhk03_labeled=False, # use cuhk03's labeled or detected images
-                 cuhk03_classic_split=False, # use cuhk03's classic split or 767/700 split
-                 market1501_500k=False, # add 500k distractors to the gallery set for market1501
-                 **kwargs
-                 ):
+    def __init__(
+        self,
+        use_gpu,
+        source_names,
+        target_names,
+        cuhk03_labeled=False, # use cuhk03's labeled or detected images
+        cuhk03_classic_split=False, # use cuhk03's classic split or 767/700 split
+        market1501_500k=False, # add 500k distractors to the gallery set for market1501
+        **kwargs
+        ):
         super(ImageDataManager, self).__init__(use_gpu, source_names, target_names, **kwargs)
         self.cuhk03_labeled = cuhk03_labeled
         self.cuhk03_classic_split = cuhk03_classic_split
@@ -180,15 +182,16 @@ class ImageDataManager(BaseDataManager):
 
 class VideoDataManager(BaseDataManager):
 
-    def __init__(self,
-                 use_gpu,
-                 source_names,
-                 target_names,
-                 seq_len=15,
-                 sample_method='evenly',
-                 image_training=True, # train the video-reid model with images rather than tracklets
-                 **kwargs
-                 ):
+    def __init__(
+        self,
+        use_gpu,
+        source_names,
+        target_names,
+        seq_len=15,
+        sample_method='evenly',
+        image_training=True, # train the video-reid model with images rather than tracklets
+        **kwargs
+        ):
         super(VideoDataManager, self).__init__(use_gpu, source_names, target_names, **kwargs)
         self.seq_len = seq_len
         self.sample_method = sample_method
@@ -235,7 +238,6 @@ class VideoDataManager(BaseDataManager):
         
         else:
             # each batch has image data of shape (batch, seq_len, channel, height, width)
-            # note: this requires new training scripts
             self.trainloader = DataLoader(
                 VideoDataset(
                     train,
@@ -249,6 +251,7 @@ class VideoDataManager(BaseDataManager):
                 pin_memory=self.use_gpu,
                 drop_last=True
             )
+            raise NotImplementedError('This requires a new trainer')
 
         print('=> Initializing test (target) datasets')
         self.testloader_dict = {name: {'query': None, 'gallery': None} for name in target_names}

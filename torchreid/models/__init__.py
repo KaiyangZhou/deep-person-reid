@@ -59,6 +59,7 @@ def get_names():
 
 
 def init_model(name, *args, **kwargs):
-    if name not in list(__model_factory.keys()):
-        raise KeyError('Unknown model: {}'.format(name))
+    avai_models = get_names()
+    if name not in avai_models:
+        raise KeyError('Unknown model: {}. The available models are: {}'.format(name, avai_models))
     return __model_factory[name](*args, **kwargs)

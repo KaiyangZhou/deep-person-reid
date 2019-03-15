@@ -18,6 +18,7 @@ model_urls = {
 
 
 class MLFNBlock(nn.Module):
+    
     def __init__(self, in_channels, out_channels, stride, fsm_channels, groups=32):
         super(MLFNBlock, self).__init__()
         self.groups = groups
@@ -87,12 +88,12 @@ class MLFNBlock(nn.Module):
 
 
 class MLFN(nn.Module):
-    """
-    Multi-Level Factorisation Net
+    """Multi-Level Factorisation Nets
 
     Reference:
     Chang et al. Multi-Level Factorisation Net for Person Re-Identification. CVPR 2018.
     """
+    
     def __init__(self, num_classes, loss={'xent'}, groups=32, channels=[64, 256, 512, 1024, 2048], embed_dim=1024, **kwargs):
         super(MLFN, self).__init__()
         self.loss = loss
@@ -191,8 +192,8 @@ class MLFN(nn.Module):
 
 
 def init_pretrained_weights(model, model_url):
-    """
-    Initialize model with pretrained weights.
+    """Initializes model with pretrained weights.
+    
     Layers that don't match with pretrained layers in name or size are kept unchanged.
     """
     pretrain_dict = model_zoo.load_url(model_url)

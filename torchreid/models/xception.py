@@ -29,6 +29,7 @@ pretrained_settings = {
 
 
 class SeparableConv2d(nn.Module):
+    
     def __init__(self, in_channels, out_channels, kernel_size=1, stride=1, padding=0, dilation=1, bias=False):
         super(SeparableConv2d,self).__init__()
 
@@ -44,6 +45,7 @@ class SeparableConv2d(nn.Module):
 
 
 class Block(nn.Module):
+    
     def __init__(self, in_filters, out_filters, reps, strides=1, start_with_relu=True, grow_first=True):
         super(Block, self).__init__()
 
@@ -96,12 +98,12 @@ class Block(nn.Module):
 
 
 class Xception(nn.Module):
-    """
-    Xception
+    """Xception
     
     Reference:
     Chollet. Xception: Deep Learning with Depthwise Separable Convolutions. CVPR 2017.
     """
+    
     def __init__(self, num_classes, loss, fc_dims=None, dropout_p=None, **kwargs):
         super(Xception, self).__init__()
         self.loss = loss
@@ -142,13 +144,12 @@ class Xception(nn.Module):
         self._init_params()
 
     def _construct_fc_layer(self, fc_dims, input_dim, dropout_p=None):
-        """
-        Construct fully connected layer
+        """Constructs fully connected layer.
 
-        - fc_dims (list or tuple): dimensions of fc layers, if None,
-                                   no fc layers are constructed
-        - input_dim (int): input dimension
-        - dropout_p (float): dropout probability, if None, dropout is unused
+        Args:
+            fc_dims (list or tuple): dimensions of fc layers, if None, no fc layers are constructed
+            input_dim (int): input dimension
+            dropout_p (float): dropout probability, if None, dropout is unused
         """
         if fc_dims is None:
             self.feature_dim = input_dim
@@ -239,8 +240,8 @@ class Xception(nn.Module):
 
 
 def init_pretrained_weights(model, model_url):
-    """
-    Initialize model with pretrained weights.
+    """Initialize models with pretrained weights.
+    
     Layers that don't match with pretrained layers in name or size are kept unchanged.
     """
     pretrain_dict = model_zoo.load_url(model_url)

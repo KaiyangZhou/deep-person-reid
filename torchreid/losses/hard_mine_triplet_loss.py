@@ -10,10 +10,11 @@ class TripletLoss(nn.Module):
     
     Reference:
     Hermans et al. In Defense of the Triplet Loss for Person Re-Identification. arXiv:1703.07737.
-    Code imported from https://github.com/Cysu/open-reid/blob/master/reid/loss/triplet.py.
+    
+    Imported from https://github.com/Cysu/open-reid/blob/master/reid/loss/triplet.py.
     
     Args:
-    - margin (float): margin for triplet.
+        margin (float): margin for triplet.
     """
     
     def __init__(self, margin=0.3):
@@ -24,8 +25,8 @@ class TripletLoss(nn.Module):
     def forward(self, inputs, targets):
         """
         Args:
-        - inputs: feature matrix with shape (batch_size, feat_dim)
-        - targets: ground truth labels with shape (num_classes)
+            inputs: feature matrix with shape (batch_size, feat_dim)
+            targets: ground truth labels with shape (num_classes)
         """
         n = inputs.size(0)
         
@@ -46,5 +47,4 @@ class TripletLoss(nn.Module):
         
         # Compute ranking hinge loss
         y = torch.ones_like(dist_an)
-        loss = self.ranking_loss(dist_an, dist_ap, y)
-        return loss
+        return self.ranking_loss(dist_an, dist_ap, y)

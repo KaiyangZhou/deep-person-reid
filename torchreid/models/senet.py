@@ -114,6 +114,7 @@ class Bottleneck(nn.Module):
     """
     Base class for bottlenecks that implements `forward()` method.
     """
+    
     def forward(self, x):
         residual = x
 
@@ -187,9 +188,7 @@ class SEResNetBottleneck(Bottleneck):
 
 
 class SEResNeXtBottleneck(Bottleneck):
-    """
-    ResNeXt bottleneck type C with a Squeeze-and-Excitation module.
-    """
+    """ResNeXt bottleneck type C with a Squeeze-and-Excitation module"""
     expansion = 4
 
     def __init__(self, inplanes, planes, groups, reduction, stride=1,
@@ -211,12 +210,12 @@ class SEResNeXtBottleneck(Bottleneck):
 
 
 class SENet(nn.Module):
-    """
-    Squeeze-and-excitation network
+    """Squeeze-and-excitation network
     
     Reference:
     Hu et al. Squeeze-and-Excitation Networks. CVPR 2018.
     """
+    
     def __init__(self, num_classes, loss, block, layers, groups, reduction, dropout_p=0.2,
                  inplanes=128, input_3x3=True, downsample_kernel_size=3, downsample_padding=1,
                  last_stride=2, fc_dims=None, **kwargs):
@@ -415,8 +414,8 @@ class SENet(nn.Module):
 
 
 def init_pretrained_weights(model, model_url):
-    """
-    Initialize model with pretrained weights.
+    """Initializes model with pretrained weights.
+    
     Layers that don't match with pretrained layers in name or size are kept unchanged.
     """
     pretrain_dict = model_zoo.load_url(model_url)

@@ -46,13 +46,13 @@ class Fire(nn.Module):
 
 
 class SqueezeNet(nn.Module):
-    """
-    SqueezeNet
+    """SqueezeNet
 
     Reference:
     Iandola et al. SqueezeNet: AlexNet-level accuracy with 50x fewer parameters
     and< 0.5 MB model size. arXiv:1602.07360.
     """
+    
     def __init__(self, num_classes, loss, version=1.0, fc_dims=None, dropout_p=None, **kwargs):
         super(SqueezeNet, self).__init__()
         self.loss = loss
@@ -102,13 +102,12 @@ class SqueezeNet(nn.Module):
         self._init_params()
 
     def _construct_fc_layer(self, fc_dims, input_dim, dropout_p=None):
-        """
-        Construct fully connected layer
+        """Constructs fully connected layer
 
-        - fc_dims (list or tuple): dimensions of fc layers, if None,
-                                   no fc layers are constructed
-        - input_dim (int): input dimension
-        - dropout_p (float): dropout probability, if None, dropout is unused
+        Args:
+            fc_dims (list or tuple): dimensions of fc layers, if None, no fc layers are constructed
+            input_dim (int): input dimension
+            dropout_p (float): dropout probability, if None, dropout is unused
         """
         if fc_dims is None:
             self.feature_dim = input_dim
@@ -168,8 +167,8 @@ class SqueezeNet(nn.Module):
 
 
 def init_pretrained_weights(model, model_url):
-    """
-    Initialize model with pretrained weights.
+    """Initializes model with pretrained weights.
+    
     Layers that don't match with pretrained layers in name or size are kept unchanged.
     """
     pretrain_dict = model_zoo.load_url(model_url, map_location=None)

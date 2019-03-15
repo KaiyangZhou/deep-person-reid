@@ -88,11 +88,10 @@ def set_bn_to_eval(m):
 
 
 def open_all_layers(model):
-    """
-    Open all layers in model for training.
+    """Opens all layers in model for training.
 
     Args:
-    - model (nn.Module): neural net model.
+        model (nn.Module): neural net model.
     """
     model.train()
     for p in model.parameters():
@@ -100,13 +99,12 @@ def open_all_layers(model):
 
 
 def open_specified_layers(model, open_layers):
-    """
-    Open specified layers in model for training while keeping
+    """Opens specified layers in model for training while keeping
     other layers frozen.
 
     Args:
-    - model (nn.Module): neural net model.
-    - open_layers (list): list of layer names.
+        model (nn.Module): neural net model.
+        open_layers (list): list of layer names.
     """
     if isinstance(model, nn.DataParallel):
         model = model.module
@@ -159,13 +157,13 @@ def accuracy(output, target, topk=(1,)):
 
 
 def load_pretrained_weights(model, weight_path):
-    """Load pretrianed weights to model
+    """Loads pretrianed weights to model
 
     Incompatible layers (unmatched in name or size) will be ignored
 
     Args:
-    - model (nn.Module): network model, which must not be nn.DataParallel
-    - weight_path (str): path to pretrained weights
+        model (nn.Module): network model, which must not be nn.DataParallel
+        weight_path (str): path to pretrained weights
     """
     checkpoint = load_checkpoint(weight_path)
     if 'state_dict' in checkpoint:

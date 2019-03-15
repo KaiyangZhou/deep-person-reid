@@ -271,13 +271,13 @@ class Inception_C(nn.Module):
 
 
 class InceptionV4Base(nn.Module):
-    """
-    Inception-v4
+    """Inception-v4
 
     Reference:
     Szegedy et al. Inception-v4, Inception-ResNet and the Impact of Residual
     Connections on Learning. AAAI 2017.
     """
+    
     def __init__(self, num_classes, loss, **kwargs):
         super(InceptionV4Base, self).__init__()
         self.loss = loss
@@ -328,8 +328,8 @@ class InceptionV4Base(nn.Module):
 
 
 def init_pretrained_weights(model, model_url):
-    """
-    Initialize model with pretrained weights.
+    """Initializes model with pretrained weights.
+    
     Layers that don't match with pretrained layers in name or size are kept unchanged.
     """
     pretrain_dict = model_zoo.load_url(model_url)

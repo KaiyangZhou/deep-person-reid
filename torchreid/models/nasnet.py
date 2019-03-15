@@ -168,6 +168,7 @@ class BranchSeparablesReduction(BranchSeparables):
 
 
 class CellStem0(nn.Module):
+    
     def __init__(self, stem_filters, num_filters=42):
         super(CellStem0, self).__init__()
         self.num_filters = num_filters
@@ -529,11 +530,11 @@ class ReductionCell1(nn.Module):
 
 
 class NASNetAMobile(nn.Module):
-    """
-    Neural Architecture Search (NAS)
+    """Neural Architecture Search (NAS)
 
     Zoph et al. Learning Transferable Architectures for Scalable Image Recognition. CVPR 2018.
     """
+    
     def __init__(self, num_classes, loss, stem_filters=32, penultimate_filters=1056, filters_multiplier=2, **kwargs):
         super(NASNetAMobile, self).__init__()
         self.stem_filters = stem_filters
@@ -656,8 +657,8 @@ class NASNetAMobile(nn.Module):
 
 
 def init_pretrained_weights(model, model_url):
-    """
-    Initialize model with pretrained weights.
+    """Initializes model with pretrained weights.
+    
     Layers that don't match with pretrained layers in name or size are kept unchanged.
     """
     pretrain_dict = model_zoo.load_url(model_url)

@@ -11,16 +11,18 @@ __all__ = ['MuDeep']
 
 
 class ConvBlock(nn.Module):
-    """Basic convolutional block:
+    """Basic convolutional block.
+    
     convolution + batch normalization + relu.
 
-    Args (following http://pytorch.org/docs/master/nn.html#torch.nn.Conv2d):
+    Args:
         in_c (int): number of input channels.
         out_c (int): number of output channels.
         k (int or tuple): kernel size.
         s (int or tuple): stride.
         p (int or tuple): padding.
     """
+    
     def __init__(self, in_c, out_c, k, s, p):
         super(ConvBlock, self).__init__()
         self.conv = nn.Conv2d(in_c, out_c, k, stride=s, padding=p)
@@ -32,6 +34,7 @@ class ConvBlock(nn.Module):
 
 class ConvLayers(nn.Module):
     """Preprocessing layers."""
+    
     def __init__(self):
         super(ConvLayers, self).__init__()
         self.conv1 = ConvBlock(3, 48, k=3, s=1, p=1)
@@ -47,6 +50,7 @@ class ConvLayers(nn.Module):
 
 class MultiScaleA(nn.Module):
     """Multi-scale stream layer A (Sec.3.1)"""
+    
     def __init__(self):
         super(MultiScaleA, self).__init__()
         self.stream1 = nn.Sequential(
@@ -75,6 +79,7 @@ class MultiScaleA(nn.Module):
 
 class Reduction(nn.Module):
     """Reduction layer (Sec.3.1)"""
+    
     def __init__(self):
         super(Reduction, self).__init__()
         self.stream1 = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
@@ -95,6 +100,7 @@ class Reduction(nn.Module):
 
 class MultiScaleB(nn.Module):
     """Multi-scale stream layer B (Sec.3.1)"""
+    
     def __init__(self):
         super(MultiScaleB, self).__init__()
         self.stream1 = nn.Sequential(
@@ -125,6 +131,7 @@ class MultiScaleB(nn.Module):
 
 class Fusion(nn.Module):
     """Saliency-based learning fusion layer (Sec.3.2)"""
+    
     def __init__(self):
         super(Fusion, self).__init__()
         self.a1 = nn.Parameter(torch.rand(1, 256, 1, 1))
@@ -146,12 +153,12 @@ class Fusion(nn.Module):
 
 
 class MuDeep(nn.Module):
-    """
-    Multiscale deep neural network.
+    """Multiscale deep neural network.
 
     Reference:
     Qian et al. Multi-scale Deep Learning Architectures for Person Re-identification. ICCV 2017.
     """
+    
     def __init__(self, num_classes, loss={'xent'}, **kwargs):
         super(MuDeep, self).__init__()
         self.loss = loss
