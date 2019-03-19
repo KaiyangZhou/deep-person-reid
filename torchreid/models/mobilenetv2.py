@@ -1,13 +1,12 @@
 from __future__ import absolute_import
 from __future__ import division
 
+__all__ = ['mobilenetv2_1dot0', 'mobilenetv2_1dot4']
+
 import torch
 from torch import nn
 from torch.nn import functional as F
 import torch.utils.model_zoo as model_zoo
-
-
-__all__ = ['mobilenetv2_1dot0', 'mobilenetv2_1dot4']
 
 
 model_urls = {
@@ -72,7 +71,7 @@ class MobileNetV2(nn.Module):
     Sandler et al. MobileNetV2: Inverted Residuals and Linear Bottlenecks. CVPR 2018.
     """
 
-    def __init__(self, num_classes, width_mult=1, loss={'xent'}, fc_dims=None, dropout_p=None, **kwargs):
+    def __init__(self, num_classes, width_mult=1, loss='softmax', fc_dims=None, dropout_p=None, **kwargs):
         super(MobileNetV2, self).__init__()
         self.loss = loss
         self.in_channels = int(32 * width_mult)
@@ -176,9 +175,9 @@ class MobileNetV2(nn.Module):
         
         y = self.classifier(v)
        
-        if self.loss == {'xent'}:
+        if self.loss == 'softmax':
             return y
-        elif self.loss == {'xent', 'htri'}:
+        elif self.loss == 'triplet':
             return y, v
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))

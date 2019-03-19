@@ -1,6 +1,12 @@
 from __future__ import absolute_import
 from __future__ import division
 
+__all__ = [
+    'squeezenet1_0',
+    'squeezenet1_1',
+    'squeezenet1_0_fc512'
+]
+
 from collections import OrderedDict
 import math
 
@@ -11,9 +17,6 @@ from torch.nn import functional as F
 import torch.nn.init as init
 import torchvision
 import torch.utils.model_zoo as model_zoo
-
-
-__all__ = ['squeezenet1_0', 'squeezenet1_1', 'squeezenet1_0_fc512']
 
 
 model_urls = {
@@ -158,9 +161,9 @@ class SqueezeNet(nn.Module):
 
         y = self.classifier(v)
 
-        if self.loss == {'xent'}:
+        if self.loss == 'softmax':
             return y
-        elif self.loss == {'xent', 'htri'}:
+        elif self.loss == 'triplet':
             return y, v
         else:
             raise KeyError('Unsupported loss: {}'.format(self.loss))
@@ -179,9 +182,10 @@ def init_pretrained_weights(model, model_url):
     print('Initialized model with pretrained weights from {}'.format(model_url))
 
 
-def squeezenet1_0(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def squeezenet1_0(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = SqueezeNet(
-        num_classes, loss,
+        num_classes,
+        loss,
         version=1.0,
         fc_dims=None,
         dropout_p=None,
@@ -192,9 +196,10 @@ def squeezenet1_0(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     return model
 
 
-def squeezenet1_0_fc512(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def squeezenet1_0_fc512(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = SqueezeNet(
-        num_classes, loss,
+        num_classes,
+        loss,
         version=1.0,
         fc_dims=[512],
         dropout_p=None,
@@ -205,9 +210,10 @@ def squeezenet1_0_fc512(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     return model
 
 
-def squeezenet1_1(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def squeezenet1_1(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = SqueezeNet(
-        num_classes, loss,
+        num_classes,
+        loss,
         version=1.1,
         fc_dims=None,
         dropout_p=None,

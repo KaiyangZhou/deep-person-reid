@@ -1,6 +1,8 @@
 from __future__ import absolute_import
 from __future__ import division
 
+__all__ = ['inceptionresnetv2']
+
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
@@ -12,9 +14,6 @@ import sys
 """
 Code imported from https://github.com/Cadene/pretrained-models.pytorch
 """
-
-
-__all__ = ['inceptionresnetv2']
 
 
 pretrained_settings = {
@@ -282,7 +281,7 @@ class InceptionResNetV2(nn.Module):
     Connections on Learning. AAAI 2017.
     """
     
-    def __init__(self, num_classes, loss={'xent'}, **kwargs):
+    def __init__(self, num_classes, loss='softmax', **kwargs):
         super(InceptionResNetV2, self).__init__()
         self.loss = loss
         
@@ -385,15 +384,15 @@ class InceptionResNetV2(nn.Module):
 
         y = self.classifier(v)
 
-        if self.loss == {'xent'}:
+        if self.loss == 'softmax':
             return y
-        elif self.loss == {'xent', 'htri'}:
+        elif self.loss == 'triplet':
             return y, v
         else:
             raise KeyError('Unsupported loss: {}'.format(self.loss))
 
 
-def inceptionresnetv2(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def inceptionresnetv2(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = InceptionResNetV2(
         num_classes=num_classes,
         loss=loss,

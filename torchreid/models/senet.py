@@ -1,6 +1,16 @@
 from __future__ import absolute_import
 from __future__ import division
 
+__all__ = [
+    'senet154',
+    'se_resnet50',
+    'se_resnet101',
+    'se_resnet152',
+    'se_resnext50_32x4d',
+    'se_resnext101_32x4d',
+    'se_resnet50_fc512'
+]
+
 from collections import OrderedDict
 import math
 
@@ -14,10 +24,6 @@ import torchvision
 """
 Code imported from https://github.com/Cadene/pretrained-models.pytorch
 """
-
-
-__all__ = ['senet154', 'se_resnet50', 'se_resnet101', 'se_resnet152', 'se_resnext50_32x4d', 'se_resnext101_32x4d',
-           'se_resnet50_fc512']
 
 
 pretrained_settings = {
@@ -405,9 +411,9 @@ class SENet(nn.Module):
         
         y = self.classifier(v)
         
-        if self.loss == {'xent'}:
+        if self.loss == 'softmax':
             return y
-        elif self.loss == {'xent', 'htri'}:
+        elif self.loss == 'triplet':
             return y, v
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))
@@ -426,7 +432,7 @@ def init_pretrained_weights(model, model_url):
     print('Initialized model with pretrained weights from {}'.format(model_url))
 
 
-def senet154(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def senet154(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = SENet(
         num_classes=num_classes,
         loss=loss,
@@ -445,7 +451,7 @@ def senet154(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     return model
 
 
-def se_resnet50(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def se_resnet50(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = SENet(
         num_classes=num_classes,
         loss=loss,
@@ -468,7 +474,7 @@ def se_resnet50(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     return model
 
 
-def se_resnet50_fc512(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def se_resnet50_fc512(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = SENet(
         num_classes=num_classes,
         loss=loss,
@@ -491,7 +497,7 @@ def se_resnet50_fc512(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     return model
 
 
-def se_resnet101(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def se_resnet101(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = SENet(
         num_classes=num_classes,
         loss=loss,
@@ -514,7 +520,7 @@ def se_resnet101(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     return model
 
 
-def se_resnet152(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def se_resnet152(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = SENet(
         num_classes=num_classes,
         loss=loss,
@@ -537,7 +543,7 @@ def se_resnet152(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     return model
 
 
-def se_resnext50_32x4d(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def se_resnext50_32x4d(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = SENet(
         num_classes=num_classes,
         loss=loss,
@@ -560,7 +566,7 @@ def se_resnext50_32x4d(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     return model
 
 
-def se_resnext101_32x4d(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def se_resnext101_32x4d(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = SENet(
         num_classes=num_classes,
         loss=loss,

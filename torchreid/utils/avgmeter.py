@@ -1,6 +1,8 @@
 from __future__ import absolute_import
 from __future__ import division
 
+__all__ = ['AverageMeter']
+
 
 class AverageMeter(object):
     """Computes and stores the average and current value"""

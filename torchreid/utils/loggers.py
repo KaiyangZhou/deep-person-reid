@@ -1,10 +1,12 @@
 from __future__ import absolute_import
 
+__all__ = ['Logger', 'RankLogger']
+
 import sys
 import os
 import os.path as osp
 
-from .iotools import mkdir_if_missing
+from .tools import mkdir_if_missing
 
 
 class Logger(object):

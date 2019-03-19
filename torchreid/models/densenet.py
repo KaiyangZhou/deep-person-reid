@@ -1,6 +1,8 @@
 from __future__ import absolute_import
 from __future__ import division
 
+__all__ = ['densenet121', 'densenet121_fc512']
+
 from collections import OrderedDict
 import math
 import re
@@ -10,9 +12,6 @@ import torch.nn as nn
 from torch.utils import model_zoo
 from torch.nn import functional as F
 import torchvision
-
-
-__all__ = ['densenet121', 'densenet121_fc512']
 
 
 model_urls = {
@@ -163,9 +162,9 @@ class DenseNet(nn.Module):
         
         y = self.classifier(v)
         
-        if self.loss == {'xent'}:
+        if self.loss == 'softmax':
             return y
-        elif self.loss == {'xent', 'htri'}:
+        elif self.loss == 'triplet':
             return y, v
         else:
             raise KeyError('Unsupported loss: {}'.format(self.loss))
@@ -208,7 +207,7 @@ densenet161: num_init_features=96, growth_rate=48, block_config=(6, 12, 36, 24)
 """
 
 
-def densenet121(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def densenet121(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = DenseNet(
         num_classes=num_classes,
         loss=loss,
@@ -224,7 +223,7 @@ def densenet121(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     return model
 
 
-def densenet121_fc512(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def densenet121_fc512(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = DenseNet(
         num_classes=num_classes,
         loss=loss,

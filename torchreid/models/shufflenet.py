@@ -1,14 +1,13 @@
 from __future__ import absolute_import
 from __future__ import division
 
+__all__ = ['shufflenet']
+
 import torch
 from torch import nn
 from torch.nn import functional as F
 import torchvision
 import torch.utils.model_zoo as model_zoo
-
-
-__all__ = ['shufflenet']
 
 
 model_urls = {
@@ -85,7 +84,7 @@ class ShuffleNet(nn.Module):
     Network for Mobile Devices. CVPR 2018.
     """
     
-    def __init__(self, num_classes, loss={'xent'}, num_groups=3, **kwargs):
+    def __init__(self, num_classes, loss='softmax', num_groups=3, **kwargs):
         super(ShuffleNet, self).__init__()
         self.loss = loss
 
@@ -136,9 +135,9 @@ class ShuffleNet(nn.Module):
 
         y = self.classifier(x)
 
-        if self.loss == {'xent'}:
+        if self.loss == 'softmax':
             return y
-        elif self.loss == {'xent', 'htri'}:
+        elif self.loss == 'triplet':
             return y, x
         else:
             raise KeyError('Unsupported loss: {}'.format(self.loss))
@@ -157,7 +156,7 @@ def init_pretrained_weights(model, model_url):
     print('Initialized model with pretrained weights from {}'.format(model_url))
 
 
-def shufflenet(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def shufflenet(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = ShuffleNet(num_classes, loss, **kwargs)
     if pretrained:
         init_pretrained_weights(model, model_urls['imagenet'])

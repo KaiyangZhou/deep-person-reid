@@ -1,11 +1,16 @@
-"""
-deep-person-reid
-==
+from __future__ import absolute_import
+from __future__ import print_function
 
-Description: PyTorch implementation of deep person re-identification models.
-
-Github page: https://github.com/KaiyangZhou/deep-person-reid
-"""
-
+__version__ = '0.7.0'
 __author__ = 'Kaiyang Zhou'
-__homepage__ = 'https://kaiyangzhou.github.io/'
+__description__ = 'Pytorch framework for deep-learning person re-identification'
+
+from torchreid import (
+    engine,
+    models,
+    losses,
+    metrics,
+    data,
+    optim,
+    utils
+)

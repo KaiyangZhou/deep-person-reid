@@ -1,12 +1,14 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
+__all__ = ['visualize_ranked_results']
+
 import numpy as np
 import os
 import os.path as osp
 import shutil
 
-from .iotools import mkdir_if_missing
+from .tools import mkdir_if_missing
 
 
 def visualize_ranked_results(distmat, dataset, save_dir='log/ranked_results', topk=20):

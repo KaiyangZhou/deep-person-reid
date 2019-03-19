@@ -1,13 +1,12 @@
 from __future__ import absolute_import
 from __future__ import division
 
+__all__ = ['MuDeep']
+
 import torch
 from torch import nn
 from torch.nn import functional as F
 import torchvision
-
-
-__all__ = ['MuDeep']
 
 
 class ConvBlock(nn.Module):
@@ -159,7 +158,7 @@ class MuDeep(nn.Module):
     Qian et al. Multi-scale Deep Learning Architectures for Person Re-identification. ICCV 2017.
     """
     
-    def __init__(self, num_classes, loss={'xent'}, **kwargs):
+    def __init__(self, num_classes, loss='softmax', **kwargs):
         super(MuDeep, self).__init__()
         self.loss = loss
 
@@ -195,9 +194,9 @@ class MuDeep(nn.Module):
         x = self.fc(x)
         y = self.classifier(x)
 
-        if self.loss == {'xent'}:
+        if self.loss == 'softmax':
             return y
-        elif self.loss == {'xent', 'htri'}:
+        elif self.loss == 'triplet':
             return y, x
         else:
             raise KeyError('Unsupported loss: {}'.format(self.loss))

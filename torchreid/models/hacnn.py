@@ -1,13 +1,12 @@
 from __future__ import absolute_import
 from __future__ import division
 
+__all__ = ['HACNN']
+
 import torch
 from torch import nn
 from torch.nn import functional as F
 import torchvision
-
-
-__all__ = ['HACNN']
 
 
 class ConvBlock(nn.Module):
@@ -199,7 +198,7 @@ class HACNN(nn.Module):
         learn_region (bool): whether to learn region features (i.e. local branch)
     """
     
-    def __init__(self, num_classes, loss={'xent'}, nchannels=[128, 256, 384], feat_dim=512, learn_region=True, use_gpu=True, **kwargs):
+    def __init__(self, num_classes, loss='softmax', nchannels=[128, 256, 384], feat_dim=512, learn_region=True, use_gpu=True, **kwargs):
         super(HACNN, self).__init__()
         self.loss = loss
         self.learn_region = learn_region
@@ -362,13 +361,13 @@ class HACNN(nn.Module):
         if self.learn_region:
             prelogits_local = self.classifier_local(x_local)
         
-        if self.loss == {'xent'}:
+        if self.loss == 'softmax':
             if self.learn_region:
                 return (prelogits_global, prelogits_local)
             else:
                 return prelogits_global
         
-        elif self.loss == {'xent', 'htri'}:
+        elif self.loss == 'triplet':
             if self.learn_region:
                 return (prelogits_global, prelogits_local), (x_global, x_local)
             else:

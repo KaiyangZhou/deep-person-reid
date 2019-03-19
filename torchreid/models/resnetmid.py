@@ -1,14 +1,13 @@
 from __future__ import absolute_import
 from __future__ import division
 
+__all__ = ['resnet50mid']
+
 import torch
 from torch import nn
 from torch.nn import functional as F
 import torchvision
 import torch.utils.model_zoo as model_zoo
-
-
-__all__ = ['resnet50mid']
 
 
 model_urls = {
@@ -223,9 +222,9 @@ class ResNet(nn.Module):
         
         y = self.classifier(v)
         
-        if self.loss == {'xent'}:
+        if self.loss == 'softmax':
             return y
-        elif self.loss == {'xent', 'htri'}:
+        elif self.loss == 'triplet':
             return y, v
         else:
             raise KeyError('Unsupported loss: {}'.format(self.loss))
@@ -255,7 +254,7 @@ resnet152: block=Bottleneck, layers=[3, 8, 36, 3]
 """
 
 
-def resnet50mid(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def resnet50mid(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = ResNet(
         num_classes=num_classes,
         loss=loss,

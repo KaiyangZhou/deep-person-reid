@@ -1,14 +1,13 @@
 from __future__ import absolute_import
 from __future__ import division
 
+__all__ = ['mlfn']
+
 import torch
 from torch import nn
 from torch.nn import functional as F
 import torchvision
 import torch.utils.model_zoo as model_zoo
-
-
-__all__ = ['mlfn']
 
 
 model_urls = {
@@ -94,7 +93,7 @@ class MLFN(nn.Module):
     Chang et al. Multi-Level Factorisation Net for Person Re-Identification. CVPR 2018.
     """
     
-    def __init__(self, num_classes, loss={'xent'}, groups=32, channels=[64, 256, 512, 1024, 2048], embed_dim=1024, **kwargs):
+    def __init__(self, num_classes, loss='softmax', groups=32, channels=[64, 256, 512, 1024, 2048], embed_dim=1024, **kwargs):
         super(MLFN, self).__init__()
         self.loss = loss
         self.groups = groups
@@ -183,9 +182,9 @@ class MLFN(nn.Module):
 
         y = self.classifier(v)
 
-        if self.loss == {'xent'}:
+        if self.loss == 'softmax':
             return y
-        elif self.loss == {'xent', 'htri'}:
+        elif self.loss == 'triplet':
             return y, v
         else:
             raise KeyError('Unsupported loss: {}'.format(self.loss))
@@ -204,7 +203,7 @@ def init_pretrained_weights(model, model_url):
     print('Initialized model with pretrained weights from {}'.format(model_url))
 
 
-def mlfn(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def mlfn(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = MLFN(num_classes, loss, **kwargs)
     if pretrained:
         init_pretrained_weights(model, model_urls['imagenet'])

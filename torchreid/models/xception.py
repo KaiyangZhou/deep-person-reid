@@ -1,15 +1,14 @@
 from __future__ import absolute_import
 from __future__ import division
 
+__all__ = ['xception']
+
 import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.model_zoo as model_zoo
 from torch.nn import init
-
-
-__all__ = ['xception']
 
 
 pretrained_settings = {
@@ -231,9 +230,9 @@ class Xception(nn.Module):
         
         y = self.classifier(v)
         
-        if self.loss == {'xent'}:
+        if self.loss == 'softmax':
             return y
-        elif self.loss == {'xent', 'htri'}:
+        elif self.loss == 'triplet':
             return y, v
         else:
             raise KeyError('Unsupported loss: {}'.format(self.loss))
@@ -252,9 +251,10 @@ def init_pretrained_weights(model, model_url):
     print('Initialized model with pretrained weights from {}'.format(model_url))
 
 
-def xception(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def xception(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = Xception(
-        num_classes, loss,
+        num_classes,
+        loss,
         fc_dims=None,
         dropout_p=None,
         **kwargs

@@ -1,6 +1,8 @@
 from __future__ import absolute_import
 from __future__ import division
 
+__all__ = ['nasnetamobile']
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -27,8 +29,6 @@ Thanks to Anastasiia (https://github.com/DagnyT) for the great help, support and
 """
 Code imported from https://github.com/Cadene/pretrained-models.pytorch
 """
-
-__all__ = ['nasnetamobile']
 
 
 pretrained_settings = {
@@ -648,9 +648,9 @@ class NASNetAMobile(nn.Module):
 
         y = self.classifier(v)
 
-        if self.loss == {'xent'}:
+        if self.loss == 'softmax':
             return y
-        elif self.loss == {'xent', 'htri'}:
+        elif self.loss == 'triplet':
             return y, v
         else:
             raise KeyError('Unsupported loss: {}'.format(self.loss))
@@ -669,7 +669,7 @@ def init_pretrained_weights(model, model_url):
     print('Initialized model with pretrained weights from {}'.format(model_url))
 
 
-def nasnetamobile(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def nasnetamobile(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = NASNetAMobile(num_classes, loss, **kwargs)
     if pretrained:
         model_url = pretrained_settings['nasnetamobile']['imagenet']['url']

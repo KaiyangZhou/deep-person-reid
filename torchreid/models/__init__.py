@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 
+import torch
+
 from .resnet import *
 from .resnetmid import *
 from .resnext import *
@@ -54,12 +56,14 @@ __model_factory = {
 }
 
 
-def get_names():
-    return list(__model_factory.keys())
-
-
-def init_model(name, *args, **kwargs):
-    avai_models = get_names()
+def build_model(name, num_classes, loss='softmax', pretrained=True, use_gpu=True):
+    avai_models = list(__model_factory.keys())
     if name not in avai_models:
-        raise KeyError('Unknown model: {}. The available models are: {}'.format(name, avai_models))
-    return __model_factory[name](*args, **kwargs)
+        raise KeyError('Unknown model: {}. Must be one of {}'.format(name, avai_models))
+    print('Initializing model: {}'.format(name))
+    return __model_factory[name](
+        num_classes=num_classes,
+        loss=loss,
+        pretrained=pretrained,
+        use_gpu=use_gpu
+    )

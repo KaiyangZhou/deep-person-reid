@@ -1,6 +1,8 @@
 from __future__ import absolute_import
 from __future__ import division
 
+__all__ = ['resnext50_32x4d', 'resnext50_32x4d_fc512']
+
 import math
 
 import torch
@@ -8,9 +10,6 @@ from torch import nn
 from torch.nn import functional as F
 import torchvision
 import torch.utils.model_zoo as model_zoo
-
-
-__all__ = ['resnext50_32x4d', 'resnext50_32x4d_fc512']
 
 
 model_urls = {
@@ -178,9 +177,9 @@ class ResNeXt(nn.Module):
         
         y = self.classifier(v)
         
-        if self.loss == {'xent'}:
+        if self.loss == 'softmax':
             return y
-        elif self.loss == {'xent', 'htri'}:
+        elif self.loss == 'triplet':
             return y, v
         else:
             raise KeyError("Unsupported loss: {}".format(self.loss))
@@ -199,7 +198,7 @@ def init_pretrained_weights(model, model_url):
     print('Initialized model with pretrained weights from {}'.format(model_url))
 
 
-def resnext50_32x4d(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def resnext50_32x4d(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = ResNeXt(
         num_classes=num_classes,
         loss=loss,
@@ -217,7 +216,7 @@ def resnext50_32x4d(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     return model
 
 
-def resnext50_32x4d_fc512(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def resnext50_32x4d_fc512(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = ResNeXt(
         num_classes=num_classes,
         loss=loss,

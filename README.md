@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="imgs/deep-person-reid-logo.png" alt="logo" width="260">
+  <img src="docs/figures/deep-person-reid-logo.png" alt="logo" width="260">
 </p>
 
 This project aims to provide an efficient framework for training and evaluating deep person re-identification models in [Pytorch](http://pytorch.org/).
@@ -164,7 +164,7 @@ Use `--eval-freq` to control the evaluation frequency and `--start-eval` to indi
 To visualize the ranked results, you can use `--visualize-ranks`, which works along with `--evaluate`. The ranked images will be saved in `save_dir/ranked_results/dataset_name` where `save_dir` is the directory you specify with `--save-dir`. This function is implemented in [torchreid/utils/reidtools.py](torchreid/utils/reidtools.py).
 
 <p align="center">
-  <img src="imgs/ranked_results.jpg" alt="ranked_results" width="600">
+  <img src="docs/figures/ranked_results.jpg" alt="ranked_results" width="600">
 </p>
 
 

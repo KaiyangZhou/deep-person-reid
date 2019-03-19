@@ -2,6 +2,16 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import division
 
+__all__ = [
+    'save_checkpoint',
+    'load_checkpoint',
+    'resume_from_checkpoint',
+    'open_all_layers',
+    'open_specified_layers',
+    'count_num_param',
+    'load_pretrained_weights'
+]
+
 from collections import OrderedDict
 import shutil
 import warnings
@@ -13,7 +23,7 @@ import pickle
 import torch
 import torch.nn as nn
 
-from .iotools import mkdir_if_missing
+from .tools import mkdir_if_missing
 
 
 def save_checkpoint(state, save_dir, is_best=False, remove_module_from_keys=False):
@@ -104,10 +114,13 @@ def open_specified_layers(model, open_layers):
 
     Args:
         model (nn.Module): neural net model.
-        open_layers (list): list of layer names.
+        open_layers (str or list): layers open for training.
     """
     if isinstance(model, nn.DataParallel):
         model = model.module
+
+    if isinstance(open_layers, str):
+        open_layers = [open_layers]
 
     for layer in open_layers:
         assert hasattr(model, layer), '"{}" is not an attribute of the model, please provide the correct name'.format(layer)
@@ -124,6 +137,11 @@ def open_specified_layers(model, open_layers):
 
 
 def count_num_param(model):
+    """Counts number of parameters in a model
+
+    Args:
+        model (nn.Module): neural network
+    """
     num_param = sum(p.numel() for p in model.parameters()) / 1e+06
 
     if isinstance(model, nn.DataParallel):
@@ -133,27 +151,6 @@ def count_num_param(model):
         # we ignore the classifier because it is unused at test time
         num_param -= sum(p.numel() for p in model.classifier.parameters()) / 1e+06
     return num_param
-
-
-def accuracy(output, target, topk=(1,)):
-    """Computes the accuracy over the k top predictions for the specified values of k"""
-    with torch.no_grad():
-        maxk = max(topk)
-        batch_size = target.size(0)
-
-        if isinstance(output, (tuple, list)):
-            output = output[0]
-
-        _, pred = output.topk(maxk, 1, True, True)
-        pred = pred.t()
-        correct = pred.eq(target.view(1, -1).expand_as(pred))
-
-        res = []
-        for k in topk:
-            correct_k = correct[:k].view(-1).float().sum(0, keepdim=True)
-            acc = correct_k.mul_(100.0 / batch_size)
-            res.append(acc.item())
-        return res
 
 
 def load_pretrained_weights(model, weight_path):

@@ -1,14 +1,13 @@
 from __future__ import absolute_import
 from __future__ import division
 
+__all__ = ['pcb_p6', 'pcb_p4']
+
 import torch
 from torch import nn
 from torch.nn import functional as F
 import torchvision
 import torch.utils.model_zoo as model_zoo
-
-
-__all__ = ['pcb_p6', 'pcb_p4']
 
 
 model_urls = {
@@ -217,9 +216,9 @@ class PCB(nn.Module):
             y_i = self.classifier[i](v_h_i)
             y.append(y_i)
         
-        if self.loss == {'xent'}:
+        if self.loss == 'softmax':
             return y
-        elif self.loss == {'xent', 'htri'}:
+        elif self.loss == 'triplet':
             v_g = F.normalize(v_g, p=2, dim=1)
             return y, v_g.view(v_g.size(0), -1)
         else:
@@ -239,7 +238,7 @@ def init_pretrained_weights(model, model_url):
     print('Initialized model with pretrained weights from {}'.format(model_url))
 
 
-def pcb_p6(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def pcb_p6(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = PCB(
         num_classes=num_classes,
         loss=loss,
@@ -256,7 +255,7 @@ def pcb_p6(num_classes, loss={'xent'}, pretrained=True, **kwargs):
     return model
 
 
-def pcb_p4(num_classes, loss={'xent'}, pretrained=True, **kwargs):
+def pcb_p4(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = PCB(
         num_classes=num_classes,
         loss=loss,
