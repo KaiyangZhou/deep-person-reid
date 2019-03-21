@@ -111,10 +111,10 @@ venv.bak/
 .mypy_cache/
 
 # Custom
-data
+reid-data
 log
 saved-models
-debug.py
+debug
 .idea
 
 # Cython eval code
