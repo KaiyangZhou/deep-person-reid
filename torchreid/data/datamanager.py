@@ -163,7 +163,7 @@ class VideoDataManager(DataManager):
 
     def __init__(self, root, sources, targets=None, height=256, width=128, random_erase=False,
                  color_jitter=False, color_aug=False, use_cpu=False, split_id=0, combineall=False,
-                 batch_size=32, workers=4, num_instances=4, train_sampler=None,
+                 batch_size=3, workers=4, num_instances=4, train_sampler=None,
                  seq_len=15, sample_method='evenly'):
         
         super(VideoDataManager, self).__init__(sources, targets=targets, height=height, width=width,
