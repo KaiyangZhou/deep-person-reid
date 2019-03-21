@@ -15,21 +15,19 @@ Torchreid documentation
    :maxdepth: 3
    :caption: Package Reference
    :hidden:
-   
-   packages/data
-   packages/engine
-   packages/losses
-   packages/metrics
-   packages/models
-   packages/optim
-   packages/utils
+
+   pkg/data
+   pkg/engine
+   pkg/losses
+   pkg/metrics
+   pkg/optim
+   pkg/utils
 
 .. toctree::
    :maxdepth: 1
    :caption: Resources
    :hidden:
 
-   resources/model_zoo
    AWESOME_REID.md
 
 

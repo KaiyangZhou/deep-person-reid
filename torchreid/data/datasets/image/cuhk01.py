@@ -14,17 +14,17 @@ from torchreid.utils import read_json, write_json
 
 
 class CUHK01(ImageDataset):
-    """CUHK01
+    """CUHK01.
 
     Reference:
-    Li et al. Human Reidentification with Transferred Metric Learning. ACCV 2012.
+        Li et al. Human Reidentification with Transferred Metric Learning. ACCV 2012.
 
-    URL: http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html
+    URL: `<http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html>`_
     
     Dataset statistics:
-        identities: 971
-        images: 3884
-        cameras: 4
+        - identities: 971.
+        - images: 3884.
+        - cameras: 4.
     """
     dataset_dir = 'cuhk01'
     dataset_url = None

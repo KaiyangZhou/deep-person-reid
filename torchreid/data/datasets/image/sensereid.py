@@ -12,20 +12,19 @@ from torchreid.data.datasets import ImageDataset
 
 
 class SenseReID(ImageDataset):
-    """SenseReID
+    """SenseReID.
 
     This dataset is used for test purpose only.
 
     Reference:
-    Zhao et al. Spindle Net: Person Re-identification with Human Body
-    Region Guided Feature Decomposition and Fusion. CVPR 2017.
+        Zhao et al. Spindle Net: Person Re-identification with Human Body
+        Region Guided Feature Decomposition and Fusion. CVPR 2017.
 
-    URL: https://drive.google.com/file/d/0B56OfSrVI8hubVJLTzkwV2VaOWM/view
+    URL: `<https://drive.google.com/file/d/0B56OfSrVI8hubVJLTzkwV2VaOWM/view>`_
 
     Dataset statistics:
-        train: 0 ids, 0 images
-        query: 522 ids, 1040 images
-        gallery: 1717 ids, 3388 images
+        - query: 522 ids, 1040 images.
+        - gallery: 1717 ids, 3388 images.
     """
     dataset_dir = 'sensereid'
     dataset_url = None

@@ -15,15 +15,16 @@ class PRID(ImageDataset):
     """PRID (single-shot version of prid-2011)
 
     Reference:
-    Hirzer et al. Person Re-Identification by Descriptive and Discriminative Classification. SCIA 2011.
+        Hirzer et al. Person Re-Identification by Descriptive and Discriminative
+        Classification. SCIA 2011.
 
-    URL: https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/
+    URL: `<https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/>`_
     
     Dataset statistics:
-        Two views
-        View A captures 385 identities
-        View B captures 749 identities
-        200 identities appear in both views
+        - Two views.
+        - View A captures 385 identities.
+        - View B captures 749 identities.
+        - 200 identities appear in both views.
     """
     dataset_dir = 'prid2011'
     dataset_url = None

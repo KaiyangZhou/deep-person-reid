@@ -16,6 +16,20 @@ from torchreid.utils import read_image, mkdir_if_missing, download_url
 
 
 class Dataset(object):
+    """An abstract class representing a Dataset.
+
+    This is the base class for ``ImageDataset`` and ``VideoDataset``.
+
+    Args:
+        train (list): contains tuples of (img_path(s), pid, camid).
+        query (list): contains tuples of (img_path(s), pid, camid).
+        gallery (list): contains tuples of (img_path(s), pid, camid).
+        transform: transform function.
+        mode (str): 'train', 'query' or 'gallery'.
+        combineall (bool): combines train, query and gallery in a
+            dataset for training.
+        verbose (bool): show information.
+    """
 
     def __init__(self, train, query, gallery, transform=None, mode='train',
                  combineall=False, verbose=True, **kwargs):
@@ -53,7 +67,7 @@ class Dataset(object):
         return len(self.data)
 
     def __add__(self, other):
-        """Adds two datasets together (only the train set)"""
+        """Adds two datasets together (only the train set)."""
         train = copy.deepcopy(self.train)
 
         for img_path, pid, camid in other.train:
@@ -65,22 +79,17 @@ class Dataset(object):
                        mode=self.mode, combineall=self.combineall, verbose=self.verbose)
 
     def __radd__(self, other):
-        """Supports sum([dataset1, dataset2, dataset3])"""
+        """Supports sum([dataset1, dataset2, dataset3])."""
         if other == 0:
             return self
         else:
             return self.__add__(other)
 
     def parse_data(self, data):
-        """Parses data
+        """Parses data list.
 
-        :param data: data list containing tuples of (img_path(s), pid, camid).
-        :type data: list
-
-        :return num_pids: number of person identities
-        :rtype num_pids: int
-        :return num_cams: number of cameras
-        :rtype num_cams: int
+        Args:
+            data (list): contains tuples of (img_path(s), pid, camid)
         """
         pids = set()
         cams = set()
@@ -90,16 +99,19 @@ class Dataset(object):
         return len(pids), len(cams)
 
     def get_num_pids(self, data):
+        """Returns the number of training person identities."""
         return self.parse_data(data)[0]
 
     def get_num_cams(self, data):
+        """Returns the number of training cameras."""
         return self.parse_data(data)[1]
 
     def show_summary(self):
+        """Shows dataset statistics."""
         pass
 
     def combine_all(self):
-        """Combines train, query and gallery"""
+        """Combines train, query and gallery in a dataset for training."""
         combined = copy.deepcopy(self.train)
 
         # relabel pids in gallery
@@ -124,12 +136,11 @@ class Dataset(object):
         self.num_train_pids = self.get_num_pids(self.train)
 
     def download_dataset(self, dataset_dir, dataset_url):
-        """Downloads and extracts dataset
+        """Downloads and extracts dataset.
 
-        :param dataset_dir: dataset directory
-        :type dataset_dir: str
-        :param dataset_url: url to download dataset
-        :type dataset_url: str
+        Args:
+            dataset_dir (str): dataset directory.
+            dataset_url (str): url to download dataset.
         """
         if osp.exists(dataset_dir):
             return
@@ -160,10 +171,10 @@ class Dataset(object):
         print('{} dataset is ready'.format(self.__class__.__name__))
 
     def check_before_run(self, required_files):
-        """Checks if required files exist before going deeper
+        """Checks if required files exist before going deeper.
 
-        :param required_files: string name(s) of file(s)
-        :type required_files: str or list
+        Args:
+            required_files (str or list): string file name(s).
         """
         if isinstance(required_files, str):
             required_files = [required_files]
@@ -194,6 +205,10 @@ class Dataset(object):
 
 
 class ImageDataset(Dataset):
+    """A base class representing ImageDataset.
+
+    All other image datasets should subclass it.
+    """
 
     def __init__(self, train, query, gallery, **kwargs):
         super(ImageDataset, self).__init__(train, query, gallery, **kwargs)
@@ -221,6 +236,10 @@ class ImageDataset(Dataset):
 
 
 class VideoDataset(Dataset):
+    """A base class representing VideoDataset.
+
+    All other video datasets should subclass it.
+    """
 
     def __init__(self, train, query, gallery, seq_len=15, sample_method='evenly', **kwargs):
         super(VideoDataset, self).__init__(train, query, gallery, **kwargs)

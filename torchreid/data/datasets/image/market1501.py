@@ -12,16 +12,16 @@ from torchreid.data.datasets import ImageDataset
 
 
 class Market1501(ImageDataset):
-    """Market1501
+    """Market1501.
 
     Reference:
-    Zheng et al. Scalable Person Re-identification: A Benchmark. ICCV 2015.
+        Zheng et al. Scalable Person Re-identification: A Benchmark. ICCV 2015.
 
-    URL: http://www.liangzheng.org/Project/project_reid.html
+    URL: `<http://www.liangzheng.org/Project/project_reid.html>`_
     
     Dataset statistics:
-        identities: 1501 (+1 for background)
-        images: 12936 (train) + 3368 (query) + 15913 (gallery)
+        - identities: 1501 (+1 for background).
+        - images: 12936 (train) + 3368 (query) + 15913 (gallery).
     """
     dataset_dir = 'market1501'
     dataset_url = 'http://188.138.127.15:81/Datasets/Market-1501-v15.09.15.zip'

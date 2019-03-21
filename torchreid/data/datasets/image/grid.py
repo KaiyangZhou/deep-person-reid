@@ -13,17 +13,17 @@ from torchreid.utils import read_json, write_json
 
 
 class GRID(ImageDataset):
-    """GRID
+    """GRID.
 
     Reference:
-    Loy et al. Multi-camera activity correlation analysis. CVPR 2009.
+        Loy et al. Multi-camera activity correlation analysis. CVPR 2009.
 
-    URL: http://personal.ie.cuhk.edu.hk/~ccloy/downloads_qmul_underground_reid.html
+    URL: `<http://personal.ie.cuhk.edu.hk/~ccloy/downloads_qmul_underground_reid.html>`_
     
     Dataset statistics:
-        identities: 250
-        images: 1275
-        cameras: 8
+        - identities: 250.
+        - images: 1275.
+        - cameras: 8.
     """
     dataset_dir = 'grid'
     dataset_url = 'http://personal.ie.cuhk.edu.hk/~ccloy/files/datasets/underground_reid.zip'

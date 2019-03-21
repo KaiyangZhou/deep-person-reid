@@ -12,17 +12,17 @@ from torchreid.data.datasets import VideoDataset
 
 
 class Mars(VideoDataset):
-    """MARS
+    """MARS.
 
     Reference:
-    Zheng et al. MARS: A Video Benchmark for Large-Scale Person Re-identification. ECCV 2016.
+        Zheng et al. MARS: A Video Benchmark for Large-Scale Person Re-identification. ECCV 2016.
 
-    URL: http://www.liangzheng.com.cn/Project/project_mars.html
+    URL: `<http://www.liangzheng.com.cn/Project/project_mars.html>`_
     
     Dataset statistics:
-        identities: 1261
-        tracklets: 8298 (train) + 1980 (query) + 9330 (gallery)
-        cameras: 6
+        - identities: 1261.
+        - tracklets: 8298 (train) + 1980 (query) + 9330 (gallery).
+        - cameras: 6.
     """
     dataset_dir = 'mars'
     dataset_url = None

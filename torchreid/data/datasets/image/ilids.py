@@ -16,15 +16,15 @@ from torchreid.utils import read_json, write_json
 
 
 class iLIDS(ImageDataset):
-    """QMUL-iLIDS
+    """QMUL-iLIDS.
 
     Reference:
-    Zheng et al. Associating Groups of People. BMVC 2009.
+        Zheng et al. Associating Groups of People. BMVC 2009.
     
     Dataset statistics:
-        identities: 119
-        images: 476
-        cameras: 8 (not explicitly provided)
+        - identities: 119.
+        - images: 476. 
+        - cameras: 8 (not explicitly provided).
     """
     dataset_dir = 'ilids'
     dataset_url = 'http://www.eecs.qmul.ac.uk/~jason/data/i-LIDS_Pedestrian.tgz'

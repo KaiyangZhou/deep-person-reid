@@ -12,17 +12,18 @@ from torchreid.utils import read_json, write_json
 
 
 class PRID2011(VideoDataset):
-    """PRID2011
+    """PRID2011.
 
     Reference:
-    Hirzer et al. Person Re-Identification by Descriptive and Discriminative Classification. SCIA 2011.
+        Hirzer et al. Person Re-Identification by Descriptive and
+        Discriminative Classification. SCIA 2011.
 
-    URL: https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/
+    URL: `<https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/>`_
     
     Dataset statistics:
-        identities: 200
-        tracklets: 400
-        cameras: 2
+        - identities: 200.
+        - tracklets: 400.
+        - cameras: 2.
     """
     dataset_dir = 'prid2011'
     dataset_url = None

@@ -2,8 +2,7 @@ import torchreid
 
 datamanager = torchreid.data.ImageDataManager(
     root='reid-data',
-    sources=['market1501', 'cuhk03'],
-    targets='market1501',
+    sources='market1501',
     height=128,
     width=64,
     combineall=True,

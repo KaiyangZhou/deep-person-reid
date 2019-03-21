@@ -13,17 +13,17 @@ from torchreid.utils import read_json, write_json
 
 
 class iLIDSVID(VideoDataset):
-    """iLIDS-VID
+    """iLIDS-VID.
 
     Reference:
-    Wang et al. Person Re-Identification by Video Ranking. ECCV 2014.
+        Wang et al. Person Re-Identification by Video Ranking. ECCV 2014.
 
-    URL: http://www.eecs.qmul.ac.uk/~xiatian/downloads_qmul_iLIDS-VID_ReID_dataset.html
+    URL: `<http://www.eecs.qmul.ac.uk/~xiatian/downloads_qmul_iLIDS-VID_ReID_dataset.html>`_
     
     Dataset statistics:
-        identities: 300
-        tracklets: 600
-        cameras: 2
+        - identities: 300.
+        - tracklets: 600.
+        - cameras: 2.
     """
     dataset_dir = 'ilids-vid'
     dataset_url = 'http://www.eecs.qmul.ac.uk/~xiatian/iLIDS-VID/iLIDS-VID.tar'

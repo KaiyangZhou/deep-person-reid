@@ -13,17 +13,19 @@ from torchreid.utils import read_json, write_json
 
 
 class DukeMTMCVidReID(VideoDataset):
-    """DukeMTMCVidReID
+    """DukeMTMCVidReID.
 
     Reference:
-    Wu et al. Exploit the Unknown Gradually: One-Shot Video-Based Person
-    Re-Identification by Stepwise Learning. CVPR 2018.
+        - Ristani et al. Performance Measures and a Data Set for Multi-Target,
+          Multi-Camera Tracking. ECCVW 2016.
+        - Wu et al. Exploit the Unknown Gradually: One-Shot Video-Based Person
+          Re-Identification by Stepwise Learning. CVPR 2018.
 
-    URL: https://github.com/Yu-Wu/DukeMTMC-VideoReID
+    URL: `<https://github.com/Yu-Wu/DukeMTMC-VideoReID>`_
     
     Dataset statistics:
-        identities: 702 (train) + 702 (test)
-        tracklets: 2196 (train) + 2636 (test)
+        - identities: 702 (train) + 702 (test).
+        - tracklets: 2196 (train) + 2636 (test).
     """
     dataset_dir = 'dukemtmc-vidreid'
     dataset_url = 'http://vision.cs.duke.edu/DukeMTMC/data/misc/DukeMTMC-VideoReID.zip'

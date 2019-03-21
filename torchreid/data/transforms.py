@@ -21,7 +21,10 @@ class Random2DTranslation(object):
     Args:
         height (int): target image height.
         width (int): target image width.
-        p (float): probability of performing this transformation. Default: 0.5.
+        p (float, optional): probability that this operation takes place.
+            Default is 0.5.
+        interpolation (int, optional): desired interpolation. Default is
+            ``PIL.Image.BILINEAR``
     """
     
     def __init__(self, height, width, p=0.5, interpolation=Image.BILINEAR):
@@ -45,19 +48,21 @@ class Random2DTranslation(object):
 
 
 class RandomErasing(object):
-    '''Randomly erases an image patch.
+    """Randomly erases an image patch.
 
-    Class that performs Random Erasing in Random Erasing Data Augmentation by Zhong et al. 
-    -------------------------------------------------------------------------------------
-    probability: The probability that the operation will be performed.
-    sl: min erasing area
-    sh: max erasing area
-    r1: min aspect ratio
-    mean: erasing value
-    -------------------------------------------------------------------------------------
-    
-    Imported from https://github.com/zhunzhong07/Random-Erasing
-    '''
+    Origin: `<https://github.com/zhunzhong07/Random-Erasing>`_
+
+    Reference:
+        Zhong et al. Random Erasing Data Augmentation.
+
+    Args:
+        probability (float, optional): probability that this operation takes place.
+            Default is 0.5.
+        sl (float, optional): min erasing area.
+        sh (float, optional): max erasing area.
+        r1 (float, optional): min aspect ratio.
+        mean (list, optional): erasing value.
+    """
     
     def __init__(self, probability=0.5, sl=0.02, sh=0.4, r1=0.3, mean=[0.4914, 0.4822, 0.4465]):
         self.probability = probability
@@ -97,7 +102,12 @@ class ColorAugmentation(object):
     """Randomly alters the intensities of RGB channels.
 
     Reference:
-    Krizhevsky et al. ImageNet Classification with Deep ConvolutionalNeural Networks. NIPS 2012.
+        Krizhevsky et al. ImageNet Classification with Deep ConvolutionalNeural
+        Networks. NIPS 2012.
+
+    Args:
+        p (float, optional): probability that this operation takes place.
+            Default is 0.5.
     """
     
     def __init__(self, p=0.5):
@@ -121,37 +131,42 @@ class ColorAugmentation(object):
         return tensor
 
 
-def build_transforms(
-        height,
-        width,
-        random_erase=False, # use random erasing for data augmentation
-        color_jitter=False, # randomly change the brightness, contrast and saturation
-        color_aug=False, # randomly alter the intensities of RGB channels
-        norm_mean=[0.485, 0.456, 0.406], # default is imagenet mean
-        norm_std=[0.229, 0.224, 0.225], # default is imagenet std
-        **kwargs
-    ):
+def build_transforms(height, width, random_erase=False, color_jitter=False,
+                     color_aug=False, norm_mean=[0.485, 0.456, 0.406],
+                     norm_std=[0.229, 0.224, 0.225], **kwargs):
+    """Builds train and test transform functions
+
+    Args:
+        height (int): target image height.
+        width (int): target image width.
+        random_erase (bool, optional): use random erasing. Default is False.
+        color_jitter (bool, optional): use color jittering. Default is False.
+        color_aug (bool, optional): use color augmentation. Default is False.
+        norm_mean (list): normalization mean values. Default is ImageNet means.
+        norm_std (list): normalization standard deviation values. Default is
+            ImageNet standard deviation values.
+    """
     normalize = Normalize(mean=norm_mean, std=norm_std)
 
     # build train transformations
-    transform_train = []
-    transform_train += [Random2DTranslation(height, width)]
-    transform_train += [RandomHorizontalFlip()]
+    transform_tr = []
+    transform_tr += [Random2DTranslation(height, width)]
+    transform_tr += [RandomHorizontalFlip()]
     if color_jitter:
-        transform_train += [ColorJitter(brightness=0.2, contrast=0.15, saturation=0, hue=0)]
-    transform_train += [ToTensor()]
+        transform_tr += [ColorJitter(brightness=0.2, contrast=0.15, saturation=0, hue=0)]
+    transform_tr += [ToTensor()]
     if color_aug:
-        transform_train += [ColorAugmentation()]
-    transform_train += [normalize]
+        transform_tr += [ColorAugmentation()]
+    transform_tr += [normalize]
     if random_erase:
-        transform_train += [RandomErasing()]
-    transform_train = Compose(transform_train)
+        transform_tr += [RandomErasing()]
+    transform_tr = Compose(transform_tr)
 
     # build test transformations
-    transform_test = Compose([
+    transform_te = Compose([
         Resize((height, width)),
         ToTensor(),
         normalize,
     ])
 
-    return transform_train, transform_test
+    return transform_tr, transform_te

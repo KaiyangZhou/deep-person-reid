@@ -13,17 +13,17 @@ from torchreid.utils import read_json, write_json
 
 
 class VIPeR(ImageDataset):
-    """VIPeR
+    """VIPeR.
 
     Reference:
-    Gray et al. Evaluating appearance models for recognition, reacquisition, and tracking. PETS 2007.
+        Gray et al. Evaluating appearance models for recognition, reacquisition, and tracking. PETS 2007.
 
-    URL: https://vision.soe.ucsc.edu/node/178
+    URL: `<https://vision.soe.ucsc.edu/node/178>`_
     
     Dataset statistics:
-        identities: 632
-        images: 632 x 2 = 1264
-        cameras: 2
+        - identities: 632.
+        - images: 632 x 2 = 1264.
+        - cameras: 2.
     """
     dataset_dir = 'viper'
     dataset_url = 'http://users.soe.ucsc.edu/~manduchi/VIPeR.v1.0.zip'

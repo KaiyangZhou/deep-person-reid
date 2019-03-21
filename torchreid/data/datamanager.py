@@ -10,20 +10,36 @@ from torchreid.data.datasets import init_image_dataset, init_video_dataset
 
 
 class DataManager(object):
+    """Base data manager.
 
-    def __init__(self, sources, targets=None, height=256, width=128, random_erase=False,
+    Args:
+        sources (str or list): source dataset(s).
+        targets (str or list, optional): target dataset(s). If not given,
+            it equals to ``sources``.
+        height (int, optional): target image height. Default is 256.
+        width (int, optional): target image width. Default is 128.
+        random_erase (bool, optional): use random erasing. Default is False.
+        color_jitter (bool, optional): use color jittering. Default is False.
+        color_aug (bool, optional): use color augmentation. Default is False.
+        use_cpu (bool, optional): use cpu. Default is False.
+    """
+
+    def __init__(self, sources=None, targets=None, height=256, width=128, random_erase=False,
                  color_jitter=False, color_aug=False, use_cpu=False):
         self.sources = sources
         self.targets = targets
 
+        if self.sources is None:
+            raise ValueError('sources must not be None')
+
         if isinstance(self.sources, str):
             self.sources = [self.sources]
 
-        if isinstance(self.targets, str):
-            self.targets = [self.targets]
-
         if self.targets is None:
             self.targets = self.sources
+
+        if isinstance(self.targets, str):
+            self.targets = [self.targets]
 
         self.transform_tr, self.transform_te = build_transforms(
             height, width,
@@ -36,27 +52,74 @@ class DataManager(object):
 
     @property
     def num_train_pids(self):
+        """Returns the number of training person identities."""
         return self._num_train_pids
 
     @property
     def num_train_cams(self):
+        """Returns the number of training cameras."""
         return self._num_train_cams
 
     def return_dataloaders(self):
+        """Returns trainloader and testloader."""
         return self.trainloader, self.testloader
 
     def return_testdataset_by_name(self, name):
+        """Returns query and gallery of a test dataset, each containing
+        tuples of (img_path(s), pid, camid).
+
+        Args:
+            name (str): dataset name.
+        """
         return self.testdataset[name]['query'], self.testdataset[name]['gallery']
 
 
 class ImageDataManager(DataManager):
+    """Image data manager.
 
-    def __init__(self, root, sources, targets=None, height=256, width=128, random_erase=False,
+    Args:
+        root (str): root path to datasets.
+        sources (str or list): source dataset(s).
+        targets (str or list, optional): target dataset(s). If not given,
+            it equals to ``sources``.
+        height (int, optional): target image height. Default is 256.
+        width (int, optional): target image width. Default is 128.
+        random_erase (bool, optional): use random erasing. Default is False.
+        color_jitter (bool, optional): use color jittering. Default is False.
+        color_aug (bool, optional): use color augmentation. Default is False.
+        use_cpu (bool, optional): use cpu. Default is False.
+        split_id (int, optional): split id (*0-based*). Default is 0.
+        combineall (bool, optional): combine train, query and gallery in a dataset for
+            training. Default is False.
+        batch_size (int, optional): number of images in a batch. Default is 32.
+        workers (int, optional): number of workers. Default is 4.
+        num_instances (int, optional): number of instances per identity in a batch.
+            Default is 4.
+        train_sampler (str, optional): sampler. Default is empty (``RandomSampler``).
+        cuhk03_labeled (bool, optional): use cuhk03 labeled images.
+            Default is False (defaul is to use detected images).
+        cuhk03_classic_split (bool, optional): use the classic split in cuhk03.
+            Default is False.
+        market1501_500k (bool, optional): add 500K distractors to the gallery
+            set in market1501. Default is False.
+
+    Examples::
+
+        datamanager = torchreid.data.ImageDataManager(
+            root='reid-data',
+            sources='market1501',
+            height=256,
+            width=128,
+            batch_size=32
+        )
+    """
+
+    def __init__(self, root='', sources=None, targets=None, height=256, width=128, random_erase=False,
                  color_jitter=False, color_aug=False, use_cpu=False, split_id=0, combineall=False,
-                 batch_size=32, workers=4, num_instances=4, train_sampler=None,
+                 batch_size=32, workers=4, num_instances=4, train_sampler='',
                  cuhk03_labeled=False, cuhk03_classic_split=False, market1501_500k=False):
         
-        super(ImageDataManager, self).__init__(sources, targets=targets, height=height, width=width,
+        super(ImageDataManager, self).__init__(sources=sources, targets=targets, height=height, width=width,
                                                random_erase=random_erase, color_jitter=color_jitter,
                                                color_aug=color_aug, use_cpu=use_cpu)
 
@@ -160,13 +223,47 @@ class ImageDataManager(DataManager):
 
 
 class VideoDataManager(DataManager):
+    """Video data manager.
 
-    def __init__(self, root, sources, targets=None, height=256, width=128, random_erase=False,
+    Args:
+        root (str): root path to datasets.
+        sources (str or list): source dataset(s).
+        targets (str or list, optional): target dataset(s). If not given,
+            it equals to ``sources``.
+        height (int, optional): target image height. Default is 256.
+        width (int, optional): target image width. Default is 128.
+        random_erase (bool, optional): use random erasing. Default is False.
+        color_jitter (bool, optional): use color jittering. Default is False.
+        color_aug (bool, optional): use color augmentation. Default is False.
+        use_cpu (bool, optional): use cpu. Default is False.
+        split_id (int, optional): split id (*0-based*). Default is 0.
+        combineall (bool, optional): combine train, query and gallery in a dataset for
+            training. Default is False.
+        batch_size (int, optional): number of *tracklets* in a batch. Default is 3.
+        workers (int, optional): number of workers. Default is 4.
+        num_instances (int, optional): number of instances per identity in a batch.
+            Default is 4.
+        train_sampler (str, optional): sampler. Default is empty (``RandomSampler``).
+        seq_len (int, optional): how many images to sample in a tracklet. Default is 15.
+        sample_method (str, optional): how to sample images in a tracklet. Default is evenly.
+
+    Examples::
+
+        datamanager = torchreid.data.VideoDataManager(
+            root='reid-data',
+            sources='mars',
+            height=256,
+            width=128,
+            batch_size=32
+        )
+    """
+
+    def __init__(self, root='', sources=None, targets=None, height=256, width=128, random_erase=False,
                  color_jitter=False, color_aug=False, use_cpu=False, split_id=0, combineall=False,
                  batch_size=3, workers=4, num_instances=4, train_sampler=None,
                  seq_len=15, sample_method='evenly'):
         
-        super(VideoDataManager, self).__init__(sources, targets=targets, height=height, width=width,
+        super(VideoDataManager, self).__init__(sources=sources, targets=targets, height=height, width=width,
                                                random_erase=random_erase, color_jitter=color_jitter,
                                                color_aug=color_aug, use_cpu=use_cpu)
 

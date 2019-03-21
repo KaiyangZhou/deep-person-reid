@@ -27,17 +27,17 @@ VERSION_DICT = {
 
 
 class MSMT17(ImageDataset):
-    """MSMT17
+    """MSMT17.
 
     Reference:
-    Wei et al. Person Transfer GAN to Bridge Domain Gap for Person Re-Identification. CVPR 2018.
+        Wei et al. Person Transfer GAN to Bridge Domain Gap for Person Re-Identification. CVPR 2018.
 
-    URL: http://www.pkuvmc.com/publications/msmt17.html
+    URL: `<http://www.pkuvmc.com/publications/msmt17.html>`_
     
     Dataset statistics:
-        identities: 4101
-        images: 32621 (train) + 11659 (query) + 82161 (gallery)
-        cameras: 15
+        - identities: 4101.
+        - images: 32621 (train) + 11659 (query) + 82161 (gallery).
+        - cameras: 15.
     """
     dataset_dir = 'msmt17'
     dataset_url = None

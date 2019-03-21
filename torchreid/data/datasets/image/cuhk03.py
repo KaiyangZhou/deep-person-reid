@@ -11,18 +11,18 @@ from torchreid.utils import mkdir_if_missing, read_json, write_json
 
 
 class CUHK03(ImageDataset):
-    """CUHK03
+    """CUHK03.
 
     Reference:
-    Li et al. DeepReID: Deep Filter Pairing Neural Network for Person Re-identification. CVPR 2014.
+        Li et al. DeepReID: Deep Filter Pairing Neural Network for Person Re-identification. CVPR 2014.
 
-    URL: http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html#!
+    URL: `<http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html#!>`_
     
     Dataset statistics:
-        identities: 1360
-        images: 13164
-        cameras: 6
-        splits: 20 (classic)
+        - identities: 1360.
+        - images: 13164.
+        - cameras: 6.
+        - splits: 20 (classic).
     """
     dataset_dir = 'cuhk03'
     dataset_url = None
@@ -74,12 +74,10 @@ class CUHK03(ImageDataset):
         super(CUHK03, self).__init__(train, query, gallery, **kwargs)
 
     def preprocess_split(self):
-        """
-        This function is a bit complex and ugly, what it does is
-        1. extract data from cuhk-03.mat and save as png images
-        2. create 20 classic splits (Li et al. CVPR'14)
-        3. create new split (Zhong et al. CVPR'17)
-        """
+        # This function is a bit complex and ugly, what it does is
+        # 1. extract data from cuhk-03.mat and save as png images
+        # 2. create 20 classic splits (Li et al. CVPR'14)
+        # 3. create new split (Zhong et al. CVPR'17)
         if osp.exists(self.imgs_labeled_dir) \
            and osp.exists(self.imgs_detected_dir) \
            and osp.exists(self.split_classic_det_json_path) \

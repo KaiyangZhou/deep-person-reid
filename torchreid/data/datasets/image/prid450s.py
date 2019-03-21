@@ -13,17 +13,17 @@ from torchreid.utils import read_json, write_json
 
 
 class PRID450S(ImageDataset):
-    """PRID450S
+    """PRID450S.
 
     Reference:
-    Roth et al. Mahalanobis Distance Learning for Person Re-Identification. PR 2014.
+        Roth et al. Mahalanobis Distance Learning for Person Re-Identification. PR 2014.
 
-    URL: https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/prid450s/
+    URL: `<https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/prid450s/>`_
     
     Dataset statistics:
-        identities: 450
-        images: 900
-        cameras: 2
+        - identities: 450.
+        - images: 900.
+        - cameras: 2.
     """
     dataset_dir = 'prid450s'
     dataset_url = 'https://files.icg.tugraz.at/f/8c709245bb/?raw=1'
