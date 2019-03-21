@@ -1,7 +1,7 @@
 # Awesome-ReID
 Here is a collection of ReID-related research with links to codes and papers. You are welcome to submit [PR](https://help.github.com/articles/creating-a-pull-request/)s if you find something missing.
 
-## Table of Contents
+## Conferences
 - **[AAAI 2019](#aaai-2019)**
 - **[NeurIPS 2018](#neurips-2018)**
 - **[ECCV 2018](#eccv-2018)**

@@ -2,7 +2,7 @@
 - :dog: means that the model is initialized with [imagenet](http://www.image-net.org/) pretrained weights.
 - Results are presented in the format of **Rank1 (mAP)**.
 - Classification layer is ignored when computing the model size.
-- Unless specified otherwise, the following [data augmentation techniques](torchreid/transforms.py) are used: (1) Random2DTranslation, and (2) RandomHorizontalFlip.
+- Unless specified otherwise, the following data augmentation techniques are used: (1) Random2DTranslation, and (2) RandomHorizontalFlip.
 - Click the highlighted results to download the model weights and the training scripts.
 
 ## Image person reid

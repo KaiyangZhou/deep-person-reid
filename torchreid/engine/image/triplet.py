@@ -16,17 +16,17 @@ from torchreid import metrics
 
 class ImageTripletEngine(engine.Engine):
 
-    def __init__(self, dataset, model, optimizer, margin=0.3,
+    def __init__(self, datamanager, model, optimizer, margin=0.3,
                  weight_t=1, weight_x=1, scheduler=None, use_cpu=False,
                  label_smooth=True):
-        super(ImageTripletEngine, self).__init__(dataset, model, optimizer, scheduler, use_cpu)
+        super(ImageTripletEngine, self).__init__(datamanager, model, optimizer, scheduler, use_cpu)
 
         self.weight_t = weight_t
         self.weight_x = weight_x
         
         self.criterion_t = TripletLoss(margin=margin)
         self.criterion_x = CrossEntropyLoss(
-            num_classes=self.dataset.num_train_pids,
+            num_classes=self.datamanager.num_train_pids,
             use_gpu=self.use_gpu,
             label_smooth=label_smooth
         )

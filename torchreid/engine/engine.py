@@ -19,8 +19,8 @@ from torchreid import metrics
 
 class Engine(object):
 
-    def __init__(self, dataset, model, optimizer, scheduler=None, use_cpu=False):
-        self.dataset = dataset
+    def __init__(self, datamanager, model, optimizer, scheduler=None, use_cpu=False):
+        self.datamanager = datamanager
         self.model = model
         self.optimizer = optimizer
         self.scheduler = scheduler
@@ -36,7 +36,7 @@ class Engine(object):
             start_eval=0, eval_freq=-1, save_dir='log', test_only=False, print_freq=10,
             dist_metric='euclidean', visrank=False, visrank_topk=20,
             use_metric_cuhk03=False, ranks=[1, 5, 10, 20]):
-        trainloader, testloader = self.dataset.return_dataloaders()
+        trainloader, testloader = self.datamanager.return_dataloaders()
 
         if test_only:
             self.test(testloader, dist_metric, visrank, visrank_topk,
@@ -151,7 +151,7 @@ class Engine(object):
             use_metric_cuhk03=use_metric_cuhk03
         )
 
-        print('** Results')
+        print('** Results **')
         print('mAP: {:.1%}'.format(mAP))
         print('CMC curve')
         for r in ranks:
@@ -160,7 +160,7 @@ class Engine(object):
         if visrank:
             visualize_ranked_results(
                 distmat,
-                self.dataset.return_testdataset_by_name(dataset_name),
+                self.datamanager.return_testdataset_by_name(dataset_name),
                 save_dir=osp.join(save_dir, 'ranked_results', dataset_name),
                 topk=visrank_topk
             )

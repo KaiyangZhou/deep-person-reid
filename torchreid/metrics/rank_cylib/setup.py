@@ -11,6 +11,7 @@ def numpy_include():
         numpy_include = np.get_numpy_include()
     return numpy_include
 
+
 ext_modules = [
     Extension(
         'rank_cy',

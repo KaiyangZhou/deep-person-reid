@@ -118,5 +118,5 @@ debug.py
 .idea
 
 # Cython eval code
-torchreid/eval_cylib/eval_metrics_cy.c
-torchreid/eval_cylib/*.html
+*.c
+*.html

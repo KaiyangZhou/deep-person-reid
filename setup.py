@@ -1,4 +1,7 @@
 from setuptools import find_packages, setup
+from distutils.extension import Extension
+from Cython.Build import cythonize
+import numpy as np
 
 
 def readme():
@@ -12,6 +15,23 @@ def find_version():
     with open(version_file, 'r') as f:
         exec(compile(f.read(), version_file, 'exec'))
     return locals()['__version__']
+
+
+def numpy_include():
+    try:
+        numpy_include = np.get_include()
+    except AttributeError:
+        numpy_include = np.get_numpy_include()
+    return numpy_include
+
+
+ext_modules = [
+    Extension(
+        'torchreid.metrics.rank_cylib.rank_cy',
+        ['torchreid/metrics/rank_cylib/rank_cy.pyx'],
+        include_dirs=[numpy_include()],
+    )
+]
 
 
 setup(
@@ -38,5 +58,6 @@ setup(
         'Person Re-Identification',
         'Deep Learning',
         'Computer Vision'
-    ]
+    ],
+    ext_modules=cythonize(ext_modules)
 )

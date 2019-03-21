@@ -16,12 +16,12 @@ from torchreid import metrics
 
 class ImageSoftmaxEngine(engine.Engine):
 
-    def __init__(self, dataset, model, optimizer, scheduler=None, use_cpu=False,
+    def __init__(self, datamanager, model, optimizer, scheduler=None, use_cpu=False,
                  label_smooth=True):
-        super(ImageSoftmaxEngine, self).__init__(dataset, model, optimizer, scheduler, use_cpu)
+        super(ImageSoftmaxEngine, self).__init__(datamanager, model, optimizer, scheduler, use_cpu)
         
         self.criterion = CrossEntropyLoss(
-            num_classes=self.dataset.num_train_pids,
+            num_classes=self.datamanager.num_train_pids,
             use_gpu=self.use_gpu,
             label_smooth=label_smooth
         )

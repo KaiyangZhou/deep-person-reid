@@ -14,8 +14,8 @@ try:
 except ImportError:
     IS_CYTHON_AVAI = False
     warnings.warn(
-        'Cython evaluation (very fast, highly recommended) is unavailable, '
-        'now use python evaluation.'
+        'Cython evaluation (very fast so highly recommended) is '
+        'unavailable, now use python evaluation.'
     )
 
 
