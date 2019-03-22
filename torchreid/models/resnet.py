@@ -97,10 +97,10 @@ class Bottleneck(nn.Module):
 
 
 class ResNet(nn.Module):
-    """Residual network
+    """Residual network.
     
     Reference:
-    He et al. Deep Residual Learning for Image Recognition. CVPR 2016.
+        He et al. Deep Residual Learning for Image Recognition. CVPR 2016.
     """
     
     def __init__(self, num_classes, loss, block, layers,

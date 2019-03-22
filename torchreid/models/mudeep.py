@@ -155,7 +155,8 @@ class MuDeep(nn.Module):
     """Multiscale deep neural network.
 
     Reference:
-    Qian et al. Multi-scale Deep Learning Architectures for Person Re-identification. ICCV 2017.
+        Qian et al. Multi-scale Deep Learning Architectures
+        for Person Re-identification. ICCV 2017.
     """
     
     def __init__(self, num_classes, loss='softmax', **kwargs):

@@ -116,11 +116,11 @@ class DimReduceLayer(nn.Module):
 
 
 class PCB(nn.Module):
-    """Part-based Convolutional Baseline
+    """Part-based Convolutional Baseline.
 
     Reference:
-    Sun et al. Beyond Part Models: Person Retrieval with Refined
-    Part Pooling (and A Strong Convolutional Baseline). ECCV 2018.
+        Sun et al. Beyond Part Models: Person Retrieval with Refined
+        Part Pooling (and A Strong Convolutional Baseline). ECCV 2018.
     """
     
     def __init__(self, num_classes, loss, block, layers,

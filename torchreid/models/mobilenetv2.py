@@ -65,10 +65,11 @@ class Bottleneck(nn.Module):
 
 
 class MobileNetV2(nn.Module):
-    """MobileNetV2
+    """MobileNetV2.
 
     Reference:
-    Sandler et al. MobileNetV2: Inverted Residuals and Linear Bottlenecks. CVPR 2018.
+        Sandler et al. MobileNetV2: Inverted Residuals and
+        Linear Bottlenecks. CVPR 2018.
     """
 
     def __init__(self, num_classes, width_mult=1, loss='softmax', fc_dims=None, dropout_p=None, **kwargs):

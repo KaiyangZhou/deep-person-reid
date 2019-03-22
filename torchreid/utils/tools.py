@@ -20,29 +20,40 @@ from PIL import Image
 import torch
 
 
-def mkdir_if_missing(directory):
-    if not osp.exists(directory):
+def mkdir_if_missing(dirname):
+    """Creates dirname if it is missing."""
+    if not osp.exists(dirname):
         try:
-            os.makedirs(directory)
+            os.makedirs(dirname)
         except OSError as e:
             if e.errno != errno.EEXIST:
                 raise
 
 
-def check_isfile(path):
-    isfile = osp.isfile(path)
+def check_isfile(fpath):
+    """Checks if the given path is a file.
+
+    Args:
+        fpath (str): file path.
+
+    Returns:
+       bool
+    """
+    isfile = osp.isfile(fpath)
     if not isfile:
-        warnings.warn('No file found at "{}"'.format(path))
+        warnings.warn('No file found at "{}"'.format(fpath))
     return isfile
 
 
 def read_json(fpath):
+    """Reads json file from a path."""
     with open(fpath, 'r') as f:
         obj = json.load(f)
     return obj
 
 
 def write_json(obj, fpath):
+    """Writes to a json file."""
     mkdir_if_missing(osp.dirname(fpath))
     with open(fpath, 'w') as f:
         json.dump(obj, f, indent=4, separators=(',', ': '))
@@ -56,6 +67,12 @@ def set_random_seed(seed):
 
 
 def download_url(url, dst):
+    """Downloads file from a url to a destination.
+
+    Args:
+        url (str): url to download file.
+        dst (str): destination path.
+    """
     from six.moves import urllib
     print('* url="{}"'.format(url))
     print('* destination="{}"'.format(dst))
@@ -78,6 +95,14 @@ def download_url(url, dst):
 
 
 def read_image(path):
+    """Reads image from path using ``PIL.Image``.
+
+    Args:
+        path (str): path to an image.
+
+    Returns:
+        PIL image
+    """
     got_img = False
     if not osp.exists(path):
         raise IOError('"{}" does not exist'.format(path))

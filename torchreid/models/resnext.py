@@ -58,10 +58,11 @@ class ResNeXtBottleneck(nn.Module):
 
 
 class ResNeXt(nn.Module):
-    """ResNeXt
+    """ResNeXt.
     
     Reference:
-    Xie et al. Aggregated Residual Transformations for Deep Neural Networks. CVPR 2017.
+        Xie et al. Aggregated Residual Transformations for Deep
+        Neural Networks. CVPR 2017.
     """
     
     def __init__(self, num_classes, loss, block, layers,

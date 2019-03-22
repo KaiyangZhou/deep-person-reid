@@ -11,18 +11,17 @@ import shutil
 from .tools import mkdir_if_missing
 
 
-def visualize_ranked_results(distmat, dataset, save_dir='log/ranked_results', topk=20):
-    """Visualizes ranked results
+def visualize_ranked_results(distmat, dataset, save_dir='', topk=20):
+    """Visualizes ranked results.
 
-    Support both imgreid and vidreid
+    Supports both image-reid and video-reid.
 
     Args:
-        distmat: distance matrix of shape (num_query, num_gallery).
-        dataset: a 2-tuple containing (query, gallery), each contains a list of (img_path, pid, camid);
-            for imgreid, img_path is a string, while for vidreid, img_path is a tuple containing
-            a sequence of strings.
-        save_dir: directory to save output images.
-        topk: int, denoting top-k images in the rank list to be visualized.
+        distmat (numpy.ndarray): distance matrix of shape (num_query, num_gallery).
+        dataset (tuple): a 2-tuple containing (query, gallery), each of which contains
+            tuples of (img_path(s), pid, camid).
+        save_dir (str): directory to save output images.
+        topk (int, optional): denoting top-k images in the rank list to be visualized.
     """
     num_q, num_g = distmat.shape
 

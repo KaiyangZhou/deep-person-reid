@@ -140,6 +140,7 @@ class Engine(object):
         print('Speed: {:.4f} sec/batch'.format(batch_time.avg))
 
         distmat = metrics.compute_distance_matrix(qf, gf, dist_metric)
+        distmat = distmat.numpy()
 
         print('Computing CMC and mAP ...')
         cmc, mAP = metrics.evaluate_rank(

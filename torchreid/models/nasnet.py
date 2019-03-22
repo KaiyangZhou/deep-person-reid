@@ -530,9 +530,11 @@ class ReductionCell1(nn.Module):
 
 
 class NASNetAMobile(nn.Module):
-    """Neural Architecture Search (NAS)
+    """Neural Architecture Search (NAS).
 
-    Zoph et al. Learning Transferable Architectures for Scalable Image Recognition. CVPR 2018.
+    Reference:
+        Zoph et al. Learning Transferable Architectures
+        for Scalable Image Recognition. CVPR 2018.
     """
     
     def __init__(self, num_classes, loss, stem_filters=32, penultimate_filters=1056, filters_multiplier=2, **kwargs):

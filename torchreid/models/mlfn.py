@@ -87,10 +87,11 @@ class MLFNBlock(nn.Module):
 
 
 class MLFN(nn.Module):
-    """Multi-Level Factorisation Nets
+    """Multi-Level Factorisation Nets.
 
     Reference:
-    Chang et al. Multi-Level Factorisation Net for Person Re-Identification. CVPR 2018.
+        Chang et al. Multi-Level Factorisation Net for
+        Person Re-Identification. CVPR 2018.
     """
     
     def __init__(self, num_classes, loss='softmax', groups=32, channels=[64, 256, 512, 1024, 2048], embed_dim=1024, **kwargs):

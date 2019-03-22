@@ -9,12 +9,12 @@ class TripletLoss(nn.Module):
     """Triplet loss with hard positive/negative mining.
     
     Reference:
-    Hermans et al. In Defense of the Triplet Loss for Person Re-Identification. arXiv:1703.07737.
+        Hermans et al. In Defense of the Triplet Loss for Person Re-Identification. arXiv:1703.07737.
     
-    Imported from https://github.com/Cysu/open-reid/blob/master/reid/loss/triplet.py.
+    Imported from `<https://github.com/Cysu/open-reid/blob/master/reid/loss/triplet.py>`_.
     
     Args:
-        margin (float): margin for triplet.
+        margin (float, optional): margin for triplet. Default is 0.3.
     """
     
     def __init__(self, margin=0.3):
@@ -25,8 +25,8 @@ class TripletLoss(nn.Module):
     def forward(self, inputs, targets):
         """
         Args:
-            inputs: feature matrix with shape (batch_size, feat_dim)
-            targets: ground truth labels with shape (num_classes)
+            inputs (torch.Tensor): feature matrix with shape (batch_size, feat_dim).
+            targets (torch.LongTensor): ground truth labels with shape (num_classes).
         """
         n = inputs.size(0)
         

@@ -5,7 +5,14 @@ __all__ = ['AverageMeter']
 
 
 class AverageMeter(object):
-    """Computes and stores the average and current value"""
+    """Computes and stores the average and current value.
+
+    Examples::
+        >>> # Initialize a meter to record loss
+        >>> losses = AverageMeter()
+        >>> # Update meter after every minibatch update
+        >>> losses.update(loss_value, batch_size)
+    """
     def __init__(self):
         self.reset()
 

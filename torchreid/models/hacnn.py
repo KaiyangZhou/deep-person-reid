@@ -189,14 +189,14 @@ class HACNN(nn.Module):
     """Harmonious Attention Convolutional Neural Network.
 
     Reference:
-    Li et al. Harmonious Attention Network for Person Re-identification. CVPR 2018.
-
-    Args:
-        num_classes (int): number of classes to predict
-        nchannels (list): number of channels AFTER concatenation
-        feat_dim (int): feature dimension for a single stream
-        learn_region (bool): whether to learn region features (i.e. local branch)
+        Li et al. Harmonious Attention Network for Person Re-identification. CVPR 2018.
     """
+
+    # Args:
+    #    num_classes (int): number of classes to predict
+    #    nchannels (list): number of channels AFTER concatenation
+    #    feat_dim (int): feature dimension for a single stream
+    #    learn_region (bool): whether to learn region features (i.e. local branch)
     
     def __init__(self, num_classes, loss='softmax', nchannels=[128, 256, 384], feat_dim=512, learn_region=True, use_gpu=True, **kwargs):
         super(HACNN, self).__init__()

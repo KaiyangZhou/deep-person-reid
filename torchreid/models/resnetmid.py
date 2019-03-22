@@ -96,12 +96,12 @@ class Bottleneck(nn.Module):
         return out
 
 
-class ResNet(nn.Module):
+class ResNetMid(nn.Module):
     """Residual network + mid-level features.
     
     Reference:
-    Yu et al. The Devil is in the Middle: Exploiting Mid-level Representations for
-    Cross-Domain Instance Matching. arXiv:1711.08106.
+        Yu et al. The Devil is in the Middle: Exploiting Mid-level Representations for
+        Cross-Domain Instance Matching. arXiv:1711.08106.
     """
     
     def __init__(self, num_classes, loss, block, layers,
@@ -109,7 +109,7 @@ class ResNet(nn.Module):
                  fc_dims=None,
                  **kwargs):
         self.inplanes = 64
-        super(ResNet, self).__init__()
+        super(ResNetMid, self).__init__()
         self.loss = loss
         self.feature_dim = 512 * block.expansion
         
@@ -255,7 +255,7 @@ resnet152: block=Bottleneck, layers=[3, 8, 36, 3]
 
 
 def resnet50mid(num_classes, loss='softmax', pretrained=True, **kwargs):
-    model = ResNet(
+    model = ResNetMid(
         num_classes=num_classes,
         loss=loss,
         block=Bottleneck,

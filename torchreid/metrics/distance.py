@@ -9,6 +9,24 @@ from torch.nn import functional as F
 
 
 def compute_distance_matrix(input1, input2, metric='euclidean'):
+    """A wrapper function for computing distance matrix.
+
+    Args:
+        input1 (torch.Tensor): 2-D feature matrix.
+        input2 (torch.Tensor): 2-D feature matrix.
+        metric (str, optional): "euclidean" or "cosine".
+            Default is "euclidean".
+
+    Returns:
+        torch.Tensor: distance matrix.
+
+    Examples::
+       >>> from torchreid import metrics
+       >>> input1 = torch.rand(10, 2048)
+       >>> input2 = torch.rand(100, 2048)
+       >>> distmat = metrics.compute_distance_matrix(input1, input2)
+       >>> distmat.size() # (10, 100)
+    """
     # check input
     assert isinstance(input1, torch.Tensor)
     assert isinstance(input2, torch.Tensor)
@@ -30,31 +48,33 @@ def compute_distance_matrix(input1, input2, metric='euclidean'):
 
 
 def euclidean_squared_distance(input1, input2):
-    """
+    """Computes euclidean squared distance.
+
     Args:
-        input1 (torch.Tensor): 2-D feature matrix
-        input2 (torch.Tensor): 2-D feature matrix
+        input1 (torch.Tensor): 2-D feature matrix.
+        input2 (torch.Tensor): 2-D feature matrix.
 
     Returns:
-        distmat (numpy.ndarray): distance matrix
+        torch.Tensor: distance matrix.
     """
     m, n = input1.size(0), input2.size(0)
     distmat = torch.pow(input1, 2).sum(dim=1, keepdim=True).expand(m, n) + \
               torch.pow(input2, 2).sum(dim=1, keepdim=True).expand(n, m).t()
     distmat.addmm_(1, -2, input1, input2.t())
-    return distmat.numpy()
+    return distmat
 
 
 def cosine_distance(input1, input2):
-    """
+    """Computes cosine distance.
+
     Args:
-        input1 (torch.Tensor): 2-D feature matrix
-        input2 (torch.Tensor): 2-D feature matrix
+        input1 (torch.Tensor): 2-D feature matrix.
+        input2 (torch.Tensor): 2-D feature matrix.
 
     Returns:
-        distmat (numpy.ndarray): distance matrix
+        torch.Tensor: distance matrix.
     """
     input1_normed = F.normalize(input1, p=2, dim=1)
     input2_normed = F.normalize(input2, p=2, dim=1)
     distmat = 1 - torch.mm(input1_normed, input2_normed.t())
-    return distmat.numpy()
+    return distmat

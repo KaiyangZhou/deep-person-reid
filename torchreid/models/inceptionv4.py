@@ -268,16 +268,16 @@ class Inception_C(nn.Module):
         return out
 
 
-class InceptionV4Base(nn.Module):
-    """Inception-v4
+class InceptionV4(nn.Module):
+    """Inception-v4.
 
     Reference:
-    Szegedy et al. Inception-v4, Inception-ResNet and the Impact of Residual
-    Connections on Learning. AAAI 2017.
+        Szegedy et al. Inception-v4, Inception-ResNet and the Impact of Residual
+        Connections on Learning. AAAI 2017.
     """
     
     def __init__(self, num_classes, loss, **kwargs):
-        super(InceptionV4Base, self).__init__()
+        super(InceptionV4, self).__init__()
         self.loss = loss
 
         self.features = nn.Sequential(
@@ -339,7 +339,7 @@ def init_pretrained_weights(model, model_url):
 
 
 def inceptionv4(num_classes, loss='softmax', pretrained=True, **kwargs):
-    model = InceptionV4Base(num_classes, loss, **kwargs)
+    model = InceptionV4(num_classes, loss, **kwargs)
     if pretrained:
         model_url = pretrained_settings['inceptionv4']['imagenet']['url']
         init_pretrained_weights(model, model_url)

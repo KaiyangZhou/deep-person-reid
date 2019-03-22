@@ -77,11 +77,11 @@ cfg = {
 
 
 class ShuffleNet(nn.Module):
-    """ShuffleNet
+    """ShuffleNet.
 
     Reference:
-    Zhang et al. ShuffleNet: An Extremely Efficient Convolutional Neural
-    Network for Mobile Devices. CVPR 2018.
+        Zhang et al. ShuffleNet: An Extremely Efficient Convolutional Neural
+        Network for Mobile Devices. CVPR 2018.
     """
     
     def __init__(self, num_classes, loss='softmax', num_groups=3, **kwargs):

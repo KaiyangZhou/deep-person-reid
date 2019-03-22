@@ -20,6 +20,7 @@ Torchreid documentation
    pkg/engine
    pkg/losses
    pkg/metrics
+   pkg/models
    pkg/optim
    pkg/utils
 

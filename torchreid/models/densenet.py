@@ -64,7 +64,7 @@ class DenseNet(nn.Module):
     """Densely connected network.
     
     Reference:
-    Huang et al. Densely Connected Convolutional Networks. CVPR 2017.
+        Huang et al. Densely Connected Convolutional Networks. CVPR 2017.
     """
     def __init__(self, num_classes, loss, growth_rate=32, block_config=(6, 12, 24, 16),
                  num_init_features=64, bn_size=4, drop_rate=0, fc_dims=None, dropout_p=None, **kwargs):

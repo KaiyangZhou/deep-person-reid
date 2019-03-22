@@ -254,7 +254,7 @@ class VideoDataManager(DataManager):
             sources='mars',
             height=256,
             width=128,
-            batch_size=32
+            batch_size=3
         )
     """
 

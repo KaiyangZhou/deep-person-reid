@@ -8,6 +8,27 @@ AVAI_SCH = ['single_step', 'multi_step']
 
 
 def build_lr_scheduler(optimizer, lr_scheduler, stepsize, gamma=0.1):
+    """A function wrapper for building a learning rate scheduler.
+
+    Args:
+        optimizer (Optimizer): an Optimizer.
+        lr_scheduler (str): learning rate scheduler method. Currently supports
+            "single_step" and "multi_step".
+        stepsize (int or list): step size to decay learning rate. When ``lr_scheduler`` is
+            "single_step", ``stepsize`` should be an integer. When ``lr_scheduler`` is
+            "multi_step", ``stepsize`` is a list.
+        gamma (float, optional): decay rate. Default is 0.1.
+
+    Examples::
+        >>> # Decay learning rate by every 20 epochs.
+        >>> scheduler = torchreid.optim.build_lr_scheduler(
+        >>>     optimizer, lr_scheduler='single_step', stepsize=20
+        >>> )
+        >>> # Decay learning rate at 30, 50 and 55 epochs.
+        >>> scheduler = torchreid.optim.build_lr_scheduler(
+        >>>     optimizer, lr_scheduler='multi_step', stepsize=[30, 50, 55]
+        >>> )
+    """
     if lr_scheduler not in AVAI_SCH:
         raise ValueError('Unsupported scheduler: {}. Must be one of {}'.format(lr_scheduler, AVAI_SCH))
 
