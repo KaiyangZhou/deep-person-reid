@@ -1,3 +1,5 @@
+.. _torchreid_data:
+
 torchreid.data
 ==============
 
@@ -6,78 +8,82 @@ Data Manager
 ---------------------------
 
 .. automodule:: torchreid.data.datamanager
-   :members:
+    :members:
 
 
 Sampler
 -----------------------
 
 .. automodule:: torchreid.data.sampler
-   :members:
+    :members:
 
 
 Transforms
 ---------------------------
 
 .. automodule:: torchreid.data.transforms
-   :members:
+    :members:
 
 
 Dataset
 ---------------------------
 
 .. automodule:: torchreid.data.datasets.dataset
-   :members:
+    :members:
+
+
+.. automodule:: torchreid.data.datasets.__init__
+    :members:
 
 
 Image Datasets
 ------------------------------
 
 .. automodule:: torchreid.data.datasets.image.market1501
-   :members:
+    :members:
 
 .. automodule:: torchreid.data.datasets.image.cuhk03
-   :members:
+    :members:
 
 .. automodule:: torchreid.data.datasets.image.dukemtmcreid
-   :members:
+    :members:
 
 .. automodule:: torchreid.data.datasets.image.msmt17
-   :members:
+    :members:
 
 .. automodule:: torchreid.data.datasets.image.viper
-   :members:
+    :members:
 
 .. automodule:: torchreid.data.datasets.image.grid
-   :members:
+    :members:
 
 .. automodule:: torchreid.data.datasets.image.cuhk01
-   :members:
+    :members:
 
 .. automodule:: torchreid.data.datasets.image.prid450s
-   :members:
+    :members:
 
 .. automodule:: torchreid.data.datasets.image.ilids
-   :members:
+    :members:
 
 .. automodule:: torchreid.data.datasets.image.sensereid
-   :members:
+    :members:
 
 .. automodule:: torchreid.data.datasets.image.prid
-   :members:
+    :members:
 
 
 Video Datasets
 ------------------------------
 
 .. automodule:: torchreid.data.datasets.video.mars
-   :members:
+    :members:
 
 .. automodule:: torchreid.data.datasets.video.ilidsvid
-   :members:
+    :members:
 
 .. automodule:: torchreid.data.datasets.video.prid2011
-   :members:
+    :members:
 
 .. automodule:: torchreid.data.datasets.video.dukemtmcvidreid
-   :members:
+    :members:

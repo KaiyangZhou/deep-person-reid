@@ -4,32 +4,30 @@ Torchreid documentation
 
 
 .. toctree::
-   :maxdepth: 3
-   :hidden:
+    :hidden:
 
-   tutorial
-   datasets
-   evaluation
-
-.. toctree::
-   :maxdepth: 3
-   :caption: Package Reference
-   :hidden:
-
-   pkg/data
-   pkg/engine
-   pkg/losses
-   pkg/metrics
-   pkg/models
-   pkg/optim
-   pkg/utils
+    user_guide
+    datasets
+    evaluation
 
 .. toctree::
-   :maxdepth: 1
-   :caption: Resources
-   :hidden:
+    :caption: Package Reference
+    :hidden:
 
-   AWESOME_REID.md
+    pkg/data
+    pkg/engine
+    pkg/losses
+    pkg/metrics
+    pkg/models
+    pkg/optim
+    pkg/utils
+
+.. toctree::
+    :caption: Resources
+    :hidden:
+
+    AWESOME_REID.md
+    MODEL_ZOO.md
 
 
 Indices and tables

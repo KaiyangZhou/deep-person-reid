@@ -15,6 +15,52 @@ from torchreid import metrics
 
 
 class ImageSoftmaxEngine(engine.Engine):
+    """Softmax-loss engine for image-reid.
+
+    Args:
+        datamanager (DataManager): an instance of ``torchreid.data.ImageDataManager``
+            or ``torchreid.data.VideoDataManager``.
+        model (nn.Module): model instance.
+        optimizer (Optimizer): an Optimizer.
+        scheduler (LRScheduler, optional): if None, no learning rate decay will be performed.
+        use_cpu (bool, optional): use cpu. Default is False.
+        label_smooth (bool, optional): use label smoothing regularizer. Default is True.
+
+    Examples::
+        
+        import torch
+        import torchreid
+        datamanager = torchreid.data.ImageDataManager(
+            root='path/to/reid-data',
+            sources='market1501',
+            height=256,
+            width=128,
+            combineall=False,
+            batch_size=32
+        )
+        model = torchreid.models.build_model(
+            name='resnet50',
+            num_classes=datamanager.num_train_pids,
+            loss='softmax'
+        )
+        model = model.cuda()
+        optimizer = torchreid.optim.build_optimizer(
+            model, optim='adam', lr=0.0003
+        )
+        scheduler = torchreid.optim.build_lr_scheduler(
+            optimizer,
+            lr_scheduler='single_step',
+            stepsize=20
+        )
+        engine = torchreid.engine.ImageSoftmaxEngine(
+            datamanager, model, optimizer, scheduler=scheduler
+        )
+        engine.run(
+            max_epoch=60,
+            save_dir='log/resnet50-softmax-market1501',
+            print_freq=10
+        )
+    """
 
     def __init__(self, datamanager, model, optimizer, scheduler=None, use_cpu=False,
                  label_smooth=True):
@@ -27,6 +73,15 @@ class ImageSoftmaxEngine(engine.Engine):
         )
 
     def train(self, epoch, trainloader, fixbase=False, open_layers=None, print_freq=10):
+        """Trains the model for one epoch on source datasets using softmax loss.
+
+        Args:
+            epoch (int): current epoch.
+            trainloader (Dataloader): training dataloader.
+            fixbase (bool, optional): whether to fix base layers. Default is False.
+            open_layers (str or list, optional): layers open for training.
+            print_freq (int, optional): print frequency. Default is 10.
+        """
         losses = AverageMeter()
         accs = AverageMeter()
         batch_time = AverageMeter()

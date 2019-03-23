@@ -30,6 +30,7 @@ __video_datasets = {
 
 
 def init_image_dataset(name, **kwargs):
+    """Initializes an image dataset."""
     avai_datasets = list(__image_datasets.keys())
     if name not in avai_datasets:
         raise ValueError('Invalid dataset name. Received "{}", but expected to be one of {}'.format(name, avai_datasets))
@@ -37,20 +38,65 @@ def init_image_dataset(name, **kwargs):
 
 
 def init_video_dataset(name, **kwargs):
+    """Initializes a video dataset."""
     avai_datasets = list(__video_datasets.keys())
     if name not in avai_datasets:
         raise ValueError('Invalid dataset name. Received "{}", but expected to be one of {}'.format(name, avai_datasets))
     return __video_datasets[name](**kwargs)
 
 
-def add_image_dataset(name, dataset_):
+def register_image_dataset(name, dataset_):
+    """Registers a custom image dataset.
+
+    Args:
+        name (str): key corresponding to the custom dataset.
+        dataset_ (Dataset): the custom dataset class.
+
+    Examples::
+        
+        import torchreid
+        import CustomDataset
+        torchreid.data.register_image_dataset('custom_dataset', CustomDataset)
+        # single dataset case
+        datamanager = torchreid.data.ImageDataManager(
+            root='reid-data',
+            sources='custom_dataset'
+        )
+        # multiple dataset case
+        datamanager = torchreid.data.ImageDataManager(
+            root='reid-data',
+            sources=['custom_dataset', 'dukemtmcreid']
+        )
+    """
     curr_datasets = list(__image_datasets.keys())
     if name in curr_datasets:
         raise ValueError('The given name already exists, please choose another name excluding {}'.format(curr_datasets))
     __image_datasets[name] = dataset_
 
 
-def add_video_dataset(name, dataset_):
+def register_video_dataset(name, dataset_):
+    """Registers a custom video dataset.
+
+    Args:
+        name (str): key corresponding to the custom dataset.
+        dataset_ (Dataset): the custom dataset class.
+
+    Examples::
+        
+        import torchreid
+        import CustomDataset
+        torchreid.data.register_video_dataset('custom_dataset', CustomDataset)
+        # single dataset case
+        datamanager = torchreid.data.VideoDataManager(
+            root='reid-data',
+            sources='custom_dataset'
+        )
+        # multiple dataset case
+        datamanager = torchreid.data.VideoDataManager(
+            root='reid-data',
+            sources=['custom_dataset', 'ilidsvid']
+        )
+    """
     curr_datasets = list(__video_datasets.keys())
     if name in curr_datasets:
         raise ValueError('The given name already exists, please choose another name excluding {}'.format(curr_datasets))

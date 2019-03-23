@@ -7,6 +7,7 @@ import os
 import os.path as osp
 import glob
 import re
+import warnings
 
 from torchreid.data.datasets import ImageDataset
 
@@ -36,6 +37,10 @@ class Market1501(ImageDataset):
         data_dir = osp.join(self.data_dir, 'Market-1501-v15.09.15')
         if osp.isdir(data_dir):
             self.data_dir = data_dir
+        else:
+            warnings.warn('The current data structure is deprecated. Please '
+                          'put data folders such as "bounding_box_train" under '
+                          '"Market-1501-v15.09.15".')
         
         self.train_dir = osp.join(self.data_dir, 'bounding_box_train')
         self.query_dir = osp.join(self.data_dir, 'query')

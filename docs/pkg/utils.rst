@@ -1,3 +1,5 @@
+.. _torchreid_utils:
+
 torchreid.utils
 =================
 
@@ -5,31 +7,31 @@ Average Meter
 --------------
 
 .. automodule:: torchreid.utils.avgmeter
-   :members:
+    :members:
 
 
 Loggers
 -------
 
 .. automodule:: torchreid.utils.loggers
-   :members:
+    :members:
 
 
 Generic Tools
 ---------------
 .. automodule:: torchreid.utils.tools
-   :members:
+    :members:
 
 
 ReID Tools
 ----------
 
 .. automodule:: torchreid.utils.reidtools
-   :members:
+    :members:
 
 
 Torch Tools
 ------------
 
 .. automodule:: torchreid.utils.torchtools
-   :members:
+    :members:

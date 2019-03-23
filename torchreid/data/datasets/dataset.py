@@ -208,6 +208,11 @@ class ImageDataset(Dataset):
     """A base class representing ImageDataset.
 
     All other image datasets should subclass it.
+
+    ``__getitem__`` returns an image given index.
+    It will return ``img``, ``pid``, ``camid`` and ``img_path``
+    where ``img`` has shape (channel, height, width). As a result,
+    data in each batch has shape (batch_size, channel, height, width).
     """
 
     def __init__(self, train, query, gallery, **kwargs):
@@ -239,6 +244,11 @@ class VideoDataset(Dataset):
     """A base class representing VideoDataset.
 
     All other video datasets should subclass it.
+
+    ``__getitem__`` returns an image given index.
+    It will return ``imgs``, ``pid`` and ``camid``
+    where ``imgs`` has shape (seq_len, channel, height, width). As a result,
+    data in each batch has shape (batch_size, seq_len, channel, height, width).
     """
 
     def __init__(self, train, query, gallery, seq_len=15, sample_method='evenly', **kwargs):

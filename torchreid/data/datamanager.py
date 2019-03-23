@@ -106,7 +106,7 @@ class ImageDataManager(DataManager):
     Examples::
 
         datamanager = torchreid.data.ImageDataManager(
-            root='reid-data',
+            root='path/to/reid-data',
             sources='market1501',
             height=256,
             width=128,
@@ -245,16 +245,21 @@ class VideoDataManager(DataManager):
             Default is 4.
         train_sampler (str, optional): sampler. Default is empty (``RandomSampler``).
         seq_len (int, optional): how many images to sample in a tracklet. Default is 15.
-        sample_method (str, optional): how to sample images in a tracklet. Default is evenly.
+        sample_method (str, optional): how to sample images in a tracklet. Default is "evenly".
+            Choices are ["evenly", "random", "all"]. "evenly" and "random" sample ``seq_len``
+            images in a tracklet while "all" samples all images in a tracklet, thus ``batch_size``
+            needs to be set to 1.
 
     Examples::
 
         datamanager = torchreid.data.VideoDataManager(
-            root='reid-data',
+            root='path/to/reid-data',
             sources='mars',
             height=256,
             width=128,
-            batch_size=3
+            batch_size=3,
+            seq_len=15,
+            sample_method='evenly'
         )
     """
 

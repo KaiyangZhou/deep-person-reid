@@ -1,3 +1,5 @@
+.. _torchreid_optim:
+
 torchreid.optim
 =================
 
@@ -5,12 +7,12 @@ torchreid.optim
 Optimizer
 ----------
 
-.. automodule:: torchreid.optim.optimizers
-   :members: build_optimizer
+.. automodule:: torchreid.optim.optimizer
+    :members: build_optimizer
 
 
 LR Scheduler
 -------------
 
-.. automodule:: torchreid.optim.lr_schedulers
-   :members: build_lr_scheduler
+.. automodule:: torchreid.optim.lr_scheduler
+    :members: build_lr_scheduler

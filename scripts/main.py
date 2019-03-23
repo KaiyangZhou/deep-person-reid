@@ -5,8 +5,8 @@ datamanager = torchreid.data.ImageDataManager(
     sources='market1501',
     height=128,
     width=64,
-    combineall=True,
-    batch_size=5
+    combineall=False,
+    batch_size=16
 )
 model = torchreid.models.build_model(
     name='squeezenet1_0',
@@ -14,6 +14,6 @@ model = torchreid.models.build_model(
     loss='softmax'
 )
 optimizer = torchreid.optim.build_optimizer(model)
-scheduler = torchreid.optim.build_lr_scheduler(optimizer, lr_scheduler='multi_step', stepsize=[10, 20])
+scheduler = torchreid.optim.build_lr_scheduler(optimizer, lr_scheduler='single_step', stepsize=20)
 engine = torchreid.engine.ImageSoftmaxEngine(datamanager, model, optimizer, scheduler=scheduler)
 #engine.run(max_epoch=1, print_freq=1, fixbase_epoch=0, open_layers='classifier', test_only=True)

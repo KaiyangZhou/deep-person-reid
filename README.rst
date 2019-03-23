@@ -1,9 +1,9 @@
-Torchreid is a library built on `PyTorch <https://pytorch.org/>`_ for research on deep-learning person re-identification.
+Torchreid is a library built on `PyTorch <https://pytorch.org/>`_ for deep-learning person re-identification.
 
 It features:
 
 - multi-GPU training
-- support both image reid and video reid
+- support both image- and video-reid
 - end-to-end training and evaluation
 - incredibly easy preparation of reid datasets
 - multi-dataset training
@@ -30,10 +30,73 @@ xx-xx-2019: Torchreid documentation is out!
 
 Get started: 30 seconds to Torchreid
 -------------------------------------
-1. Load dataset
-2. Build model, optimizer and lr_scheduler
-3. Build engine
-4. Runers
+1. Import ``torchreid``
+
+.. code-block:: python
+    
+    import torchreid
+
+2. Load data manager
+
+.. code-block:: python
+    
+    datamanager = torchreid.data.ImageDataManager(
+        root='reid-data',
+        sources='market1501',
+        height=256,
+        width=128,
+        batch_size=32,
+        market1501_500k=False
+    )
+
+3 Build model, optimizer and lr_scheduler
+
+.. code-block:: python
+    
+    model = torchreid.models.build_model(
+        name='resnet50',
+        num_classes=datamanager.num_train_pids,
+        loss='softmax',
+        pretrained=True
+    )
+
+    model = model.cuda() # move model to gpu
+
+    optimizer = torchreid.optim.build_optimizer(
+        model,
+        optim='adam',
+        lr=0.0003
+    )
+
+    scheduler = torchreid.optim.build_lr_scheduler(
+        optimizer,
+        lr_scheduler='single_step',
+        stepsize=20
+    )
+
+4. Build engine
+
+.. code-block:: python
+    
+    engine = torchreid.engine.ImageSoftmaxEngine(
+        datamanager,
+        model,
+        optimizer=optimizer,
+        scheduler=scheduler,
+        label_smooth=True
+    )
+
+5. Run training and test
+
+.. code-block:: python
+    
+    engine.run(
+        save_dir='log/resnet50',
+        max_epoch=60,
+        eval_freq=10,
+        print_freq=10,
+        test_only=False
+    )
 
 
 Datasets

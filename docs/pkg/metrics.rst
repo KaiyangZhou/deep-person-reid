@@ -1,3 +1,5 @@
+.. _torchreid_metrics:
+
 torchreid.metrics
 =================
 
@@ -6,18 +8,18 @@ Distance
 ---------
 
 .. automodule:: torchreid.metrics.distance
-   :members:
+    :members:
 
 
 Accuracy
 --------
 
 .. automodule:: torchreid.metrics.accuracy
-   :members:
+    :members:
 
 
 Rank
 -----
 
 .. automodule:: torchreid.metrics.rank
-   :members: evaluate_rank
+    :members: evaluate_rank

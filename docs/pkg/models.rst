@@ -1,3 +1,5 @@
+.. _torchreid_models:
+
 torchreid.models
 =================
 
@@ -5,7 +7,7 @@ Interface
 ---------
 
 .. automodule:: torchreid.models.__init__
-   :members:
+    :members:
 
 
 ImageNet Classification Models

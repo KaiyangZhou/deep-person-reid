@@ -18,8 +18,18 @@ from torchreid import metrics
 
 
 class Engine(object):
+    """A generic base Engine class for both image- and video-reid.
 
-    def __init__(self, datamanager, model, optimizer, scheduler=None, use_cpu=False):
+    Args:
+        datamanager (DataManager): an instance of ``torchreid.data.ImageDataManager``
+            or ``torchreid.data.VideoDataManager``.
+        model (nn.Module): model instance.
+        optimizer (Optimizer): an Optimizer.
+        scheduler (LRScheduler, optional): if None, no learning rate decay will be performed.
+        use_cpu (bool, optional): use cpu. Default is False.
+    """
+
+    def __init__(self, datamanager, model, optimizer=None, scheduler=None, use_cpu=False):
         self.datamanager = datamanager
         self.model = model
         self.optimizer = optimizer
@@ -29,18 +39,50 @@ class Engine(object):
         # check attributes
         if not isinstance(self.model, nn.Module):
             raise TypeError('model must be an instance of nn.Module')
-        if not isinstance(self.optimizer, torch.optim.Optimizer):
-            raise TypeError('optimizer must be an instance of torch.optim.Optimizer')
 
-    def run(self, max_epoch=0, start_epoch=0, fixbase_epoch=0, open_layers=None,
-            start_eval=0, eval_freq=-1, save_dir='log', test_only=False, print_freq=10,
+    def run(self, save_dir='log', max_epoch=0, start_epoch=0, fixbase_epoch=0, open_layers=None,
+            start_eval=0, eval_freq=-1, test_only=False, print_freq=10,
             dist_metric='euclidean', visrank=False, visrank_topk=20,
             use_metric_cuhk03=False, ranks=[1, 5, 10, 20]):
+        """A unified pipeline for training and evaluating a model.
+
+        Args:
+            save_dir (str): directory to save model.
+            max_epoch (int): maximum epoch.
+            start_epoch (int, optional): starting epoch. Default is 0.
+            fixbase_epoch (int, optional): number of epochs to train ``open_layers`` (new layers)
+                while keeping base layers frozen. Default is 0.
+            open_layers (str or list, optional): layers (attribute names) open for training.
+            start_eval (int, optional): from which epoch to start evaluation. Default is 0.
+            eval_freq (int, optional): evaluation frequency. Default is -1 (meaning evaluation
+                is only performed at the end of training).
+            test_only (bool, optional): if True, only runs evaluation on test datasets.
+                Default is False.
+            print_freq (int, optional): print_frequency. Default is 10.
+            dist_metric (str, optional): distance metric used to compute distance matrix
+                between query and gallery. Default is "euclidean".
+            visrank (bool, optional): visualizes ranked results. Default is False. Visualization
+                will be performed every test time, so it is recommended to enable ``visrank`` when
+                ``test_only`` is True. The ranked images will be saved to
+                "save_dir/ranks-epoch/dataset_name", e.g. "save_dir/ranks-60/market1501".
+            visrank_topk (int, optional): top-k ranked images to be visualized. Default is 20.
+            use_metric_cuhk03 (bool, optional): use single-gallery-shot setting for cuhk03.
+                Default is False. This should be enabled when using cuhk03 classic split.
+            ranks (list, optional): cmc ranks to be computed. Default is [1, 5, 10, 20].
+        """
         trainloader, testloader = self.datamanager.return_dataloaders()
 
         if test_only:
-            self.test(testloader, dist_metric, visrank, visrank_topk,
-                      save_dir, use_metric_cuhk03, ranks)
+            self.test(
+                0,
+                testloader,
+                dist_metric=dist_metric,
+                visrank=visrank,
+                visrank_topk=visrank_topk,
+                save_dir=save_dir,
+                use_metric_cuhk03=use_metric_cuhk03,
+                ranks=ranks
+            )
             return
 
         time_start = time.time()
@@ -60,14 +102,28 @@ class Engine(object):
                 self.scheduler.step()
             
             if (epoch+1)>start_eval and eval_freq>0 and (epoch+1)%eval_freq==0 and (epoch+1)!=max_epoch:
-                rank1 = self.test(testloader, dist_metric, visrank, visrank_topk,
-                                  save_dir, use_metric_cuhk03, ranks)
+                rank1 = self.test(
+                    epoch,
+                    testloader,
+                    dist_metric=dist_metric,
+                    visrank=visrank,
+                    visrank_topk=visrank_topk,
+                    save_dir=save_dir,
+                    use_metric_cuhk03=use_metric_cuhk03,
+                    ranks=ranks
+                )
                 self._save_checkpoint(epoch, rank1, save_dir)
 
         print('=> Final test')
         rank1 = self.test(
-            testloader, dist_metric, visrank, visrank_topk,
-            save_dir, use_metric_cuhk03, ranks
+            epoch,
+            testloader,
+            dist_metric=dist_metric,
+            visrank=visrank,
+            visrank_topk=visrank_topk,
+            save_dir=save_dir,
+            use_metric_cuhk03=use_metric_cuhk03,
+            ranks=ranks
         )
         self._save_checkpoint(epoch, rank1, save_dir)
 
@@ -76,26 +132,77 @@ class Engine(object):
         print('Elapsed {}'.format(elapsed))
 
     def train(self):
+        """Performs training on source datasets for one epoch.
+
+        This will be called every epoch in ``run()``, e.g.
+
+        .. code-block:: python
+            
+            for epoch in range(start_epoch, max_epoch):
+                self.train(some_arguments)
+
+        .. note::
+            
+            This needs to be implemented in subclasses.
+        """
         raise NotImplementedError
 
-    def test(self, testloader, dist_metric='euclidean', visrank=False, visrank_topk=20,
+    def test(self, epoch, testloader, dist_metric='euclidean', visrank=False, visrank_topk=20,
              save_dir='', use_metric_cuhk03=False, ranks=[1, 5, 10, 20]):
-        target_names = list(testloader.keys())
+        """Tests model on target datasets.
+
+        .. note::
+
+            This function has been called in ``run()`` when necessary.
+
+        .. note::
+
+            The test pipeline implemented in this function suits both image- and
+            video-reid. In general, a subclass of Engine only needs to re-implement
+            ``_extract_features()`` and ``_parse_data_for_eval()`` when necessary,
+            but not a must. Please refer to the source code for more details.
+
+        Args:
+            epoch (int): current epoch.
+            testloader (dict): dictionary containing
+                {dataset_name: 'query': queryloader, 'gallery': galleryloader}.
+            dist_metric (str, optional): distance metric used to compute distance matrix
+                between query and gallery. Default is "euclidean".
+            visrank (bool, optional): visualizes ranked results. Default is False. Visualization
+                will be performed every test time, so it is recommended to enable ``visrank`` when
+                ``test_only`` is True. The ranked images will be saved to
+                "save_dir/ranks-epoch/dataset_name", e.g. "save_dir/ranks-60/market1501".
+            visrank_topk (int, optional): top-k ranked images to be visualized. Default is 20.
+            save_dir (str): directory to save visualized results if ``visrank`` is True.
+            use_metric_cuhk03 (bool, optional): use single-gallery-shot setting for cuhk03.
+                Default is False. This should be enabled when using cuhk03 classic split.
+            ranks (list, optional): cmc ranks to be computed. Default is [1, 5, 10, 20].
+        """
+        targets = list(testloader.keys())
         
-        for name in target_names:
+        for name in targets:
             print('Evaluate {}'.format(name))
             queryloader = testloader[name]['query']
             galleryloader = testloader[name]['gallery']
             rank1 = self._evaluate(
-                name, queryloader, galleryloader, dist_metric, visrank,
-                visrank_topk, save_dir, use_metric_cuhk03, ranks
+                epoch,
+                dataset_name=name,
+                queryloader=queryloader,
+                galleryloader=galleryloader,
+                dist_metric=dist_metric,
+                visrank=visrank,
+                visrank_topk=visrank_topk,
+                save_dir=save_dir,
+                use_metric_cuhk03=use_metric_cuhk03,
+                ranks=ranks
             )
         
         return rank1
 
     @torch.no_grad()
-    def _evaluate(self, dataset_name, queryloader, galleryloader, dist_metric,
-                  visrank, visrank_topk, save_dir, use_metric_cuhk03, ranks):
+    def _evaluate(self, epoch, dataset_name='', queryloader=None, galleryloader=None,
+                  dist_metric='euclidean', visrank=False, visrank_topk=20, save_dir='',
+                  use_metric_cuhk03=False, ranks=[1, 5, 10, 20]):
         batch_time = AverageMeter()
 
         self.model.eval()
@@ -162,7 +269,7 @@ class Engine(object):
             visualize_ranked_results(
                 distmat,
                 self.datamanager.return_testdataset_by_name(dataset_name),
-                save_dir=osp.join(save_dir, 'ranked_results', dataset_name),
+                save_dir=osp.join(save_dir, 'visrank-'+str(epoch+1), dataset_name),
                 topk=visrank_topk
             )
 

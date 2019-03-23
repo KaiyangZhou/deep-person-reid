@@ -12,6 +12,57 @@ from torchreid.engine.image import ImageSoftmaxEngine
 
 
 class VideoSoftmaxEngine(ImageSoftmaxEngine):
+    """Softmax-loss engine for video-reid.
+
+    Args:
+        datamanager (DataManager): an instance of ``torchreid.data.ImageDataManager``
+            or ``torchreid.data.VideoDataManager``.
+        model (nn.Module): model instance.
+        optimizer (Optimizer): an Optimizer.
+        scheduler (LRScheduler, optional): if None, no learning rate decay will be performed.
+        use_cpu (bool, optional): use cpu. Default is False.
+        label_smooth (bool, optional): use label smoothing regularizer. Default is True.
+        pooling_method (str, optional): how to pool features for a tracklet.
+            Default is "avg" (average). Choices are ["avg", "max"].
+
+    Examples::
+        
+        import torch
+        import torchreid
+        # Each batch contains batch_size*seq_len images
+        datamanager = torchreid.data.VideoDataManager(
+            root='path/to/reid-data',
+            sources='mars',
+            height=256,
+            width=128,
+            combineall=False,
+            batch_size=8, # number of tracklets
+            seq_len=15 # number of images in each tracklet
+        )
+        model = torchreid.models.build_model(
+            name='resnet50',
+            num_classes=datamanager.num_train_pids,
+            loss='softmax'
+        )
+        model = model.cuda()
+        optimizer = torchreid.optim.build_optimizer(
+            model, optim='adam', lr=0.0003
+        )
+        scheduler = torchreid.optim.build_lr_scheduler(
+            optimizer,
+            lr_scheduler='single_step',
+            stepsize=20
+        )
+        engine = torchreid.engine.VideoSoftmaxEngine(
+            datamanager, model, optimizer, scheduler=scheduler,
+            pooling_method='avg'
+        )
+        engine.run(
+            max_epoch=60,
+            save_dir='log/resnet50-softmax-mars',
+            print_freq=10
+        )
+    """
 
     def __init__(self, datamanager, model, optimizer, scheduler=None,
                  use_cpu=False, label_smooth=True, pooling_method='avg'):
