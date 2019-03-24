@@ -213,26 +213,26 @@
 
 
 <div class="viewcode-block" id="register_image_dataset"><a class="viewcode-back" href="../../../../pkg/data.html#torchreid.data.datasets.__init__.register_image_dataset">[docs]</a><span class="k">def</span> <span class="nf">register_image_dataset</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">dataset_</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Registers a custom image dataset.</span>
+    <span class="sd">&quot;&quot;&quot;Registers a new image dataset.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        name (str): key corresponding to the custom dataset.</span>
-<span class="sd">        dataset_ (Dataset): the custom dataset class.</span>
+<span class="sd">        name (str): key corresponding to the new dataset.</span>
+<span class="sd">        dataset_ (Dataset): the new dataset class.</span>
 
 <span class="sd">    Examples::</span>
 <span class="sd">        </span>
 <span class="sd">        import torchreid</span>
-<span class="sd">        import CustomDataset</span>
-<span class="sd">        torchreid.data.register_image_dataset(&#39;custom_dataset&#39;, CustomDataset)</span>
+<span class="sd">        import NewDataset</span>
+<span class="sd">        torchreid.data.register_image_dataset(&#39;new_dataset&#39;, NewDataset)</span>
 <span class="sd">        # single dataset case</span>
 <span class="sd">        datamanager = torchreid.data.ImageDataManager(</span>
 <span class="sd">            root=&#39;reid-data&#39;,</span>
-<span class="sd">            sources=&#39;custom_dataset&#39;</span>
+<span class="sd">            sources=&#39;new_dataset&#39;</span>
 <span class="sd">        )</span>
 <span class="sd">        # multiple dataset case</span>
 <span class="sd">        datamanager = torchreid.data.ImageDataManager(</span>
 <span class="sd">            root=&#39;reid-data&#39;,</span>
-<span class="sd">            sources=[&#39;custom_dataset&#39;, &#39;dukemtmcreid&#39;]</span>
+<span class="sd">            sources=[&#39;new_dataset&#39;, &#39;dukemtmcreid&#39;]</span>
 <span class="sd">        )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">curr_datasets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">__image_datasets</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -242,26 +242,26 @@
 
 
 <div class="viewcode-block" id="register_video_dataset"><a class="viewcode-back" href="../../../../pkg/data.html#torchreid.data.datasets.__init__.register_video_dataset">[docs]</a><span class="k">def</span> <span class="nf">register_video_dataset</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">dataset_</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Registers a custom video dataset.</span>
+    <span class="sd">&quot;&quot;&quot;Registers a new video dataset.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        name (str): key corresponding to the custom dataset.</span>
-<span class="sd">        dataset_ (Dataset): the custom dataset class.</span>
+<span class="sd">        name (str): key corresponding to the new dataset.</span>
+<span class="sd">        dataset_ (Dataset): the new dataset class.</span>
 
 <span class="sd">    Examples::</span>
 <span class="sd">        </span>
 <span class="sd">        import torchreid</span>
-<span class="sd">        import CustomDataset</span>
-<span class="sd">        torchreid.data.register_video_dataset(&#39;custom_dataset&#39;, CustomDataset)</span>
+<span class="sd">        import NewDataset</span>
+<span class="sd">        torchreid.data.register_video_dataset(&#39;new_dataset&#39;, NewDataset)</span>
 <span class="sd">        # single dataset case</span>
 <span class="sd">        datamanager = torchreid.data.VideoDataManager(</span>
 <span class="sd">            root=&#39;reid-data&#39;,</span>
-<span class="sd">            sources=&#39;custom_dataset&#39;</span>
+<span class="sd">            sources=&#39;new_dataset&#39;</span>
 <span class="sd">        )</span>
 <span class="sd">        # multiple dataset case</span>
 <span class="sd">        datamanager = torchreid.data.VideoDataManager(</span>
 <span class="sd">            root=&#39;reid-data&#39;,</span>
-<span class="sd">            sources=[&#39;custom_dataset&#39;, &#39;ilidsvid&#39;]</span>
+<span class="sd">            sources=[&#39;new_dataset&#39;, &#39;ilidsvid&#39;]</span>
 <span class="sd">        )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">curr_datasets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">__video_datasets</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>

@@ -628,14 +628,14 @@ data in each batch has shape (batch_size, seq_len, channel, height, width).</p>
 <dl class="function">
 <dt id="torchreid.data.datasets.__init__.register_image_dataset">
 <code class="descclassname">torchreid.data.datasets.__init__.</code><code class="descname">register_image_dataset</code><span class="sig-paren">(</span><em>name</em>, <em>dataset_</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/__init__.html#register_image_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.__init__.register_image_dataset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Registers a custom image dataset.</p>
+<dd><p>Registers a new image dataset.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<em>str</em>) – key corresponding to the custom dataset.</li>
-<li><strong>dataset</strong> (<a class="reference internal" href="#torchreid.data.datasets.dataset.Dataset" title="torchreid.data.datasets.dataset.Dataset"><em>Dataset</em></a>) – the custom dataset class.</li>
+<li><strong>name</strong> (<em>str</em>) – key corresponding to the new dataset.</li>
+<li><strong>dataset</strong> (<a class="reference internal" href="#torchreid.data.datasets.dataset.Dataset" title="torchreid.data.datasets.dataset.Dataset"><em>Dataset</em></a>) – the new dataset class.</li>
 </ul>
 </td>
 </tr>
@@ -643,17 +643,17 @@ data in each batch has shape (batch_size, seq_len, channel, height, width).</p>
 </table>
 <p>Examples:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torchreid</span>
-<span class="kn">import</span> <span class="nn">CustomDataset</span>
-<span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">register_image_dataset</span><span class="p">(</span><span class="s1">&#39;custom_dataset&#39;</span><span class="p">,</span> <span class="n">CustomDataset</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">NewDataset</span>
+<span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">register_image_dataset</span><span class="p">(</span><span class="s1">&#39;new_dataset&#39;</span><span class="p">,</span> <span class="n">NewDataset</span><span class="p">)</span>
 <span class="c1"># single dataset case</span>
 <span class="n">datamanager</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ImageDataManager</span><span class="p">(</span>
     <span class="n">root</span><span class="o">=</span><span class="s1">&#39;reid-data&#39;</span><span class="p">,</span>
-    <span class="n">sources</span><span class="o">=</span><span class="s1">&#39;custom_dataset&#39;</span>
+    <span class="n">sources</span><span class="o">=</span><span class="s1">&#39;new_dataset&#39;</span>
 <span class="p">)</span>
 <span class="c1"># multiple dataset case</span>
 <span class="n">datamanager</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ImageDataManager</span><span class="p">(</span>
     <span class="n">root</span><span class="o">=</span><span class="s1">&#39;reid-data&#39;</span><span class="p">,</span>
-    <span class="n">sources</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;custom_dataset&#39;</span><span class="p">,</span> <span class="s1">&#39;dukemtmcreid&#39;</span><span class="p">]</span>
+    <span class="n">sources</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;new_dataset&#39;</span><span class="p">,</span> <span class="s1">&#39;dukemtmcreid&#39;</span><span class="p">]</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -662,14 +662,14 @@ data in each batch has shape (batch_size, seq_len, channel, height, width).</p>
 <dl class="function">
 <dt id="torchreid.data.datasets.__init__.register_video_dataset">
 <code class="descclassname">torchreid.data.datasets.__init__.</code><code class="descname">register_video_dataset</code><span class="sig-paren">(</span><em>name</em>, <em>dataset_</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/__init__.html#register_video_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.__init__.register_video_dataset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Registers a custom video dataset.</p>
+<dd><p>Registers a new video dataset.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<em>str</em>) – key corresponding to the custom dataset.</li>
-<li><strong>dataset</strong> (<a class="reference internal" href="#torchreid.data.datasets.dataset.Dataset" title="torchreid.data.datasets.dataset.Dataset"><em>Dataset</em></a>) – the custom dataset class.</li>
+<li><strong>name</strong> (<em>str</em>) – key corresponding to the new dataset.</li>
+<li><strong>dataset</strong> (<a class="reference internal" href="#torchreid.data.datasets.dataset.Dataset" title="torchreid.data.datasets.dataset.Dataset"><em>Dataset</em></a>) – the new dataset class.</li>
 </ul>
 </td>
 </tr>
@@ -677,17 +677,17 @@ data in each batch has shape (batch_size, seq_len, channel, height, width).</p>
 </table>
 <p>Examples:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torchreid</span>
-<span class="kn">import</span> <span class="nn">CustomDataset</span>
-<span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">register_video_dataset</span><span class="p">(</span><span class="s1">&#39;custom_dataset&#39;</span><span class="p">,</span> <span class="n">CustomDataset</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">NewDataset</span>
+<span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">register_video_dataset</span><span class="p">(</span><span class="s1">&#39;new_dataset&#39;</span><span class="p">,</span> <span class="n">NewDataset</span><span class="p">)</span>
 <span class="c1"># single dataset case</span>
 <span class="n">datamanager</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">VideoDataManager</span><span class="p">(</span>
     <span class="n">root</span><span class="o">=</span><span class="s1">&#39;reid-data&#39;</span><span class="p">,</span>
-    <span class="n">sources</span><span class="o">=</span><span class="s1">&#39;custom_dataset&#39;</span>
+    <span class="n">sources</span><span class="o">=</span><span class="s1">&#39;new_dataset&#39;</span>
 <span class="p">)</span>
 <span class="c1"># multiple dataset case</span>
 <span class="n">datamanager</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">VideoDataManager</span><span class="p">(</span>
     <span class="n">root</span><span class="o">=</span><span class="s1">&#39;reid-data&#39;</span><span class="p">,</span>
-    <span class="n">sources</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;custom_dataset&#39;</span><span class="p">,</span> <span class="s1">&#39;ilidsvid&#39;</span><span class="p">]</span>
+    <span class="n">sources</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;new_dataset&#39;</span><span class="p">,</span> <span class="s1">&#39;ilidsvid&#39;</span><span class="p">]</span>
 <span class="p">)</span>
 </pre></div>
 </div>

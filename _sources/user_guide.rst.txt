@@ -199,8 +199,8 @@ Use your own dataset
 
     from torchreid.data import ImageDataset
 
-    class CustomDataset(ImageDataset):
-        dataset_dir = 'custom_dataset'
+    class NewDataset(ImageDataset):
+        dataset_dir = 'new_dataset'
 
         def __init__(self, root='', **kwargs):
             self.root = osp.abspath(osp.expanduser(root))
@@ -213,7 +213,7 @@ Use your own dataset
             query = ...
             gallery = ...
 
-            super(CustomDataset, self).__init__(train, query, gallery, **kwargs)
+            super(NewDataset, self).__init__(train, query, gallery, **kwargs)
 
 
 2. Register your dataset.
@@ -221,7 +221,7 @@ Use your own dataset
 .. code-block:: python
     
     import torchreid
-    torchreid.data.register_image_dataset('custom_dataset', CustomDataset)
+    torchreid.data.register_image_dataset('new_dataset', NewDataset)
 
 
 3. Initialize a data manager with your dataset.
@@ -231,17 +231,17 @@ Use your own dataset
     # use your own dataset only
     datamanager = torchreid.data.ImageDataManager(
         root='reid-data',
-        sources='custom_dataset'
+        sources='new_dataset'
     )
     # combine with other datasets
     datamanager = torchreid.data.ImageDataManager(
         root='reid-data',
-        sources=['custom_dataset', 'dukemtmcreid']
+        sources=['new_dataset', 'dukemtmcreid']
     )
     # cross-dataset evaluation
     datamanager = torchreid.data.ImageDataManager(
         root='reid-data',
-        sources=['custom_dataset', 'dukemtmcreid'],
+        sources=['new_dataset', 'dukemtmcreid'],
         targets='market1501' # or targets=['market1501', 'cuhk03']
     )
 

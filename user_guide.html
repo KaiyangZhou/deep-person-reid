@@ -366,8 +366,8 @@
 
 <span class="kn">from</span> <span class="nn">torchreid.data</span> <span class="kn">import</span> <span class="n">ImageDataset</span>
 
-<span class="k">class</span> <span class="nc">CustomDataset</span><span class="p">(</span><span class="n">ImageDataset</span><span class="p">):</span>
-    <span class="n">dataset_dir</span> <span class="o">=</span> <span class="s1">&#39;custom_dataset&#39;</span>
+<span class="k">class</span> <span class="nc">NewDataset</span><span class="p">(</span><span class="n">ImageDataset</span><span class="p">):</span>
+    <span class="n">dataset_dir</span> <span class="o">=</span> <span class="s1">&#39;new_dataset&#39;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">root</span><span class="p">))</span>
@@ -380,14 +380,14 @@
         <span class="n">query</span> <span class="o">=</span> <span class="o">...</span>
         <span class="n">gallery</span> <span class="o">=</span> <span class="o">...</span>
 
-        <span class="nb">super</span><span class="p">(</span><span class="n">CustomDataset</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">gallery</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">NewDataset</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">gallery</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
 <li>Register your dataset.</li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torchreid</span>
-<span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">register_image_dataset</span><span class="p">(</span><span class="s1">&#39;custom_dataset&#39;</span><span class="p">,</span> <span class="n">CustomDataset</span><span class="p">)</span>
+<span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">register_image_dataset</span><span class="p">(</span><span class="s1">&#39;new_dataset&#39;</span><span class="p">,</span> <span class="n">NewDataset</span><span class="p">)</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
@@ -396,17 +396,17 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># use your own dataset only</span>
 <span class="n">datamanager</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ImageDataManager</span><span class="p">(</span>
     <span class="n">root</span><span class="o">=</span><span class="s1">&#39;reid-data&#39;</span><span class="p">,</span>
-    <span class="n">sources</span><span class="o">=</span><span class="s1">&#39;custom_dataset&#39;</span>
+    <span class="n">sources</span><span class="o">=</span><span class="s1">&#39;new_dataset&#39;</span>
 <span class="p">)</span>
 <span class="c1"># combine with other datasets</span>
 <span class="n">datamanager</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ImageDataManager</span><span class="p">(</span>
     <span class="n">root</span><span class="o">=</span><span class="s1">&#39;reid-data&#39;</span><span class="p">,</span>
-    <span class="n">sources</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;custom_dataset&#39;</span><span class="p">,</span> <span class="s1">&#39;dukemtmcreid&#39;</span><span class="p">]</span>
+    <span class="n">sources</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;new_dataset&#39;</span><span class="p">,</span> <span class="s1">&#39;dukemtmcreid&#39;</span><span class="p">]</span>
 <span class="p">)</span>
 <span class="c1"># cross-dataset evaluation</span>
 <span class="n">datamanager</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ImageDataManager</span><span class="p">(</span>
     <span class="n">root</span><span class="o">=</span><span class="s1">&#39;reid-data&#39;</span><span class="p">,</span>
-    <span class="n">sources</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;custom_dataset&#39;</span><span class="p">,</span> <span class="s1">&#39;dukemtmcreid&#39;</span><span class="p">],</span>
+    <span class="n">sources</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;new_dataset&#39;</span><span class="p">,</span> <span class="s1">&#39;dukemtmcreid&#39;</span><span class="p">],</span>
     <span class="n">targets</span><span class="o">=</span><span class="s1">&#39;market1501&#39;</span> <span class="c1"># or targets=[&#39;market1501&#39;, &#39;cuhk03&#39;]</span>
 <span class="p">)</span>
 </pre></div>
