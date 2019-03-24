@@ -118,7 +118,7 @@ A unified interface
 -----------------------
 In "deep-person-reid/scripts/", we provide a unified interface including a default parser file ``default_parser.py`` and the main script ``main.py``. For example, to train an image reid model on Market1501 using softmax, you can do
 
-.. code-block:: python
+.. code-block:: bash
     
     python main.py \
     --root path/to/reid-data \
