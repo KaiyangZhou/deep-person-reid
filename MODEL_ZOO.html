@@ -1,0 +1,341 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Model Zoo &mdash; torchreid 0.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Awesome-ReID" href="AWESOME_REID.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> torchreid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html">How-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="evaluation.html">Evaluation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pkg/data.html">torchreid.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/engine.html">torchreid.engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/losses.html">torchreid.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/metrics.html">torchreid.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/models.html">torchreid.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/optim.html">torchreid.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/utils.html">torchreid.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="AWESOME_REID.html">Awesome-ReID</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Model Zoo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">torchreid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Model Zoo</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/MODEL_ZOO.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="model-zoo">
+<h1>Model Zoo<a class="headerlink" href="#model-zoo" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Results are presented in the format of <em>Rank-1 (mAP)</em>.</li>
+<li>Classification layer is ignored when computing the model size.</li>
+<li>Unless specified otherwise, only <code class="docutils literal notranslate"><span class="pre">Random2DTranslation</span></code> and <code class="docutils literal notranslate"><span class="pre">RandomHorizontalFlip</span></code> are used for data augmentation.</li>
+<li>Asterisk (*) means the model is trained from scratch.</li>
+<li>Model weights can be downloaded by clicking the highlighted numbers.</li>
+</ul>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="left">Model</th>
+<th align="center"># param (M)</th>
+<th align="center">Loss</th>
+<th align="center">Input</th>
+<th align="center">market1501</th>
+<th align="center">dukemtmcreid</th>
+<th align="center">msmt17</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">resnet50</td>
+<td align="center">23.5</td>
+<td align="center">softmax</td>
+<td align="center">(256, 128)</td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_market_softmax.zip">87.9 (70.4)</a></td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_duke_softmax.zip">78.3 (58.9)</a></td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_msmt_softmax.zip">63.2 (33.9)</a></td>
+</tr>
+<tr>
+<td align="left">resnet50_fc512</td>
+<td align="center">24.6</td>
+<td align="center">softmax</td>
+<td align="center">(256, 128)</td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_fc512_market_softmax.zip">90.8 (75.3)</a></td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_fc512_duke_softmax.zip">81.0 (64.0)</a></td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_fc512_msmt_softmax.zip">69.6 (38.4)</a></td>
+</tr>
+<tr>
+<td align="left">densenet121_fc512</td>
+<td align="center">7.5</td>
+<td align="center">softmax</td>
+<td align="center">(256, 128)</td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_fc512_market_softmax.zip">87.8 (68.0)</a></td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_fc512_duke_softmax.zip">79.7 (58.8)</a></td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_fc512_msmt_softmax.zip">67.6 (35.0)</a></td>
+</tr>
+<tr>
+<td align="left">se_resnet50_fc512</td>
+<td align="center">27.1</td>
+<td align="center">softmax</td>
+<td align="center">(256, 128)</td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/se_resnet50_fc512_market_softmax.zip">91.9 (75.8)</a></td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/se_resnet50_fc512_duke_softmax.zip">81.5 (63.7)</a></td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/se_resnet50_fc512_msmt_softmax.zip">71.1 (39.8)</a></td>
+</tr>
+<tr>
+<td align="left">shufflenet</td>
+<td align="center">0.9</td>
+<td align="center">softmax</td>
+<td align="center">(256, 128)</td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/shufflenet_market_softmax.zip">84.1(64.1)</a></td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/shufflenet_duke_softmax.zip">73.4(51.9)</a></td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/shufflenet_msmt_softmax.zip">51.3(24.2)</a></td>
+</tr>
+<tr>
+<td align="left">squeezenet1_0_fc512</td>
+<td align="center">1.0</td>
+<td align="center">softmax</td>
+<td align="center">(256, 128)</td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/squeezenet1_0_fc512_market_softmax.zip">79.3 (52.2)</a></td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/squeezenet1_0_fc512_duke_softmax.zip">66.6 (42.6)</a></td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/squeezenet1_0_fc512_msmt_softmax.zip">44.1 (17.1)</a></td>
+</tr>
+<tr>
+<td align="left">mobilenetv2_1dot0</td>
+<td align="center">2.2</td>
+<td align="center">softmax</td>
+<td align="center">(256, 128)</td>
+<td align="center"><a href="http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenetv2_1dot0_market.pth.tar">85.6 (67.3)</a></td>
+<td align="center"><a href="http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenetv2_1dot0_duke.pth.tar">74.2 (54.7)</a></td>
+<td align="center"><a href="http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenetv2_1dot0_msmt.pth.tar">57.4 (29.3)</a></td>
+</tr>
+<tr>
+<td align="left">mobilenetv2_1dot4</td>
+<td align="center">4.3</td>
+<td align="center">softmax</td>
+<td align="center">(256, 128)</td>
+<td align="center"><a href="http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenetv2_1dot4_market.pth.tar">87.0 (68.5)</a></td>
+<td align="center"><a href="http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenetv2_1dot4_duke.pth.tar">76.2 (55.8)</a></td>
+<td align="center"><a href="http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenetv2_1dot4_msmt.pth.tar">60.1 (31.5)</a></td>
+</tr>
+<tr>
+<td align="left">resnet50mid</td>
+<td align="center">27.7</td>
+<td align="center">softmax</td>
+<td align="center">(256, 128)</td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50mid_market_softmax.zip">90.2 (76.0)</a></td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50mid_duke_softmax.zip">81.6 (64.0)</a></td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50mid_msmt_softmax.zip">69.0 (38.0)</a></td>
+</tr>
+<tr>
+<td align="left">mlfn</td>
+<td align="center">32.5</td>
+<td align="center">softmax</td>
+<td align="center">(256, 128)</td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mlfn_market_softmax.zip">90.1 (74.3)</a></td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mlfn_duke_softmax.zip">81.1 (63.2)</a></td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mlfn_msmt_softmax.zip">66.4 (37.2)</a></td>
+</tr>
+<tr>
+<td align="left">hacnn<sup>*</sup></td>
+<td align="center">3.7</td>
+<td align="center">softmax</td>
+<td align="center">(160, 64)</td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/hacnn_market_softmax.zip">90.9 (75.6)</a></td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/hacnn_duke_softmax.zip">80.1 (63.2)</a></td>
+<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/hacnn_msmt_softmax.zip">64.7 (37.2)</a></td>
+</tr>
+</tbody>
+</table></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="AWESOME_REID.html" class="btn btn-neutral float-left" title="Awesome-ReID" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Kaiyang Zhou
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

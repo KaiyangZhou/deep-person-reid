@@ -1,0 +1,313 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torchreid.models.__init__ &mdash; torchreid 0.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> torchreid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">How-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../evaluation.html">Evaluation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/data.html">torchreid.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/engine.html">torchreid.engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/losses.html">torchreid.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/metrics.html">torchreid.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/models.html">torchreid.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/optim.html">torchreid.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/utils.html">torchreid.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../AWESOME_REID.html">Awesome-ReID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../MODEL_ZOO.html">Model Zoo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">torchreid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>torchreid.models.__init__</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for torchreid.models.__init__</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">from</span> <span class="nn">.resnet</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.resnetmid</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.resnext</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.senet</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.densenet</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.inceptionresnetv2</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.inceptionv4</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.xception</span> <span class="k">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">.nasnet</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.mobilenetv2</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.shufflenet</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.squeezenet</span> <span class="k">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">.mudeep</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.hacnn</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.pcb</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.mlfn</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<span class="n">__model_factory</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># image classification models</span>
+    <span class="s1">&#39;resnet18&#39;</span><span class="p">:</span> <span class="n">resnet18</span><span class="p">,</span>
+    <span class="s1">&#39;resnet34&#39;</span><span class="p">:</span> <span class="n">resnet34</span><span class="p">,</span>
+    <span class="s1">&#39;resnet50&#39;</span><span class="p">:</span> <span class="n">resnet50</span><span class="p">,</span>
+    <span class="s1">&#39;resnet101&#39;</span><span class="p">:</span> <span class="n">resnet101</span><span class="p">,</span>
+    <span class="s1">&#39;resnet152&#39;</span><span class="p">:</span> <span class="n">resnet152</span><span class="p">,</span>
+    <span class="s1">&#39;resnet50_fc512&#39;</span><span class="p">:</span> <span class="n">resnet50_fc512</span><span class="p">,</span>
+    <span class="s1">&#39;resnext50_32x4d&#39;</span><span class="p">:</span> <span class="n">resnext50_32x4d</span><span class="p">,</span>
+    <span class="s1">&#39;resnext50_32x4d_fc512&#39;</span><span class="p">:</span> <span class="n">resnext50_32x4d_fc512</span><span class="p">,</span>
+    <span class="s1">&#39;se_resnet50&#39;</span><span class="p">:</span> <span class="n">se_resnet50</span><span class="p">,</span>
+    <span class="s1">&#39;se_resnet50_fc512&#39;</span><span class="p">:</span> <span class="n">se_resnet50_fc512</span><span class="p">,</span>
+    <span class="s1">&#39;se_resnet101&#39;</span><span class="p">:</span> <span class="n">se_resnet101</span><span class="p">,</span>
+    <span class="s1">&#39;se_resnext50_32x4d&#39;</span><span class="p">:</span> <span class="n">se_resnext50_32x4d</span><span class="p">,</span>
+    <span class="s1">&#39;se_resnext101_32x4d&#39;</span><span class="p">:</span> <span class="n">se_resnext101_32x4d</span><span class="p">,</span>
+    <span class="s1">&#39;densenet121&#39;</span><span class="p">:</span> <span class="n">densenet121</span><span class="p">,</span>
+    <span class="s1">&#39;densenet169&#39;</span><span class="p">:</span> <span class="n">densenet169</span><span class="p">,</span>
+    <span class="s1">&#39;densenet201&#39;</span><span class="p">:</span> <span class="n">densenet201</span><span class="p">,</span>
+    <span class="s1">&#39;densenet161&#39;</span><span class="p">:</span> <span class="n">densenet161</span><span class="p">,</span>
+    <span class="s1">&#39;densenet121_fc512&#39;</span><span class="p">:</span> <span class="n">densenet121_fc512</span><span class="p">,</span>
+    <span class="s1">&#39;inceptionresnetv2&#39;</span><span class="p">:</span> <span class="n">inceptionresnetv2</span><span class="p">,</span>
+    <span class="s1">&#39;inceptionv4&#39;</span><span class="p">:</span> <span class="n">inceptionv4</span><span class="p">,</span>
+    <span class="s1">&#39;xception&#39;</span><span class="p">:</span> <span class="n">xception</span><span class="p">,</span>
+    <span class="c1"># lightweight models</span>
+    <span class="s1">&#39;nasnsetmobile&#39;</span><span class="p">:</span> <span class="n">nasnetamobile</span><span class="p">,</span>
+    <span class="s1">&#39;mobilenetv2_1dot0&#39;</span><span class="p">:</span> <span class="n">mobilenetv2_1dot0</span><span class="p">,</span>
+    <span class="s1">&#39;mobilenetv2_1dot4&#39;</span><span class="p">:</span> <span class="n">mobilenetv2_1dot4</span><span class="p">,</span>
+    <span class="s1">&#39;shufflenet&#39;</span><span class="p">:</span> <span class="n">shufflenet</span><span class="p">,</span>
+    <span class="s1">&#39;squeezenet1_0&#39;</span><span class="p">:</span> <span class="n">squeezenet1_0</span><span class="p">,</span>
+    <span class="s1">&#39;squeezenet1_0_fc512&#39;</span><span class="p">:</span> <span class="n">squeezenet1_0_fc512</span><span class="p">,</span>
+    <span class="s1">&#39;squeezenet1_1&#39;</span><span class="p">:</span> <span class="n">squeezenet1_1</span><span class="p">,</span>
+    <span class="c1"># reid-specific models</span>
+    <span class="s1">&#39;mudeep&#39;</span><span class="p">:</span> <span class="n">MuDeep</span><span class="p">,</span>
+    <span class="s1">&#39;resnet50mid&#39;</span><span class="p">:</span> <span class="n">resnet50mid</span><span class="p">,</span>
+    <span class="s1">&#39;hacnn&#39;</span><span class="p">:</span> <span class="n">HACNN</span><span class="p">,</span>
+    <span class="s1">&#39;pcb_p6&#39;</span><span class="p">:</span> <span class="n">pcb_p6</span><span class="p">,</span>
+    <span class="s1">&#39;pcb_p4&#39;</span><span class="p">:</span> <span class="n">pcb_p4</span><span class="p">,</span>
+    <span class="s1">&#39;mlfn&#39;</span><span class="p">:</span> <span class="n">mlfn</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="show_avai_models"><a class="viewcode-back" href="../../../pkg/models.html#torchreid.models.__init__.show_avai_models">[docs]</a><span class="k">def</span> <span class="nf">show_avai_models</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Displays available models.</span>
+
+<span class="sd">    Examples::</span>
+<span class="sd">        &gt;&gt;&gt; from torchreid import models</span>
+<span class="sd">        &gt;&gt;&gt; models.show_avai_models()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">__model_factory</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
+
+
+<div class="viewcode-block" id="build_model"><a class="viewcode-back" href="../../../pkg/models.html#torchreid.models.__init__.build_model">[docs]</a><span class="k">def</span> <span class="nf">build_model</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A function wrapper for building a model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        name (str): model name.</span>
+<span class="sd">        num_classes (int): number of training identities.</span>
+<span class="sd">        loss (str, optional): loss function to optimize the model. Currently</span>
+<span class="sd">            supports &quot;softmax&quot; and &quot;triplet&quot;. Default is &quot;softmax&quot;.</span>
+<span class="sd">        pretrained (bool, optional): whether to load ImageNet-pretrained weights.</span>
+<span class="sd">            Default is True.</span>
+<span class="sd">        use_gpu (bool, optional): whether to use gpu. Default is True.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        nn.Module</span>
+
+<span class="sd">    Examples::</span>
+<span class="sd">        &gt;&gt;&gt; from torchreid import models</span>
+<span class="sd">        &gt;&gt;&gt; model = models.build_model(&#39;resnet50&#39;, 751, loss=&#39;softmax&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">avai_models</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">__model_factory</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">avai_models</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;Unknown model: </span><span class="si">{}</span><span class="s1">. Must be one of </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">avai_models</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Initializing model: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">__model_factory</span><span class="p">[</span><span class="n">name</span><span class="p">](</span>
+        <span class="n">num_classes</span><span class="o">=</span><span class="n">num_classes</span><span class="p">,</span>
+        <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>
+        <span class="n">pretrained</span><span class="o">=</span><span class="n">pretrained</span><span class="p">,</span>
+        <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span>
+    <span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Kaiyang Zhou
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

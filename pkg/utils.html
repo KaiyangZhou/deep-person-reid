@@ -1,0 +1,655 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torchreid.utils &mdash; torchreid 0.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Awesome-ReID" href="../AWESOME_REID.html" />
+    <link rel="prev" title="torchreid.optim" href="optim.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> torchreid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">How-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../evaluation.html">Evaluation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data.html">torchreid.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="engine.html">torchreid.engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losses.html">torchreid.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">torchreid.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">torchreid.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optim.html">torchreid.optim</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">torchreid.utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-torchreid.utils.avgmeter">Average Meter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-torchreid.utils.loggers">Loggers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-torchreid.utils.tools">Generic Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-torchreid.utils.reidtools">ReID Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-torchreid.utils.torchtools">Torch Tools</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../AWESOME_REID.html">Awesome-ReID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MODEL_ZOO.html">Model Zoo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">torchreid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>torchreid.utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/pkg/utils.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="torchreid-utils">
+<span id="id1"></span><h1>torchreid.utils<a class="headerlink" href="#torchreid-utils" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-torchreid.utils.avgmeter">
+<span id="average-meter"></span><h2>Average Meter<a class="headerlink" href="#module-torchreid.utils.avgmeter" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="torchreid.utils.avgmeter.AverageMeter">
+<em class="property">class </em><code class="descclassname">torchreid.utils.avgmeter.</code><code class="descname">AverageMeter</code><a class="reference internal" href="../_modules/torchreid/utils/avgmeter.html#AverageMeter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.avgmeter.AverageMeter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes and stores the average and current value.</p>
+<dl class="docutils">
+<dt>Examples::</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Initialize a meter to record loss</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">losses</span> <span class="o">=</span> <span class="n">AverageMeter</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Update meter after every minibatch update</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">losses</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">loss_value</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-torchreid.utils.loggers">
+<span id="loggers"></span><h2>Loggers<a class="headerlink" href="#module-torchreid.utils.loggers" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="torchreid.utils.loggers.Logger">
+<em class="property">class </em><code class="descclassname">torchreid.utils.loggers.</code><code class="descname">Logger</code><span class="sig-paren">(</span><em>fpath=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/loggers.html#Logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.loggers.Logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes console output to external text file.</p>
+<p>Imported from <a class="reference external" href="https://github.com/Cysu/open-reid/blob/master/reid/utils/logging.py">https://github.com/Cysu/open-reid/blob/master/reid/utils/logging.py</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fpath</strong> (<em>str</em>) – directory to save logging file.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">Logger</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">save_dir</span> <span class="o">=</span> <span class="s1">&#39;log/resnet50-softmax-market1501&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">log_name</span> <span class="o">=</span> <span class="s1">&#39;train.log&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">log_name</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.utils.loggers.RankLogger">
+<em class="property">class </em><code class="descclassname">torchreid.utils.loggers.</code><code class="descname">RankLogger</code><span class="sig-paren">(</span><em>sources</em>, <em>targets</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/loggers.html#RankLogger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.loggers.RankLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Records the rank1 matching accuracy obtained for each
+test dataset at specified evaluation steps and provides a function
+to show the summarized results, which are convenient for analysis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sources</strong> (<em>str</em><em> or </em><em>list</em>) – source dataset name(s).</li>
+<li><strong>targets</strong> (<em>str</em><em> or </em><em>list</em>) – target dataset name(s).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Examples::</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">RankLogger</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;market1501&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="s1">&#39;market1501&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ranklogger</span> <span class="o">=</span> <span class="n">RankLogger</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ranklogger</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ranklogger</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ranklogger</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ranklogger</span><span class="o">.</span><span class="n">show_summary</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># You will see:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># =&gt; Show performance summary</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># market1501 (source)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># - epoch 10   rank1 50.0%</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># - epoch 20   rank1 70.0%</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># - epoch 30   rank1 90.0%</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># If there are multiple test datasets</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;market1501&#39;</span><span class="p">,</span> <span class="s1">&#39;dukemtmcreid&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ranklogger</span> <span class="o">=</span> <span class="n">RankLogger</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ranklogger</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ranklogger</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">20</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ranklogger</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">30</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ranklogger</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ranklogger</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">20</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ranklogger</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">30</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ranklogger</span><span class="o">.</span><span class="n">show_summary</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># You can see:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># =&gt; Show performance summary</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># market1501 (source)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># - epoch 10   rank1 50.0%</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># - epoch 20   rank1 70.0%</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># - epoch 30   rank1 90.0%</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># dukemtmcreid (target)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># - epoch 10   rank1 10.0%</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># - epoch 20   rank1 20.0%</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># - epoch 30   rank1 30.0%</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="method">
+<dt id="torchreid.utils.loggers.RankLogger.show_summary">
+<code class="descname">show_summary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/loggers.html#RankLogger.show_summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.loggers.RankLogger.show_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows saved results.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="torchreid.utils.loggers.RankLogger.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>name</em>, <em>epoch</em>, <em>rank1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/loggers.html#RankLogger.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.loggers.RankLogger.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>str</em>) – dataset name.</li>
+<li><strong>epoch</strong> (<em>int</em>) – current epoch.</li>
+<li><strong>rank1</strong> (<em>float</em>) – rank1 result.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-torchreid.utils.tools">
+<span id="generic-tools"></span><h2>Generic Tools<a class="headerlink" href="#module-torchreid.utils.tools" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="torchreid.utils.tools.mkdir_if_missing">
+<code class="descclassname">torchreid.utils.tools.</code><code class="descname">mkdir_if_missing</code><span class="sig-paren">(</span><em>dirname</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/tools.html#mkdir_if_missing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.tools.mkdir_if_missing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates dirname if it is missing.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="torchreid.utils.tools.check_isfile">
+<code class="descclassname">torchreid.utils.tools.</code><code class="descname">check_isfile</code><span class="sig-paren">(</span><em>fpath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/tools.html#check_isfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.tools.check_isfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the given path is a file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fpath</strong> (<em>str</em>) – file path.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="torchreid.utils.tools.read_json">
+<code class="descclassname">torchreid.utils.tools.</code><code class="descname">read_json</code><span class="sig-paren">(</span><em>fpath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/tools.html#read_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.tools.read_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads json file from a path.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="torchreid.utils.tools.write_json">
+<code class="descclassname">torchreid.utils.tools.</code><code class="descname">write_json</code><span class="sig-paren">(</span><em>obj</em>, <em>fpath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/tools.html#write_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.tools.write_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes to a json file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="torchreid.utils.tools.download_url">
+<code class="descclassname">torchreid.utils.tools.</code><code class="descname">download_url</code><span class="sig-paren">(</span><em>url</em>, <em>dst</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/tools.html#download_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.tools.download_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downloads file from a url to a destination.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>url</strong> (<em>str</em>) – url to download file.</li>
+<li><strong>dst</strong> (<em>str</em>) – destination path.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="torchreid.utils.tools.read_image">
+<code class="descclassname">torchreid.utils.tools.</code><code class="descname">read_image</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/tools.html#read_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.tools.read_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads image from path using <code class="docutils literal notranslate"><span class="pre">PIL.Image</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – path to an image.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">PIL image</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-torchreid.utils.reidtools">
+<span id="reid-tools"></span><h2>ReID Tools<a class="headerlink" href="#module-torchreid.utils.reidtools" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="torchreid.utils.reidtools.visualize_ranked_results">
+<code class="descclassname">torchreid.utils.reidtools.</code><code class="descname">visualize_ranked_results</code><span class="sig-paren">(</span><em>distmat</em>, <em>dataset</em>, <em>save_dir=''</em>, <em>topk=20</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/reidtools.html#visualize_ranked_results"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.reidtools.visualize_ranked_results" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visualizes ranked results.</p>
+<p>Supports both image-reid and video-reid.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>distmat</strong> (<em>numpy.ndarray</em>) – distance matrix of shape (num_query, num_gallery).</li>
+<li><strong>dataset</strong> (<em>tuple</em>) – a 2-tuple containing (query, gallery), each of which contains
+tuples of (img_path(s), pid, camid).</li>
+<li><strong>save_dir</strong> (<em>str</em>) – directory to save output images.</li>
+<li><strong>topk</strong> (<em>int</em><em>, </em><em>optional</em>) – denoting top-k images in the rank list to be visualized.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-torchreid.utils.torchtools">
+<span id="torch-tools"></span><h2>Torch Tools<a class="headerlink" href="#module-torchreid.utils.torchtools" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="torchreid.utils.torchtools.save_checkpoint">
+<code class="descclassname">torchreid.utils.torchtools.</code><code class="descname">save_checkpoint</code><span class="sig-paren">(</span><em>state</em>, <em>save_dir</em>, <em>is_best=False</em>, <em>remove_module_from_keys=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/torchtools.html#save_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.torchtools.save_checkpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves checkpoint.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>state</strong> (<em>dict</em>) – dictionary.</li>
+<li><strong>save_dir</strong> (<em>str</em>) – directory to save checkpoint.</li>
+<li><strong>is_best</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, this checkpoint will be copied and named
+“model-best.pth.tar”. Default is False.</li>
+<li><strong>remove_module_from_keys</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to remove “module.”
+from layer names. Default is False.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Examples::</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;state_dict&#39;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;epoch&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;rank1&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;optimizer&#39;</span><span class="p">:</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">save_checkpoint</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="s1">&#39;log/my_model&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torchreid.utils.torchtools.load_checkpoint">
+<code class="descclassname">torchreid.utils.torchtools.</code><code class="descname">load_checkpoint</code><span class="sig-paren">(</span><em>fpath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/torchtools.html#load_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.torchtools.load_checkpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads checkpoint.</p>
+<p><code class="docutils literal notranslate"><span class="pre">UnicodeDecodeError</span></code> can be well handled, which means
+python2-saved files can be read from python3.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fpath</strong> (<em>str</em>) – path to checkpoint.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Examples::</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">load_checkpoint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fpath</span> <span class="o">=</span> <span class="s1">&#39;log/my_model/model.pth.tar-10&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">checkpoint</span> <span class="o">=</span> <span class="n">load_checkpoint</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torchreid.utils.torchtools.resume_from_checkpoint">
+<code class="descclassname">torchreid.utils.torchtools.</code><code class="descname">resume_from_checkpoint</code><span class="sig-paren">(</span><em>fpath</em>, <em>model</em>, <em>optimizer=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/torchtools.html#resume_from_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.torchtools.resume_from_checkpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resumes training from a checkpoint.</p>
+<p>This will load (1) model weights and (2) <code class="docutils literal notranslate"><span class="pre">state_dict</span></code>
+of optimizer if <code class="docutils literal notranslate"><span class="pre">optimizer</span></code> is not None.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fpath</strong> (<em>str</em>) – path to checkpoint.</li>
+<li><strong>model</strong> (<em>nn.Module</em>) – model.</li>
+<li><strong>optimizer</strong> (<em>Optimizer</em><em>, </em><em>optional</em>) – an Optimizer.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">start_epoch.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Examples::</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">resume_from_checkpoint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fpath</span> <span class="o">=</span> <span class="s1">&#39;log/my_model/model.pth.tar-10&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">start_epoch</span> <span class="o">=</span> <span class="n">resume_from_checkpoint</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torchreid.utils.torchtools.open_all_layers">
+<code class="descclassname">torchreid.utils.torchtools.</code><code class="descname">open_all_layers</code><span class="sig-paren">(</span><em>model</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/torchtools.html#open_all_layers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.torchtools.open_all_layers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Opens all layers in model for training.</p>
+<dl class="docutils">
+<dt>Examples::</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">open_all_layers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">open_all_layers</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torchreid.utils.torchtools.open_specified_layers">
+<code class="descclassname">torchreid.utils.torchtools.</code><code class="descname">open_specified_layers</code><span class="sig-paren">(</span><em>model</em>, <em>open_layers</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/torchtools.html#open_specified_layers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.torchtools.open_specified_layers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Opens specified layers in model for training while keeping
+other layers frozen.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>model</strong> (<em>nn.Module</em>) – neural net model.</li>
+<li><strong>open_layers</strong> (<em>str</em><em> or </em><em>list</em>) – layers open for training.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Examples::</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">open_specified_layers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Only model.classifier will be updated.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">open_layers</span> <span class="o">=</span> <span class="s1">&#39;classifier&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">open_specified_layers</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">open_layers</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Only model.fc and model.classifier will be updated.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">open_layers</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;fc&#39;</span><span class="p">,</span> <span class="s1">&#39;classifier&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">open_specified_layers</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">open_layers</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torchreid.utils.torchtools.count_num_param">
+<code class="descclassname">torchreid.utils.torchtools.</code><code class="descname">count_num_param</code><span class="sig-paren">(</span><em>model</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/torchtools.html#count_num_param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.torchtools.count_num_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>Counts number of parameters in a model.</p>
+<dl class="docutils">
+<dt>Examples::</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">count_num_param</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model_size</span> <span class="o">=</span> <span class="n">count_num_param</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torchreid.utils.torchtools.load_pretrained_weights">
+<code class="descclassname">torchreid.utils.torchtools.</code><code class="descname">load_pretrained_weights</code><span class="sig-paren">(</span><em>model</em>, <em>weight_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/torchtools.html#load_pretrained_weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.torchtools.load_pretrained_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads pretrianed weights to model.</p>
+<dl class="docutils">
+<dt>Features::</dt>
+<dd><ul class="first last simple">
+<li>Incompatible layers (unmatched in name or size) will be ignored.</li>
+<li>Can automatically deal with keys containing “module.”.</li>
+</ul>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>model</strong> (<em>nn.Module</em>) – model.</li>
+<li><strong>weight_path</strong> (<em>str</em>) – path to pretrained weights.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Examples::</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">load_pretrained_weights</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">weight_path</span> <span class="o">=</span> <span class="s1">&#39;log/my_model/model-best.pth.tar&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">load_pretrained_weights</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">weight_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../AWESOME_REID.html" class="btn btn-neutral float-right" title="Awesome-ReID" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="optim.html" class="btn btn-neutral float-left" title="torchreid.optim" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Kaiyang Zhou
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

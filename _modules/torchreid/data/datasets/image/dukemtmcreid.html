@@ -1,0 +1,280 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torchreid.data.datasets.image.dukemtmcreid &mdash; torchreid 0.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> torchreid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../user_guide.html">How-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../evaluation.html">Evaluation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/data.html">torchreid.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/engine.html">torchreid.engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/losses.html">torchreid.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/metrics.html">torchreid.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/models.html">torchreid.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/optim.html">torchreid.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/utils.html">torchreid.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../AWESOME_REID.html">Awesome-ReID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../MODEL_ZOO.html">Model Zoo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">torchreid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>torchreid.data.datasets.image.dukemtmcreid</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for torchreid.data.datasets.image.dukemtmcreid</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">torchreid.data.datasets</span> <span class="k">import</span> <span class="n">ImageDataset</span>
+
+
+<div class="viewcode-block" id="DukeMTMCreID"><a class="viewcode-back" href="../../../../../pkg/data.html#torchreid.data.datasets.image.dukemtmcreid.DukeMTMCreID">[docs]</a><span class="k">class</span> <span class="nc">DukeMTMCreID</span><span class="p">(</span><span class="n">ImageDataset</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;DukeMTMC-reID.</span>
+
+<span class="sd">    Reference:</span>
+<span class="sd">        - Ristani et al. Performance Measures and a Data Set for Multi-Target, Multi-Camera Tracking. ECCVW 2016.</span>
+<span class="sd">        - Zheng et al. Unlabeled Samples Generated by GAN Improve the Person Re-identification Baseline in vitro. ICCV 2017.</span>
+
+<span class="sd">    URL: `&lt;https://github.com/layumi/DukeMTMC-reID_evaluation&gt;`_</span>
+<span class="sd">    </span>
+<span class="sd">    Dataset statistics:</span>
+<span class="sd">        - identities: 1404 (train + query).</span>
+<span class="sd">        - images:16522 (train) + 2228 (query) + 17661 (gallery).</span>
+<span class="sd">        - cameras: 8.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dataset_dir</span> <span class="o">=</span> <span class="s1">&#39;dukemtmc-reid&#39;</span>
+    <span class="n">dataset_url</span> <span class="o">=</span> <span class="s1">&#39;http://vision.cs.duke.edu/DukeMTMC/data/misc/DukeMTMC-reID.zip&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">root</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">download_dataset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset_url</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_dir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;DukeMTMC-reID/bounding_box_train&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query_dir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;DukeMTMC-reID/query&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gallery_dir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;DukeMTMC-reID/bounding_box_test&#39;</span><span class="p">)</span>
+        
+        <span class="n">required_files</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_dir</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">query_dir</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gallery_dir</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_before_run</span><span class="p">(</span><span class="n">required_files</span><span class="p">)</span>
+
+        <span class="n">train</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_dir</span><span class="p">,</span> <span class="n">relabel</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">query_dir</span><span class="p">,</span> <span class="n">relabel</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">gallery</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gallery_dir</span><span class="p">,</span> <span class="n">relabel</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">DukeMTMCreID</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">gallery</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">process_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dir_path</span><span class="p">,</span> <span class="n">relabel</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">img_paths</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_path</span><span class="p">,</span> <span class="s1">&#39;*.jpg&#39;</span><span class="p">))</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;([-\d]+)_c(\d)&#39;</span><span class="p">)</span>
+
+        <span class="n">pid_container</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">img_path</span> <span class="ow">in</span> <span class="n">img_paths</span><span class="p">:</span>
+            <span class="n">pid</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">groups</span><span class="p">())</span>
+            <span class="n">pid_container</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+        <span class="n">pid2label</span> <span class="o">=</span> <span class="p">{</span><span class="n">pid</span><span class="p">:</span><span class="n">label</span> <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">pid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pid_container</span><span class="p">)}</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">img_path</span> <span class="ow">in</span> <span class="n">img_paths</span><span class="p">:</span>
+            <span class="n">pid</span><span class="p">,</span> <span class="n">camid</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">groups</span><span class="p">())</span>
+            <span class="k">assert</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">camid</span> <span class="o">&lt;=</span> <span class="mi">8</span>
+            <span class="n">camid</span> <span class="o">-=</span> <span class="mi">1</span> <span class="c1"># index starts from 0</span>
+            <span class="k">if</span> <span class="n">relabel</span><span class="p">:</span> <span class="n">pid</span> <span class="o">=</span> <span class="n">pid2label</span><span class="p">[</span><span class="n">pid</span><span class="p">]</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">img_path</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">camid</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Kaiyang Zhou
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

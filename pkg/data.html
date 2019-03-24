@@ -1,0 +1,1077 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torchreid.data &mdash; torchreid 0.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="torchreid.engine" href="engine.html" />
+    <link rel="prev" title="Evaluation" href="../evaluation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> torchreid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">How-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../evaluation.html">Evaluation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">torchreid.data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-torchreid.data.datamanager">Data Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-torchreid.data.sampler">Sampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-torchreid.data.transforms">Transforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-torchreid.data.datasets.dataset">Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-torchreid.data.datasets.image.market1501">Image Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-torchreid.data.datasets.video.mars">Video Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="engine.html">torchreid.engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losses.html">torchreid.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">torchreid.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">torchreid.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optim.html">torchreid.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">torchreid.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../AWESOME_REID.html">Awesome-ReID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MODEL_ZOO.html">Model Zoo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">torchreid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>torchreid.data</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/pkg/data.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="torchreid-data">
+<span id="id1"></span><h1>torchreid.data<a class="headerlink" href="#torchreid-data" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-torchreid.data.datamanager">
+<span id="data-manager"></span><h2>Data Manager<a class="headerlink" href="#module-torchreid.data.datamanager" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="torchreid.data.datamanager.DataManager">
+<em class="property">class </em><code class="descclassname">torchreid.data.datamanager.</code><code class="descname">DataManager</code><span class="sig-paren">(</span><em>sources=None</em>, <em>targets=None</em>, <em>height=256</em>, <em>width=128</em>, <em>random_erase=False</em>, <em>color_jitter=False</em>, <em>color_aug=False</em>, <em>use_cpu=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#DataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.DataManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base data manager.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sources</strong> (<em>str</em><em> or </em><em>list</em>) – source dataset(s).</li>
+<li><strong>targets</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – target dataset(s). If not given,
+it equals to <code class="docutils literal notranslate"><span class="pre">sources</span></code>.</li>
+<li><strong>height</strong> (<em>int</em><em>, </em><em>optional</em>) – target image height. Default is 256.</li>
+<li><strong>width</strong> (<em>int</em><em>, </em><em>optional</em>) – target image width. Default is 128.</li>
+<li><strong>random_erase</strong> (<em>bool</em><em>, </em><em>optional</em>) – use random erasing. Default is False.</li>
+<li><strong>color_jitter</strong> (<em>bool</em><em>, </em><em>optional</em>) – use color jittering. Default is False.</li>
+<li><strong>color_aug</strong> (<em>bool</em><em>, </em><em>optional</em>) – use color augmentation. Default is False.</li>
+<li><strong>use_cpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – use cpu. Default is False.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="torchreid.data.datamanager.DataManager.num_train_cams">
+<code class="descname">num_train_cams</code><a class="headerlink" href="#torchreid.data.datamanager.DataManager.num_train_cams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of training cameras.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="torchreid.data.datamanager.DataManager.num_train_pids">
+<code class="descname">num_train_pids</code><a class="headerlink" href="#torchreid.data.datamanager.DataManager.num_train_pids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of training person identities.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="torchreid.data.datamanager.DataManager.return_dataloaders">
+<code class="descname">return_dataloaders</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#DataManager.return_dataloaders"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.DataManager.return_dataloaders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns trainloader and testloader.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="torchreid.data.datamanager.DataManager.return_testdataset_by_name">
+<code class="descname">return_testdataset_by_name</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#DataManager.return_testdataset_by_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.DataManager.return_testdataset_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns query and gallery of a test dataset, each containing
+tuples of (img_path(s), pid, camid).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) – dataset name.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.data.datamanager.ImageDataManager">
+<em class="property">class </em><code class="descclassname">torchreid.data.datamanager.</code><code class="descname">ImageDataManager</code><span class="sig-paren">(</span><em>root=''</em>, <em>sources=None</em>, <em>targets=None</em>, <em>height=256</em>, <em>width=128</em>, <em>random_erase=False</em>, <em>color_jitter=False</em>, <em>color_aug=False</em>, <em>use_cpu=False</em>, <em>split_id=0</em>, <em>combineall=False</em>, <em>batch_size=32</em>, <em>workers=4</em>, <em>num_instances=4</em>, <em>train_sampler=''</em>, <em>cuhk03_labeled=False</em>, <em>cuhk03_classic_split=False</em>, <em>market1501_500k=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#ImageDataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.ImageDataManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Image data manager.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>root</strong> (<em>str</em>) – root path to datasets.</li>
+<li><strong>sources</strong> (<em>str</em><em> or </em><em>list</em>) – source dataset(s).</li>
+<li><strong>targets</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – target dataset(s). If not given,
+it equals to <code class="docutils literal notranslate"><span class="pre">sources</span></code>.</li>
+<li><strong>height</strong> (<em>int</em><em>, </em><em>optional</em>) – target image height. Default is 256.</li>
+<li><strong>width</strong> (<em>int</em><em>, </em><em>optional</em>) – target image width. Default is 128.</li>
+<li><strong>random_erase</strong> (<em>bool</em><em>, </em><em>optional</em>) – use random erasing. Default is False.</li>
+<li><strong>color_jitter</strong> (<em>bool</em><em>, </em><em>optional</em>) – use color jittering. Default is False.</li>
+<li><strong>color_aug</strong> (<em>bool</em><em>, </em><em>optional</em>) – use color augmentation. Default is False.</li>
+<li><strong>use_cpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – use cpu. Default is False.</li>
+<li><strong>split_id</strong> (<em>int</em><em>, </em><em>optional</em>) – split id (<em>0-based</em>). Default is 0.</li>
+<li><strong>combineall</strong> (<em>bool</em><em>, </em><em>optional</em>) – combine train, query and gallery in a dataset for
+training. Default is False.</li>
+<li><strong>batch_size</strong> (<em>int</em><em>, </em><em>optional</em>) – number of images in a batch. Default is 32.</li>
+<li><strong>workers</strong> (<em>int</em><em>, </em><em>optional</em>) – number of workers. Default is 4.</li>
+<li><strong>num_instances</strong> (<em>int</em><em>, </em><em>optional</em>) – number of instances per identity in a batch.
+Default is 4.</li>
+<li><strong>train_sampler</strong> (<em>str</em><em>, </em><em>optional</em>) – sampler. Default is empty (<code class="docutils literal notranslate"><span class="pre">RandomSampler</span></code>).</li>
+<li><strong>cuhk03_labeled</strong> (<em>bool</em><em>, </em><em>optional</em>) – use cuhk03 labeled images.
+Default is False (defaul is to use detected images).</li>
+<li><strong>cuhk03_classic_split</strong> (<em>bool</em><em>, </em><em>optional</em>) – use the classic split in cuhk03.
+Default is False.</li>
+<li><strong>market1501_500k</strong> (<em>bool</em><em>, </em><em>optional</em>) – add 500K distractors to the gallery
+set in market1501. Default is False.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">datamanager</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ImageDataManager</span><span class="p">(</span>
+    <span class="n">root</span><span class="o">=</span><span class="s1">&#39;path/to/reid-data&#39;</span><span class="p">,</span>
+    <span class="n">sources</span><span class="o">=</span><span class="s1">&#39;market1501&#39;</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.data.datamanager.VideoDataManager">
+<em class="property">class </em><code class="descclassname">torchreid.data.datamanager.</code><code class="descname">VideoDataManager</code><span class="sig-paren">(</span><em>root=''</em>, <em>sources=None</em>, <em>targets=None</em>, <em>height=256</em>, <em>width=128</em>, <em>random_erase=False</em>, <em>color_jitter=False</em>, <em>color_aug=False</em>, <em>use_cpu=False</em>, <em>split_id=0</em>, <em>combineall=False</em>, <em>batch_size=3</em>, <em>workers=4</em>, <em>num_instances=4</em>, <em>train_sampler=None</em>, <em>seq_len=15</em>, <em>sample_method='evenly'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#VideoDataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.VideoDataManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Video data manager.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>root</strong> (<em>str</em>) – root path to datasets.</li>
+<li><strong>sources</strong> (<em>str</em><em> or </em><em>list</em>) – source dataset(s).</li>
+<li><strong>targets</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – target dataset(s). If not given,
+it equals to <code class="docutils literal notranslate"><span class="pre">sources</span></code>.</li>
+<li><strong>height</strong> (<em>int</em><em>, </em><em>optional</em>) – target image height. Default is 256.</li>
+<li><strong>width</strong> (<em>int</em><em>, </em><em>optional</em>) – target image width. Default is 128.</li>
+<li><strong>random_erase</strong> (<em>bool</em><em>, </em><em>optional</em>) – use random erasing. Default is False.</li>
+<li><strong>color_jitter</strong> (<em>bool</em><em>, </em><em>optional</em>) – use color jittering. Default is False.</li>
+<li><strong>color_aug</strong> (<em>bool</em><em>, </em><em>optional</em>) – use color augmentation. Default is False.</li>
+<li><strong>use_cpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – use cpu. Default is False.</li>
+<li><strong>split_id</strong> (<em>int</em><em>, </em><em>optional</em>) – split id (<em>0-based</em>). Default is 0.</li>
+<li><strong>combineall</strong> (<em>bool</em><em>, </em><em>optional</em>) – combine train, query and gallery in a dataset for
+training. Default is False.</li>
+<li><strong>batch_size</strong> (<em>int</em><em>, </em><em>optional</em>) – number of <em>tracklets</em> in a batch. Default is 3.</li>
+<li><strong>workers</strong> (<em>int</em><em>, </em><em>optional</em>) – number of workers. Default is 4.</li>
+<li><strong>num_instances</strong> (<em>int</em><em>, </em><em>optional</em>) – number of instances per identity in a batch.
+Default is 4.</li>
+<li><strong>train_sampler</strong> (<em>str</em><em>, </em><em>optional</em>) – sampler. Default is empty (<code class="docutils literal notranslate"><span class="pre">RandomSampler</span></code>).</li>
+<li><strong>seq_len</strong> (<em>int</em><em>, </em><em>optional</em>) – how many images to sample in a tracklet. Default is 15.</li>
+<li><strong>sample_method</strong> (<em>str</em><em>, </em><em>optional</em>) – how to sample images in a tracklet. Default is “evenly”.
+Choices are [“evenly”, “random”, “all”]. “evenly” and “random” sample <code class="docutils literal notranslate"><span class="pre">seq_len</span></code>
+images in a tracklet while “all” samples all images in a tracklet, thus <code class="docutils literal notranslate"><span class="pre">batch_size</span></code>
+needs to be set to 1.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">datamanager</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">VideoDataManager</span><span class="p">(</span>
+    <span class="n">root</span><span class="o">=</span><span class="s1">&#39;path/to/reid-data&#39;</span><span class="p">,</span>
+    <span class="n">sources</span><span class="o">=</span><span class="s1">&#39;mars&#39;</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">seq_len</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="n">sample_method</span><span class="o">=</span><span class="s1">&#39;evenly&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-torchreid.data.sampler">
+<span id="sampler"></span><h2>Sampler<a class="headerlink" href="#module-torchreid.data.sampler" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="torchreid.data.sampler.RandomIdentitySampler">
+<em class="property">class </em><code class="descclassname">torchreid.data.sampler.</code><code class="descname">RandomIdentitySampler</code><span class="sig-paren">(</span><em>data_source</em>, <em>batch_size</em>, <em>num_instances</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/sampler.html#RandomIdentitySampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.sampler.RandomIdentitySampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Randomly samples N identities each with K instances.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data_source</strong> (<em>list</em>) – contains tuples of (img_path(s), pid, camid).</li>
+<li><strong>batch_size</strong> (<em>int</em>) – batch size.</li>
+<li><strong>num_instances</strong> (<em>int</em>) – number of instances per identity in a batch.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="torchreid.data.sampler.build_train_sampler">
+<code class="descclassname">torchreid.data.sampler.</code><code class="descname">build_train_sampler</code><span class="sig-paren">(</span><em>data_source</em>, <em>train_sampler</em>, <em>batch_size=32</em>, <em>num_instances=4</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/sampler.html#build_train_sampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.sampler.build_train_sampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds a training sampler.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data_source</strong> (<em>list</em>) – contains tuples of (img_path(s), pid, camid).</li>
+<li><strong>train_sampler</strong> (<em>str</em>) – sampler name (default: <code class="docutils literal notranslate"><span class="pre">RandomSampler</span></code>).</li>
+<li><strong>batch_size</strong> (<em>int</em><em>, </em><em>optional</em>) – batch size. Default is 32.</li>
+<li><strong>num_instances</strong> (<em>int</em><em>, </em><em>optional</em>) – number of instances per identity in a
+batch (for <code class="docutils literal notranslate"><span class="pre">RandomIdentitySampler</span></code>). Default is 4.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-torchreid.data.transforms">
+<span id="transforms"></span><h2>Transforms<a class="headerlink" href="#module-torchreid.data.transforms" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="torchreid.data.transforms.ColorAugmentation">
+<em class="property">class </em><code class="descclassname">torchreid.data.transforms.</code><code class="descname">ColorAugmentation</code><span class="sig-paren">(</span><em>p=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/transforms.html#ColorAugmentation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.transforms.ColorAugmentation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Randomly alters the intensities of RGB channels.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Krizhevsky et al. ImageNet Classification with Deep ConvolutionalNeural
+Networks. NIPS 2012.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>p</strong> (<em>float</em><em>, </em><em>optional</em>) – probability that this operation takes place.
+Default is 0.5.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.data.transforms.Random2DTranslation">
+<em class="property">class </em><code class="descclassname">torchreid.data.transforms.</code><code class="descname">Random2DTranslation</code><span class="sig-paren">(</span><em>height</em>, <em>width</em>, <em>p=0.5</em>, <em>interpolation=2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/transforms.html#Random2DTranslation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.transforms.Random2DTranslation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Randomly translates the input image with a probability.</p>
+<p>Specifically, given a predefined shape (height, width), the input is first
+resized with a factor of 1.25, leading to (height*1.25, width*1.25), then
+a random crop is performed. Such operation is done with a probability.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>height</strong> (<em>int</em>) – target image height.</li>
+<li><strong>width</strong> (<em>int</em>) – target image width.</li>
+<li><strong>p</strong> (<em>float</em><em>, </em><em>optional</em>) – probability that this operation takes place.
+Default is 0.5.</li>
+<li><strong>interpolation</strong> (<em>int</em><em>, </em><em>optional</em>) – desired interpolation. Default is
+<code class="docutils literal notranslate"><span class="pre">PIL.Image.BILINEAR</span></code></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.data.transforms.RandomErasing">
+<em class="property">class </em><code class="descclassname">torchreid.data.transforms.</code><code class="descname">RandomErasing</code><span class="sig-paren">(</span><em>probability=0.5, sl=0.02, sh=0.4, r1=0.3, mean=[0.4914, 0.4822, 0.4465]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/transforms.html#RandomErasing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.transforms.RandomErasing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Randomly erases an image patch.</p>
+<p>Origin: <a class="reference external" href="https://github.com/zhunzhong07/Random-Erasing">https://github.com/zhunzhong07/Random-Erasing</a></p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Zhong et al. Random Erasing Data Augmentation.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>probability</strong> (<em>float</em><em>, </em><em>optional</em>) – probability that this operation takes place.
+Default is 0.5.</li>
+<li><strong>sl</strong> (<em>float</em><em>, </em><em>optional</em>) – min erasing area.</li>
+<li><strong>sh</strong> (<em>float</em><em>, </em><em>optional</em>) – max erasing area.</li>
+<li><strong>r1</strong> (<em>float</em><em>, </em><em>optional</em>) – min aspect ratio.</li>
+<li><strong>mean</strong> (<em>list</em><em>, </em><em>optional</em>) – erasing value.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="torchreid.data.transforms.build_transforms">
+<code class="descclassname">torchreid.data.transforms.</code><code class="descname">build_transforms</code><span class="sig-paren">(</span><em>height, width, random_erase=False, color_jitter=False, color_aug=False, norm_mean=[0.485, 0.456, 0.406], norm_std=[0.229, 0.224, 0.225], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/transforms.html#build_transforms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.transforms.build_transforms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds train and test transform functions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>height</strong> (<em>int</em>) – target image height.</li>
+<li><strong>width</strong> (<em>int</em>) – target image width.</li>
+<li><strong>random_erase</strong> (<em>bool</em><em>, </em><em>optional</em>) – use random erasing. Default is False.</li>
+<li><strong>color_jitter</strong> (<em>bool</em><em>, </em><em>optional</em>) – use color jittering. Default is False.</li>
+<li><strong>color_aug</strong> (<em>bool</em><em>, </em><em>optional</em>) – use color augmentation. Default is False.</li>
+<li><strong>norm_mean</strong> (<em>list</em>) – normalization mean values. Default is ImageNet means.</li>
+<li><strong>norm_std</strong> (<em>list</em>) – normalization standard deviation values. Default is
+ImageNet standard deviation values.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-torchreid.data.datasets.dataset">
+<span id="dataset"></span><h2>Dataset<a class="headerlink" href="#module-torchreid.data.datasets.dataset" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="torchreid.data.datasets.dataset.Dataset">
+<em class="property">class </em><code class="descclassname">torchreid.data.datasets.dataset.</code><code class="descname">Dataset</code><span class="sig-paren">(</span><em>train</em>, <em>query</em>, <em>gallery</em>, <em>transform=None</em>, <em>mode='train'</em>, <em>combineall=False</em>, <em>verbose=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/dataset.html#Dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.dataset.Dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>An abstract class representing a Dataset.</p>
+<p>This is the base class for <code class="docutils literal notranslate"><span class="pre">ImageDataset</span></code> and <code class="docutils literal notranslate"><span class="pre">VideoDataset</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>train</strong> (<em>list</em>) – contains tuples of (img_path(s), pid, camid).</li>
+<li><strong>query</strong> (<em>list</em>) – contains tuples of (img_path(s), pid, camid).</li>
+<li><strong>gallery</strong> (<em>list</em>) – contains tuples of (img_path(s), pid, camid).</li>
+<li><strong>transform</strong> – transform function.</li>
+<li><strong>mode</strong> (<em>str</em>) – ‘train’, ‘query’ or ‘gallery’.</li>
+<li><strong>combineall</strong> (<em>bool</em>) – combines train, query and gallery in a
+dataset for training.</li>
+<li><strong>verbose</strong> (<em>bool</em>) – show information.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="torchreid.data.datasets.dataset.Dataset.check_before_run">
+<code class="descname">check_before_run</code><span class="sig-paren">(</span><em>required_files</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/dataset.html#Dataset.check_before_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.dataset.Dataset.check_before_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if required files exist before going deeper.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>required_files</strong> (<em>str</em><em> or </em><em>list</em>) – string file name(s).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="torchreid.data.datasets.dataset.Dataset.combine_all">
+<code class="descname">combine_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/dataset.html#Dataset.combine_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.dataset.Dataset.combine_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines train, query and gallery in a dataset for training.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="torchreid.data.datasets.dataset.Dataset.download_dataset">
+<code class="descname">download_dataset</code><span class="sig-paren">(</span><em>dataset_dir</em>, <em>dataset_url</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/dataset.html#Dataset.download_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.dataset.Dataset.download_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downloads and extracts dataset.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dataset_dir</strong> (<em>str</em>) – dataset directory.</li>
+<li><strong>dataset_url</strong> (<em>str</em>) – url to download dataset.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="torchreid.data.datasets.dataset.Dataset.get_num_cams">
+<code class="descname">get_num_cams</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/dataset.html#Dataset.get_num_cams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.dataset.Dataset.get_num_cams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of training cameras.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="torchreid.data.datasets.dataset.Dataset.get_num_pids">
+<code class="descname">get_num_pids</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/dataset.html#Dataset.get_num_pids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.dataset.Dataset.get_num_pids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of training person identities.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="torchreid.data.datasets.dataset.Dataset.parse_data">
+<code class="descname">parse_data</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/dataset.html#Dataset.parse_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.dataset.Dataset.parse_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses data list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>list</em>) – contains tuples of (img_path(s), pid, camid)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="torchreid.data.datasets.dataset.Dataset.show_summary">
+<code class="descname">show_summary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/dataset.html#Dataset.show_summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.dataset.Dataset.show_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows dataset statistics.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.data.datasets.dataset.ImageDataset">
+<em class="property">class </em><code class="descclassname">torchreid.data.datasets.dataset.</code><code class="descname">ImageDataset</code><span class="sig-paren">(</span><em>train</em>, <em>query</em>, <em>gallery</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/dataset.html#ImageDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.dataset.ImageDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>A base class representing ImageDataset.</p>
+<p>All other image datasets should subclass it.</p>
+<p><code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> returns an image given index.
+It will return <code class="docutils literal notranslate"><span class="pre">img</span></code>, <code class="docutils literal notranslate"><span class="pre">pid</span></code>, <code class="docutils literal notranslate"><span class="pre">camid</span></code> and <code class="docutils literal notranslate"><span class="pre">img_path</span></code>
+where <code class="docutils literal notranslate"><span class="pre">img</span></code> has shape (channel, height, width). As a result,
+data in each batch has shape (batch_size, channel, height, width).</p>
+<dl class="method">
+<dt id="torchreid.data.datasets.dataset.ImageDataset.show_summary">
+<code class="descname">show_summary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/dataset.html#ImageDataset.show_summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.dataset.ImageDataset.show_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows dataset statistics.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.data.datasets.dataset.VideoDataset">
+<em class="property">class </em><code class="descclassname">torchreid.data.datasets.dataset.</code><code class="descname">VideoDataset</code><span class="sig-paren">(</span><em>train</em>, <em>query</em>, <em>gallery</em>, <em>seq_len=15</em>, <em>sample_method='evenly'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/dataset.html#VideoDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.dataset.VideoDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>A base class representing VideoDataset.</p>
+<p>All other video datasets should subclass it.</p>
+<p><code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> returns an image given index.
+It will return <code class="docutils literal notranslate"><span class="pre">imgs</span></code>, <code class="docutils literal notranslate"><span class="pre">pid</span></code> and <code class="docutils literal notranslate"><span class="pre">camid</span></code>
+where <code class="docutils literal notranslate"><span class="pre">imgs</span></code> has shape (seq_len, channel, height, width). As a result,
+data in each batch has shape (batch_size, seq_len, channel, height, width).</p>
+<dl class="method">
+<dt id="torchreid.data.datasets.dataset.VideoDataset.show_summary">
+<code class="descname">show_summary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/dataset.html#VideoDataset.show_summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.dataset.VideoDataset.show_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows dataset statistics.</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-torchreid.data.datasets.__init__"></span><dl class="function">
+<dt id="torchreid.data.datasets.__init__.init_image_dataset">
+<code class="descclassname">torchreid.data.datasets.__init__.</code><code class="descname">init_image_dataset</code><span class="sig-paren">(</span><em>name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/__init__.html#init_image_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.__init__.init_image_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes an image dataset.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="torchreid.data.datasets.__init__.init_video_dataset">
+<code class="descclassname">torchreid.data.datasets.__init__.</code><code class="descname">init_video_dataset</code><span class="sig-paren">(</span><em>name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/__init__.html#init_video_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.__init__.init_video_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes a video dataset.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="torchreid.data.datasets.__init__.register_image_dataset">
+<code class="descclassname">torchreid.data.datasets.__init__.</code><code class="descname">register_image_dataset</code><span class="sig-paren">(</span><em>name</em>, <em>dataset_</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/__init__.html#register_image_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.__init__.register_image_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Registers a custom image dataset.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>str</em>) – key corresponding to the custom dataset.</li>
+<li><strong>dataset</strong> (<a class="reference internal" href="#torchreid.data.datasets.dataset.Dataset" title="torchreid.data.datasets.dataset.Dataset"><em>Dataset</em></a>) – the custom dataset class.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torchreid</span>
+<span class="kn">import</span> <span class="nn">CustomDataset</span>
+<span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">register_image_dataset</span><span class="p">(</span><span class="s1">&#39;custom_dataset&#39;</span><span class="p">,</span> <span class="n">CustomDataset</span><span class="p">)</span>
+<span class="c1"># single dataset case</span>
+<span class="n">datamanager</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ImageDataManager</span><span class="p">(</span>
+    <span class="n">root</span><span class="o">=</span><span class="s1">&#39;reid-data&#39;</span><span class="p">,</span>
+    <span class="n">sources</span><span class="o">=</span><span class="s1">&#39;custom_dataset&#39;</span>
+<span class="p">)</span>
+<span class="c1"># multiple dataset case</span>
+<span class="n">datamanager</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ImageDataManager</span><span class="p">(</span>
+    <span class="n">root</span><span class="o">=</span><span class="s1">&#39;reid-data&#39;</span><span class="p">,</span>
+    <span class="n">sources</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;custom_dataset&#39;</span><span class="p">,</span> <span class="s1">&#39;dukemtmcreid&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="torchreid.data.datasets.__init__.register_video_dataset">
+<code class="descclassname">torchreid.data.datasets.__init__.</code><code class="descname">register_video_dataset</code><span class="sig-paren">(</span><em>name</em>, <em>dataset_</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/__init__.html#register_video_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.__init__.register_video_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Registers a custom video dataset.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>str</em>) – key corresponding to the custom dataset.</li>
+<li><strong>dataset</strong> (<a class="reference internal" href="#torchreid.data.datasets.dataset.Dataset" title="torchreid.data.datasets.dataset.Dataset"><em>Dataset</em></a>) – the custom dataset class.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torchreid</span>
+<span class="kn">import</span> <span class="nn">CustomDataset</span>
+<span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">register_video_dataset</span><span class="p">(</span><span class="s1">&#39;custom_dataset&#39;</span><span class="p">,</span> <span class="n">CustomDataset</span><span class="p">)</span>
+<span class="c1"># single dataset case</span>
+<span class="n">datamanager</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">VideoDataManager</span><span class="p">(</span>
+    <span class="n">root</span><span class="o">=</span><span class="s1">&#39;reid-data&#39;</span><span class="p">,</span>
+    <span class="n">sources</span><span class="o">=</span><span class="s1">&#39;custom_dataset&#39;</span>
+<span class="p">)</span>
+<span class="c1"># multiple dataset case</span>
+<span class="n">datamanager</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">VideoDataManager</span><span class="p">(</span>
+    <span class="n">root</span><span class="o">=</span><span class="s1">&#39;reid-data&#39;</span><span class="p">,</span>
+    <span class="n">sources</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;custom_dataset&#39;</span><span class="p">,</span> <span class="s1">&#39;ilidsvid&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-torchreid.data.datasets.image.market1501">
+<span id="image-datasets"></span><h2>Image Datasets<a class="headerlink" href="#module-torchreid.data.datasets.image.market1501" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="torchreid.data.datasets.image.market1501.Market1501">
+<em class="property">class </em><code class="descclassname">torchreid.data.datasets.image.market1501.</code><code class="descname">Market1501</code><span class="sig-paren">(</span><em>root=''</em>, <em>market1501_500k=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/image/market1501.html#Market1501"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.image.market1501.Market1501" title="Permalink to this definition">¶</a></dt>
+<dd><p>Market1501.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Zheng et al. Scalable Person Re-identification: A Benchmark. ICCV 2015.</dd>
+</dl>
+<p>URL: <a class="reference external" href="http://www.liangzheng.org/Project/project_reid.html">http://www.liangzheng.org/Project/project_reid.html</a></p>
+<dl class="docutils">
+<dt>Dataset statistics:</dt>
+<dd><ul class="first last simple">
+<li>identities: 1501 (+1 for background).</li>
+<li>images: 12936 (train) + 3368 (query) + 15913 (gallery).</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-torchreid.data.datasets.image.cuhk03"></span><dl class="class">
+<dt id="torchreid.data.datasets.image.cuhk03.CUHK03">
+<em class="property">class </em><code class="descclassname">torchreid.data.datasets.image.cuhk03.</code><code class="descname">CUHK03</code><span class="sig-paren">(</span><em>root=''</em>, <em>split_id=0</em>, <em>cuhk03_labeled=False</em>, <em>cuhk03_classic_split=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/image/cuhk03.html#CUHK03"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.image.cuhk03.CUHK03" title="Permalink to this definition">¶</a></dt>
+<dd><p>CUHK03.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Li et al. DeepReID: Deep Filter Pairing Neural Network for Person Re-identification. CVPR 2014.</dd>
+</dl>
+<p>URL: <a class="reference external" href="http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html#!">http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html#!</a></p>
+<dl class="docutils">
+<dt>Dataset statistics:</dt>
+<dd><ul class="first last simple">
+<li>identities: 1360.</li>
+<li>images: 13164.</li>
+<li>cameras: 6.</li>
+<li>splits: 20 (classic).</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-torchreid.data.datasets.image.dukemtmcreid"></span><dl class="class">
+<dt id="torchreid.data.datasets.image.dukemtmcreid.DukeMTMCreID">
+<em class="property">class </em><code class="descclassname">torchreid.data.datasets.image.dukemtmcreid.</code><code class="descname">DukeMTMCreID</code><span class="sig-paren">(</span><em>root=''</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/image/dukemtmcreid.html#DukeMTMCreID"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.image.dukemtmcreid.DukeMTMCreID" title="Permalink to this definition">¶</a></dt>
+<dd><p>DukeMTMC-reID.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd><ul class="first last simple">
+<li>Ristani et al. Performance Measures and a Data Set for Multi-Target, Multi-Camera Tracking. ECCVW 2016.</li>
+<li>Zheng et al. Unlabeled Samples Generated by GAN Improve the Person Re-identification Baseline in vitro. ICCV 2017.</li>
+</ul>
+</dd>
+</dl>
+<p>URL: <a class="reference external" href="https://github.com/layumi/DukeMTMC-reID_evaluation">https://github.com/layumi/DukeMTMC-reID_evaluation</a></p>
+<dl class="docutils">
+<dt>Dataset statistics:</dt>
+<dd><ul class="first last simple">
+<li>identities: 1404 (train + query).</li>
+<li>images:16522 (train) + 2228 (query) + 17661 (gallery).</li>
+<li>cameras: 8.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-torchreid.data.datasets.image.msmt17"></span><dl class="class">
+<dt id="torchreid.data.datasets.image.msmt17.MSMT17">
+<em class="property">class </em><code class="descclassname">torchreid.data.datasets.image.msmt17.</code><code class="descname">MSMT17</code><span class="sig-paren">(</span><em>root=''</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/image/msmt17.html#MSMT17"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.image.msmt17.MSMT17" title="Permalink to this definition">¶</a></dt>
+<dd><p>MSMT17.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Wei et al. Person Transfer GAN to Bridge Domain Gap for Person Re-Identification. CVPR 2018.</dd>
+</dl>
+<p>URL: <a class="reference external" href="http://www.pkuvmc.com/publications/msmt17.html">http://www.pkuvmc.com/publications/msmt17.html</a></p>
+<dl class="docutils">
+<dt>Dataset statistics:</dt>
+<dd><ul class="first last simple">
+<li>identities: 4101.</li>
+<li>images: 32621 (train) + 11659 (query) + 82161 (gallery).</li>
+<li>cameras: 15.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-torchreid.data.datasets.image.viper"></span><dl class="class">
+<dt id="torchreid.data.datasets.image.viper.VIPeR">
+<em class="property">class </em><code class="descclassname">torchreid.data.datasets.image.viper.</code><code class="descname">VIPeR</code><span class="sig-paren">(</span><em>root=''</em>, <em>split_id=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/image/viper.html#VIPeR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.image.viper.VIPeR" title="Permalink to this definition">¶</a></dt>
+<dd><p>VIPeR.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Gray et al. Evaluating appearance models for recognition, reacquisition, and tracking. PETS 2007.</dd>
+</dl>
+<p>URL: <a class="reference external" href="https://vision.soe.ucsc.edu/node/178">https://vision.soe.ucsc.edu/node/178</a></p>
+<dl class="docutils">
+<dt>Dataset statistics:</dt>
+<dd><ul class="first last simple">
+<li>identities: 632.</li>
+<li>images: 632 x 2 = 1264.</li>
+<li>cameras: 2.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-torchreid.data.datasets.image.grid"></span><dl class="class">
+<dt id="torchreid.data.datasets.image.grid.GRID">
+<em class="property">class </em><code class="descclassname">torchreid.data.datasets.image.grid.</code><code class="descname">GRID</code><span class="sig-paren">(</span><em>root=''</em>, <em>split_id=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/image/grid.html#GRID"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.image.grid.GRID" title="Permalink to this definition">¶</a></dt>
+<dd><p>GRID.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Loy et al. Multi-camera activity correlation analysis. CVPR 2009.</dd>
+</dl>
+<p>URL: <a class="reference external" href="http://personal.ie.cuhk.edu.hk/~ccloy/downloads_qmul_underground_reid.html">http://personal.ie.cuhk.edu.hk/~ccloy/downloads_qmul_underground_reid.html</a></p>
+<dl class="docutils">
+<dt>Dataset statistics:</dt>
+<dd><ul class="first last simple">
+<li>identities: 250.</li>
+<li>images: 1275.</li>
+<li>cameras: 8.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-torchreid.data.datasets.image.cuhk01"></span><dl class="class">
+<dt id="torchreid.data.datasets.image.cuhk01.CUHK01">
+<em class="property">class </em><code class="descclassname">torchreid.data.datasets.image.cuhk01.</code><code class="descname">CUHK01</code><span class="sig-paren">(</span><em>root=''</em>, <em>split_id=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/image/cuhk01.html#CUHK01"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.image.cuhk01.CUHK01" title="Permalink to this definition">¶</a></dt>
+<dd><p>CUHK01.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Li et al. Human Reidentification with Transferred Metric Learning. ACCV 2012.</dd>
+</dl>
+<p>URL: <a class="reference external" href="http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html">http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html</a></p>
+<dl class="docutils">
+<dt>Dataset statistics:</dt>
+<dd><ul class="first last simple">
+<li>identities: 971.</li>
+<li>images: 3884.</li>
+<li>cameras: 4.</li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="torchreid.data.datasets.image.cuhk01.CUHK01.prepare_split">
+<code class="descname">prepare_split</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/image/cuhk01.html#CUHK01.prepare_split"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.image.cuhk01.CUHK01.prepare_split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Image name format: 0001001.png, where first four digits represent identity
+and last four digits represent cameras. Camera 1&amp;2 are considered the same
+view and camera 3&amp;4 are considered the same view.</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-torchreid.data.datasets.image.prid450s"></span><dl class="class">
+<dt id="torchreid.data.datasets.image.prid450s.PRID450S">
+<em class="property">class </em><code class="descclassname">torchreid.data.datasets.image.prid450s.</code><code class="descname">PRID450S</code><span class="sig-paren">(</span><em>root=''</em>, <em>split_id=0</em>, <em>min_seq_len=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/image/prid450s.html#PRID450S"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.image.prid450s.PRID450S" title="Permalink to this definition">¶</a></dt>
+<dd><p>PRID450S.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Roth et al. Mahalanobis Distance Learning for Person Re-Identification. PR 2014.</dd>
+</dl>
+<p>URL: <a class="reference external" href="https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/prid450s/">https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/prid450s/</a></p>
+<dl class="docutils">
+<dt>Dataset statistics:</dt>
+<dd><ul class="first last simple">
+<li>identities: 450.</li>
+<li>images: 900.</li>
+<li>cameras: 2.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-torchreid.data.datasets.image.ilids"></span><dl class="class">
+<dt id="torchreid.data.datasets.image.ilids.iLIDS">
+<em class="property">class </em><code class="descclassname">torchreid.data.datasets.image.ilids.</code><code class="descname">iLIDS</code><span class="sig-paren">(</span><em>root=''</em>, <em>split_id=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/image/ilids.html#iLIDS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.image.ilids.iLIDS" title="Permalink to this definition">¶</a></dt>
+<dd><p>QMUL-iLIDS.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Zheng et al. Associating Groups of People. BMVC 2009.</dd>
+<dt>Dataset statistics:</dt>
+<dd><ul class="first last simple">
+<li>identities: 119.</li>
+<li>images: 476.</li>
+<li>cameras: 8 (not explicitly provided).</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-torchreid.data.datasets.image.sensereid"></span><dl class="class">
+<dt id="torchreid.data.datasets.image.sensereid.SenseReID">
+<em class="property">class </em><code class="descclassname">torchreid.data.datasets.image.sensereid.</code><code class="descname">SenseReID</code><span class="sig-paren">(</span><em>root=''</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/image/sensereid.html#SenseReID"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.image.sensereid.SenseReID" title="Permalink to this definition">¶</a></dt>
+<dd><p>SenseReID.</p>
+<p>This dataset is used for test purpose only.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Zhao et al. Spindle Net: Person Re-identification with Human Body
+Region Guided Feature Decomposition and Fusion. CVPR 2017.</dd>
+</dl>
+<p>URL: <a class="reference external" href="https://drive.google.com/file/d/0B56OfSrVI8hubVJLTzkwV2VaOWM/view">https://drive.google.com/file/d/0B56OfSrVI8hubVJLTzkwV2VaOWM/view</a></p>
+<dl class="docutils">
+<dt>Dataset statistics:</dt>
+<dd><ul class="first last simple">
+<li>query: 522 ids, 1040 images.</li>
+<li>gallery: 1717 ids, 3388 images.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-torchreid.data.datasets.image.prid"></span><dl class="class">
+<dt id="torchreid.data.datasets.image.prid.PRID">
+<em class="property">class </em><code class="descclassname">torchreid.data.datasets.image.prid.</code><code class="descname">PRID</code><span class="sig-paren">(</span><em>single-shot version of prid-2011</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/image/prid.html#PRID"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.image.prid.PRID" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Reference:</dt>
+<dd>Hirzer et al. Person Re-Identification by Descriptive and Discriminative
+Classification. SCIA 2011.</dd>
+</dl>
+<p>URL: <a class="reference external" href="https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/">https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/</a></p>
+<dl class="docutils">
+<dt>Dataset statistics:</dt>
+<dd><ul class="first last simple">
+<li>Two views.</li>
+<li>View A captures 385 identities.</li>
+<li>View B captures 749 identities.</li>
+<li>200 identities appear in both views.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-torchreid.data.datasets.video.mars">
+<span id="video-datasets"></span><h2>Video Datasets<a class="headerlink" href="#module-torchreid.data.datasets.video.mars" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="torchreid.data.datasets.video.mars.Mars">
+<em class="property">class </em><code class="descclassname">torchreid.data.datasets.video.mars.</code><code class="descname">Mars</code><span class="sig-paren">(</span><em>root=''</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/video/mars.html#Mars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.video.mars.Mars" title="Permalink to this definition">¶</a></dt>
+<dd><p>MARS.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Zheng et al. MARS: A Video Benchmark for Large-Scale Person Re-identification. ECCV 2016.</dd>
+</dl>
+<p>URL: <a class="reference external" href="http://www.liangzheng.com.cn/Project/project_mars.html">http://www.liangzheng.com.cn/Project/project_mars.html</a></p>
+<dl class="docutils">
+<dt>Dataset statistics:</dt>
+<dd><ul class="first last simple">
+<li>identities: 1261.</li>
+<li>tracklets: 8298 (train) + 1980 (query) + 9330 (gallery).</li>
+<li>cameras: 6.</li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="torchreid.data.datasets.video.mars.Mars.combine_all">
+<code class="descname">combine_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/video/mars.html#Mars.combine_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.video.mars.Mars.combine_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines train, query and gallery in a dataset for training.</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-torchreid.data.datasets.video.ilidsvid"></span><dl class="class">
+<dt id="torchreid.data.datasets.video.ilidsvid.iLIDSVID">
+<em class="property">class </em><code class="descclassname">torchreid.data.datasets.video.ilidsvid.</code><code class="descname">iLIDSVID</code><span class="sig-paren">(</span><em>root=''</em>, <em>split_id=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/video/ilidsvid.html#iLIDSVID"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.video.ilidsvid.iLIDSVID" title="Permalink to this definition">¶</a></dt>
+<dd><p>iLIDS-VID.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Wang et al. Person Re-Identification by Video Ranking. ECCV 2014.</dd>
+</dl>
+<p>URL: <a class="reference external" href="http://www.eecs.qmul.ac.uk/~xiatian/downloads_qmul_iLIDS-VID_ReID_dataset.html">http://www.eecs.qmul.ac.uk/~xiatian/downloads_qmul_iLIDS-VID_ReID_dataset.html</a></p>
+<dl class="docutils">
+<dt>Dataset statistics:</dt>
+<dd><ul class="first last simple">
+<li>identities: 300.</li>
+<li>tracklets: 600.</li>
+<li>cameras: 2.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-torchreid.data.datasets.video.prid2011"></span><dl class="class">
+<dt id="torchreid.data.datasets.video.prid2011.PRID2011">
+<em class="property">class </em><code class="descclassname">torchreid.data.datasets.video.prid2011.</code><code class="descname">PRID2011</code><span class="sig-paren">(</span><em>root=''</em>, <em>split_id=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/video/prid2011.html#PRID2011"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.video.prid2011.PRID2011" title="Permalink to this definition">¶</a></dt>
+<dd><p>PRID2011.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Hirzer et al. Person Re-Identification by Descriptive and
+Discriminative Classification. SCIA 2011.</dd>
+</dl>
+<p>URL: <a class="reference external" href="https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/">https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/</a></p>
+<dl class="docutils">
+<dt>Dataset statistics:</dt>
+<dd><ul class="first last simple">
+<li>identities: 200.</li>
+<li>tracklets: 400.</li>
+<li>cameras: 2.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-torchreid.data.datasets.video.dukemtmcvidreid"></span><dl class="class">
+<dt id="torchreid.data.datasets.video.dukemtmcvidreid.DukeMTMCVidReID">
+<em class="property">class </em><code class="descclassname">torchreid.data.datasets.video.dukemtmcvidreid.</code><code class="descname">DukeMTMCVidReID</code><span class="sig-paren">(</span><em>root=''</em>, <em>min_seq_len=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/video/dukemtmcvidreid.html#DukeMTMCVidReID"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.video.dukemtmcvidreid.DukeMTMCVidReID" title="Permalink to this definition">¶</a></dt>
+<dd><p>DukeMTMCVidReID.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd><ul class="first last simple">
+<li>Ristani et al. Performance Measures and a Data Set for Multi-Target,
+Multi-Camera Tracking. ECCVW 2016.</li>
+<li>Wu et al. Exploit the Unknown Gradually: One-Shot Video-Based Person
+Re-Identification by Stepwise Learning. CVPR 2018.</li>
+</ul>
+</dd>
+</dl>
+<p>URL: <a class="reference external" href="https://github.com/Yu-Wu/DukeMTMC-VideoReID">https://github.com/Yu-Wu/DukeMTMC-VideoReID</a></p>
+<dl class="docutils">
+<dt>Dataset statistics:</dt>
+<dd><ul class="first last simple">
+<li>identities: 702 (train) + 702 (test).</li>
+<li>tracklets: 2196 (train) + 2636 (test).</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="engine.html" class="btn btn-neutral float-right" title="torchreid.engine" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../evaluation.html" class="btn btn-neutral float-left" title="Evaluation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Kaiyang Zhou
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

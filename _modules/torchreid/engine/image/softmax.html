@@ -1,0 +1,338 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torchreid.engine.image.softmax &mdash; torchreid 0.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> torchreid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user_guide.html">How-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../evaluation.html">Evaluation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pkg/data.html">torchreid.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pkg/engine.html">torchreid.engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pkg/losses.html">torchreid.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pkg/metrics.html">torchreid.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pkg/models.html">torchreid.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pkg/optim.html">torchreid.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pkg/utils.html">torchreid.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../AWESOME_REID.html">Awesome-ReID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../MODEL_ZOO.html">Model Zoo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">torchreid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>torchreid.engine.image.softmax</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for torchreid.engine.image.softmax</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">import</span> <span class="nn">torchreid</span>
+<span class="kn">from</span> <span class="nn">torchreid.engine</span> <span class="k">import</span> <span class="n">engine</span>
+<span class="kn">from</span> <span class="nn">torchreid.losses</span> <span class="k">import</span> <span class="n">CrossEntropyLoss</span>
+<span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">AverageMeter</span><span class="p">,</span> <span class="n">open_specified_layers</span><span class="p">,</span> <span class="n">open_all_layers</span>
+<span class="kn">from</span> <span class="nn">torchreid</span> <span class="k">import</span> <span class="n">metrics</span>
+
+
+<div class="viewcode-block" id="ImageSoftmaxEngine"><a class="viewcode-back" href="../../../../pkg/engine.html#torchreid.engine.image.softmax.ImageSoftmaxEngine">[docs]</a><span class="k">class</span> <span class="nc">ImageSoftmaxEngine</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">Engine</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Softmax-loss engine for image-reid.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        datamanager (DataManager): an instance of ``torchreid.data.ImageDataManager``</span>
+<span class="sd">            or ``torchreid.data.VideoDataManager``.</span>
+<span class="sd">        model (nn.Module): model instance.</span>
+<span class="sd">        optimizer (Optimizer): an Optimizer.</span>
+<span class="sd">        scheduler (LRScheduler, optional): if None, no learning rate decay will be performed.</span>
+<span class="sd">        use_cpu (bool, optional): use cpu. Default is False.</span>
+<span class="sd">        label_smooth (bool, optional): use label smoothing regularizer. Default is True.</span>
+
+<span class="sd">    Examples::</span>
+<span class="sd">        </span>
+<span class="sd">        import torch</span>
+<span class="sd">        import torchreid</span>
+<span class="sd">        datamanager = torchreid.data.ImageDataManager(</span>
+<span class="sd">            root=&#39;path/to/reid-data&#39;,</span>
+<span class="sd">            sources=&#39;market1501&#39;,</span>
+<span class="sd">            height=256,</span>
+<span class="sd">            width=128,</span>
+<span class="sd">            combineall=False,</span>
+<span class="sd">            batch_size=32</span>
+<span class="sd">        )</span>
+<span class="sd">        model = torchreid.models.build_model(</span>
+<span class="sd">            name=&#39;resnet50&#39;,</span>
+<span class="sd">            num_classes=datamanager.num_train_pids,</span>
+<span class="sd">            loss=&#39;softmax&#39;</span>
+<span class="sd">        )</span>
+<span class="sd">        model = model.cuda()</span>
+<span class="sd">        optimizer = torchreid.optim.build_optimizer(</span>
+<span class="sd">            model, optim=&#39;adam&#39;, lr=0.0003</span>
+<span class="sd">        )</span>
+<span class="sd">        scheduler = torchreid.optim.build_lr_scheduler(</span>
+<span class="sd">            optimizer,</span>
+<span class="sd">            lr_scheduler=&#39;single_step&#39;,</span>
+<span class="sd">            stepsize=20</span>
+<span class="sd">        )</span>
+<span class="sd">        engine = torchreid.engine.ImageSoftmaxEngine(</span>
+<span class="sd">            datamanager, model, optimizer, scheduler=scheduler</span>
+<span class="sd">        )</span>
+<span class="sd">        engine.run(</span>
+<span class="sd">            max_epoch=60,</span>
+<span class="sd">            save_dir=&#39;log/resnet50-softmax-market1501&#39;,</span>
+<span class="sd">            print_freq=10</span>
+<span class="sd">        )</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamanager</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">label_smooth</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ImageSoftmaxEngine</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">datamanager</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">scheduler</span><span class="p">,</span> <span class="n">use_cpu</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">criterion</span> <span class="o">=</span> <span class="n">CrossEntropyLoss</span><span class="p">(</span>
+            <span class="n">num_classes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span><span class="n">num_train_pids</span><span class="p">,</span>
+            <span class="n">use_gpu</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span>
+            <span class="n">label_smooth</span><span class="o">=</span><span class="n">label_smooth</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="ImageSoftmaxEngine.train"><a class="viewcode-back" href="../../../../pkg/engine.html#torchreid.engine.image.softmax.ImageSoftmaxEngine.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">trainloader</span><span class="p">,</span> <span class="n">fixbase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">open_layers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">print_freq</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Trains the model for one epoch on source datasets using softmax loss.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            epoch (int): current epoch.</span>
+<span class="sd">            trainloader (Dataloader): training dataloader.</span>
+<span class="sd">            fixbase (bool, optional): whether to fix base layers. Default is False.</span>
+<span class="sd">            open_layers (str or list, optional): layers open for training.</span>
+<span class="sd">            print_freq (int, optional): print frequency. Default is 10.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">losses</span> <span class="o">=</span> <span class="n">AverageMeter</span><span class="p">()</span>
+        <span class="n">accs</span> <span class="o">=</span> <span class="n">AverageMeter</span><span class="p">()</span>
+        <span class="n">batch_time</span> <span class="o">=</span> <span class="n">AverageMeter</span><span class="p">()</span>
+        <span class="n">data_time</span> <span class="o">=</span> <span class="n">AverageMeter</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">fixbase</span> <span class="ow">and</span> <span class="p">(</span><span class="n">open_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">open_specified_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">open_layers</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">open_all_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">trainloader</span><span class="p">):</span>
+            <span class="n">data_time</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">end</span><span class="p">)</span>
+
+            <span class="n">imgs</span><span class="p">,</span> <span class="n">pids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_data_for_train</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">:</span>
+                <span class="n">imgs</span> <span class="o">=</span> <span class="n">imgs</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+                <span class="n">pids</span> <span class="o">=</span> <span class="n">pids</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+            <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_loss</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">criterion</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">pids</span><span class="p">)</span>
+            <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+            <span class="n">batch_time</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">end</span><span class="p">)</span>
+
+            <span class="n">losses</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">pids</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+            <span class="n">accs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">metrics</span><span class="o">.</span><span class="n">accuracy</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">pids</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">batch_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">print_freq</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Epoch: [</span><span class="si">{0}</span><span class="s1">][</span><span class="si">{1}</span><span class="s1">/</span><span class="si">{2}</span><span class="s1">]</span><span class="se">\t</span><span class="s1">&#39;</span>
+                      <span class="s1">&#39;Time </span><span class="si">{batch_time.val:.3f}</span><span class="s1"> (</span><span class="si">{batch_time.avg:.3f}</span><span class="s1">)</span><span class="se">\t</span><span class="s1">&#39;</span>
+                      <span class="s1">&#39;Data </span><span class="si">{data_time.val:.3f}</span><span class="s1"> (</span><span class="si">{data_time.avg:.3f}</span><span class="s1">)</span><span class="se">\t</span><span class="s1">&#39;</span>
+                      <span class="s1">&#39;Loss </span><span class="si">{loss.val:.4f}</span><span class="s1"> (</span><span class="si">{loss.avg:.4f}</span><span class="s1">)</span><span class="se">\t</span><span class="s1">&#39;</span>
+                      <span class="s1">&#39;Acc </span><span class="si">{acc.val:.2f}</span><span class="s1"> (</span><span class="si">{acc.avg:.2f}</span><span class="s1">)</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                      <span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">batch_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">trainloader</span><span class="p">),</span>
+                      <span class="n">batch_time</span><span class="o">=</span><span class="n">batch_time</span><span class="p">,</span>
+                      <span class="n">data_time</span><span class="o">=</span><span class="n">data_time</span><span class="p">,</span>
+                      <span class="n">loss</span><span class="o">=</span><span class="n">losses</span><span class="p">,</span>
+                      <span class="n">acc</span><span class="o">=</span><span class="n">accs</span><span class="p">))</span>
+            
+            <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Kaiyang Zhou
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

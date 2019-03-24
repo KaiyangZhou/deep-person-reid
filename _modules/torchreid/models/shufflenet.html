@@ -1,0 +1,375 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torchreid.models.shufflenet &mdash; torchreid 0.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> torchreid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">How-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../evaluation.html">Evaluation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/data.html">torchreid.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/engine.html">torchreid.engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/losses.html">torchreid.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/metrics.html">torchreid.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/models.html">torchreid.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/optim.html">torchreid.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/utils.html">torchreid.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../AWESOME_REID.html">Awesome-ReID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../MODEL_ZOO.html">Model Zoo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">torchreid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>torchreid.models.shufflenet</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for torchreid.models.shufflenet</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;shufflenet&#39;</span><span class="p">]</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">nn</span>
+<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
+<span class="kn">import</span> <span class="nn">torchvision</span>
+<span class="kn">import</span> <span class="nn">torch.utils.model_zoo</span> <span class="k">as</span> <span class="nn">model_zoo</span>
+
+
+<span class="n">model_urls</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># training epoch = 90, top1 = 61.8</span>
+    <span class="s1">&#39;imagenet&#39;</span><span class="p">:</span> <span class="s1">&#39;http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/imagenet-pretrained/shufflenet-bee1b265.pth.tar&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="k">class</span> <span class="nc">ChannelShuffle</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ChannelShuffle</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="n">num_groups</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">c</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span>
+        <span class="c1"># reshape</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+        <span class="c1"># transpose</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span>
+        <span class="c1"># flatten</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+
+<span class="k">class</span> <span class="nc">Bottleneck</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">stride</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">,</span> <span class="n">group_conv1x1</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Bottleneck</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">stride</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;Warning: stride must be either 1 or 2&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stride</span> <span class="o">=</span> <span class="n">stride</span>
+        <span class="n">mid_channels</span> <span class="o">=</span> <span class="n">out_channels</span> <span class="o">//</span> <span class="mi">4</span>
+        <span class="k">if</span> <span class="n">stride</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span> <span class="n">out_channels</span> <span class="o">-=</span> <span class="n">in_channels</span>
+        <span class="c1"># group conv is not applied to first conv1x1 at stage 2</span>
+        <span class="n">num_groups_conv1x1</span> <span class="o">=</span> <span class="n">num_groups</span> <span class="k">if</span> <span class="n">group_conv1x1</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">mid_channels</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">num_groups_conv1x1</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bn1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">(</span><span class="n">mid_channels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shuffle1</span> <span class="o">=</span> <span class="n">ChannelShuffle</span><span class="p">(</span><span class="n">num_groups</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">mid_channels</span><span class="p">,</span> <span class="n">mid_channels</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="n">stride</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">mid_channels</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bn2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">(</span><span class="n">mid_channels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">mid_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">num_groups</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bn3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">(</span><span class="n">out_channels</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">stride</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">shortcut</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">AvgPool2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bn1</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shuffle1</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv3</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stride</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shortcut</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">res</span><span class="p">,</span> <span class="n">out</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="c1"># configuration of (num_groups: #out_channels) based on Table 1 in the paper</span>
+<span class="n">cfg</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="mi">144</span><span class="p">,</span> <span class="mi">288</span><span class="p">,</span> <span class="mi">576</span><span class="p">],</span>
+    <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">800</span><span class="p">],</span>
+    <span class="mi">3</span><span class="p">:</span> <span class="p">[</span><span class="mi">240</span><span class="p">,</span> <span class="mi">480</span><span class="p">,</span> <span class="mi">960</span><span class="p">],</span>
+    <span class="mi">4</span><span class="p">:</span> <span class="p">[</span><span class="mi">272</span><span class="p">,</span> <span class="mi">544</span><span class="p">,</span> <span class="mi">1088</span><span class="p">],</span>
+    <span class="mi">8</span><span class="p">:</span> <span class="p">[</span><span class="mi">384</span><span class="p">,</span> <span class="mi">768</span><span class="p">,</span> <span class="mi">1536</span><span class="p">],</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="ShuffleNet"><a class="viewcode-back" href="../../../pkg/models.html#torchreid.models.shufflenet.ShuffleNet">[docs]</a><span class="k">class</span> <span class="nc">ShuffleNet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;ShuffleNet.</span>
+
+<span class="sd">    Reference:</span>
+<span class="sd">        Zhang et al. ShuffleNet: An Extremely Efficient Convolutional Neural</span>
+<span class="sd">        Network for Mobile Devices. CVPR 2018.</span>
+
+<span class="sd">    Public keys:</span>
+<span class="sd">        - ``shufflenet``: ShuffleNet (groups=3).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span> <span class="n">num_groups</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ShuffleNet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">(</span><span class="mi">24</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">MaxPool2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stage2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">Bottleneck</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">,</span> <span class="n">group_conv1x1</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+            <span class="n">Bottleneck</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">),</span>
+            <span class="n">Bottleneck</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">),</span>
+            <span class="n">Bottleneck</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stage3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">Bottleneck</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">),</span>
+            <span class="n">Bottleneck</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">),</span>
+            <span class="n">Bottleneck</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">),</span>
+            <span class="n">Bottleneck</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">),</span>
+            <span class="n">Bottleneck</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">),</span>
+            <span class="n">Bottleneck</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">),</span>
+            <span class="n">Bottleneck</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">),</span>
+            <span class="n">Bottleneck</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stage4</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">Bottleneck</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="mi">2</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">),</span>
+            <span class="n">Bottleneck</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">),</span>
+            <span class="n">Bottleneck</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">),</span>
+            <span class="n">Bottleneck</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">num_classes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feat_dim</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">[</span><span class="n">num_groups</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stage2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stage3</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stage4</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">avg_pool2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">2</span><span class="p">:])</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">training</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span>
+
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">==</span> <span class="s1">&#39;softmax&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">y</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">==</span> <span class="s1">&#39;triplet&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;Unsupported loss: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">))</span></div>
+
+
+<span class="k">def</span> <span class="nf">init_pretrained_weights</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">model_url</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Initializes model with pretrained weights.</span>
+<span class="sd">    </span>
+<span class="sd">    Layers that don&#39;t match with pretrained layers in name or size are kept unchanged.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pretrain_dict</span> <span class="o">=</span> <span class="n">model_zoo</span><span class="o">.</span><span class="n">load_url</span><span class="p">(</span><span class="n">model_url</span><span class="p">)</span>
+    <span class="n">model_dict</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()</span>
+    <span class="n">pretrain_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">pretrain_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">model_dict</span> <span class="ow">and</span> <span class="n">model_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="n">v</span><span class="o">.</span><span class="n">size</span><span class="p">()}</span>
+    <span class="n">model_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pretrain_dict</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">model_dict</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Initialized model with pretrained weights from </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_url</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">shufflenet</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">ShuffleNet</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pretrained</span><span class="p">:</span>
+        <span class="n">init_pretrained_weights</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">model_urls</span><span class="p">[</span><span class="s1">&#39;imagenet&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">model</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Kaiyang Zhou
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

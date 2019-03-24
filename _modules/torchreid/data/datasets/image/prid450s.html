@@ -1,0 +1,320 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torchreid.data.datasets.image.prid450s &mdash; torchreid 0.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> torchreid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../user_guide.html">How-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../evaluation.html">Evaluation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/data.html">torchreid.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/engine.html">torchreid.engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/losses.html">torchreid.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/metrics.html">torchreid.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/models.html">torchreid.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/optim.html">torchreid.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/utils.html">torchreid.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../AWESOME_REID.html">Awesome-ReID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../MODEL_ZOO.html">Model Zoo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">torchreid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>torchreid.data.datasets.image.prid450s</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for torchreid.data.datasets.image.prid450s</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">torchreid.data.datasets</span> <span class="k">import</span> <span class="n">ImageDataset</span>
+<span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">read_json</span><span class="p">,</span> <span class="n">write_json</span>
+
+
+<div class="viewcode-block" id="PRID450S"><a class="viewcode-back" href="../../../../../pkg/data.html#torchreid.data.datasets.image.prid450s.PRID450S">[docs]</a><span class="k">class</span> <span class="nc">PRID450S</span><span class="p">(</span><span class="n">ImageDataset</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;PRID450S.</span>
+
+<span class="sd">    Reference:</span>
+<span class="sd">        Roth et al. Mahalanobis Distance Learning for Person Re-Identification. PR 2014.</span>
+
+<span class="sd">    URL: `&lt;https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/prid450s/&gt;`_</span>
+<span class="sd">    </span>
+<span class="sd">    Dataset statistics:</span>
+<span class="sd">        - identities: 450.</span>
+<span class="sd">        - images: 900.</span>
+<span class="sd">        - cameras: 2.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dataset_dir</span> <span class="o">=</span> <span class="s1">&#39;prid450s&#39;</span>
+    <span class="n">dataset_url</span> <span class="o">=</span> <span class="s1">&#39;https://files.icg.tugraz.at/f/8c709245bb/?raw=1&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">split_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">min_seq_len</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">root</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">download_dataset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset_url</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">split_path</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;splits.json&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cam_a_dir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;cam_a&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cam_b_dir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;cam_b&#39;</span><span class="p">)</span>
+        
+        <span class="n">required_files</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cam_a_dir</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cam_b_dir</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_before_run</span><span class="p">(</span><span class="n">required_files</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">prepare_split</span><span class="p">()</span>
+        <span class="n">splits</span> <span class="o">=</span> <span class="n">read_json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">split_id</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">splits</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;split_id exceeds range, received </span><span class="si">{}</span><span class="s1">, but expected between 0 and </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">split_id</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">splits</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">split</span> <span class="o">=</span> <span class="n">splits</span><span class="p">[</span><span class="n">split_id</span><span class="p">]</span>
+
+        <span class="n">train</span> <span class="o">=</span> <span class="n">split</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">]</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">split</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">]</span>
+        <span class="n">gallery</span> <span class="o">=</span> <span class="n">split</span><span class="p">[</span><span class="s1">&#39;gallery&#39;</span><span class="p">]</span>
+
+        <span class="n">train</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">train</span><span class="p">]</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">query</span><span class="p">]</span>
+        <span class="n">gallery</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">gallery</span><span class="p">]</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">PRID450S</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">gallery</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">prepare_split</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">osp</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split_path</span><span class="p">):</span>
+            <span class="n">cam_a_imgs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_a_dir</span><span class="p">,</span> <span class="s1">&#39;img_*.png&#39;</span><span class="p">)))</span>
+            <span class="n">cam_b_imgs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_b_dir</span><span class="p">,</span> <span class="s1">&#39;img_*.png&#39;</span><span class="p">)))</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">cam_a_imgs</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">cam_b_imgs</span><span class="p">)</span>
+
+            <span class="n">num_pids</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cam_a_imgs</span><span class="p">)</span>
+            <span class="n">num_train_pids</span> <span class="o">=</span> <span class="n">num_pids</span> <span class="o">//</span> <span class="mi">2</span>
+
+            <span class="n">splits</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+                <span class="n">order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">num_pids</span><span class="p">)</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
+                <span class="n">train_idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">order</span><span class="p">[:</span><span class="n">num_train_pids</span><span class="p">])</span>
+                <span class="n">idx2label</span> <span class="o">=</span> <span class="p">{</span><span class="n">idx</span><span class="p">:</span> <span class="n">label</span> <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_idxs</span><span class="p">)}</span>
+
+                <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+
+                <span class="c1"># processing camera a</span>
+                <span class="k">for</span> <span class="n">img_path</span> <span class="ow">in</span> <span class="n">cam_a_imgs</span><span class="p">:</span>
+                    <span class="n">img_name</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span>
+                    <span class="n">img_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">img_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">img_idx</span> <span class="ow">in</span> <span class="n">train_idxs</span><span class="p">:</span>
+                        <span class="n">train</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">img_path</span><span class="p">,</span> <span class="n">idx2label</span><span class="p">[</span><span class="n">img_idx</span><span class="p">],</span> <span class="mi">0</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">test</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">img_path</span><span class="p">,</span> <span class="n">img_idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+                <span class="c1"># processing camera b</span>
+                <span class="k">for</span> <span class="n">img_path</span> <span class="ow">in</span> <span class="n">cam_b_imgs</span><span class="p">:</span>
+                    <span class="n">img_name</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span>
+                    <span class="n">img_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">img_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">img_idx</span> <span class="ow">in</span> <span class="n">train_idxs</span><span class="p">:</span>
+                        <span class="n">train</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">img_path</span><span class="p">,</span> <span class="n">idx2label</span><span class="p">[</span><span class="n">img_idx</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">test</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">img_path</span><span class="p">,</span> <span class="n">img_idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+                <span class="n">split</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;train&#39;</span><span class="p">:</span> <span class="n">train</span><span class="p">,</span>
+                    <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="n">test</span><span class="p">,</span>
+                    <span class="s1">&#39;gallery&#39;</span><span class="p">:</span> <span class="n">test</span><span class="p">,</span>
+                    <span class="s1">&#39;num_train_pids&#39;</span><span class="p">:</span> <span class="n">num_train_pids</span><span class="p">,</span>
+                    <span class="s1">&#39;num_query_pids&#39;</span><span class="p">:</span> <span class="n">num_pids</span> <span class="o">-</span> <span class="n">num_train_pids</span><span class="p">,</span>
+                    <span class="s1">&#39;num_gallery_pids&#39;</span><span class="p">:</span> <span class="n">num_pids</span> <span class="o">-</span> <span class="n">num_train_pids</span>
+                <span class="p">}</span>
+                <span class="n">splits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">split</span><span class="p">)</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Totally </span><span class="si">{}</span><span class="s1"> splits are created&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">splits</span><span class="p">)))</span>
+            <span class="n">write_json</span><span class="p">(</span><span class="n">splits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_path</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Split file saved to </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split_path</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Kaiyang Zhou
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

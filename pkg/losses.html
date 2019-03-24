@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torchreid.losses &mdash; torchreid 0.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="torchreid.metrics" href="metrics.html" />
+    <link rel="prev" title="torchreid.engine" href="engine.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> torchreid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">How-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../evaluation.html">Evaluation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data.html">torchreid.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="engine.html">torchreid.engine</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">torchreid.losses</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-torchreid.losses.cross_entropy_loss">Softmax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-torchreid.losses.hard_mine_triplet_loss">Triplet</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">torchreid.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">torchreid.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optim.html">torchreid.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">torchreid.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../AWESOME_REID.html">Awesome-ReID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MODEL_ZOO.html">Model Zoo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">torchreid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>torchreid.losses</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/pkg/losses.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="torchreid-losses">
+<span id="id1"></span><h1>torchreid.losses<a class="headerlink" href="#torchreid-losses" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-torchreid.losses.cross_entropy_loss">
+<span id="softmax"></span><h2>Softmax<a class="headerlink" href="#module-torchreid.losses.cross_entropy_loss" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="torchreid.losses.cross_entropy_loss.CrossEntropyLoss">
+<em class="property">class </em><code class="descclassname">torchreid.losses.cross_entropy_loss.</code><code class="descname">CrossEntropyLoss</code><span class="sig-paren">(</span><em>num_classes</em>, <em>epsilon=0.1</em>, <em>use_gpu=True</em>, <em>label_smooth=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/losses/cross_entropy_loss.html#CrossEntropyLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.losses.cross_entropy_loss.CrossEntropyLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cross entropy loss with label smoothing regularizer.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Szegedy et al. Rethinking the Inception Architecture for Computer Vision. CVPR 2016.</dd>
+</dl>
+<p>With label smoothing, the label <span class="math notranslate nohighlight">\(y\)</span> for a class is computed by</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+(1 - \epsilon) \times y + \frac{\epsilon}{K},
+\end{equation}\]</div>
+<p>where <span class="math notranslate nohighlight">\(K\)</span> denotes the number of classes and <span class="math notranslate nohighlight">\(\epsilon\)</span> is a weight. When
+<span class="math notranslate nohighlight">\(\epsilon = 0\)</span>, the loss function reduces to the normal cross entropy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>num_classes</strong> (<em>int</em>) – number of classes.</li>
+<li><strong>epsilon</strong> (<em>float</em><em>, </em><em>optional</em>) – weight. Default is 0.1.</li>
+<li><strong>use_gpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to use gpu devices. Default is True.</li>
+<li><strong>label_smooth</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to apply label smoothing. Default is True.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="torchreid.losses.cross_entropy_loss.CrossEntropyLoss.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>inputs</em>, <em>targets</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/losses/cross_entropy_loss.html#CrossEntropyLoss.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.losses.cross_entropy_loss.CrossEntropyLoss.forward" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>inputs</strong> (<em>torch.Tensor</em>) – prediction matrix (before softmax) with
+shape (batch_size, num_classes).</li>
+<li><strong>targets</strong> (<em>torch.LongTensor</em>) – ground truth labels with shape (num_classes).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-torchreid.losses.hard_mine_triplet_loss">
+<span id="triplet"></span><h2>Triplet<a class="headerlink" href="#module-torchreid.losses.hard_mine_triplet_loss" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="torchreid.losses.hard_mine_triplet_loss.TripletLoss">
+<em class="property">class </em><code class="descclassname">torchreid.losses.hard_mine_triplet_loss.</code><code class="descname">TripletLoss</code><span class="sig-paren">(</span><em>margin=0.3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/losses/hard_mine_triplet_loss.html#TripletLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.losses.hard_mine_triplet_loss.TripletLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Triplet loss with hard positive/negative mining.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Hermans et al. In Defense of the Triplet Loss for Person Re-Identification. arXiv:1703.07737.</dd>
+</dl>
+<p>Imported from <a class="reference external" href="https://github.com/Cysu/open-reid/blob/master/reid/loss/triplet.py">https://github.com/Cysu/open-reid/blob/master/reid/loss/triplet.py</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>margin</strong> (<em>float</em><em>, </em><em>optional</em>) – margin for triplet. Default is 0.3.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="torchreid.losses.hard_mine_triplet_loss.TripletLoss.forward">
+<code class="descname">forward</code><span class="sig-paren">(</span><em>inputs</em>, <em>targets</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/losses/hard_mine_triplet_loss.html#TripletLoss.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.losses.hard_mine_triplet_loss.TripletLoss.forward" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>inputs</strong> (<em>torch.Tensor</em>) – feature matrix with shape (batch_size, feat_dim).</li>
+<li><strong>targets</strong> (<em>torch.LongTensor</em>) – ground truth labels with shape (num_classes).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="metrics.html" class="btn btn-neutral float-right" title="torchreid.metrics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="engine.html" class="btn btn-neutral float-left" title="torchreid.engine" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Kaiyang Zhou
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

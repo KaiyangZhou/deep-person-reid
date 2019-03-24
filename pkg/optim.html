@@ -1,0 +1,327 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torchreid.optim &mdash; torchreid 0.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="torchreid.utils" href="utils.html" />
+    <link rel="prev" title="torchreid.models" href="models.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> torchreid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">How-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../evaluation.html">Evaluation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data.html">torchreid.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="engine.html">torchreid.engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losses.html">torchreid.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">torchreid.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">torchreid.models</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">torchreid.optim</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-torchreid.optim.optimizer">Optimizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-torchreid.optim.lr_scheduler">LR Scheduler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">torchreid.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../AWESOME_REID.html">Awesome-ReID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MODEL_ZOO.html">Model Zoo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">torchreid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>torchreid.optim</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/pkg/optim.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="torchreid-optim">
+<span id="id1"></span><h1>torchreid.optim<a class="headerlink" href="#torchreid-optim" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-torchreid.optim.optimizer">
+<span id="optimizer"></span><h2>Optimizer<a class="headerlink" href="#module-torchreid.optim.optimizer" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="torchreid.optim.optimizer.build_optimizer">
+<code class="descclassname">torchreid.optim.optimizer.</code><code class="descname">build_optimizer</code><span class="sig-paren">(</span><em>model</em>, <em>optim='adam'</em>, <em>lr=0.0003</em>, <em>weight_decay=0.0005</em>, <em>momentum=0.9</em>, <em>sgd_dampening=0</em>, <em>sgd_nesterov=False</em>, <em>rmsprop_alpha=0.99</em>, <em>adam_beta1=0.9</em>, <em>adam_beta2=0.99</em>, <em>staged_lr=False</em>, <em>new_layers=''</em>, <em>base_lr_mult=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/optim/optimizer.html#build_optimizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.optim.optimizer.build_optimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function wrapper for building an optimizer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>model</strong> (<em>nn.Module</em>) – model.</li>
+<li><strong>optim</strong> (<em>str</em><em>, </em><em>optional</em>) – optimizer. Default is “adam”.</li>
+<li><strong>lr</strong> (<em>float</em><em>, </em><em>optional</em>) – learning rate. Default is 0.0003.</li>
+<li><strong>weight_decay</strong> (<em>float</em><em>, </em><em>optional</em>) – weight decay (L2 penalty). Default is 5e-04.</li>
+<li><strong>momentum</strong> (<em>float</em><em>, </em><em>optional</em>) – momentum factor in sgd. Default is 0.9,</li>
+<li><strong>sgd_dampening</strong> (<em>float</em><em>, </em><em>optional</em>) – dampening for momentum. Default is 0.</li>
+<li><strong>sgd_nesterov</strong> (<em>bool</em><em>, </em><em>optional</em>) – enables Nesterov momentum. Default is False.</li>
+<li><strong>rmsprop_alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – smoothing constant for rmsprop. Default is 0.99.</li>
+<li><strong>adam_beta1</strong> (<em>float</em><em>, </em><em>optional</em>) – beta-1 value in adam. Default is 0.9.</li>
+<li><strong>adam_beta2</strong> (<em>float</em><em>, </em><em>optional</em>) – beta-2 value in adam. Default is 0.99,</li>
+<li><strong>staged_lr</strong> (<em>bool</em><em>, </em><em>optional</em>) – uses different learning rates for base and new layers. Base
+layers are pretrained layers while new layers are randomly initialized, e.g. the
+identity classification layer. Enabling <code class="docutils literal notranslate"><span class="pre">staged_lr</span></code> can allow the base layers to
+be trained with a smaller learning rate determined by <code class="docutils literal notranslate"><span class="pre">base_lr_mult</span></code>, while the new
+layers will take the <code class="docutils literal notranslate"><span class="pre">lr</span></code>. Default is False.</li>
+<li><strong>new_layers</strong> (<em>str</em><em> or </em><em>list</em>) – attribute names in <code class="docutils literal notranslate"><span class="pre">model</span></code>. Default is empty.</li>
+<li><strong>base_lr_mult</strong> (<em>float</em><em>, </em><em>optional</em>) – learning rate multiplier for base layers. Default is 0.1.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Examples::</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># A normal optimizer can be built by</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">build_optimizer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">optim</span><span class="o">=</span><span class="s1">&#39;sgd&#39;</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># If you want to use a smaller learning rate for pretrained layers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># and the attribute name for the randomly initialized layer is &#39;classifier&#39;,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># you can do</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">build_optimizer</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">model</span><span class="p">,</span> <span class="n">optim</span><span class="o">=</span><span class="s1">&#39;sgd&#39;</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">staged_lr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">new_layers</span><span class="o">=</span><span class="s1">&#39;classifier&#39;</span><span class="p">,</span> <span class="n">base_lr_mult</span><span class="o">=</span><span class="mf">0.1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Now the `classifier` has learning rate 0.01 but the base layers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># have learning rate 0.01 * 0.1.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># new_layers can also take multiple attribute names. Say the new layers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># are &#39;fc&#39; and &#39;classifier&#39;, you can do</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">build_optimizer</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">model</span><span class="p">,</span> <span class="n">optim</span><span class="o">=</span><span class="s1">&#39;sgd&#39;</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">staged_lr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">new_layers</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fc&#39;</span><span class="p">,</span> <span class="s1">&#39;classifier&#39;</span><span class="p">],</span> <span class="n">base_lr_mult</span><span class="o">=</span><span class="mf">0.1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-torchreid.optim.lr_scheduler">
+<span id="lr-scheduler"></span><h2>LR Scheduler<a class="headerlink" href="#module-torchreid.optim.lr_scheduler" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="torchreid.optim.lr_scheduler.build_lr_scheduler">
+<code class="descclassname">torchreid.optim.lr_scheduler.</code><code class="descname">build_lr_scheduler</code><span class="sig-paren">(</span><em>optimizer</em>, <em>lr_scheduler</em>, <em>stepsize</em>, <em>gamma=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/optim/lr_scheduler.html#build_lr_scheduler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.optim.lr_scheduler.build_lr_scheduler" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function wrapper for building a learning rate scheduler.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>optimizer</strong> (<em>Optimizer</em>) – an Optimizer.</li>
+<li><strong>lr_scheduler</strong> (<em>str</em>) – learning rate scheduler method. Currently supports
+“single_step” and “multi_step”.</li>
+<li><strong>stepsize</strong> (<em>int</em><em> or </em><em>list</em>) – step size to decay learning rate. When <code class="docutils literal notranslate"><span class="pre">lr_scheduler</span></code> is
+“single_step”, <code class="docutils literal notranslate"><span class="pre">stepsize</span></code> should be an integer. When <code class="docutils literal notranslate"><span class="pre">lr_scheduler</span></code> is
+“multi_step”, <code class="docutils literal notranslate"><span class="pre">stepsize</span></code> is a list.</li>
+<li><strong>gamma</strong> (<em>float</em><em>, </em><em>optional</em>) – decay rate. Default is 0.1.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Examples::</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Decay learning rate by every 20 epochs.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scheduler</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">build_lr_scheduler</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">optimizer</span><span class="p">,</span> <span class="n">lr_scheduler</span><span class="o">=</span><span class="s1">&#39;single_step&#39;</span><span class="p">,</span> <span class="n">stepsize</span><span class="o">=</span><span class="mi">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Decay learning rate at 30, 50 and 55 epochs.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scheduler</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">build_lr_scheduler</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">optimizer</span><span class="p">,</span> <span class="n">lr_scheduler</span><span class="o">=</span><span class="s1">&#39;multi_step&#39;</span><span class="p">,</span> <span class="n">stepsize</span><span class="o">=</span><span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">55</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="utils.html" class="btn btn-neutral float-right" title="torchreid.utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="models.html" class="btn btn-neutral float-left" title="torchreid.models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Kaiyang Zhou
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

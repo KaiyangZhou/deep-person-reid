@@ -1,0 +1,250 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Evaluation &mdash; torchreid 0.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="torchreid.data" href="pkg/data.html" />
+    <link rel="prev" title="Datasets" href="datasets.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> torchreid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html">How-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#image-reid">Image ReID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#video-reid">Video ReID</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pkg/data.html">torchreid.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/engine.html">torchreid.engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/losses.html">torchreid.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/metrics.html">torchreid.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/models.html">torchreid.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/optim.html">torchreid.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/utils.html">torchreid.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="AWESOME_REID.html">Awesome-ReID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MODEL_ZOO.html">Model Zoo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">torchreid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Evaluation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/evaluation.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="evaluation">
+<h1>Evaluation<a class="headerlink" href="#evaluation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="image-reid">
+<h2>Image ReID<a class="headerlink" href="#image-reid" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><strong>Market1501</strong>, <strong>DukeMTMC-reID</strong>, <strong>CUHK03 (767/700 split)</strong> and <strong>MSMT17</strong> have fixed split so keeping <code class="docutils literal notranslate"><span class="pre">split_id=0</span></code> is fine.</li>
+<li><strong>CUHK03 (classic split)</strong> has 20 fixed splits, so do <code class="docutils literal notranslate"><span class="pre">split_id=0~19</span></code>.</li>
+<li><strong>VIPeR</strong> contains 632 identities each with 2 images under two camera views. Evaluation should be done for 10 random splits. Each split randomly divides 632 identities to 316 train ids (632 images) and the other 316 test ids (632 images). Note that, in each random split, there are two sub-splits, one using camera-A as query and camera-B as gallery while the other one using camera-B as query and camera-A as gallery. Thus, there are totally 20 splits generated with <code class="docutils literal notranslate"><span class="pre">split_id</span></code> starting from 0 to 19. Models can be trained on <code class="docutils literal notranslate"><span class="pre">split_id=[0,</span> <span class="pre">2,</span> <span class="pre">4,</span> <span class="pre">6,</span> <span class="pre">8,</span> <span class="pre">10,</span> <span class="pre">12,</span> <span class="pre">14,</span> <span class="pre">16,</span> <span class="pre">18]</span></code> (because <code class="docutils literal notranslate"><span class="pre">split_id=0</span></code> and <code class="docutils literal notranslate"><span class="pre">split_id=1</span></code> share the same train set, and so on and so forth.). At test time, models trained on <code class="docutils literal notranslate"><span class="pre">split_id=0</span></code> can be directly evaluated on <code class="docutils literal notranslate"><span class="pre">split_id=1</span></code>, models trained on <code class="docutils literal notranslate"><span class="pre">split_id=2</span></code> can be directly evaluated on <code class="docutils literal notranslate"><span class="pre">split_id=3</span></code>, and so on and so forth.</li>
+<li><strong>CUHK01</strong> is similar to VIPeR in the split generation.</li>
+<li><strong>GRID</strong> , <strong>PRID450S</strong>, <strong>iLIDS</strong> and <strong>PRID</strong> have 10 random splits, so evaluation should be done by varying <code class="docutils literal notranslate"><span class="pre">split_id</span></code> from 0 to 9.</li>
+<li><strong>SenseReID</strong> has no training images and is used for evaluation only.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <code class="docutils literal notranslate"><span class="pre">split_id</span></code> argument is defined in <code class="docutils literal notranslate"><span class="pre">ImageDataManager</span></code> and <code class="docutils literal notranslate"><span class="pre">VideoDataManager</span></code>. Please refer to <a class="reference internal" href="pkg/data.html#torchreid-data"><span class="std std-ref">torchreid.data</span></a>.</p>
+</div>
+</div>
+<div class="section" id="video-reid">
+<h2>Video ReID<a class="headerlink" href="#video-reid" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><strong>MARS</strong> and <strong>DukeMTMC-VideoReID</strong> have fixed single split so using <code class="docutils literal notranslate"><span class="pre">split_id=0</span></code> is ok.</li>
+<li><strong>iLIDS-VID</strong> and <strong>PRID2011</strong> have 10 predefined splits so evaluation should be done by varying <code class="docutils literal notranslate"><span class="pre">split_id</span></code> from 0 to 9.</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pkg/data.html" class="btn btn-neutral float-right" title="torchreid.data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="datasets.html" class="btn btn-neutral float-left" title="Datasets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Kaiyang Zhou
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

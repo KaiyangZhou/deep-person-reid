@@ -1,0 +1,562 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torchreid.models &mdash; torchreid 0.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="torchreid.optim" href="optim.html" />
+    <link rel="prev" title="torchreid.metrics" href="metrics.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> torchreid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">How-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../evaluation.html">Evaluation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data.html">torchreid.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="engine.html">torchreid.engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losses.html">torchreid.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">torchreid.metrics</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">torchreid.models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-torchreid.models.__init__">Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#imagenet-classification-models">ImageNet Classification Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lightweight-models">Lightweight Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reid-specific-models">ReID-specific Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="optim.html">torchreid.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">torchreid.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../AWESOME_REID.html">Awesome-ReID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MODEL_ZOO.html">Model Zoo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">torchreid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>torchreid.models</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/pkg/models.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="torchreid-models">
+<span id="id1"></span><h1>torchreid.models<a class="headerlink" href="#torchreid-models" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-torchreid.models.__init__">
+<span id="interface"></span><h2>Interface<a class="headerlink" href="#module-torchreid.models.__init__" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="torchreid.models.__init__.build_model">
+<code class="descclassname">torchreid.models.__init__.</code><code class="descname">build_model</code><span class="sig-paren">(</span><em>name</em>, <em>num_classes</em>, <em>loss='softmax'</em>, <em>pretrained=True</em>, <em>use_gpu=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/__init__.html#build_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.__init__.build_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function wrapper for building a model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) – model name.</li>
+<li><strong>num_classes</strong> (<em>int</em>) – number of training identities.</li>
+<li><strong>loss</strong> (<em>str</em><em>, </em><em>optional</em>) – loss function to optimize the model. Currently
+supports “softmax” and “triplet”. Default is “softmax”.</li>
+<li><strong>pretrained</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to load ImageNet-pretrained weights.
+Default is True.</li>
+<li><strong>use_gpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to use gpu. Default is True.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">nn.Module</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Examples::</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid</span> <span class="k">import</span> <span class="n">models</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">build_model</span><span class="p">(</span><span class="s1">&#39;resnet50&#39;</span><span class="p">,</span> <span class="mi">751</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torchreid.models.__init__.show_avai_models">
+<code class="descclassname">torchreid.models.__init__.</code><code class="descname">show_avai_models</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/__init__.html#show_avai_models"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.__init__.show_avai_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays available models.</p>
+<dl class="docutils">
+<dt>Examples::</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid</span> <span class="k">import</span> <span class="n">models</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">models</span><span class="o">.</span><span class="n">show_avai_models</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="imagenet-classification-models">
+<h2>ImageNet Classification Models<a class="headerlink" href="#imagenet-classification-models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="torchreid.models.resnet.ResNet">
+<em class="property">class </em><code class="descclassname">torchreid.models.resnet.</code><code class="descname">ResNet</code><span class="sig-paren">(</span><em>num_classes</em>, <em>loss</em>, <em>block</em>, <em>layers</em>, <em>last_stride=2</em>, <em>fc_dims=None</em>, <em>dropout_p=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/resnet.html#ResNet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.resnet.ResNet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Residual network.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>He et al. Deep Residual Learning for Image Recognition. CVPR 2016.</dd>
+<dt>Public keys:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">resnet18</span></code>: ResNet18.</li>
+<li><code class="docutils literal notranslate"><span class="pre">resnet34</span></code>: ResNet34.</li>
+<li><code class="docutils literal notranslate"><span class="pre">resnet50</span></code>: ResNet50.</li>
+<li><code class="docutils literal notranslate"><span class="pre">resnet101</span></code>: ResNet101.</li>
+<li><code class="docutils literal notranslate"><span class="pre">resnet152</span></code>: ResNet152.</li>
+<li><code class="docutils literal notranslate"><span class="pre">resnet50_fc512</span></code>: ResNet50 + FC.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.models.resnext.ResNeXt">
+<em class="property">class </em><code class="descclassname">torchreid.models.resnext.</code><code class="descname">ResNeXt</code><span class="sig-paren">(</span><em>num_classes</em>, <em>loss</em>, <em>block</em>, <em>layers</em>, <em>groups=32</em>, <em>base_width=4</em>, <em>last_stride=2</em>, <em>fc_dims=None</em>, <em>dropout_p=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/resnext.html#ResNeXt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.resnext.ResNeXt" title="Permalink to this definition">¶</a></dt>
+<dd><p>ResNeXt.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Xie et al. Aggregated Residual Transformations for Deep
+Neural Networks. CVPR 2017.</dd>
+<dt>Public keys:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">resnext50_32x4d</span></code>: ResNeXt50 (groups=32, width=4).</li>
+<li><code class="docutils literal notranslate"><span class="pre">resnext50_32x4d_fc512</span></code> ResNeXt50 (groups=32, width=4) + FC.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.models.senet.SENet">
+<em class="property">class </em><code class="descclassname">torchreid.models.senet.</code><code class="descname">SENet</code><span class="sig-paren">(</span><em>num_classes</em>, <em>loss</em>, <em>block</em>, <em>layers</em>, <em>groups</em>, <em>reduction</em>, <em>dropout_p=0.2</em>, <em>inplanes=128</em>, <em>input_3x3=True</em>, <em>downsample_kernel_size=3</em>, <em>downsample_padding=1</em>, <em>last_stride=2</em>, <em>fc_dims=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/senet.html#SENet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.senet.SENet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Squeeze-and-excitation network.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Hu et al. Squeeze-and-Excitation Networks. CVPR 2018.</dd>
+<dt>Public keys:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">senet154</span></code>: SENet154.</li>
+<li><code class="docutils literal notranslate"><span class="pre">se_resnet50</span></code>: ResNet50 + SE.</li>
+<li><code class="docutils literal notranslate"><span class="pre">se_resnet101</span></code>: ResNet101 + SE.</li>
+<li><code class="docutils literal notranslate"><span class="pre">se_resnet152</span></code>: ResNet152 + SE.</li>
+<li><code class="docutils literal notranslate"><span class="pre">se_resnext50_32x4d</span></code>: ResNeXt50 (groups=32, width=4) + SE.</li>
+<li><code class="docutils literal notranslate"><span class="pre">se_resnext101_32x4d</span></code>: ResNeXt101 (groups=32, width=4) + SE.</li>
+<li><code class="docutils literal notranslate"><span class="pre">se_resnet50_fc512</span></code>: (ResNet50 + SE) + FC.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.models.densenet.DenseNet">
+<em class="property">class </em><code class="descclassname">torchreid.models.densenet.</code><code class="descname">DenseNet</code><span class="sig-paren">(</span><em>num_classes</em>, <em>loss</em>, <em>growth_rate=32</em>, <em>block_config=(6</em>, <em>12</em>, <em>24</em>, <em>16)</em>, <em>num_init_features=64</em>, <em>bn_size=4</em>, <em>drop_rate=0</em>, <em>fc_dims=None</em>, <em>dropout_p=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/densenet.html#DenseNet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.densenet.DenseNet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Densely connected network.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Huang et al. Densely Connected Convolutional Networks. CVPR 2017.</dd>
+<dt>Public keys:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">densenet121</span></code>: DenseNet121.</li>
+<li><code class="docutils literal notranslate"><span class="pre">densenet169</span></code>: DenseNet169.</li>
+<li><code class="docutils literal notranslate"><span class="pre">densenet201</span></code>: DenseNet201.</li>
+<li><code class="docutils literal notranslate"><span class="pre">densenet161</span></code>: DenseNet161.</li>
+<li><code class="docutils literal notranslate"><span class="pre">densenet121_fc512</span></code>: DenseNet121 + FC.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.models.inceptionresnetv2.InceptionResNetV2">
+<em class="property">class </em><code class="descclassname">torchreid.models.inceptionresnetv2.</code><code class="descname">InceptionResNetV2</code><span class="sig-paren">(</span><em>num_classes</em>, <em>loss='softmax'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/inceptionresnetv2.html#InceptionResNetV2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.inceptionresnetv2.InceptionResNetV2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inception-ResNet-V2.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Szegedy et al. Inception-v4, Inception-ResNet and the Impact of Residual
+Connections on Learning. AAAI 2017.</dd>
+<dt>Public keys:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">inceptionresnetv2</span></code>: Inception-ResNet-V2.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.models.inceptionv4.InceptionV4">
+<em class="property">class </em><code class="descclassname">torchreid.models.inceptionv4.</code><code class="descname">InceptionV4</code><span class="sig-paren">(</span><em>num_classes</em>, <em>loss</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/inceptionv4.html#InceptionV4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.inceptionv4.InceptionV4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inception-v4.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Szegedy et al. Inception-v4, Inception-ResNet and the Impact of Residual
+Connections on Learning. AAAI 2017.</dd>
+<dt>Public keys:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">inceptionv4</span></code>: InceptionV4.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.models.xception.Xception">
+<em class="property">class </em><code class="descclassname">torchreid.models.xception.</code><code class="descname">Xception</code><span class="sig-paren">(</span><em>num_classes</em>, <em>loss</em>, <em>fc_dims=None</em>, <em>dropout_p=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/xception.html#Xception"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.xception.Xception" title="Permalink to this definition">¶</a></dt>
+<dd><p>Xception.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Chollet. Xception: Deep Learning with Depthwise
+Separable Convolutions. CVPR 2017.</dd>
+<dt>Public keys:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">xception</span></code>: Xception.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="lightweight-models">
+<h2>Lightweight Models<a class="headerlink" href="#lightweight-models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="torchreid.models.nasnet.NASNetAMobile">
+<em class="property">class </em><code class="descclassname">torchreid.models.nasnet.</code><code class="descname">NASNetAMobile</code><span class="sig-paren">(</span><em>num_classes</em>, <em>loss</em>, <em>stem_filters=32</em>, <em>penultimate_filters=1056</em>, <em>filters_multiplier=2</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/nasnet.html#NASNetAMobile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.nasnet.NASNetAMobile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Neural Architecture Search (NAS).</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Zoph et al. Learning Transferable Architectures
+for Scalable Image Recognition. CVPR 2018.</dd>
+<dt>Public keys:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">nasnetamobile</span></code>: NASNet-A Mobile.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.models.mobilenetv2.MobileNetV2">
+<em class="property">class </em><code class="descclassname">torchreid.models.mobilenetv2.</code><code class="descname">MobileNetV2</code><span class="sig-paren">(</span><em>num_classes</em>, <em>width_mult=1</em>, <em>loss='softmax'</em>, <em>fc_dims=None</em>, <em>dropout_p=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/mobilenetv2.html#MobileNetV2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.mobilenetv2.MobileNetV2" title="Permalink to this definition">¶</a></dt>
+<dd><p>MobileNetV2.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Sandler et al. MobileNetV2: Inverted Residuals and
+Linear Bottlenecks. CVPR 2018.</dd>
+<dt>Public keys:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">mobilenetv2_1dot0</span></code>: MobileNetV2 x1.0.</li>
+<li><code class="docutils literal notranslate"><span class="pre">mobilenetv2_1dot4</span></code>: MobileNetV2 x1.4.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.models.shufflenet.ShuffleNet">
+<em class="property">class </em><code class="descclassname">torchreid.models.shufflenet.</code><code class="descname">ShuffleNet</code><span class="sig-paren">(</span><em>num_classes</em>, <em>loss='softmax'</em>, <em>num_groups=3</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/shufflenet.html#ShuffleNet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.shufflenet.ShuffleNet" title="Permalink to this definition">¶</a></dt>
+<dd><p>ShuffleNet.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Zhang et al. ShuffleNet: An Extremely Efficient Convolutional Neural
+Network for Mobile Devices. CVPR 2018.</dd>
+<dt>Public keys:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">shufflenet</span></code>: ShuffleNet (groups=3).</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.models.squeezenet.SqueezeNet">
+<em class="property">class </em><code class="descclassname">torchreid.models.squeezenet.</code><code class="descname">SqueezeNet</code><span class="sig-paren">(</span><em>num_classes</em>, <em>loss</em>, <em>version=1.0</em>, <em>fc_dims=None</em>, <em>dropout_p=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/squeezenet.html#SqueezeNet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.squeezenet.SqueezeNet" title="Permalink to this definition">¶</a></dt>
+<dd><p>SqueezeNet.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Iandola et al. SqueezeNet: AlexNet-level accuracy with 50x fewer parameters
+and&lt; 0.5 MB model size. arXiv:1602.07360.</dd>
+<dt>Public keys:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">squeezenet1_0</span></code>: SqueezeNet (version=1.0).</li>
+<li><code class="docutils literal notranslate"><span class="pre">squeezenet1_1</span></code>: SqueezeNet (version=1.1).</li>
+<li><code class="docutils literal notranslate"><span class="pre">squeezenet1_0_fc512</span></code>: SqueezeNet (version=1.0) + FC.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="reid-specific-models">
+<h2>ReID-specific Models<a class="headerlink" href="#reid-specific-models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="torchreid.models.mudeep.MuDeep">
+<em class="property">class </em><code class="descclassname">torchreid.models.mudeep.</code><code class="descname">MuDeep</code><span class="sig-paren">(</span><em>num_classes</em>, <em>loss='softmax'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/mudeep.html#MuDeep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.mudeep.MuDeep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiscale deep neural network.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Qian et al. Multi-scale Deep Learning Architectures
+for Person Re-identification. ICCV 2017.</dd>
+<dt>Public keys:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">mudeep</span></code>: Multiscale deep neural network.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.models.resnetmid.ResNetMid">
+<em class="property">class </em><code class="descclassname">torchreid.models.resnetmid.</code><code class="descname">ResNetMid</code><span class="sig-paren">(</span><em>num_classes</em>, <em>loss</em>, <em>block</em>, <em>layers</em>, <em>last_stride=2</em>, <em>fc_dims=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/resnetmid.html#ResNetMid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.resnetmid.ResNetMid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Residual network + mid-level features.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Yu et al. The Devil is in the Middle: Exploiting Mid-level Representations for
+Cross-Domain Instance Matching. arXiv:1711.08106.</dd>
+<dt>Public keys:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">resnet50mid</span></code>: ResNet50 + mid-level feature fusion.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.models.hacnn.HACNN">
+<em class="property">class </em><code class="descclassname">torchreid.models.hacnn.</code><code class="descname">HACNN</code><span class="sig-paren">(</span><em>num_classes, loss='softmax', nchannels=[128, 256, 384], feat_dim=512, learn_region=True, use_gpu=True, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/hacnn.html#HACNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.hacnn.HACNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Harmonious Attention Convolutional Neural Network.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Li et al. Harmonious Attention Network for Person Re-identification. CVPR 2018.</dd>
+<dt>Public keys:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">hacnn</span></code>: HACNN.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.models.pcb.PCB">
+<em class="property">class </em><code class="descclassname">torchreid.models.pcb.</code><code class="descname">PCB</code><span class="sig-paren">(</span><em>num_classes</em>, <em>loss</em>, <em>block</em>, <em>layers</em>, <em>parts=6</em>, <em>reduced_dim=256</em>, <em>nonlinear='relu'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/pcb.html#PCB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.pcb.PCB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Part-based Convolutional Baseline.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Sun et al. Beyond Part Models: Person Retrieval with Refined
+Part Pooling (and A Strong Convolutional Baseline). ECCV 2018.</dd>
+<dt>Public keys:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">pcb_p4</span></code>: PCB with 4-part strips.</li>
+<li><code class="docutils literal notranslate"><span class="pre">pcb_p6</span></code>: PCB with 6-part strips.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.models.mlfn.MLFN">
+<em class="property">class </em><code class="descclassname">torchreid.models.mlfn.</code><code class="descname">MLFN</code><span class="sig-paren">(</span><em>num_classes, loss='softmax', groups=32, channels=[64, 256, 512, 1024, 2048], embed_dim=1024, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/mlfn.html#MLFN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.mlfn.MLFN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multi-Level Factorisation Net.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Chang et al. Multi-Level Factorisation Net for
+Person Re-Identification. CVPR 2018.</dd>
+<dt>Public keys:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">mlfn</span></code>: MLFN (Multi-Level Factorisation Net).</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="optim.html" class="btn btn-neutral float-right" title="torchreid.optim" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="metrics.html" class="btn btn-neutral float-left" title="torchreid.metrics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Kaiyang Zhou
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

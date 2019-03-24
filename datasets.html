@@ -1,0 +1,519 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Datasets &mdash; torchreid 0.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Evaluation" href="evaluation.html" />
+    <link rel="prev" title="How-to" href="user_guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> torchreid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html">How-to</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#image-datasets">Image Datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#market1501-dagger-market1501">Market1501 <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">market1501</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cuhk03-cuhk03">CUHK03 (<code class="docutils literal notranslate"><span class="pre">cuhk03</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dukemtmc-reid-dagger-dukemtmcreid">DukeMTMC-reID <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">dukemtmcreid</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#msmt17-msmt17">MSMT17 (<code class="docutils literal notranslate"><span class="pre">msmt17</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#viper-dagger-viper">VIPeR <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">viper</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#grid-dagger-grid">GRID <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">grid</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cuhk01-cuhk01">CUHK01 (<code class="docutils literal notranslate"><span class="pre">cuhk01</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#prid450s-dagger-prid450s">PRID450S <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">prid450s</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sensereid-sensereid">SenseReID (<code class="docutils literal notranslate"><span class="pre">sensereid</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#qmul-ilids-dagger-ilids">QMUL-iLIDS <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">ilids</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#prid-prid">PRID (<code class="docutils literal notranslate"><span class="pre">prid</span></code>)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#video-datasets">Video Datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mars-mars">MARS (<code class="docutils literal notranslate"><span class="pre">mars</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ilids-vid-dagger-ilidsvid">iLIDS-VID <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">ilidsvid</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#prid2011-prid2011">PRID2011 (<code class="docutils literal notranslate"><span class="pre">prid2011</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dukemtmc-videoreid-dagger-dukemtmcvidreid">DukeMTMC-VideoReID <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">dukemtmcvidreid</span></code>)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="evaluation.html">Evaluation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pkg/data.html">torchreid.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/engine.html">torchreid.engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/losses.html">torchreid.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/metrics.html">torchreid.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/models.html">torchreid.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/optim.html">torchreid.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/utils.html">torchreid.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="AWESOME_REID.html">Awesome-ReID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MODEL_ZOO.html">Model Zoo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">torchreid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Datasets</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/datasets.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="datasets">
+<h1>Datasets<a class="headerlink" href="#datasets" title="Permalink to this headline">¶</a></h1>
+<p>Here we provide a guide on how to prepare datasets.</p>
+<p>Suppose you wanna store the reid data in a directory called “path/to/reid-data/”, you need to specify the <code class="docutils literal notranslate"><span class="pre">root</span></code> as <em>root=’path/to/reid-data/’</em> when initializing <code class="docutils literal notranslate"><span class="pre">DataManager</span></code>. Below we use <code class="docutils literal notranslate"><span class="pre">$REID</span></code> to denote “path/to/reid-data”.</p>
+<p>Please refer to <a class="reference internal" href="pkg/data.html#torchreid-data"><span class="std std-ref">torchreid.data</span></a> for details regarding the arguments.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Dataset with a <span class="math notranslate nohighlight">\(\dagger\)</span> superscript means that the process is automated, so you can directly call the dataset in <code class="docutils literal notranslate"><span class="pre">DataManager</span></code> (which automatically downloads the dataset and organizes the data structure). However, we also provide a way below to help the manual setup in case the automation fails.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The keys to use specific datasets are enclosed in the parantheses beside the datasets.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You are suggested to use the provided names for dataset folders such as “market1501” for Market1501 and “dukemtmcreid” for DukeMTMC-reID when doing the manual setup, otherwise you need to modify the source code accordingly (i.e. the <code class="docutils literal notranslate"><span class="pre">dataset_dir</span></code> attribute).</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#image-datasets" id="id1">Image Datasets</a><ul>
+<li><a class="reference internal" href="#market1501-dagger-market1501" id="id2">Market1501 <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">market1501</span></code>)</a></li>
+<li><a class="reference internal" href="#cuhk03-cuhk03" id="id3">CUHK03 (<code class="docutils literal notranslate"><span class="pre">cuhk03</span></code>)</a></li>
+<li><a class="reference internal" href="#dukemtmc-reid-dagger-dukemtmcreid" id="id4">DukeMTMC-reID <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">dukemtmcreid</span></code>)</a></li>
+<li><a class="reference internal" href="#msmt17-msmt17" id="id5">MSMT17 (<code class="docutils literal notranslate"><span class="pre">msmt17</span></code>)</a></li>
+<li><a class="reference internal" href="#viper-dagger-viper" id="id6">VIPeR <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">viper</span></code>)</a></li>
+<li><a class="reference internal" href="#grid-dagger-grid" id="id7">GRID <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">grid</span></code>)</a></li>
+<li><a class="reference internal" href="#cuhk01-cuhk01" id="id8">CUHK01 (<code class="docutils literal notranslate"><span class="pre">cuhk01</span></code>)</a></li>
+<li><a class="reference internal" href="#prid450s-dagger-prid450s" id="id9">PRID450S <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">prid450s</span></code>)</a></li>
+<li><a class="reference internal" href="#sensereid-sensereid" id="id10">SenseReID (<code class="docutils literal notranslate"><span class="pre">sensereid</span></code>)</a></li>
+<li><a class="reference internal" href="#qmul-ilids-dagger-ilids" id="id11">QMUL-iLIDS <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">ilids</span></code>)</a></li>
+<li><a class="reference internal" href="#prid-prid" id="id12">PRID (<code class="docutils literal notranslate"><span class="pre">prid</span></code>)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#video-datasets" id="id13">Video Datasets</a><ul>
+<li><a class="reference internal" href="#mars-mars" id="id14">MARS (<code class="docutils literal notranslate"><span class="pre">mars</span></code>)</a></li>
+<li><a class="reference internal" href="#ilids-vid-dagger-ilidsvid" id="id15">iLIDS-VID <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">ilidsvid</span></code>)</a></li>
+<li><a class="reference internal" href="#prid2011-prid2011" id="id16">PRID2011 (<code class="docutils literal notranslate"><span class="pre">prid2011</span></code>)</a></li>
+<li><a class="reference internal" href="#dukemtmc-videoreid-dagger-dukemtmcvidreid" id="id17">DukeMTMC-VideoReID <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">dukemtmcvidreid</span></code>)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="image-datasets">
+<h2><a class="toc-backref" href="#id1">Image Datasets</a><a class="headerlink" href="#image-datasets" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="market1501-dagger-market1501">
+<h3><a class="toc-backref" href="#id2">Market1501 <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">market1501</span></code>)</a><a class="headerlink" href="#market1501-dagger-market1501" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Create a directory named “market1501” under <code class="docutils literal notranslate"><span class="pre">$REID</span></code>.</li>
+<li>Download the dataset to “market1501” from <a class="reference external" href="http://www.liangzheng.org/Project/project_reid.html">http://www.liangzheng.org/Project/project_reid.html</a> and extract the files.</li>
+<li>The data structure should look like</li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>market1501/
+    Market-1501-v15.09.15/
+        query/
+        bounding_box_train/
+        bounding_box_test/
+</pre></div>
+</div>
+<ul class="simple">
+<li>To use the extra 500K distractors (i.e. Market1501 + 500K), go to the <strong>Market-1501+500k Dataset</strong> section at <a class="reference external" href="http://www.liangzheng.org/Project/project_reid.html">http://www.liangzheng.org/Project/project_reid.html</a>, download the zip file “distractors_500k.zip” and extract it under “market1501/Market-1501-v15.09.15”. The argument to use these 500K distrctors is <code class="docutils literal notranslate"><span class="pre">market1501_500k</span></code> in <code class="docutils literal notranslate"><span class="pre">ImageDataManager</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="cuhk03-cuhk03">
+<h3><a class="toc-backref" href="#id3">CUHK03 (<code class="docutils literal notranslate"><span class="pre">cuhk03</span></code>)</a><a class="headerlink" href="#cuhk03-cuhk03" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Create a folder named “cuhk03” under <code class="docutils literal notranslate"><span class="pre">$REID</span></code>.</li>
+<li>Download the dataset to “cuhk03/” from <a class="reference external" href="http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html">http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html</a> and extract “cuhk03_release.zip”, resulting in “cuhk03/cuhk03_release/”.</li>
+<li>Download the new split (767/700) from <a class="reference external" href="https://github.com/zhunzhong07/person-re-ranking/tree/master/evaluation/data/CUHK03">person-re-ranking</a>. What you need are “cuhk03_new_protocol_config_detected.mat” and “cuhk03_new_protocol_config_labeled.mat”. Put these two mat files under “cuhk03/”.</li>
+<li>The data structure should look like</li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cuhk03/
+    cuhk03_release/
+    cuhk03_new_protocol_config_detected.mat
+    cuhk03_new_protocol_config_labeled.mat
+</pre></div>
+</div>
+<ul class="simple">
+<li>In the default mode, we load data using the new split (767/700). If you wanna use the original (20) splits (1367/100), please set <code class="docutils literal notranslate"><span class="pre">cuhk03_classic_split</span></code> to True in <code class="docutils literal notranslate"><span class="pre">ImageDataManager</span></code>. As the CMC is computed differently from Market1501 for the 1367/100 split (see <a class="reference external" href="http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html">here</a>), you need to enable <code class="docutils literal notranslate"><span class="pre">use_metric_cuhk03</span></code> in <code class="docutils literal notranslate"><span class="pre">ImageDataManager</span></code> to activate the <em>single-gallery-shot</em> metric for fair comparison with some methods that adopt the old splits (<em>do not need to report mAP</em>). In addition, we support both <em>labeled</em> and <em>detected</em> modes. The default mode loads <em>detected</em> images. Enable <code class="docutils literal notranslate"><span class="pre">cuhk03_labeled</span></code> in <code class="docutils literal notranslate"><span class="pre">ImageDataManager</span></code> if you wanna train and test on <em>labeled</em> images.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The code will extract images in “cuhk-03.mat” and save them under “cuhk03/images_detected” and “cuhk03/images_labeled”. Also, four json files will be automatically generated, i.e. “splits_classic_detected.json”, “splits_classic_labeled.json”, “splits_new_detected.json” and “splits_new_labeled.json”. If the parent path of <code class="docutils literal notranslate"><span class="pre">$REID</span></code> is changed, these json files should be manually deleted. The code can automatically generate new json files to match the new path.</p>
+</div>
+</div>
+<div class="section" id="dukemtmc-reid-dagger-dukemtmcreid">
+<h3><a class="toc-backref" href="#id4">DukeMTMC-reID <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">dukemtmcreid</span></code>)</a><a class="headerlink" href="#dukemtmc-reid-dagger-dukemtmcreid" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Create a directory called “dukemtmc-reid” under <code class="docutils literal notranslate"><span class="pre">$REID</span></code>.</li>
+<li>Download “DukeMTMC-reID” from <a class="reference external" href="http://vision.cs.duke.edu/DukeMTMC/">http://vision.cs.duke.edu/DukeMTMC/</a> and extract it under “dukemtmc-reid”.</li>
+<li>The data structure should look like</li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>dukemtmc-reid/
+    DukeMTMC-reID/
+        query/
+        bounding_box_train/
+        bounding_box_test/
+        ...
+</pre></div>
+</div>
+</div>
+<div class="section" id="msmt17-msmt17">
+<h3><a class="toc-backref" href="#id5">MSMT17 (<code class="docutils literal notranslate"><span class="pre">msmt17</span></code>)</a><a class="headerlink" href="#msmt17-msmt17" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Create a directory called “msmt17” under <code class="docutils literal notranslate"><span class="pre">$REID</span></code>.</li>
+<li>Download the dataset from <a class="reference external" href="http://www.pkuvmc.com/publications/msmt17.html">http://www.pkuvmc.com/publications/msmt17.html</a> to “msmt17” and extract the files.</li>
+<li>The data structure should look like</li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>msmt17/
+    MSMT17_V1/ # or MSMT17_V2
+        train/
+        test/
+        list_train.txt
+        list_query.txt
+        list_gallery.txt
+        list_val.txt
+</pre></div>
+</div>
+</div>
+<div class="section" id="viper-dagger-viper">
+<h3><a class="toc-backref" href="#id6">VIPeR <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">viper</span></code>)</a><a class="headerlink" href="#viper-dagger-viper" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>The download link is <a class="reference external" href="http://users.soe.ucsc.edu/~manduchi/VIPeR.v1.0.zip">http://users.soe.ucsc.edu/~manduchi/VIPeR.v1.0.zip</a>.</li>
+<li>Organize the dataset in a folder named “viper” as follows</li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>viper/
+    VIPeR/
+        cam_a/
+        cam_b/
+</pre></div>
+</div>
+</div>
+<div class="section" id="grid-dagger-grid">
+<h3><a class="toc-backref" href="#id7">GRID <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">grid</span></code>)</a><a class="headerlink" href="#grid-dagger-grid" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>The download link is <a class="reference external" href="http://personal.ie.cuhk.edu.hk/~ccloy/files/datasets/underground_reid.zip">http://personal.ie.cuhk.edu.hk/~ccloy/files/datasets/underground_reid.zip</a>.</li>
+<li>Organize the dataset in a folder named “grid” as follows</li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>grid/
+    underground_reid/
+        probe/
+        gallery/
+        ...
+</pre></div>
+</div>
+</div>
+<div class="section" id="cuhk01-cuhk01">
+<h3><a class="toc-backref" href="#id8">CUHK01 (<code class="docutils literal notranslate"><span class="pre">cuhk01</span></code>)</a><a class="headerlink" href="#cuhk01-cuhk01" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Create a folder named “cuhk01” under <code class="docutils literal notranslate"><span class="pre">$REID</span></code>.</li>
+<li>Download “CUHK01.zip” from <a class="reference external" href="http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html">http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html</a> and place it under “cuhk01/”.</li>
+<li>The code can automatically extract the files, or you can do it yourself.</li>
+<li>The data structure should look like</li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cuhk01/
+    campus/
+</pre></div>
+</div>
+</div>
+<div class="section" id="prid450s-dagger-prid450s">
+<h3><a class="toc-backref" href="#id9">PRID450S <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">prid450s</span></code>)</a><a class="headerlink" href="#prid450s-dagger-prid450s" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Create a folder named “prid450s” under <code class="docutils literal notranslate"><span class="pre">$REID</span></code>.</li>
+<li>Download the dataset from <a class="reference external" href="https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/prid450s">https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/prid450s</a> and organize the data structure as follows</li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>prid450s/
+    cam_a/
+    cam_b/
+</pre></div>
+</div>
+</div>
+<div class="section" id="sensereid-sensereid">
+<h3><a class="toc-backref" href="#id10">SenseReID (<code class="docutils literal notranslate"><span class="pre">sensereid</span></code>)</a><a class="headerlink" href="#sensereid-sensereid" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Create “sensereid” under <code class="docutils literal notranslate"><span class="pre">$REID</span></code>.</li>
+<li>Download the dataset from this <a class="reference external" href="https://drive.google.com/file/d/0B56OfSrVI8hubVJLTzkwV2VaOWM/view">link</a> and extract it to “sensereid”.</li>
+<li>Organize the data to be like</li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sensereid/
+    SenseReID/
+        test_probe/
+        test_gallery/
+</pre></div>
+</div>
+</div>
+<div class="section" id="qmul-ilids-dagger-ilids">
+<h3><a class="toc-backref" href="#id11">QMUL-iLIDS <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">ilids</span></code>)</a><a class="headerlink" href="#qmul-ilids-dagger-ilids" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Create a folder named “ilids” under <code class="docutils literal notranslate"><span class="pre">$REID</span></code>.</li>
+<li>Download the dataset from <a class="reference external" href="http://personal.ie.cuhk.edu.hk/~ccloy/files/datasets/underground_reid.zip">http://personal.ie.cuhk.edu.hk/~ccloy/files/datasets/underground_reid.zip</a> and organize it to look like</li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ilids/
+    i-LIDS_Pedestrian/
+        Persons/
+</pre></div>
+</div>
+</div>
+<div class="section" id="prid-prid">
+<h3><a class="toc-backref" href="#id12">PRID (<code class="docutils literal notranslate"><span class="pre">prid</span></code>)</a><a class="headerlink" href="#prid-prid" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Create a directory named “prid2011” under <code class="docutils literal notranslate"><span class="pre">$REID</span></code>.</li>
+<li>Download the dataset from <a class="reference external" href="https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/">https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/</a> and extract it under “prid2011”.</li>
+<li>The data structure should end up with</li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>prid2011/
+    prid_2011/
+        single_shot/
+        multi_shot/
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="video-datasets">
+<h2><a class="toc-backref" href="#id13">Video Datasets</a><a class="headerlink" href="#video-datasets" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="mars-mars">
+<h3><a class="toc-backref" href="#id14">MARS (<code class="docutils literal notranslate"><span class="pre">mars</span></code>)</a><a class="headerlink" href="#mars-mars" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Create “mars/” under <code class="docutils literal notranslate"><span class="pre">$REID</span></code>.</li>
+<li>Download the dataset from <a class="reference external" href="http://www.liangzheng.com.cn/Project/project_mars.html">http://www.liangzheng.com.cn/Project/project_mars.html</a> and place it in “mars/”.</li>
+<li>Extract “bbox_train.zip” and “bbox_test.zip”.</li>
+<li>Download the split metadata from <a class="reference external" href="https://github.com/liangzheng06/MARS-evaluation/tree/master/info">https://github.com/liangzheng06/MARS-evaluation/tree/master/info</a> and put “info/” in “mars/”.</li>
+<li>The data structure should end up with</li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mars/
+    bbox_test/
+    bbox_train/
+    info/
+</pre></div>
+</div>
+</div>
+<div class="section" id="ilids-vid-dagger-ilidsvid">
+<h3><a class="toc-backref" href="#id15">iLIDS-VID <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">ilidsvid</span></code>)</a><a class="headerlink" href="#ilids-vid-dagger-ilidsvid" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Create “ilids-vid” under <code class="docutils literal notranslate"><span class="pre">$REID</span></code>.</li>
+<li>Download the dataset from <a class="reference external" href="http://www.eecs.qmul.ac.uk/~xiatian/downloads_qmul_iLIDS-VID_ReID_dataset.html">http://www.eecs.qmul.ac.uk/~xiatian/downloads_qmul_iLIDS-VID_ReID_dataset.html</a> to “ilids-vid”.</li>
+<li>Organize the data structure to match</li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ilids-vid/
+    i-LIDS-VID/
+    train-test people splits/
+</pre></div>
+</div>
+</div>
+<div class="section" id="prid2011-prid2011">
+<h3><a class="toc-backref" href="#id16">PRID2011 (<code class="docutils literal notranslate"><span class="pre">prid2011</span></code>)</a><a class="headerlink" href="#prid2011-prid2011" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Create a directory named “prid2011” under <code class="docutils literal notranslate"><span class="pre">$REID</span></code>.</li>
+<li>Download the dataset from <a class="reference external" href="https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/">https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/</a> and extract it under “prid2011”.</li>
+<li>Download the split created by <em>iLIDS-VID</em> from <cite>here &lt;http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/datasets/prid2011/splits_prid2011.json&gt;</cite> and put it under “prid2011/”. Following the standard protocol, only 178 persons whose sequences are more than a threshold are used.</li>
+<li>The data structure should end up with</li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>prid2011/
+    splits_prid2011.json
+    prid_2011/
+        single_shot/
+        multi_shot/
+</pre></div>
+</div>
+</div>
+<div class="section" id="dukemtmc-videoreid-dagger-dukemtmcvidreid">
+<h3><a class="toc-backref" href="#id17">DukeMTMC-VideoReID <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">dukemtmcvidreid</span></code>)</a><a class="headerlink" href="#dukemtmc-videoreid-dagger-dukemtmcvidreid" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Create “dukemtmc-vidreid” under <code class="docutils literal notranslate"><span class="pre">$REID</span></code>.</li>
+<li>Download “DukeMTMC-VideoReID” from <a class="reference external" href="http://vision.cs.duke.edu/DukeMTMC/">http://vision.cs.duke.edu/DukeMTMC/</a> and unzip the file to “dukemtmc-vidreid/”.</li>
+<li>The data structure should look like</li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>dukemtmc-vidreid/
+    DukeMTMC-VideoReID/
+        train/
+        query/
+        gallery/
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="evaluation.html" class="btn btn-neutral float-right" title="Evaluation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="user_guide.html" class="btn btn-neutral float-left" title="How-to" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Kaiyang Zhou
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

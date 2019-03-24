@@ -1,0 +1,381 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torchreid.data.transforms &mdash; torchreid 0.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> torchreid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">How-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../evaluation.html">Evaluation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/data.html">torchreid.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/engine.html">torchreid.engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/losses.html">torchreid.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/metrics.html">torchreid.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/models.html">torchreid.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/optim.html">torchreid.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/utils.html">torchreid.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../AWESOME_REID.html">Awesome-ReID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../MODEL_ZOO.html">Model Zoo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">torchreid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>torchreid.data.transforms</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for torchreid.data.transforms</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="k">import</span> <span class="n">Image</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torchvision.transforms</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="Random2DTranslation"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.transforms.Random2DTranslation">[docs]</a><span class="k">class</span> <span class="nc">Random2DTranslation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Randomly translates the input image with a probability.</span>
+
+<span class="sd">    Specifically, given a predefined shape (height, width), the input is first</span>
+<span class="sd">    resized with a factor of 1.25, leading to (height*1.25, width*1.25), then</span>
+<span class="sd">    a random crop is performed. Such operation is done with a probability.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        height (int): target image height.</span>
+<span class="sd">        width (int): target image width.</span>
+<span class="sd">        p (float, optional): probability that this operation takes place.</span>
+<span class="sd">            Default is 0.5.</span>
+<span class="sd">        interpolation (int, optional): desired interpolation. Default is</span>
+<span class="sd">            ``PIL.Image.BILINEAR``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">BILINEAR</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">=</span> <span class="n">interpolation</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">img</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span><span class="p">)</span>
+        
+        <span class="n">new_width</span><span class="p">,</span> <span class="n">new_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="mf">1.125</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="mf">1.125</span><span class="p">))</span>
+        <span class="n">resized_img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="n">new_width</span><span class="p">,</span> <span class="n">new_height</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span><span class="p">)</span>
+        <span class="n">x_maxrange</span> <span class="o">=</span> <span class="n">new_width</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
+        <span class="n">y_maxrange</span> <span class="o">=</span> <span class="n">new_height</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
+        <span class="n">x1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x_maxrange</span><span class="p">)))</span>
+        <span class="n">y1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y_maxrange</span><span class="p">)))</span>
+        <span class="n">croped_img</span> <span class="o">=</span> <span class="n">resized_img</span><span class="o">.</span><span class="n">crop</span><span class="p">((</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">y1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">croped_img</span></div>
+
+
+<div class="viewcode-block" id="RandomErasing"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.transforms.RandomErasing">[docs]</a><span class="k">class</span> <span class="nc">RandomErasing</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Randomly erases an image patch.</span>
+
+<span class="sd">    Origin: `&lt;https://github.com/zhunzhong07/Random-Erasing&gt;`_</span>
+
+<span class="sd">    Reference:</span>
+<span class="sd">        Zhong et al. Random Erasing Data Augmentation.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        probability (float, optional): probability that this operation takes place.</span>
+<span class="sd">            Default is 0.5.</span>
+<span class="sd">        sl (float, optional): min erasing area.</span>
+<span class="sd">        sh (float, optional): max erasing area.</span>
+<span class="sd">        r1 (float, optional): min aspect ratio.</span>
+<span class="sd">        mean (list, optional): erasing value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">sl</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">sh</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">r1</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="p">[</span><span class="mf">0.4914</span><span class="p">,</span> <span class="mf">0.4822</span><span class="p">,</span> <span class="mf">0.4465</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">probability</span> <span class="o">=</span> <span class="n">probability</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean</span> <span class="o">=</span> <span class="n">mean</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sl</span> <span class="o">=</span> <span class="n">sl</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sh</span> <span class="o">=</span> <span class="n">sh</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r1</span> <span class="o">=</span> <span class="n">r1</span>
+       
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">img</span>
+
+        <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">2</span><span class="p">]</span>
+       
+            <span class="n">target_area</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sh</span><span class="p">)</span> <span class="o">*</span> <span class="n">area</span>
+            <span class="n">aspect_ratio</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r1</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">r1</span><span class="p">)</span>
+
+            <span class="n">h</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">target_area</span> <span class="o">*</span> <span class="n">aspect_ratio</span><span class="p">)))</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">target_area</span> <span class="o">/</span> <span class="n">aspect_ratio</span><span class="p">)))</span>
+
+            <span class="k">if</span> <span class="n">w</span> <span class="o">&lt;</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">and</span> <span class="n">h</span> <span class="o">&lt;</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">x1</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">h</span><span class="p">)</span>
+                <span class="n">y1</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">w</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="n">img</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span><span class="n">x1</span><span class="o">+</span><span class="n">h</span><span class="p">,</span> <span class="n">y1</span><span class="p">:</span><span class="n">y1</span><span class="o">+</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">img</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span><span class="n">x1</span><span class="o">+</span><span class="n">h</span><span class="p">,</span> <span class="n">y1</span><span class="p">:</span><span class="n">y1</span><span class="o">+</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">img</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span><span class="n">x1</span><span class="o">+</span><span class="n">h</span><span class="p">,</span> <span class="n">y1</span><span class="p">:</span><span class="n">y1</span><span class="o">+</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">img</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span><span class="n">x1</span><span class="o">+</span><span class="n">h</span><span class="p">,</span> <span class="n">y1</span><span class="p">:</span><span class="n">y1</span><span class="o">+</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">return</span> <span class="n">img</span>
+
+        <span class="k">return</span> <span class="n">img</span></div>
+
+
+<div class="viewcode-block" id="ColorAugmentation"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.transforms.ColorAugmentation">[docs]</a><span class="k">class</span> <span class="nc">ColorAugmentation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Randomly alters the intensities of RGB channels.</span>
+
+<span class="sd">    Reference:</span>
+<span class="sd">        Krizhevsky et al. ImageNet Classification with Deep ConvolutionalNeural</span>
+<span class="sd">        Networks. NIPS 2012.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        p (float, optional): probability that this operation takes place.</span>
+<span class="sd">            Default is 0.5.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eig_vec</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([</span>
+            <span class="p">[</span><span class="mf">0.4009</span><span class="p">,</span> <span class="mf">0.7192</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5675</span><span class="p">],</span>
+            <span class="p">[</span><span class="o">-</span><span class="mf">0.8140</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0045</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5808</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">0.4203</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.6948</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5836</span><span class="p">],</span>
+        <span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eig_val</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([[</span><span class="mf">0.2175</span><span class="p">,</span> <span class="mf">0.0188</span><span class="p">,</span> <span class="mf">0.0045</span><span class="p">]])</span>
+
+    <span class="k">def</span> <span class="nf">_check_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensor</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">tensor</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">tensor</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensor</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">tensor</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eig_val</span><span class="p">))</span> <span class="o">*</span> <span class="mf">0.1</span>
+        <span class="n">quatity</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eig_val</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eig_vec</span><span class="p">)</span>
+        <span class="n">tensor</span> <span class="o">=</span> <span class="n">tensor</span> <span class="o">+</span> <span class="n">quatity</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tensor</span></div>
+
+
+<div class="viewcode-block" id="build_transforms"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.transforms.build_transforms">[docs]</a><span class="k">def</span> <span class="nf">build_transforms</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">random_erase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">color_jitter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                     <span class="n">color_aug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">norm_mean</span><span class="o">=</span><span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">],</span>
+                     <span class="n">norm_std</span><span class="o">=</span><span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Builds train and test transform functions</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        height (int): target image height.</span>
+<span class="sd">        width (int): target image width.</span>
+<span class="sd">        random_erase (bool, optional): use random erasing. Default is False.</span>
+<span class="sd">        color_jitter (bool, optional): use color jittering. Default is False.</span>
+<span class="sd">        color_aug (bool, optional): use color augmentation. Default is False.</span>
+<span class="sd">        norm_mean (list): normalization mean values. Default is ImageNet means.</span>
+<span class="sd">        norm_std (list): normalization standard deviation values. Default is</span>
+<span class="sd">            ImageNet standard deviation values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">normalize</span> <span class="o">=</span> <span class="n">Normalize</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="n">norm_mean</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="n">norm_std</span><span class="p">)</span>
+
+    <span class="c1"># build train transformations</span>
+    <span class="n">transform_tr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Random2DTranslation</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)]</span>
+    <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">RandomHorizontalFlip</span><span class="p">()]</span>
+    <span class="k">if</span> <span class="n">color_jitter</span><span class="p">:</span>
+        <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">ColorJitter</span><span class="p">(</span><span class="n">brightness</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">contrast</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">saturation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="mi">0</span><span class="p">)]</span>
+    <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">ToTensor</span><span class="p">()]</span>
+    <span class="k">if</span> <span class="n">color_aug</span><span class="p">:</span>
+        <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">ColorAugmentation</span><span class="p">()]</span>
+    <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">normalize</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">random_erase</span><span class="p">:</span>
+        <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">RandomErasing</span><span class="p">()]</span>
+    <span class="n">transform_tr</span> <span class="o">=</span> <span class="n">Compose</span><span class="p">(</span><span class="n">transform_tr</span><span class="p">)</span>
+
+    <span class="c1"># build test transformations</span>
+    <span class="n">transform_te</span> <span class="o">=</span> <span class="n">Compose</span><span class="p">([</span>
+        <span class="n">Resize</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)),</span>
+        <span class="n">ToTensor</span><span class="p">(),</span>
+        <span class="n">normalize</span><span class="p">,</span>
+    <span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">transform_tr</span><span class="p">,</span> <span class="n">transform_te</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Kaiyang Zhou
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

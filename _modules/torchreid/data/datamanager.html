@@ -1,0 +1,577 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torchreid.data.datamanager &mdash; torchreid 0.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> torchreid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">How-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../evaluation.html">Evaluation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/data.html">torchreid.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/engine.html">torchreid.engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/losses.html">torchreid.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/metrics.html">torchreid.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/models.html">torchreid.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/optim.html">torchreid.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/utils.html">torchreid.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../AWESOME_REID.html">Awesome-ReID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../MODEL_ZOO.html">Model Zoo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">torchreid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>torchreid.data.datamanager</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for torchreid.data.datamanager</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">from</span> <span class="nn">torchreid.data.sampler</span> <span class="k">import</span> <span class="n">build_train_sampler</span>
+<span class="kn">from</span> <span class="nn">torchreid.data.transforms</span> <span class="k">import</span> <span class="n">build_transforms</span>
+<span class="kn">from</span> <span class="nn">torchreid.data.datasets</span> <span class="k">import</span> <span class="n">init_image_dataset</span><span class="p">,</span> <span class="n">init_video_dataset</span>
+
+
+<div class="viewcode-block" id="DataManager"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.datamanager.DataManager">[docs]</a><span class="k">class</span> <span class="nc">DataManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base data manager.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sources (str or list): source dataset(s).</span>
+<span class="sd">        targets (str or list, optional): target dataset(s). If not given,</span>
+<span class="sd">            it equals to ``sources``.</span>
+<span class="sd">        height (int, optional): target image height. Default is 256.</span>
+<span class="sd">        width (int, optional): target image width. Default is 128.</span>
+<span class="sd">        random_erase (bool, optional): use random erasing. Default is False.</span>
+<span class="sd">        color_jitter (bool, optional): use color jittering. Default is False.</span>
+<span class="sd">        color_aug (bool, optional): use color augmentation. Default is False.</span>
+<span class="sd">        use_cpu (bool, optional): use cpu. Default is False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">random_erase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">color_jitter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">color_aug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="n">sources</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="n">targets</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;sources must not be None&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">transform_tr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform_te</span> <span class="o">=</span> <span class="n">build_transforms</span><span class="p">(</span>
+            <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span>
+            <span class="n">random_erase</span><span class="o">=</span><span class="n">random_erase</span><span class="p">,</span>
+            <span class="n">color_jitter</span><span class="o">=</span><span class="n">color_jitter</span><span class="p">,</span>
+            <span class="n">color_aug</span><span class="o">=</span><span class="n">color_aug</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">use_cpu</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">num_train_pids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the number of training person identities.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_train_pids</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">num_train_cams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the number of training cameras.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_train_cams</span>
+
+<div class="viewcode-block" id="DataManager.return_dataloaders"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.datamanager.DataManager.return_dataloaders">[docs]</a>    <span class="k">def</span> <span class="nf">return_dataloaders</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns trainloader and testloader.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainloader</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">testloader</span></div>
+
+<div class="viewcode-block" id="DataManager.return_testdataset_by_name"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.datamanager.DataManager.return_testdataset_by_name">[docs]</a>    <span class="k">def</span> <span class="nf">return_testdataset_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns query and gallery of a test dataset, each containing</span>
+<span class="sd">        tuples of (img_path(s), pid, camid).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): dataset name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">testdataset</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;query&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">testdataset</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;gallery&#39;</span><span class="p">]</span></div></div>
+
+
+<div class="viewcode-block" id="ImageDataManager"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.datamanager.ImageDataManager">[docs]</a><span class="k">class</span> <span class="nc">ImageDataManager</span><span class="p">(</span><span class="n">DataManager</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Image data manager.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        root (str): root path to datasets.</span>
+<span class="sd">        sources (str or list): source dataset(s).</span>
+<span class="sd">        targets (str or list, optional): target dataset(s). If not given,</span>
+<span class="sd">            it equals to ``sources``.</span>
+<span class="sd">        height (int, optional): target image height. Default is 256.</span>
+<span class="sd">        width (int, optional): target image width. Default is 128.</span>
+<span class="sd">        random_erase (bool, optional): use random erasing. Default is False.</span>
+<span class="sd">        color_jitter (bool, optional): use color jittering. Default is False.</span>
+<span class="sd">        color_aug (bool, optional): use color augmentation. Default is False.</span>
+<span class="sd">        use_cpu (bool, optional): use cpu. Default is False.</span>
+<span class="sd">        split_id (int, optional): split id (*0-based*). Default is 0.</span>
+<span class="sd">        combineall (bool, optional): combine train, query and gallery in a dataset for</span>
+<span class="sd">            training. Default is False.</span>
+<span class="sd">        batch_size (int, optional): number of images in a batch. Default is 32.</span>
+<span class="sd">        workers (int, optional): number of workers. Default is 4.</span>
+<span class="sd">        num_instances (int, optional): number of instances per identity in a batch.</span>
+<span class="sd">            Default is 4.</span>
+<span class="sd">        train_sampler (str, optional): sampler. Default is empty (``RandomSampler``).</span>
+<span class="sd">        cuhk03_labeled (bool, optional): use cuhk03 labeled images.</span>
+<span class="sd">            Default is False (defaul is to use detected images).</span>
+<span class="sd">        cuhk03_classic_split (bool, optional): use the classic split in cuhk03.</span>
+<span class="sd">            Default is False.</span>
+<span class="sd">        market1501_500k (bool, optional): add 500K distractors to the gallery</span>
+<span class="sd">            set in market1501. Default is False.</span>
+
+<span class="sd">    Examples::</span>
+
+<span class="sd">        datamanager = torchreid.data.ImageDataManager(</span>
+<span class="sd">            root=&#39;path/to/reid-data&#39;,</span>
+<span class="sd">            sources=&#39;market1501&#39;,</span>
+<span class="sd">            height=256,</span>
+<span class="sd">            width=128,</span>
+<span class="sd">            batch_size=32</span>
+<span class="sd">        )</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">random_erase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">color_jitter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">color_aug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">split_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">combineall</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">num_instances</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">train_sampler</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                 <span class="n">cuhk03_labeled</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cuhk03_classic_split</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">market1501_500k</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        
+        <span class="nb">super</span><span class="p">(</span><span class="n">ImageDataManager</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">sources</span><span class="o">=</span><span class="n">sources</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span>
+                                               <span class="n">random_erase</span><span class="o">=</span><span class="n">random_erase</span><span class="p">,</span> <span class="n">color_jitter</span><span class="o">=</span><span class="n">color_jitter</span><span class="p">,</span>
+                                               <span class="n">color_aug</span><span class="o">=</span><span class="n">color_aug</span><span class="p">,</span> <span class="n">use_cpu</span><span class="o">=</span><span class="n">use_cpu</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&gt; Loading train (source) dataset&#39;</span><span class="p">)</span>
+        <span class="n">trainset</span> <span class="o">=</span> <span class="p">[]</span>  
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">:</span>
+            <span class="n">trainset_</span> <span class="o">=</span> <span class="n">init_image_dataset</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">,</span>
+                <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transform_tr</span><span class="p">,</span>
+                <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;train&#39;</span><span class="p">,</span>
+                <span class="n">combineall</span><span class="o">=</span><span class="n">combineall</span><span class="p">,</span>
+                <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span>
+                <span class="n">split_id</span><span class="o">=</span><span class="n">split_id</span><span class="p">,</span>
+                <span class="n">cuhk03_labeled</span><span class="o">=</span><span class="n">cuhk03_labeled</span><span class="p">,</span>
+                <span class="n">cuhk03_classic_split</span><span class="o">=</span><span class="n">cuhk03_classic_split</span><span class="p">,</span>
+                <span class="n">market1501_500k</span><span class="o">=</span><span class="n">market1501_500k</span>
+            <span class="p">)</span>
+            <span class="n">trainset</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trainset_</span><span class="p">)</span>
+        <span class="n">trainset</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">trainset</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_train_pids</span> <span class="o">=</span> <span class="n">trainset</span><span class="o">.</span><span class="n">num_train_pids</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_train_cams</span> <span class="o">=</span> <span class="n">trainset</span><span class="o">.</span><span class="n">num_train_cams</span>
+
+        <span class="n">train_sampler</span> <span class="o">=</span> <span class="n">build_train_sampler</span><span class="p">(</span>
+            <span class="n">trainset</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">train_sampler</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">num_instances</span><span class="o">=</span><span class="n">num_instances</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+            <span class="n">trainset</span><span class="p">,</span>
+            <span class="n">sampler</span><span class="o">=</span><span class="n">train_sampler</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">num_workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span>
+            <span class="n">pin_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span>
+            <span class="n">drop_last</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&gt; Loading test (target) dataset&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testloader</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;gallery&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testdataset</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;gallery&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">:</span>
+            <span class="c1"># build query loader</span>
+            <span class="n">queryset</span> <span class="o">=</span> <span class="n">init_image_dataset</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">,</span>
+                <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transform_te</span><span class="p">,</span>
+                <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;query&#39;</span><span class="p">,</span>
+                <span class="n">combineall</span><span class="o">=</span><span class="n">combineall</span><span class="p">,</span>
+                <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span>
+                <span class="n">split_id</span><span class="o">=</span><span class="n">split_id</span><span class="p">,</span>
+                <span class="n">cuhk03_labeled</span><span class="o">=</span><span class="n">cuhk03_labeled</span><span class="p">,</span>
+                <span class="n">cuhk03_classic_split</span><span class="o">=</span><span class="n">cuhk03_classic_split</span><span class="p">,</span>
+                <span class="n">market1501_500k</span><span class="o">=</span><span class="n">market1501_500k</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">testloader</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;query&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+                <span class="n">queryset</span><span class="p">,</span>
+                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">num_workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span>
+                <span class="n">pin_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span>
+                <span class="n">drop_last</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+
+            <span class="c1"># build gallery loader</span>
+            <span class="n">galleryset</span> <span class="o">=</span> <span class="n">init_image_dataset</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">,</span>
+                <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transform_te</span><span class="p">,</span>
+                <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;gallery&#39;</span><span class="p">,</span>
+                <span class="n">combineall</span><span class="o">=</span><span class="n">combineall</span><span class="p">,</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span>
+                <span class="n">split_id</span><span class="o">=</span><span class="n">split_id</span><span class="p">,</span>
+                <span class="n">cuhk03_labeled</span><span class="o">=</span><span class="n">cuhk03_labeled</span><span class="p">,</span>
+                <span class="n">cuhk03_classic_split</span><span class="o">=</span><span class="n">cuhk03_classic_split</span><span class="p">,</span>
+                <span class="n">market1501_500k</span><span class="o">=</span><span class="n">market1501_500k</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">testloader</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;gallery&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+                <span class="n">galleryset</span><span class="p">,</span>
+                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">num_workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span>
+                <span class="n">pin_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span>
+                <span class="n">drop_last</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">testdataset</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;query&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">query</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">testdataset</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;gallery&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">galleryset</span><span class="o">.</span><span class="n">gallery</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  **************** Summary ****************&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  train            : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # train datasets : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">)))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # train ids      : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_train_pids</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # train images   : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">trainset</span><span class="p">)))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # train cameras  : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_train_cams</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  test             : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  *****************************************&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="VideoDataManager"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.datamanager.VideoDataManager">[docs]</a><span class="k">class</span> <span class="nc">VideoDataManager</span><span class="p">(</span><span class="n">DataManager</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Video data manager.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        root (str): root path to datasets.</span>
+<span class="sd">        sources (str or list): source dataset(s).</span>
+<span class="sd">        targets (str or list, optional): target dataset(s). If not given,</span>
+<span class="sd">            it equals to ``sources``.</span>
+<span class="sd">        height (int, optional): target image height. Default is 256.</span>
+<span class="sd">        width (int, optional): target image width. Default is 128.</span>
+<span class="sd">        random_erase (bool, optional): use random erasing. Default is False.</span>
+<span class="sd">        color_jitter (bool, optional): use color jittering. Default is False.</span>
+<span class="sd">        color_aug (bool, optional): use color augmentation. Default is False.</span>
+<span class="sd">        use_cpu (bool, optional): use cpu. Default is False.</span>
+<span class="sd">        split_id (int, optional): split id (*0-based*). Default is 0.</span>
+<span class="sd">        combineall (bool, optional): combine train, query and gallery in a dataset for</span>
+<span class="sd">            training. Default is False.</span>
+<span class="sd">        batch_size (int, optional): number of *tracklets* in a batch. Default is 3.</span>
+<span class="sd">        workers (int, optional): number of workers. Default is 4.</span>
+<span class="sd">        num_instances (int, optional): number of instances per identity in a batch.</span>
+<span class="sd">            Default is 4.</span>
+<span class="sd">        train_sampler (str, optional): sampler. Default is empty (``RandomSampler``).</span>
+<span class="sd">        seq_len (int, optional): how many images to sample in a tracklet. Default is 15.</span>
+<span class="sd">        sample_method (str, optional): how to sample images in a tracklet. Default is &quot;evenly&quot;.</span>
+<span class="sd">            Choices are [&quot;evenly&quot;, &quot;random&quot;, &quot;all&quot;]. &quot;evenly&quot; and &quot;random&quot; sample ``seq_len``</span>
+<span class="sd">            images in a tracklet while &quot;all&quot; samples all images in a tracklet, thus ``batch_size``</span>
+<span class="sd">            needs to be set to 1.</span>
+
+<span class="sd">    Examples::</span>
+
+<span class="sd">        datamanager = torchreid.data.VideoDataManager(</span>
+<span class="sd">            root=&#39;path/to/reid-data&#39;,</span>
+<span class="sd">            sources=&#39;mars&#39;,</span>
+<span class="sd">            height=256,</span>
+<span class="sd">            width=128,</span>
+<span class="sd">            batch_size=3,</span>
+<span class="sd">            seq_len=15,</span>
+<span class="sd">            sample_method=&#39;evenly&#39;</span>
+<span class="sd">        )</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">random_erase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">color_jitter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">color_aug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">split_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">combineall</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">batch_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">num_instances</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">train_sampler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">seq_len</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">sample_method</span><span class="o">=</span><span class="s1">&#39;evenly&#39;</span><span class="p">):</span>
+        
+        <span class="nb">super</span><span class="p">(</span><span class="n">VideoDataManager</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">sources</span><span class="o">=</span><span class="n">sources</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span>
+                                               <span class="n">random_erase</span><span class="o">=</span><span class="n">random_erase</span><span class="p">,</span> <span class="n">color_jitter</span><span class="o">=</span><span class="n">color_jitter</span><span class="p">,</span>
+                                               <span class="n">color_aug</span><span class="o">=</span><span class="n">color_aug</span><span class="p">,</span> <span class="n">use_cpu</span><span class="o">=</span><span class="n">use_cpu</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&gt; Loading train (source) dataset&#39;</span><span class="p">)</span>
+        <span class="n">trainset</span> <span class="o">=</span> <span class="p">[]</span>  
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">:</span>
+            <span class="n">trainset_</span> <span class="o">=</span> <span class="n">init_video_dataset</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">,</span>
+                <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transform_tr</span><span class="p">,</span>
+                <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;train&#39;</span><span class="p">,</span>
+                <span class="n">combineall</span><span class="o">=</span><span class="n">combineall</span><span class="p">,</span>
+                <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span>
+                <span class="n">split_id</span><span class="o">=</span><span class="n">split_id</span><span class="p">,</span>
+                <span class="n">seq_len</span><span class="o">=</span><span class="n">seq_len</span><span class="p">,</span>
+                <span class="n">sample_method</span><span class="o">=</span><span class="n">sample_method</span>
+            <span class="p">)</span>
+            <span class="n">trainset</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trainset_</span><span class="p">)</span>
+        <span class="n">trainset</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">trainset</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_train_pids</span> <span class="o">=</span> <span class="n">trainset</span><span class="o">.</span><span class="n">num_train_pids</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_train_cams</span> <span class="o">=</span> <span class="n">trainset</span><span class="o">.</span><span class="n">num_train_cams</span>
+
+        <span class="n">train_sampler</span> <span class="o">=</span> <span class="n">build_train_sampler</span><span class="p">(</span>
+            <span class="n">trainset</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">train_sampler</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">num_instances</span><span class="o">=</span><span class="n">num_instances</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+            <span class="n">trainset</span><span class="p">,</span>
+            <span class="n">sampler</span><span class="o">=</span><span class="n">train_sampler</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">num_workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span>
+            <span class="n">pin_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span>
+            <span class="n">drop_last</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&gt; Loading test (target) dataset&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testloader</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;gallery&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testdataset</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;gallery&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">:</span>
+            <span class="c1"># build query loader</span>
+            <span class="n">queryset</span> <span class="o">=</span> <span class="n">init_video_dataset</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">,</span>
+                <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transform_te</span><span class="p">,</span>
+                <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;query&#39;</span><span class="p">,</span>
+                <span class="n">combineall</span><span class="o">=</span><span class="n">combineall</span><span class="p">,</span>
+                <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span>
+                <span class="n">split_id</span><span class="o">=</span><span class="n">split_id</span><span class="p">,</span>
+                <span class="n">seq_len</span><span class="o">=</span><span class="n">seq_len</span><span class="p">,</span>
+                <span class="n">sample_method</span><span class="o">=</span><span class="n">sample_method</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">testloader</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;query&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+                <span class="n">queryset</span><span class="p">,</span>
+                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">num_workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span>
+                <span class="n">pin_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span>
+                <span class="n">drop_last</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+
+            <span class="c1"># build gallery loader</span>
+            <span class="n">galleryset</span> <span class="o">=</span> <span class="n">init_video_dataset</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">,</span>
+                <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transform_te</span><span class="p">,</span>
+                <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;gallery&#39;</span><span class="p">,</span>
+                <span class="n">combineall</span><span class="o">=</span><span class="n">combineall</span><span class="p">,</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span>
+                <span class="n">split_id</span><span class="o">=</span><span class="n">split_id</span><span class="p">,</span>
+                <span class="n">seq_len</span><span class="o">=</span><span class="n">seq_len</span><span class="p">,</span>
+                <span class="n">sample_method</span><span class="o">=</span><span class="n">sample_method</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">testloader</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;gallery&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+                <span class="n">galleryset</span><span class="p">,</span>
+                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">num_workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span>
+                <span class="n">pin_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span>
+                <span class="n">drop_last</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">testdataset</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;query&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">query</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">testdataset</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;gallery&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">galleryset</span><span class="o">.</span><span class="n">gallery</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  **************** Summary ****************&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  train             : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # train datasets  : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">)))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # train ids       : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_train_pids</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # train tracklets : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">trainset</span><span class="p">)))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # train cameras   : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_train_cams</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  test              : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  *****************************************&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Kaiyang Zhou
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

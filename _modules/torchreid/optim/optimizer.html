@@ -1,0 +1,353 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torchreid.optim.optimizer &mdash; torchreid 0.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> torchreid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">How-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../evaluation.html">Evaluation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/data.html">torchreid.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/engine.html">torchreid.engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/losses.html">torchreid.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/metrics.html">torchreid.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/models.html">torchreid.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/optim.html">torchreid.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/utils.html">torchreid.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../AWESOME_REID.html">Awesome-ReID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../MODEL_ZOO.html">Model Zoo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">torchreid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>torchreid.optim.optimizer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for torchreid.optim.optimizer</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+
+
+<span class="n">AVAI_OPTIMS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span> <span class="s1">&#39;amsgrad&#39;</span><span class="p">,</span> <span class="s1">&#39;sgd&#39;</span><span class="p">,</span> <span class="s1">&#39;rmsprop&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="build_optimizer"><a class="viewcode-back" href="../../../pkg/optim.html#torchreid.optim.optimizer.build_optimizer">[docs]</a><span class="k">def</span> <span class="nf">build_optimizer</span><span class="p">(</span>
+        <span class="n">model</span><span class="p">,</span>
+        <span class="n">optim</span><span class="o">=</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span>
+        <span class="n">lr</span><span class="o">=</span><span class="mf">0.0003</span><span class="p">,</span>
+        <span class="n">weight_decay</span><span class="o">=</span><span class="mf">5e-04</span><span class="p">,</span>
+        <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+        <span class="n">sgd_dampening</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">sgd_nesterov</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">rmsprop_alpha</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span>
+        <span class="n">adam_beta1</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+        <span class="n">adam_beta2</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span>
+        <span class="n">staged_lr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">new_layers</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="n">base_lr_mult</span><span class="o">=</span><span class="mf">0.1</span>
+    <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A function wrapper for building an optimizer.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (nn.Module): model.</span>
+<span class="sd">        optim (str, optional): optimizer. Default is &quot;adam&quot;.</span>
+<span class="sd">        lr (float, optional): learning rate. Default is 0.0003.</span>
+<span class="sd">        weight_decay (float, optional): weight decay (L2 penalty). Default is 5e-04.</span>
+<span class="sd">        momentum (float, optional): momentum factor in sgd. Default is 0.9,</span>
+<span class="sd">        sgd_dampening (float, optional): dampening for momentum. Default is 0.</span>
+<span class="sd">        sgd_nesterov (bool, optional): enables Nesterov momentum. Default is False.</span>
+<span class="sd">        rmsprop_alpha (float, optional): smoothing constant for rmsprop. Default is 0.99.</span>
+<span class="sd">        adam_beta1 (float, optional): beta-1 value in adam. Default is 0.9.</span>
+<span class="sd">        adam_beta2 (float, optional): beta-2 value in adam. Default is 0.99,</span>
+<span class="sd">        staged_lr (bool, optional): uses different learning rates for base and new layers. Base</span>
+<span class="sd">            layers are pretrained layers while new layers are randomly initialized, e.g. the</span>
+<span class="sd">            identity classification layer. Enabling ``staged_lr`` can allow the base layers to</span>
+<span class="sd">            be trained with a smaller learning rate determined by ``base_lr_mult``, while the new</span>
+<span class="sd">            layers will take the ``lr``. Default is False.</span>
+<span class="sd">        new_layers (str or list): attribute names in ``model``. Default is empty.</span>
+<span class="sd">        base_lr_mult (float, optional): learning rate multiplier for base layers. Default is 0.1.</span>
+
+<span class="sd">    Examples::</span>
+<span class="sd">        &gt;&gt;&gt; # A normal optimizer can be built by</span>
+<span class="sd">        &gt;&gt;&gt; optimizer = torchreid.optim.build_optimizer(model, optim=&#39;sgd&#39;, lr=0.01)</span>
+<span class="sd">        &gt;&gt;&gt; # If you want to use a smaller learning rate for pretrained layers</span>
+<span class="sd">        &gt;&gt;&gt; # and the attribute name for the randomly initialized layer is &#39;classifier&#39;,</span>
+<span class="sd">        &gt;&gt;&gt; # you can do</span>
+<span class="sd">        &gt;&gt;&gt; optimizer = torchreid.optim.build_optimizer(</span>
+<span class="sd">        &gt;&gt;&gt;     model, optim=&#39;sgd&#39;, lr=0.01, staged_lr=True,</span>
+<span class="sd">        &gt;&gt;&gt;     new_layers=&#39;classifier&#39;, base_lr_mult=0.1</span>
+<span class="sd">        &gt;&gt;&gt; )</span>
+<span class="sd">        &gt;&gt;&gt; # Now the `classifier` has learning rate 0.01 but the base layers</span>
+<span class="sd">        &gt;&gt;&gt; # have learning rate 0.01 * 0.1.</span>
+<span class="sd">        &gt;&gt;&gt; # new_layers can also take multiple attribute names. Say the new layers</span>
+<span class="sd">        &gt;&gt;&gt; # are &#39;fc&#39; and &#39;classifier&#39;, you can do</span>
+<span class="sd">        &gt;&gt;&gt; optimizer = torchreid.optim.build_optimizer(</span>
+<span class="sd">        &gt;&gt;&gt;     model, optim=&#39;sgd&#39;, lr=0.01, staged_lr=True,</span>
+<span class="sd">        &gt;&gt;&gt;     new_layers=[&#39;fc&#39;, &#39;classifier&#39;], base_lr_mult=0.1</span>
+<span class="sd">        &gt;&gt;&gt; )</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">optim</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">AVAI_OPTIMS</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unsupported optim: </span><span class="si">{}</span><span class="s1">. Must be one of </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">optim</span><span class="p">,</span> <span class="n">AVAI_OPTIMS</span><span class="p">))</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;model given to build_optimizer must be an instance of nn.Module&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">staged_lr</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_layers</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">new_layers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;new_layers is empty, therefore, staged_lr is useless&#39;</span><span class="p">)</span>
+            <span class="n">new_layers</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_layers</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">DataParallel</span><span class="p">):</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">module</span>
+
+        <span class="n">base_params</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">base_layers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">new_params</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">named_children</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">new_layers</span><span class="p">:</span>
+                <span class="n">new_params</span> <span class="o">+=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">parameters</span><span class="p">()]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">base_params</span> <span class="o">+=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">parameters</span><span class="p">()]</span>
+                <span class="n">base_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        
+        <span class="n">param_groups</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">base_params</span><span class="p">,</span> <span class="s1">&#39;lr&#39;</span><span class="p">:</span> <span class="n">lr</span> <span class="o">*</span> <span class="n">base_lr_mult</span><span class="p">},</span>
+            <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">new_params</span><span class="p">},</span>
+        <span class="p">]</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Use staged learning rate&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Base layers (lr*</span><span class="si">{}</span><span class="s1">): </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">base_lr_mult</span><span class="p">,</span> <span class="n">base_layers</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;New layers (lr): </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new_layers</span><span class="p">))</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">param_groups</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Initializing optimizer: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">optim</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">optim</span> <span class="o">==</span> <span class="s1">&#39;adam&#39;</span><span class="p">:</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span>
+            <span class="n">param_groups</span><span class="p">,</span>
+            <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">,</span>
+            <span class="n">weight_decay</span><span class="o">=</span><span class="n">weight_decay</span><span class="p">,</span>
+            <span class="n">betas</span><span class="o">=</span><span class="p">(</span><span class="n">adam_beta1</span><span class="p">,</span> <span class="n">adam_beta2</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">optim</span> <span class="o">==</span> <span class="s1">&#39;amsgrad&#39;</span><span class="p">:</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span>
+            <span class="n">param_groups</span><span class="p">,</span>
+            <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">,</span>
+            <span class="n">weight_decay</span><span class="o">=</span><span class="n">weight_decay</span><span class="p">,</span>
+            <span class="n">betas</span><span class="o">=</span><span class="p">(</span><span class="n">adam_beta1</span><span class="p">,</span> <span class="n">adam_beta2</span><span class="p">),</span>
+            <span class="n">amsgrad</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">optim</span> <span class="o">==</span> <span class="s1">&#39;sgd&#39;</span><span class="p">:</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span>
+            <span class="n">param_groups</span><span class="p">,</span>
+            <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">,</span>
+            <span class="n">momentum</span><span class="o">=</span><span class="n">momentum</span><span class="p">,</span>
+            <span class="n">weight_decay</span><span class="o">=</span><span class="n">weight_decay</span><span class="p">,</span>
+            <span class="n">dampening</span><span class="o">=</span><span class="n">sgd_dampening</span><span class="p">,</span>
+            <span class="n">nesterov</span><span class="o">=</span><span class="n">sgd_nesterov</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">optim</span> <span class="o">==</span> <span class="s1">&#39;rmsprop&#39;</span><span class="p">:</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">RMSprop</span><span class="p">(</span>
+            <span class="n">param_groups</span><span class="p">,</span>
+            <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">,</span>
+            <span class="n">momentum</span><span class="o">=</span><span class="n">momentum</span><span class="p">,</span>
+            <span class="n">weight_decay</span><span class="o">=</span><span class="n">weight_decay</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">rmsprop_alpha</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">optimizer</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Kaiyang Zhou
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

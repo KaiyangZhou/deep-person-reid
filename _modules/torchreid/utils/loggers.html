@@ -1,0 +1,346 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torchreid.utils.loggers &mdash; torchreid 0.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> torchreid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">How-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../evaluation.html">Evaluation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/data.html">torchreid.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/engine.html">torchreid.engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/losses.html">torchreid.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/metrics.html">torchreid.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/models.html">torchreid.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/optim.html">torchreid.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pkg/utils.html">torchreid.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../AWESOME_REID.html">Awesome-ReID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../MODEL_ZOO.html">Model Zoo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">torchreid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>torchreid.utils.loggers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for torchreid.utils.loggers</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Logger&#39;</span><span class="p">,</span> <span class="s1">&#39;RankLogger&#39;</span><span class="p">]</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
+
+<span class="kn">from</span> <span class="nn">.tools</span> <span class="k">import</span> <span class="n">mkdir_if_missing</span>
+
+
+<div class="viewcode-block" id="Logger"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.loggers.Logger">[docs]</a><span class="k">class</span> <span class="nc">Logger</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Writes console output to external text file.</span>
+
+<span class="sd">    Imported from `&lt;https://github.com/Cysu/open-reid/blob/master/reid/utils/logging.py&gt;`_</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        fpath (str): directory to save logging file.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">       &gt;&gt;&gt; import sys</span>
+<span class="sd">       &gt;&gt;&gt; import os</span>
+<span class="sd">       &gt;&gt;&gt; import os.path as osp</span>
+<span class="sd">       &gt;&gt;&gt; from torchreid.utils import Logger</span>
+<span class="sd">       &gt;&gt;&gt; save_dir = &#39;log/resnet50-softmax-market1501&#39;</span>
+<span class="sd">       &gt;&gt;&gt; log_name = &#39;train.log&#39;</span>
+<span class="sd">       &gt;&gt;&gt; sys.stdout = Logger(osp.join(args.save_dir, log_name))</span>
+<span class="sd">    &quot;&quot;&quot;</span>  
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fpath</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">console</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">fpath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">mkdir_if_missing</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fpath</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">flush</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">fsync</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="RankLogger"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.loggers.RankLogger">[docs]</a><span class="k">class</span> <span class="nc">RankLogger</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Records the rank1 matching accuracy obtained for each</span>
+<span class="sd">    test dataset at specified evaluation steps and provides a function</span>
+<span class="sd">    to show the summarized results, which are convenient for analysis.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sources (str or list): source dataset name(s).</span>
+<span class="sd">        targets (str or list): target dataset name(s).</span>
+
+<span class="sd">    Examples::</span>
+<span class="sd">        &gt;&gt;&gt; from torchreid.utils import RankLogger</span>
+<span class="sd">        &gt;&gt;&gt; s = &#39;market1501&#39;</span>
+<span class="sd">        &gt;&gt;&gt; t = &#39;market1501&#39;</span>
+<span class="sd">        &gt;&gt;&gt; ranklogger = RankLogger(s, t)</span>
+<span class="sd">        &gt;&gt;&gt; ranklogger.write(t, 10, 0.5)</span>
+<span class="sd">        &gt;&gt;&gt; ranklogger.write(t, 20, 0.7)</span>
+<span class="sd">        &gt;&gt;&gt; ranklogger.write(t, 30, 0.9)</span>
+<span class="sd">        &gt;&gt;&gt; ranklogger.show_summary()</span>
+<span class="sd">        &gt;&gt;&gt; # You will see:</span>
+<span class="sd">        &gt;&gt;&gt; # =&gt; Show performance summary</span>
+<span class="sd">        &gt;&gt;&gt; # market1501 (source)</span>
+<span class="sd">        &gt;&gt;&gt; # - epoch 10   rank1 50.0%</span>
+<span class="sd">        &gt;&gt;&gt; # - epoch 20   rank1 70.0%</span>
+<span class="sd">        &gt;&gt;&gt; # - epoch 30   rank1 90.0%</span>
+<span class="sd">        &gt;&gt;&gt; # If there are multiple test datasets</span>
+<span class="sd">        &gt;&gt;&gt; t = [&#39;market1501&#39;, &#39;dukemtmcreid&#39;]</span>
+<span class="sd">        &gt;&gt;&gt; ranklogger = RankLogger(s, t)</span>
+<span class="sd">        &gt;&gt;&gt; ranklogger.write(t[0], 10, 0.5)</span>
+<span class="sd">        &gt;&gt;&gt; ranklogger.write(t[0], 20, 0.7)</span>
+<span class="sd">        &gt;&gt;&gt; ranklogger.write(t[0], 30, 0.9)</span>
+<span class="sd">        &gt;&gt;&gt; ranklogger.write(t[1], 10, 0.1)</span>
+<span class="sd">        &gt;&gt;&gt; ranklogger.write(t[1], 20, 0.2)</span>
+<span class="sd">        &gt;&gt;&gt; ranklogger.write(t[1], 30, 0.3)</span>
+<span class="sd">        &gt;&gt;&gt; ranklogger.show_summary()</span>
+<span class="sd">        &gt;&gt;&gt; # You can see:</span>
+<span class="sd">        &gt;&gt;&gt; # =&gt; Show performance summary</span>
+<span class="sd">        &gt;&gt;&gt; # market1501 (source)</span>
+<span class="sd">        &gt;&gt;&gt; # - epoch 10   rank1 50.0%</span>
+<span class="sd">        &gt;&gt;&gt; # - epoch 20   rank1 70.0%</span>
+<span class="sd">        &gt;&gt;&gt; # - epoch 30   rank1 90.0%</span>
+<span class="sd">        &gt;&gt;&gt; # dukemtmcreid (target)</span>
+<span class="sd">        &gt;&gt;&gt; # - epoch 10   rank1 10.0%</span>
+<span class="sd">        &gt;&gt;&gt; # - epoch 20   rank1 20.0%</span>
+<span class="sd">        &gt;&gt;&gt; # - epoch 30   rank1 30.0%</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sources</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="n">sources</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="n">targets</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;epoch&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;rank1&#39;</span><span class="p">:</span> <span class="p">[]}</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">}</span>
+
+<div class="viewcode-block" id="RankLogger.write"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.loggers.RankLogger.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">rank1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Writes result.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">           name (str): dataset name.</span>
+<span class="sd">           epoch (int): current epoch.</span>
+<span class="sd">           rank1 (float): rank1 result.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;epoch&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">epoch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;rank1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rank1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RankLogger.show_summary"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.loggers.RankLogger.show_summary">[docs]</a>    <span class="k">def</span> <span class="nf">show_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Shows saved results.&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&gt; Show performance summary&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">:</span>
+            <span class="n">from_where</span> <span class="o">=</span> <span class="s1">&#39;source&#39;</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="k">else</span> <span class="s1">&#39;target&#39;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">from_where</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">rank1</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;epoch&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;rank1&#39;</span><span class="p">]):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- epoch </span><span class="si">{}</span><span class="se">\t</span><span class="s1"> rank1 </span><span class="si">{:.1%}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">rank1</span><span class="p">))</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Kaiyang Zhou
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

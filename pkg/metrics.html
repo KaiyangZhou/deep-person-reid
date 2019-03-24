@@ -1,0 +1,389 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torchreid.metrics &mdash; torchreid 0.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="torchreid.models" href="models.html" />
+    <link rel="prev" title="torchreid.losses" href="losses.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> torchreid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">How-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../evaluation.html">Evaluation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="data.html">torchreid.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="engine.html">torchreid.engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losses.html">torchreid.losses</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">torchreid.metrics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-torchreid.metrics.distance">Distance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-torchreid.metrics.accuracy">Accuracy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-torchreid.metrics.rank">Rank</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">torchreid.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optim.html">torchreid.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">torchreid.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../AWESOME_REID.html">Awesome-ReID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MODEL_ZOO.html">Model Zoo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">torchreid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>torchreid.metrics</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/pkg/metrics.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="torchreid-metrics">
+<span id="id1"></span><h1>torchreid.metrics<a class="headerlink" href="#torchreid-metrics" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-torchreid.metrics.distance">
+<span id="distance"></span><h2>Distance<a class="headerlink" href="#module-torchreid.metrics.distance" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="torchreid.metrics.distance.compute_distance_matrix">
+<code class="descclassname">torchreid.metrics.distance.</code><code class="descname">compute_distance_matrix</code><span class="sig-paren">(</span><em>input1</em>, <em>input2</em>, <em>metric='euclidean'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/metrics/distance.html#compute_distance_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.metrics.distance.compute_distance_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper function for computing distance matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input1</strong> (<em>torch.Tensor</em>) – 2-D feature matrix.</li>
+<li><strong>input2</strong> (<em>torch.Tensor</em>) – 2-D feature matrix.</li>
+<li><strong>metric</strong> (<em>str</em><em>, </em><em>optional</em>) – “euclidean” or “cosine”.
+Default is “euclidean”.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">distance matrix.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">torch.Tensor</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Examples::</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid</span> <span class="k">import</span> <span class="n">metrics</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">input1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2048</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">input2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2048</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">distmat</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">compute_distance_matrix</span><span class="p">(</span><span class="n">input1</span><span class="p">,</span> <span class="n">input2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">distmat</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="c1"># (10, 100)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torchreid.metrics.distance.cosine_distance">
+<code class="descclassname">torchreid.metrics.distance.</code><code class="descname">cosine_distance</code><span class="sig-paren">(</span><em>input1</em>, <em>input2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/metrics/distance.html#cosine_distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.metrics.distance.cosine_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes cosine distance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input1</strong> (<em>torch.Tensor</em>) – 2-D feature matrix.</li>
+<li><strong>input2</strong> (<em>torch.Tensor</em>) – 2-D feature matrix.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">distance matrix.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">torch.Tensor</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="torchreid.metrics.distance.euclidean_squared_distance">
+<code class="descclassname">torchreid.metrics.distance.</code><code class="descname">euclidean_squared_distance</code><span class="sig-paren">(</span><em>input1</em>, <em>input2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/metrics/distance.html#euclidean_squared_distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.metrics.distance.euclidean_squared_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes euclidean squared distance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input1</strong> (<em>torch.Tensor</em>) – 2-D feature matrix.</li>
+<li><strong>input2</strong> (<em>torch.Tensor</em>) – 2-D feature matrix.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">distance matrix.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">torch.Tensor</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-torchreid.metrics.accuracy">
+<span id="accuracy"></span><h2>Accuracy<a class="headerlink" href="#module-torchreid.metrics.accuracy" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="torchreid.metrics.accuracy.accuracy">
+<code class="descclassname">torchreid.metrics.accuracy.</code><code class="descname">accuracy</code><span class="sig-paren">(</span><em>output</em>, <em>target</em>, <em>topk=(1</em>, <em>)</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/metrics/accuracy.html#accuracy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.metrics.accuracy.accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the accuracy over the k top predictions for
+the specified values of k.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>output</strong> (<em>torch.Tensor</em>) – prediction matrix with shape (batch_size, num_classes).</li>
+<li><strong>target</strong> (<em>torch.LongTensor</em>) – ground truth labels with shape (batch_size).</li>
+<li><strong>topk</strong> (<em>tuple</em><em>, </em><em>optional</em>) – accuracy at top-k will be computed. For example,
+topk=(1, 5) means accuracy at top-1 and top-5 will be computed.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">accuracy at top-k.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Examples::</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid</span> <span class="k">import</span> <span class="n">metrics</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="o">.</span><span class="n">accuracy</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-torchreid.metrics.rank">
+<span id="rank"></span><h2>Rank<a class="headerlink" href="#module-torchreid.metrics.rank" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="torchreid.metrics.rank.evaluate_rank">
+<code class="descclassname">torchreid.metrics.rank.</code><code class="descname">evaluate_rank</code><span class="sig-paren">(</span><em>distmat</em>, <em>q_pids</em>, <em>g_pids</em>, <em>q_camids</em>, <em>g_camids</em>, <em>max_rank=50</em>, <em>use_metric_cuhk03=False</em>, <em>use_cython=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/metrics/rank.html#evaluate_rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.metrics.rank.evaluate_rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates CMC rank.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>distmat</strong> (<em>numpy.ndarray</em>) – distance matrix of shape (num_query, num_gallery).</li>
+<li><strong>q_pids</strong> (<em>numpy.ndarray</em>) – 1-D array containing person identities
+of each query instance.</li>
+<li><strong>g_pids</strong> (<em>numpy.ndarray</em>) – 1-D array containing person identities
+of each gallery instance.</li>
+<li><strong>q_camids</strong> (<em>numpy.ndarray</em>) – 1-D array containing camera views under
+which each query instance is captured.</li>
+<li><strong>g_camids</strong> (<em>numpy.ndarray</em>) – 1-D array containing camera views under
+which each gallery instance is captured.</li>
+<li><strong>max_rank</strong> (<em>int</em><em>, </em><em>optional</em>) – maximum CMC rank to be computed. Default is 50.</li>
+<li><strong>use_metric_cuhk03</strong> (<em>bool</em><em>, </em><em>optional</em>) – use single-gallery-shot setting for cuhk03.
+Default is False. This should be enabled when using cuhk03 classic split.</li>
+<li><strong>use_cython</strong> (<em>bool</em><em>, </em><em>optional</em>) – use cython code for evaluation. Default is True.
+This is highly recommended as the cython code can speed up the cmc computation
+by more than 10x. This requires Cython to be installed.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="models.html" class="btn btn-neutral float-right" title="torchreid.models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="losses.html" class="btn btn-neutral float-left" title="torchreid.losses" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Kaiyang Zhou
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

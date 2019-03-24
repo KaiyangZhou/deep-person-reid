@@ -1,0 +1,434 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Torchreid &mdash; torchreid 0.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="How-to" href="user_guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home"> torchreid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html">How-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="evaluation.html">Evaluation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pkg/data.html">torchreid.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/engine.html">torchreid.engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/losses.html">torchreid.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/metrics.html">torchreid.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/models.html">torchreid.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/optim.html">torchreid.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pkg/utils.html">torchreid.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="AWESOME_REID.html">Awesome-ReID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MODEL_ZOO.html">Model Zoo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">torchreid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>Torchreid</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="torchreid">
+<h1>Torchreid<a class="headerlink" href="#torchreid" title="Permalink to this headline">¶</a></h1>
+<p>Torchreid is a library built on <a class="reference external" href="https://pytorch.org/">PyTorch</a> for deep-learning person re-identification.</p>
+<p>It features:</p>
+<ul class="simple">
+<li>multi-GPU training</li>
+<li>support both image- and video-reid</li>
+<li>end-to-end training and evaluation</li>
+<li>incredibly easy preparation of reid datasets</li>
+<li>multi-dataset training</li>
+<li>cross-dataset evaluation</li>
+<li>standard protocol used by most research papers</li>
+<li>highly extensible (easy to add models, datasets, training methods, etc.)</li>
+<li>implementations of state-of-the-art deep reid models</li>
+<li>access to pretrained reid models</li>
+<li>advanced training techniques</li>
+<li>visualization of ranking results</li>
+</ul>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Install PyTorch and torchvision following the <a class="reference external" href="https://pytorch.org/">official instructions</a>.</li>
+<li>Install Cython.</li>
+<li>Clone <code class="docutils literal notranslate"><span class="pre">deep-person-reid</span></code> to your preferred directory.</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/KaiyangZhou/deep-person-reid.git
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>Install <code class="docutils literal notranslate"><span class="pre">torchreid</span></code> via</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> deep-person-reid/
+$ python setup.py install <span class="c1"># or python3</span>
+$ <span class="c1"># If you wanna modify the source code without</span>
+$ <span class="c1"># the need to re-build it, you can do</span>
+$ <span class="c1"># python setup.py develop</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-started-30-seconds-to-torchreid">
+<h2>Get started: 30 seconds to Torchreid<a class="headerlink" href="#get-started-30-seconds-to-torchreid" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Import <code class="docutils literal notranslate"><span class="pre">torchreid</span></code></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torchreid</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Load data manager</li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">datamanager</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ImageDataManager</span><span class="p">(</span>
+    <span class="n">root</span><span class="o">=</span><span class="s1">&#39;reid-data&#39;</span><span class="p">,</span>
+    <span class="n">sources</span><span class="o">=</span><span class="s1">&#39;market1501&#39;</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+    <span class="n">market1501_500k</span><span class="o">=</span><span class="bp">False</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>3 Build model, optimizer and lr_scheduler</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">build_model</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;resnet50&#39;</span><span class="p">,</span>
+    <span class="n">num_classes</span><span class="o">=</span><span class="n">datamanager</span><span class="o">.</span><span class="n">num_train_pids</span><span class="p">,</span>
+    <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span>
+    <span class="n">pretrained</span><span class="o">=</span><span class="bp">True</span>
+<span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span> <span class="c1"># move model to gpu</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">build_optimizer</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">,</span>
+    <span class="n">optim</span><span class="o">=</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span>
+    <span class="n">lr</span><span class="o">=</span><span class="mf">0.0003</span>
+<span class="p">)</span>
+
+<span class="n">scheduler</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">build_lr_scheduler</span><span class="p">(</span>
+    <span class="n">optimizer</span><span class="p">,</span>
+    <span class="n">lr_scheduler</span><span class="o">=</span><span class="s1">&#39;single_step&#39;</span><span class="p">,</span>
+    <span class="n">stepsize</span><span class="o">=</span><span class="mi">20</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>Build engine</li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">ImageSoftmaxEngine</span><span class="p">(</span>
+    <span class="n">datamanager</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">,</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
+    <span class="n">scheduler</span><span class="o">=</span><span class="n">scheduler</span><span class="p">,</span>
+    <span class="n">label_smooth</span><span class="o">=</span><span class="bp">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li>Run training and test</li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">save_dir</span><span class="o">=</span><span class="s1">&#39;log/resnet50&#39;</span><span class="p">,</span>
+    <span class="n">max_epoch</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">eval_freq</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">print_freq</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">test_only</span><span class="o">=</span><span class="bp">False</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="a-unified-interface">
+<h2>A unified interface<a class="headerlink" href="#a-unified-interface" title="Permalink to this headline">¶</a></h2>
+<p>In “deep-person-reid/scripts/”, we provide a unified interface including a default parser file <code class="docutils literal notranslate"><span class="pre">default_parser.py</span></code> and the main script <code class="docutils literal notranslate"><span class="pre">main.py</span></code>. For example, to train an image reid model on Market1501 using softmax, you can do</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python main.py <span class="se">\</span>
+--root path/to/reid-data <span class="se">\</span>
+--app image <span class="se">\</span>
+--loss softmax <span class="se">\</span>
+--label-smooth <span class="se">\</span>
+-s market1501 <span class="se">\</span>
+-a resnet50 <span class="se">\</span>
+--optim adam <span class="se">\</span>
+--lr <span class="m">0</span>.0003 <span class="se">\</span>
+--max-epoch <span class="m">60</span> <span class="se">\</span>
+--stepsize <span class="m">20</span> <span class="m">40</span> <span class="se">\</span>
+--batch-size <span class="m">32</span> <span class="se">\</span>
+--save-dir log/resnet50-market-softmax <span class="se">\</span>
+--gpu-devices <span class="m">0</span>
+</pre></div>
+</div>
+<p>Please refer to <code class="docutils literal notranslate"><span class="pre">default_parser.py</span></code> and <code class="docutils literal notranslate"><span class="pre">main.py</span></code> for more details.</p>
+</div>
+<div class="section" id="datasets">
+<h2>Datasets<a class="headerlink" href="#datasets" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="image-reid-datasets">
+<h3>Image-reid datasets<a class="headerlink" href="#image-reid-datasets" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Zheng_Scalable_Person_Re-Identification_ICCV_2015_paper.pdf">Market1501</a></li>
+<li><a class="reference external" href="https://www.cv-foundation.org/openaccess/content_cvpr_2014/papers/Li_DeepReID_Deep_Filter_2014_CVPR_paper.pdf">CUHK03</a></li>
+<li><a class="reference external" href="https://arxiv.org/abs/1701.07717">DukeMTMC-reID</a></li>
+<li><a class="reference external" href="https://arxiv.org/abs/1711.08565">MSMT17</a></li>
+<li><a class="reference external" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.331.7285&amp;rep=rep1&amp;type=pdf">VIPeR</a></li>
+<li><a class="reference external" href="http://www.eecs.qmul.ac.uk/~txiang/publications/LoyXiangGong_cvpr_2009.pdf">GRID</a></li>
+<li><a class="reference external" href="http://www.ee.cuhk.edu.hk/~xgwang/papers/liZWaccv12.pdf">CUHK01</a></li>
+<li><a class="reference external" href="https://pdfs.semanticscholar.org/f62d/71e701c9fd021610e2076b5e0f5b2c7c86ca.pdf">PRID450S</a></li>
+<li><a class="reference external" href="http://openaccess.thecvf.com/content_cvpr_2017/papers/Zhao_Spindle_Net_Person_CVPR_2017_paper.pdf">SenseReID</a></li>
+<li><a class="reference external" href="http://www.eecs.qmul.ac.uk/~sgg/papers/ZhengGongXiang_BMVC09.pdf">QMUL-iLIDS</a></li>
+<li><a class="reference external" href="https://pdfs.semanticscholar.org/4c1b/f0592be3e535faf256c95e27982db9b3d3d3.pdf">PRID</a></li>
+</ul>
+</div>
+<div class="section" id="video-reid-datasets">
+<h3>Video-reid datasets<a class="headerlink" href="#video-reid-datasets" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="http://www.liangzheng.org/1320.pdf">MARS</a></li>
+<li><a class="reference external" href="https://www.eecs.qmul.ac.uk/~sgg/papers/WangEtAl_ECCV14.pdf">iLIDS-VID</a></li>
+<li><a class="reference external" href="https://pdfs.semanticscholar.org/4c1b/f0592be3e535faf256c95e27982db9b3d3d3.pdf">PRID2011</a></li>
+<li><a class="reference external" href="http://openaccess.thecvf.com/content_cvpr_2018/papers/Wu_Exploit_the_Unknown_CVPR_2018_paper.pdf">DukeMTMC-VideoReID</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="models">
+<h2>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="imagenet-classification-models">
+<h3>ImageNet classification models<a class="headerlink" href="#imagenet-classification-models" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="https://arxiv.org/abs/1512.03385">ResNet</a></li>
+<li><a class="reference external" href="https://arxiv.org/abs/1611.05431">ResNeXt</a></li>
+<li><a class="reference external" href="https://arxiv.org/abs/1709.01507">SENet</a></li>
+<li><a class="reference external" href="https://arxiv.org/abs/1608.06993">DenseNet</a></li>
+<li><a class="reference external" href="https://arxiv.org/abs/1602.07261">Inception-ResNet-V2</a></li>
+<li><a class="reference external" href="https://arxiv.org/abs/1602.07261">Inception-V4</a></li>
+<li><a class="reference external" href="https://arxiv.org/abs/1610.02357">Xception</a></li>
+</ul>
+</div>
+<div class="section" id="lightweight-models">
+<h3>Lightweight models<a class="headerlink" href="#lightweight-models" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="https://arxiv.org/abs/1707.07012">NASNet</a></li>
+<li><a class="reference external" href="https://arxiv.org/abs/1801.04381">MobileNetV2</a></li>
+<li><a class="reference external" href="https://arxiv.org/abs/1707.01083">ShuffleNet</a></li>
+<li><a class="reference external" href="https://arxiv.org/abs/1602.07360">SqueezeNet</a></li>
+</ul>
+</div>
+<div class="section" id="reid-specific-models">
+<h3>ReID-specific models<a class="headerlink" href="#reid-specific-models" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="https://arxiv.org/abs/1709.05165">MuDeep</a></li>
+<li><a class="reference external" href="https://arxiv.org/abs/1711.08106">ResNet-mid</a></li>
+<li><a class="reference external" href="https://arxiv.org/abs/1802.08122">HACNN</a></li>
+<li><a class="reference external" href="https://arxiv.org/abs/1711.09349">PCB</a></li>
+<li><a class="reference external" href="https://arxiv.org/abs/1803.09132">MLFN</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="losses">
+<h2>Losses<a class="headerlink" href="#losses" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Szegedy_Rethinking_the_Inception_CVPR_2016_paper.pdf">Softmax (cross entropy loss with label smoothing)</a></li>
+<li><a class="reference external" href="https://arxiv.org/abs/1703.07737">Triplet (hard example mining triplet loss)</a></li>
+</ul>
+</div>
+<div class="section" id="citation">
+<h2>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">¶</a></h2>
+<p>Please link this project in your paper</p>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="user_guide.html" class="btn btn-neutral float-right" title="How-to" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Kaiyang Zhou
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

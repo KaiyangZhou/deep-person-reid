@@ -1,0 +1,466 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torchreid.data.datasets.image.cuhk03 &mdash; torchreid 0.7.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> torchreid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../user_guide.html">How-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../evaluation.html">Evaluation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/data.html">torchreid.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/engine.html">torchreid.engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/losses.html">torchreid.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/metrics.html">torchreid.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/models.html">torchreid.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/optim.html">torchreid.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../pkg/utils.html">torchreid.utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../AWESOME_REID.html">Awesome-ReID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../MODEL_ZOO.html">Model Zoo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">torchreid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>torchreid.data.datasets.image.cuhk03</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for torchreid.data.datasets.image.cuhk03</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
+
+<span class="kn">from</span> <span class="nn">torchreid.data.datasets</span> <span class="k">import</span> <span class="n">ImageDataset</span>
+<span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">mkdir_if_missing</span><span class="p">,</span> <span class="n">read_json</span><span class="p">,</span> <span class="n">write_json</span>
+
+
+<div class="viewcode-block" id="CUHK03"><a class="viewcode-back" href="../../../../../pkg/data.html#torchreid.data.datasets.image.cuhk03.CUHK03">[docs]</a><span class="k">class</span> <span class="nc">CUHK03</span><span class="p">(</span><span class="n">ImageDataset</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;CUHK03.</span>
+
+<span class="sd">    Reference:</span>
+<span class="sd">        Li et al. DeepReID: Deep Filter Pairing Neural Network for Person Re-identification. CVPR 2014.</span>
+
+<span class="sd">    URL: `&lt;http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html#!&gt;`_</span>
+<span class="sd">    </span>
+<span class="sd">    Dataset statistics:</span>
+<span class="sd">        - identities: 1360.</span>
+<span class="sd">        - images: 13164.</span>
+<span class="sd">        - cameras: 6.</span>
+<span class="sd">        - splits: 20 (classic).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dataset_dir</span> <span class="o">=</span> <span class="s1">&#39;cuhk03&#39;</span>
+    <span class="n">dataset_url</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">split_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cuhk03_labeled</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cuhk03_classic_split</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">root</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">download_dataset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset_url</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;cuhk03_release&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raw_mat_path</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;cuhk-03.mat&#39;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">imgs_detected_dir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;images_detected&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">imgs_labeled_dir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;images_labeled&#39;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">split_classic_det_json_path</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;splits_classic_detected.json&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">split_classic_lab_json_path</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;splits_classic_labeled.json&#39;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">split_new_det_json_path</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;splits_new_detected.json&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">split_new_lab_json_path</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;splits_new_labeled.json&#39;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">split_new_det_mat_path</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;cuhk03_new_protocol_config_detected.mat&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">split_new_lab_mat_path</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;cuhk03_new_protocol_config_labeled.mat&#39;</span><span class="p">)</span>
+
+        <span class="n">required_files</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">raw_mat_path</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">split_new_det_mat_path</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">split_new_lab_mat_path</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_before_run</span><span class="p">(</span><span class="n">required_files</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">preprocess_split</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">cuhk03_labeled</span><span class="p">:</span>
+            <span class="n">split_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_classic_lab_json_path</span> <span class="k">if</span> <span class="n">cuhk03_classic_split</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_new_lab_json_path</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">split_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_classic_det_json_path</span> <span class="k">if</span> <span class="n">cuhk03_classic_split</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_new_det_json_path</span>
+
+        <span class="n">splits</span> <span class="o">=</span> <span class="n">read_json</span><span class="p">(</span><span class="n">split_path</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">split_id</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">splits</span><span class="p">),</span> <span class="s1">&#39;Condition split_id (</span><span class="si">{}</span><span class="s1">) &lt; len(splits) (</span><span class="si">{}</span><span class="s1">) is false&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">split_id</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">splits</span><span class="p">))</span>
+        <span class="n">split</span> <span class="o">=</span> <span class="n">splits</span><span class="p">[</span><span class="n">split_id</span><span class="p">]</span>
+
+        <span class="n">train</span> <span class="o">=</span> <span class="n">split</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">]</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">split</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">]</span>
+        <span class="n">gallery</span> <span class="o">=</span> <span class="n">split</span><span class="p">[</span><span class="s1">&#39;gallery&#39;</span><span class="p">]</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">CUHK03</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">gallery</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">preprocess_split</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># This function is a bit complex and ugly, what it does is</span>
+        <span class="c1"># 1. extract data from cuhk-03.mat and save as png images</span>
+        <span class="c1"># 2. create 20 classic splits (Li et al. CVPR&#39;14)</span>
+        <span class="c1"># 3. create new split (Zhong et al. CVPR&#39;17)</span>
+        <span class="k">if</span> <span class="n">osp</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">imgs_labeled_dir</span><span class="p">)</span> \
+           <span class="ow">and</span> <span class="n">osp</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">imgs_detected_dir</span><span class="p">)</span> \
+           <span class="ow">and</span> <span class="n">osp</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split_classic_det_json_path</span><span class="p">)</span> \
+           <span class="ow">and</span> <span class="n">osp</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split_classic_lab_json_path</span><span class="p">)</span> \
+           <span class="ow">and</span> <span class="n">osp</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split_new_det_json_path</span><span class="p">)</span> \
+           <span class="ow">and</span> <span class="n">osp</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split_new_lab_json_path</span><span class="p">):</span>
+           <span class="k">return</span>
+
+        <span class="kn">import</span> <span class="nn">h5py</span>
+        <span class="kn">from</span> <span class="nn">scipy.misc</span> <span class="k">import</span> <span class="n">imsave</span>
+        <span class="kn">from</span> <span class="nn">scipy.io</span> <span class="k">import</span> <span class="n">loadmat</span>
+
+        <span class="n">mkdir_if_missing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">imgs_detected_dir</span><span class="p">)</span>
+        <span class="n">mkdir_if_missing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">imgs_labeled_dir</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Extract image data from &quot;</span><span class="si">{}</span><span class="s1">&quot; and save as png&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_mat_path</span><span class="p">))</span>
+        <span class="n">mat</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_mat_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">_deref</span><span class="p">(</span><span class="n">ref</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">mat</span><span class="p">[</span><span class="n">ref</span><span class="p">][:]</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="k">def</span> <span class="nf">_process_images</span><span class="p">(</span><span class="n">img_refs</span><span class="p">,</span> <span class="n">campid</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">):</span>
+            <span class="n">img_paths</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># Note: some persons only have images for one view</span>
+            <span class="k">for</span> <span class="n">imgid</span><span class="p">,</span> <span class="n">img_ref</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">img_refs</span><span class="p">):</span>
+                <span class="n">img</span> <span class="o">=</span> <span class="n">_deref</span><span class="p">(</span><span class="n">img_ref</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="o">==</span><span class="mi">0</span> <span class="ow">or</span> <span class="n">img</span><span class="o">.</span><span class="n">ndim</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">:</span>
+                    <span class="k">continue</span> <span class="c1"># skip empty cell</span>
+                <span class="c1"># images are saved with the following format, index-1 (ensure uniqueness)</span>
+                <span class="c1"># campid: index of camera pair (1-5)</span>
+                <span class="c1"># pid: index of person in &#39;campid&#39;-th camera pair</span>
+                <span class="c1"># viewid: index of view, {1, 2}</span>
+                <span class="c1"># imgid: index of image, (1-10)</span>
+                <span class="n">viewid</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">imgid</span><span class="o">&lt;</span><span class="mi">5</span> <span class="k">else</span> <span class="mi">2</span>
+                <span class="n">img_name</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:01d}</span><span class="s1">_</span><span class="si">{:03d}</span><span class="s1">_</span><span class="si">{:01d}</span><span class="s1">_</span><span class="si">{:02d}</span><span class="s1">.png&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">campid</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">pid</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">viewid</span><span class="p">,</span> <span class="n">imgid</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">img_path</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">img_name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">osp</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">img_path</span><span class="p">):</span>
+                    <span class="n">imsave</span><span class="p">(</span><span class="n">img_path</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
+                <span class="n">img_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">img_paths</span>
+
+        <span class="k">def</span> <span class="nf">_extract_img</span><span class="p">(</span><span class="n">image_type</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Processing </span><span class="si">{}</span><span class="s1"> images ...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image_type</span><span class="p">))</span>
+            <span class="n">meta_data</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">imgs_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">imgs_detected_dir</span> <span class="k">if</span> <span class="n">image_type</span><span class="o">==</span><span class="s1">&#39;detected&#39;</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">imgs_labeled_dir</span>
+            <span class="k">for</span> <span class="n">campid</span><span class="p">,</span> <span class="n">camp_ref</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="n">image_type</span><span class="p">][</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="n">camp</span> <span class="o">=</span> <span class="n">_deref</span><span class="p">(</span><span class="n">camp_ref</span><span class="p">)</span>
+                <span class="n">num_pids</span> <span class="o">=</span> <span class="n">camp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">pid</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_pids</span><span class="p">):</span>
+                    <span class="n">img_paths</span> <span class="o">=</span> <span class="n">_process_images</span><span class="p">(</span><span class="n">camp</span><span class="p">[</span><span class="n">pid</span><span class="p">,:],</span> <span class="n">campid</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">imgs_dir</span><span class="p">)</span>
+                    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">img_paths</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;campid</span><span class="si">{}</span><span class="s1">-pid</span><span class="si">{}</span><span class="s1"> has no images&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">campid</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span>
+                    <span class="n">meta_data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">campid</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">pid</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">img_paths</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- done camera pair </span><span class="si">{}</span><span class="s1"> with </span><span class="si">{}</span><span class="s1"> identities&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">campid</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_pids</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">meta_data</span>
+
+        <span class="n">meta_detected</span> <span class="o">=</span> <span class="n">_extract_img</span><span class="p">(</span><span class="s1">&#39;detected&#39;</span><span class="p">)</span>
+        <span class="n">meta_labeled</span> <span class="o">=</span> <span class="n">_extract_img</span><span class="p">(</span><span class="s1">&#39;labeled&#39;</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">_extract_classic_split</span><span class="p">(</span><span class="n">meta_data</span><span class="p">,</span> <span class="n">test_split</span><span class="p">):</span>
+            <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+            <span class="n">num_train_pids</span><span class="p">,</span> <span class="n">num_test_pids</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+            <span class="n">num_train_imgs</span><span class="p">,</span> <span class="n">num_test_imgs</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">campid</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">img_paths</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">meta_data</span><span class="p">):</span>
+                
+                <span class="k">if</span> <span class="p">[</span><span class="n">campid</span><span class="p">,</span> <span class="n">pid</span><span class="p">]</span> <span class="ow">in</span> <span class="n">test_split</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">img_path</span> <span class="ow">in</span> <span class="n">img_paths</span><span class="p">:</span>
+                        <span class="n">camid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span> <span class="c1"># make it 0-based</span>
+                        <span class="n">test</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">img_path</span><span class="p">,</span> <span class="n">num_test_pids</span><span class="p">,</span> <span class="n">camid</span><span class="p">))</span>
+                    <span class="n">num_test_pids</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">num_test_imgs</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">img_paths</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">img_path</span> <span class="ow">in</span> <span class="n">img_paths</span><span class="p">:</span>
+                        <span class="n">camid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span> <span class="c1"># make it 0-based</span>
+                        <span class="n">train</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">img_path</span><span class="p">,</span> <span class="n">num_train_pids</span><span class="p">,</span> <span class="n">camid</span><span class="p">))</span>
+                    <span class="n">num_train_pids</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">num_train_imgs</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">img_paths</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">train</span><span class="p">,</span> <span class="n">num_train_pids</span><span class="p">,</span> <span class="n">num_train_imgs</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">num_test_pids</span><span class="p">,</span> <span class="n">num_test_imgs</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Creating classic splits (# = 20) ...&#39;</span><span class="p">)</span>
+        <span class="n">splits_classic_det</span><span class="p">,</span> <span class="n">splits_classic_lab</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">split_ref</span> <span class="ow">in</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;testsets&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">test_split</span> <span class="o">=</span> <span class="n">_deref</span><span class="p">(</span><span class="n">split_ref</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+            <span class="c1"># create split for detected images</span>
+            <span class="n">train</span><span class="p">,</span> <span class="n">num_train_pids</span><span class="p">,</span> <span class="n">num_train_imgs</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">num_test_pids</span><span class="p">,</span> <span class="n">num_test_imgs</span> <span class="o">=</span> \
+                <span class="n">_extract_classic_split</span><span class="p">(</span><span class="n">meta_detected</span><span class="p">,</span> <span class="n">test_split</span><span class="p">)</span>
+            <span class="n">splits_classic_det</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s1">&#39;train&#39;</span><span class="p">:</span> <span class="n">train</span><span class="p">,</span>
+                <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="n">test</span><span class="p">,</span>
+                <span class="s1">&#39;gallery&#39;</span><span class="p">:</span> <span class="n">test</span><span class="p">,</span>
+                <span class="s1">&#39;num_train_pids&#39;</span><span class="p">:</span> <span class="n">num_train_pids</span><span class="p">,</span>
+                <span class="s1">&#39;num_train_imgs&#39;</span><span class="p">:</span> <span class="n">num_train_imgs</span><span class="p">,</span>
+                <span class="s1">&#39;num_query_pids&#39;</span><span class="p">:</span> <span class="n">num_test_pids</span><span class="p">,</span>
+                <span class="s1">&#39;num_query_imgs&#39;</span><span class="p">:</span> <span class="n">num_test_imgs</span><span class="p">,</span>
+                <span class="s1">&#39;num_gallery_pids&#39;</span><span class="p">:</span> <span class="n">num_test_pids</span><span class="p">,</span>
+                <span class="s1">&#39;num_gallery_imgs&#39;</span><span class="p">:</span> <span class="n">num_test_imgs</span>
+            <span class="p">})</span>
+
+            <span class="c1"># create split for labeled images</span>
+            <span class="n">train</span><span class="p">,</span> <span class="n">num_train_pids</span><span class="p">,</span> <span class="n">num_train_imgs</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">num_test_pids</span><span class="p">,</span> <span class="n">num_test_imgs</span> <span class="o">=</span> \
+                <span class="n">_extract_classic_split</span><span class="p">(</span><span class="n">meta_labeled</span><span class="p">,</span> <span class="n">test_split</span><span class="p">)</span>
+            <span class="n">splits_classic_lab</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s1">&#39;train&#39;</span><span class="p">:</span> <span class="n">train</span><span class="p">,</span>
+                <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="n">test</span><span class="p">,</span>
+                <span class="s1">&#39;gallery&#39;</span><span class="p">:</span> <span class="n">test</span><span class="p">,</span>
+                <span class="s1">&#39;num_train_pids&#39;</span><span class="p">:</span> <span class="n">num_train_pids</span><span class="p">,</span>
+                <span class="s1">&#39;num_train_imgs&#39;</span><span class="p">:</span> <span class="n">num_train_imgs</span><span class="p">,</span>
+                <span class="s1">&#39;num_query_pids&#39;</span><span class="p">:</span> <span class="n">num_test_pids</span><span class="p">,</span>
+                <span class="s1">&#39;num_query_imgs&#39;</span><span class="p">:</span> <span class="n">num_test_imgs</span><span class="p">,</span>
+                <span class="s1">&#39;num_gallery_pids&#39;</span><span class="p">:</span> <span class="n">num_test_pids</span><span class="p">,</span>
+                <span class="s1">&#39;num_gallery_imgs&#39;</span><span class="p">:</span> <span class="n">num_test_imgs</span>
+            <span class="p">})</span>
+        
+        <span class="n">write_json</span><span class="p">(</span><span class="n">splits_classic_det</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_classic_det_json_path</span><span class="p">)</span>
+        <span class="n">write_json</span><span class="p">(</span><span class="n">splits_classic_lab</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_classic_lab_json_path</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">_extract_set</span><span class="p">(</span><span class="n">filelist</span><span class="p">,</span> <span class="n">pids</span><span class="p">,</span> <span class="n">pid2label</span><span class="p">,</span> <span class="n">idxs</span><span class="p">,</span> <span class="n">img_dir</span><span class="p">,</span> <span class="n">relabel</span><span class="p">):</span>
+            <span class="n">tmp_set</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">unique_pids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">idxs</span><span class="p">:</span>
+                <span class="n">img_name</span> <span class="o">=</span> <span class="n">filelist</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">camid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">img_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span> <span class="c1"># make it 0-based</span>
+                <span class="n">pid</span> <span class="o">=</span> <span class="n">pids</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">relabel</span><span class="p">:</span>
+                    <span class="n">pid</span> <span class="o">=</span> <span class="n">pid2label</span><span class="p">[</span><span class="n">pid</span><span class="p">]</span>
+                <span class="n">img_path</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">img_dir</span><span class="p">,</span> <span class="n">img_name</span><span class="p">)</span>
+                <span class="n">tmp_set</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">img_path</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">pid</span><span class="p">),</span> <span class="n">camid</span><span class="p">))</span>
+                <span class="n">unique_pids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">tmp_set</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_pids</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">_extract_new_split</span><span class="p">(</span><span class="n">split_dict</span><span class="p">,</span> <span class="n">img_dir</span><span class="p">):</span>
+            <span class="n">train_idxs</span> <span class="o">=</span> <span class="n">split_dict</span><span class="p">[</span><span class="s1">&#39;train_idx&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span> <span class="c1"># index-0</span>
+            <span class="n">pids</span> <span class="o">=</span> <span class="n">split_dict</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="n">train_pids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">pids</span><span class="p">[</span><span class="n">train_idxs</span><span class="p">])</span>
+            <span class="n">pid2label</span> <span class="o">=</span> <span class="p">{</span><span class="n">pid</span><span class="p">:</span> <span class="n">label</span> <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">pid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_pids</span><span class="p">)}</span>
+            <span class="n">query_idxs</span> <span class="o">=</span> <span class="n">split_dict</span><span class="p">[</span><span class="s1">&#39;query_idx&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">gallery_idxs</span> <span class="o">=</span> <span class="n">split_dict</span><span class="p">[</span><span class="s1">&#39;gallery_idx&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">filelist</span> <span class="o">=</span> <span class="n">split_dict</span><span class="p">[</span><span class="s1">&#39;filelist&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="n">train_info</span> <span class="o">=</span> <span class="n">_extract_set</span><span class="p">(</span><span class="n">filelist</span><span class="p">,</span> <span class="n">pids</span><span class="p">,</span> <span class="n">pid2label</span><span class="p">,</span> <span class="n">train_idxs</span><span class="p">,</span> <span class="n">img_dir</span><span class="p">,</span> <span class="n">relabel</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">query_info</span> <span class="o">=</span> <span class="n">_extract_set</span><span class="p">(</span><span class="n">filelist</span><span class="p">,</span> <span class="n">pids</span><span class="p">,</span> <span class="n">pid2label</span><span class="p">,</span> <span class="n">query_idxs</span><span class="p">,</span> <span class="n">img_dir</span><span class="p">,</span> <span class="n">relabel</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">gallery_info</span> <span class="o">=</span> <span class="n">_extract_set</span><span class="p">(</span><span class="n">filelist</span><span class="p">,</span> <span class="n">pids</span><span class="p">,</span> <span class="n">pid2label</span><span class="p">,</span> <span class="n">gallery_idxs</span><span class="p">,</span> <span class="n">img_dir</span><span class="p">,</span> <span class="n">relabel</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">train_info</span><span class="p">,</span> <span class="n">query_info</span><span class="p">,</span> <span class="n">gallery_info</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Creating new split for detected images (767/700) ...&#39;</span><span class="p">)</span>
+        <span class="n">train_info</span><span class="p">,</span> <span class="n">query_info</span><span class="p">,</span> <span class="n">gallery_info</span> <span class="o">=</span> <span class="n">_extract_new_split</span><span class="p">(</span>
+            <span class="n">loadmat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split_new_det_mat_path</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">imgs_detected_dir</span>
+        <span class="p">)</span>
+        <span class="n">split</span> <span class="o">=</span> <span class="p">[{</span>
+            <span class="s1">&#39;train&#39;</span><span class="p">:</span> <span class="n">train_info</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="n">query_info</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;gallery&#39;</span><span class="p">:</span> <span class="n">gallery_info</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;num_train_pids&#39;</span><span class="p">:</span> <span class="n">train_info</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="s1">&#39;num_train_imgs&#39;</span><span class="p">:</span> <span class="n">train_info</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="s1">&#39;num_query_pids&#39;</span><span class="p">:</span> <span class="n">query_info</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="s1">&#39;num_query_imgs&#39;</span><span class="p">:</span> <span class="n">query_info</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="s1">&#39;num_gallery_pids&#39;</span><span class="p">:</span> <span class="n">gallery_info</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="s1">&#39;num_gallery_imgs&#39;</span><span class="p">:</span> <span class="n">gallery_info</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="p">}]</span>
+        <span class="n">write_json</span><span class="p">(</span><span class="n">split</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_new_det_json_path</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Creating new split for labeled images (767/700) ...&#39;</span><span class="p">)</span>
+        <span class="n">train_info</span><span class="p">,</span> <span class="n">query_info</span><span class="p">,</span> <span class="n">gallery_info</span> <span class="o">=</span> <span class="n">_extract_new_split</span><span class="p">(</span>
+            <span class="n">loadmat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split_new_lab_mat_path</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">imgs_labeled_dir</span>
+        <span class="p">)</span>
+        <span class="n">split</span> <span class="o">=</span> <span class="p">[{</span>
+            <span class="s1">&#39;train&#39;</span><span class="p">:</span> <span class="n">train_info</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="n">query_info</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;gallery&#39;</span><span class="p">:</span> <span class="n">gallery_info</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;num_train_pids&#39;</span><span class="p">:</span> <span class="n">train_info</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="s1">&#39;num_train_imgs&#39;</span><span class="p">:</span> <span class="n">train_info</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="s1">&#39;num_query_pids&#39;</span><span class="p">:</span> <span class="n">query_info</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="s1">&#39;num_query_imgs&#39;</span><span class="p">:</span> <span class="n">query_info</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="s1">&#39;num_gallery_pids&#39;</span><span class="p">:</span> <span class="n">gallery_info</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="s1">&#39;num_gallery_imgs&#39;</span><span class="p">:</span> <span class="n">gallery_info</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="p">}]</span>
+        <span class="n">write_json</span><span class="p">(</span><span class="n">split</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_new_lab_json_path</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Kaiyang Zhou
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
