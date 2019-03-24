@@ -1,3 +1,5 @@
+Torchreid
+===========
 Torchreid is a library built on `PyTorch <https://pytorch.org/>`_ for deep-learning person re-identification.
 
 It features:

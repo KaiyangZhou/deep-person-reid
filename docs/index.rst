@@ -1,5 +1,3 @@
-Torchreid documentation
-========================
 .. include:: ../README.rst
 
 
