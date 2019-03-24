@@ -240,7 +240,7 @@ $ <span class="c1"># python setup.py develop</span>
     <span class="n">pretrained</span><span class="o">=</span><span class="bp">True</span>
 <span class="p">)</span>
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span> <span class="c1"># move model to gpu</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
 
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">build_optimizer</span><span class="p">(</span>
     <span class="n">model</span><span class="p">,</span>
