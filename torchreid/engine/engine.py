@@ -51,7 +51,8 @@ class Engine(object):
             max_epoch (int): maximum epoch.
             start_epoch (int, optional): starting epoch. Default is 0.
             fixbase_epoch (int, optional): number of epochs to train ``open_layers`` (new layers)
-                while keeping base layers frozen. Default is 0.
+                while keeping base layers frozen. Default is 0. ``fixbase_epoch`` is not counted
+                in ``max_epoch``.
             open_layers (str or list, optional): layers (attribute names) open for training.
             start_eval (int, optional): from which epoch to start evaluation. Default is 0.
             eval_freq (int, optional): evaluation frequency. Default is -1 (meaning evaluation
@@ -114,18 +115,19 @@ class Engine(object):
                 )
                 self._save_checkpoint(epoch, rank1, save_dir)
 
-        print('=> Final test')
-        rank1 = self.test(
-            epoch,
-            testloader,
-            dist_metric=dist_metric,
-            visrank=visrank,
-            visrank_topk=visrank_topk,
-            save_dir=save_dir,
-            use_metric_cuhk03=use_metric_cuhk03,
-            ranks=ranks
-        )
-        self._save_checkpoint(epoch, rank1, save_dir)
+        if max_epoch > 0:
+            print('=> Final test')
+            rank1 = self.test(
+                epoch,
+                testloader,
+                dist_metric=dist_metric,
+                visrank=visrank,
+                visrank_topk=visrank_topk,
+                save_dir=save_dir,
+                use_metric_cuhk03=use_metric_cuhk03,
+                ranks=ranks
+            )
+            self._save_checkpoint(epoch, rank1, save_dir)
 
         elapsed = round(time.time() - time_start)
         elapsed = str(datetime.timedelta(seconds=elapsed))

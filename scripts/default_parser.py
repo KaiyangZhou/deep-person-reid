@@ -7,12 +7,9 @@ import argparse
 def init_parser():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    # ************************************************************
-    # Method
-    # ************************************************************
-    parser.add_argument('--application', type=str, default='image', choices=['image', 'video'],
-                        help='image-reid or video-reid')
-    parser.add_argument('--method', type=str, default='softmax',
+    parser.add_argument('--app', type=str, default='image', choices=['image', 'video'],
+                        help='application')
+    parser.add_argument('--loss', type=str, default='softmax', choices=['softmax', 'triplet'],
                         help='methodology')
     
     # ************************************************************
@@ -20,9 +17,9 @@ def init_parser():
     # ************************************************************
     parser.add_argument('--root', type=str, default='data',
                         help='root path to data directory')
-    parser.add_argument('-s', '--source-names', type=str, required=True, nargs='+',
+    parser.add_argument('-s', '--sources', type=str, required=True, nargs='+',
                         help='source datasets (delimited by space)')
-    parser.add_argument('-t', '--target-names', type=str, required=True, nargs='+',
+    parser.add_argument('-t', '--targets', type=str, required=False, nargs='+',
                         help='target datasets (delimited by space)')
     parser.add_argument('-j', '--workers', type=int, default=4,
                         help='number of data loading workers (tips: 4 or 8 times number of gpus)')
@@ -102,16 +99,11 @@ def init_parser():
                         help='maximum epochs to run')
     parser.add_argument('--start-epoch', type=int, default=0,
                         help='manual epoch number (useful when restart)')
-
-    parser.add_argument('--train-batch-size', type=int, default=32,
-                        help='training batch size')
-    parser.add_argument('--test-batch-size', type=int, default=100,
-                        help='test batch size')
+    parser.add_argument('--batch-size', type=int, default=32,
+                        help='batch size')
     
-    parser.add_argument('--always-fixbase', action='store_true',
-                        help='always fix base network and only train specified layers')
     parser.add_argument('--fixbase-epoch', type=int, default=0,
-                        help='how many epochs to fix base network (only train randomly initialized classifier)')
+                        help='number of epochs to fix base layers')
     parser.add_argument('--open-layers', type=str, nargs='+', default=['classifier'],
                         help='open specified layers for training while keeping others frozen')
 
@@ -153,7 +145,8 @@ def init_parser():
     # ************************************************************
     # Architecture
     # ************************************************************
-    parser.add_argument('-a', '--arch', type=str, default='resnet50')
+    parser.add_argument('-a', '--arch', type=str, default='resnet50',
+                        help='model architecture')
     parser.add_argument('--no-pretrained', action='store_true',
                         help='do not load pretrained weights')
 
@@ -170,6 +163,8 @@ def init_parser():
                         help='start to evaluate after a specific epoch')
     parser.add_argument('--dist-metric', type=str, default='euclidean',
                         help='distance metric')
+    parser.add_argument('--ranks', type=str, default=[1, 5, 10, 20], nargs='+',
+                        help='cmc ranks')
     
     # ************************************************************
     # Miscs
@@ -194,3 +189,94 @@ def init_parser():
                         help='visualize topk ranks')
 
     return parser
+
+
+def imagedata_kwargs(parsed_args):
+    return {
+        'root': parsed_args.root,
+        'sources': parsed_args.sources,
+        'targets': parsed_args.targets,
+        'height': parsed_args.height,
+        'width': parsed_args.width,
+        'random_erase': parsed_args.random_erase,
+        'color_jitter': parsed_args.color_jitter,
+        'color_aug': parsed_args.color_aug,
+        'use_cpu': parsed_args.use_cpu,
+        'split_id': parsed_args.split_id,
+        'combineall': parsed_args.combineall,
+        'batch_size': parsed_args.batch_size,
+        'workers': parsed_args.workers,
+        'num_instances': parsed_args.num_instances,
+        'train_sampler': parsed_args.train_sampler,
+        # image
+        'cuhk03_labeled': parsed_args.cuhk03_labeled,
+        'cuhk03_classic_split': parsed_args.cuhk03_classic_split,
+        'market1501_500k': parsed_args.market1501_500k,
+    }
+
+
+def videodata_kwargs(parsed_args):
+    return {
+        'root': parsed_args.root,
+        'sources': parsed_args.sources,
+        'targets': parsed_args.targets,
+        'height': parsed_args.height,
+        'width': parsed_args.width,
+        'random_erase': parsed_args.random_erase,
+        'color_jitter': parsed_args.color_jitter,
+        'color_aug': parsed_args.color_aug,
+        'use_cpu': parsed_args.use_cpu,
+        'split_id': parsed_args.split_id,
+        'combineall': parsed_args.combineall,
+        'batch_size': parsed_args.batch_size,
+        'workers': parsed_args.workers,
+        'num_instances': parsed_args.num_instances,
+        'train_sampler': parsed_args.train_sampler,
+        # video
+        'seq_len': parsed_args.seq_len,
+        'sample_method': parsed_args.sample_method
+    }
+
+
+def optimizer_kwargs(parsed_args):
+    return {
+        'optim': parsed_args.optim,
+        'lr': parsed_args.lr,
+        'weight_decay': parsed_args.weight_decay,
+        'momentum': parsed_args.momentum,
+        'sgd_dampening': parsed_args.sgd_dampening,
+        'sgd_nesterov': parsed_args.sgd_nesterov,
+        'rmsprop_alpha': parsed_args.rmsprop_alpha,
+        'adam_beta1': parsed_args.adam_beta1,
+        'adam_beta2': parsed_args.adam_beta2,
+        'staged_lr': parsed_args.staged_lr,
+        'new_layers': parsed_args.new_layers,
+        'base_lr_mult': parsed_args.base_lr_mult
+    }
+
+
+def lr_scheduler_kwargs(parsed_args):
+    return {
+        'lr_scheduler': parsed_args.lr_scheduler,
+        'stepsize': parsed_args.stepsize,
+        'gamma': parsed_args.gamma
+    }
+
+
+def engine_run_kwargs(parsed_args):
+    return {
+        'save_dir': parsed_args.save_dir,
+        'max_epoch': parsed_args.max_epoch,
+        'start_epoch': parsed_args.start_epoch,
+        'fixbase_epoch': parsed_args.fixbase_epoch,
+        'open_layers': parsed_args.open_layers,
+        'start_eval': parsed_args.start_eval,
+        'eval_freq': parsed_args.eval_freq,
+        'test_only': parsed_args.evaluate,
+        'print_freq': parsed_args.print_freq,
+        'dist_metric': parsed_args.dist_metric,
+        'visrank': parsed_args.visrank,
+        'visrank_topk': parsed_args.visrank_topk,
+        'use_metric_cuhk03': parsed_args.use_metric_cuhk03,
+        'ranks': parsed_args.ranks
+    }
