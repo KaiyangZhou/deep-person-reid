@@ -122,7 +122,7 @@ class ImageDataManager(DataManager):
         super(ImageDataManager, self).__init__(sources=sources, targets=targets, height=height, width=width,
                                                random_erase=random_erase, color_jitter=color_jitter,
                                                color_aug=color_aug, use_cpu=use_cpu)
-
+        
         print('=> Loading train (source) dataset')
         trainset = []  
         for name in self.sources:

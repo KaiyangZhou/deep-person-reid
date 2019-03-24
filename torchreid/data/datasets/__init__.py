@@ -46,26 +46,26 @@ def init_video_dataset(name, **kwargs):
 
 
 def register_image_dataset(name, dataset_):
-    """Registers a custom image dataset.
+    """Registers a new image dataset.
 
     Args:
-        name (str): key corresponding to the custom dataset.
-        dataset_ (Dataset): the custom dataset class.
+        name (str): key corresponding to the new dataset.
+        dataset_ (Dataset): the new dataset class.
 
     Examples::
         
         import torchreid
-        import CustomDataset
-        torchreid.data.register_image_dataset('custom_dataset', CustomDataset)
+        import NewDataset
+        torchreid.data.register_image_dataset('new_dataset', NewDataset)
         # single dataset case
         datamanager = torchreid.data.ImageDataManager(
             root='reid-data',
-            sources='custom_dataset'
+            sources='new_dataset'
         )
         # multiple dataset case
         datamanager = torchreid.data.ImageDataManager(
             root='reid-data',
-            sources=['custom_dataset', 'dukemtmcreid']
+            sources=['new_dataset', 'dukemtmcreid']
         )
     """
     curr_datasets = list(__image_datasets.keys())
@@ -75,26 +75,26 @@ def register_image_dataset(name, dataset_):
 
 
 def register_video_dataset(name, dataset_):
-    """Registers a custom video dataset.
+    """Registers a new video dataset.
 
     Args:
-        name (str): key corresponding to the custom dataset.
-        dataset_ (Dataset): the custom dataset class.
+        name (str): key corresponding to the new dataset.
+        dataset_ (Dataset): the new dataset class.
 
     Examples::
         
         import torchreid
-        import CustomDataset
-        torchreid.data.register_video_dataset('custom_dataset', CustomDataset)
+        import NewDataset
+        torchreid.data.register_video_dataset('new_dataset', NewDataset)
         # single dataset case
         datamanager = torchreid.data.VideoDataManager(
             root='reid-data',
-            sources='custom_dataset'
+            sources='new_dataset'
         )
         # multiple dataset case
         datamanager = torchreid.data.VideoDataManager(
             root='reid-data',
-            sources=['custom_dataset', 'ilidsvid']
+            sources=['new_dataset', 'ilidsvid']
         )
     """
     curr_datasets = list(__video_datasets.keys())
