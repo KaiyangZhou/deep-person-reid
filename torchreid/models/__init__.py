@@ -24,7 +24,11 @@ from .mlfn import *
 
 __model_factory = {
     # image classification models
+    'resnet18': resnet18,
+    'resnet34': resnet34,
     'resnet50': resnet50,
+    'resnet101': resnet101,
+    'resnet152': resnet152,
     'resnet50_fc512': resnet50_fc512,
     'resnext50_32x4d': resnext50_32x4d,
     'resnext50_32x4d_fc512': resnext50_32x4d_fc512,
@@ -34,6 +38,9 @@ __model_factory = {
     'se_resnext50_32x4d': se_resnext50_32x4d,
     'se_resnext101_32x4d': se_resnext101_32x4d,
     'densenet121': densenet121,
+    'densenet169': densenet169,
+    'densenet201': densenet201,
+    'densenet161': densenet161,
     'densenet121_fc512': densenet121_fc512,
     'inceptionresnetv2': inceptionresnetv2,
     'inceptionv4': inceptionv4,

@@ -102,6 +102,9 @@ class Xception(nn.Module):
     Reference:
         Chollet. Xception: Deep Learning with Depthwise
         Separable Convolutions. CVPR 2017.
+
+    Public keys:
+        - ``xception``: Xception.
     """
     
     def __init__(self, num_classes, loss, fc_dims=None, dropout_p=None, **kwargs):

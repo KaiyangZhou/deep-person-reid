@@ -102,6 +102,9 @@ class ResNetMid(nn.Module):
     Reference:
         Yu et al. The Devil is in the Middle: Exploiting Mid-level Representations for
         Cross-Domain Instance Matching. arXiv:1711.08106.
+
+    Public keys:
+        - ``resnet50mid``: ResNet50 + mid-level feature fusion.
     """
     
     def __init__(self, num_classes, loss, block, layers,

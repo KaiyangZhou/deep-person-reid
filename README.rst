@@ -19,11 +19,23 @@ It features:
 Installation
 ---------------
 
+1. Install PyTorch and torchvision following the `official instructions <https://pytorch.org/>`_.
+2. Install Cython.
+3. Clone ``deep-person-reid`` to your preferred directory.
+
 .. code-block:: bash
     
     $ git clone https://github.com/KaiyangZhou/deep-person-reid.git
+
+4. Install ``torchreid`` via
+
+.. code-block:: bash
+    
     $ cd deep-person-reid/
-    $ python setup.py install # or python3 setup.py install
+    $ python setup.py install # or python3
+    $ # If you wanna modify the source code without
+    $ # the need to re-build it, you can do
+    $ # python setup.py develop
 
 
 News
@@ -100,6 +112,30 @@ Get started: 30 seconds to Torchreid
         print_freq=10,
         test_only=False
     )
+
+
+A unified interface
+-----------------------
+In "deep-person-reid/scripts/", we provide a unified interface including a default parser file ``default_parser.py`` and the main script ``main.py``. For example, to train an image reid model on Market1501 using softmax, you can do
+
+.. code-block:: python
+    
+    python main.py \
+    --root path/to/reid-data \
+    --app image \
+    --loss softmax \
+    --label-smooth \
+    -s market1501 \
+    -a resnet50 \
+    --optim adam \
+    --lr 0.0003 \
+    --max-epoch 60 \
+    --stepsize 20 40 \
+    --batch-size 32 \
+    --save-dir log/resnet50-market-softmax \
+    --gpu-devices 0
+
+Please refer to ``default_parser.py`` and ``main.py`` for more details.
 
 
 Datasets

@@ -70,6 +70,10 @@ class MobileNetV2(nn.Module):
     Reference:
         Sandler et al. MobileNetV2: Inverted Residuals and
         Linear Bottlenecks. CVPR 2018.
+
+    Public keys:
+        - ``mobilenetv2_1dot0``: MobileNetV2 x1.0.
+        - ``mobilenetv2_1dot4``: MobileNetV2 x1.4.
     """
 
     def __init__(self, num_classes, width_mult=1, loss='softmax', fc_dims=None, dropout_p=None, **kwargs):

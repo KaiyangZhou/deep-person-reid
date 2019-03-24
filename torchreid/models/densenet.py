@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 from __future__ import division
 
-__all__ = ['densenet121', 'densenet121_fc512']
+__all__ = ['densenet121', 'densenet169', 'densenet201', 'densenet161', 'densenet121_fc512']
 
 from collections import OrderedDict
 import math
@@ -65,6 +65,13 @@ class DenseNet(nn.Module):
     
     Reference:
         Huang et al. Densely Connected Convolutional Networks. CVPR 2017.
+
+    Public keys:
+        - ``densenet121``: DenseNet121.
+        - ``densenet169``: DenseNet169.
+        - ``densenet201``: DenseNet201.
+        - ``densenet161``: DenseNet161.
+        - ``densenet121_fc512``: DenseNet121 + FC.
     """
     def __init__(self, num_classes, loss, growth_rate=32, block_config=(6, 12, 24, 16),
                  num_init_features=64, bn_size=4, drop_rate=0, fc_dims=None, dropout_p=None, **kwargs):
@@ -220,6 +227,54 @@ def densenet121(num_classes, loss='softmax', pretrained=True, **kwargs):
     )
     if pretrained:
         init_pretrained_weights(model, model_urls['densenet121'])
+    return model
+
+
+def densenet169(num_classes, loss='softmax', pretrained=True, **kwargs):
+    model = DenseNet(
+        num_classes=num_classes,
+        loss=loss,
+        num_init_features=64,
+        growth_rate=32,
+        block_config=(6, 12, 32, 32),
+        fc_dims=None,
+        dropout_p=None,
+        **kwargs
+    )
+    if pretrained:
+        init_pretrained_weights(model, model_urls['densenet169'])
+    return model
+
+
+def densenet201(num_classes, loss='softmax', pretrained=True, **kwargs):
+    model = DenseNet(
+        num_classes=num_classes,
+        loss=loss,
+        num_init_features=64,
+        growth_rate=32,
+        block_config=(6, 12, 48, 32),
+        fc_dims=None,
+        dropout_p=None,
+        **kwargs
+    )
+    if pretrained:
+        init_pretrained_weights(model, model_urls['densenet201'])
+    return model
+
+
+def densenet161(num_classes, loss='softmax', pretrained=True, **kwargs):
+    model = DenseNet(
+        num_classes=num_classes,
+        loss=loss,
+        num_init_features=96,
+        growth_rate=48,
+        block_config=(6, 12, 36, 24),
+        fc_dims=None,
+        dropout_p=None,
+        **kwargs
+    )
+    if pretrained:
+        init_pretrained_weights(model, model_urls['densenet161'])
     return model
 
 

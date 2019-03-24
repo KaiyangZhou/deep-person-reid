@@ -190,6 +190,9 @@ class HACNN(nn.Module):
 
     Reference:
         Li et al. Harmonious Attention Network for Person Re-identification. CVPR 2018.
+
+    Public keys:
+        - ``hacnn``: HACNN.
     """
 
     # Args:

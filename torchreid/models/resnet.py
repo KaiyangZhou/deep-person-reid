@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 from __future__ import division
 
-__all__ = ['resnet50', 'resnet50_fc512']
+__all__ = ['resnet18', 'resnet34', 'resnet50', 'resnet101', 'resnet152', 'resnet50_fc512']
 
 import torch
 from torch import nn
@@ -101,6 +101,14 @@ class ResNet(nn.Module):
     
     Reference:
         He et al. Deep Residual Learning for Image Recognition. CVPR 2016.
+
+    Public keys:
+        - ``resnet18``: ResNet18.
+        - ``resnet34``: ResNet34.
+        - ``resnet50``: ResNet50.
+        - ``resnet101``: ResNet101.
+        - ``resnet152``: ResNet152.
+        - ``resnet50_fc512``: ResNet50 + FC.
     """
     
     def __init__(self, num_classes, loss, block, layers,
@@ -246,6 +254,38 @@ resnet152: block=Bottleneck, layers=[3, 8, 36, 3]
 """
 
 
+def resnet18(num_classes, loss='softmax', pretrained=True, **kwargs):
+    model = ResNet(
+        num_classes=num_classes,
+        loss=loss,
+        block=BasicBlock,
+        layers=[2, 2, 2, 2],
+        last_stride=2,
+        fc_dims=None,
+        dropout_p=None,
+        **kwargs
+    )
+    if pretrained:
+        init_pretrained_weights(model, model_urls['resnet18'])
+    return model
+
+
+def resnet34(num_classes, loss='softmax', pretrained=True, **kwargs):
+    model = ResNet(
+        num_classes=num_classes,
+        loss=loss,
+        block=BasicBlock,
+        layers=[3, 4, 6, 3],
+        last_stride=2,
+        fc_dims=None,
+        dropout_p=None,
+        **kwargs
+    )
+    if pretrained:
+        init_pretrained_weights(model, model_urls['resnet34'])
+    return model
+
+
 def resnet50(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = ResNet(
         num_classes=num_classes,
@@ -262,6 +302,41 @@ def resnet50(num_classes, loss='softmax', pretrained=True, **kwargs):
     return model
 
 
+def resnet101(num_classes, loss='softmax', pretrained=True, **kwargs):
+    model = ResNet(
+        num_classes=num_classes,
+        loss=loss,
+        block=Bottleneck,
+        layers=[3, 4, 23, 3],
+        last_stride=2,
+        fc_dims=None,
+        dropout_p=None,
+        **kwargs
+    )
+    if pretrained:
+        init_pretrained_weights(model, model_urls['resnet101'])
+    return model
+
+
+def resnet152(num_classes, loss='softmax', pretrained=True, **kwargs):
+    model = ResNet(
+        num_classes=num_classes,
+        loss=loss,
+        block=Bottleneck,
+        layers=[3, 8, 36, 3],
+        last_stride=2,
+        fc_dims=None,
+        dropout_p=None,
+        **kwargs
+    )
+    if pretrained:
+        init_pretrained_weights(model, model_urls['resnet152'])
+    return model
+
+
+"""
+resnet + fc
+"""
 def resnet50_fc512(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = ResNet(
         num_classes=num_classes,

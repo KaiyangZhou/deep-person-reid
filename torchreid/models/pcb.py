@@ -121,6 +121,10 @@ class PCB(nn.Module):
     Reference:
         Sun et al. Beyond Part Models: Person Retrieval with Refined
         Part Pooling (and A Strong Convolutional Baseline). ECCV 2018.
+
+    Public keys:
+        - ``pcb_p4``: PCB with 4-part strips.
+        - ``pcb_p6``: PCB with 6-part strips.
     """
     
     def __init__(self, num_classes, loss, block, layers,

@@ -535,6 +535,9 @@ class NASNetAMobile(nn.Module):
     Reference:
         Zoph et al. Learning Transferable Architectures
         for Scalable Image Recognition. CVPR 2018.
+
+    Public keys:
+        - ``nasnetamobile``: NASNet-A Mobile.
     """
     
     def __init__(self, num_classes, loss, stem_filters=32, penultimate_filters=1056, filters_multiplier=2, **kwargs):

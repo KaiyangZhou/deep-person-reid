@@ -220,6 +220,15 @@ class SENet(nn.Module):
     
     Reference:
         Hu et al. Squeeze-and-Excitation Networks. CVPR 2018.
+
+    Public keys:
+        - ``senet154``: SENet154.
+        - ``se_resnet50``: ResNet50 + SE.
+        - ``se_resnet101``: ResNet101 + SE.
+        - ``se_resnet152``: ResNet152 + SE.
+        - ``se_resnext50_32x4d``: ResNeXt50 (groups=32, width=4) + SE.
+        - ``se_resnext101_32x4d``: ResNeXt101 (groups=32, width=4) + SE.
+        - ``se_resnet50_fc512``: (ResNet50 + SE) + FC.
     """
     
     def __init__(self, num_classes, loss, block, layers, groups, reduction, dropout_p=0.2,

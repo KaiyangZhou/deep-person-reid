@@ -274,6 +274,9 @@ class InceptionV4(nn.Module):
     Reference:
         Szegedy et al. Inception-v4, Inception-ResNet and the Impact of Residual
         Connections on Learning. AAAI 2017.
+
+    Public keys:
+        - ``inceptionv4``: InceptionV4.
     """
     
     def __init__(self, num_classes, loss, **kwargs):

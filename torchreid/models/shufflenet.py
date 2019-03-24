@@ -82,6 +82,9 @@ class ShuffleNet(nn.Module):
     Reference:
         Zhang et al. ShuffleNet: An Extremely Efficient Convolutional Neural
         Network for Mobile Devices. CVPR 2018.
+
+    Public keys:
+        - ``shufflenet``: ShuffleNet (groups=3).
     """
     
     def __init__(self, num_classes, loss='softmax', num_groups=3, **kwargs):

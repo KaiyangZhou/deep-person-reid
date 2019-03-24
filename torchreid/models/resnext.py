@@ -63,6 +63,10 @@ class ResNeXt(nn.Module):
     Reference:
         Xie et al. Aggregated Residual Transformations for Deep
         Neural Networks. CVPR 2017.
+
+    Public keys:
+        - ``resnext50_32x4d``: ResNeXt50 (groups=32, width=4).
+        - ``resnext50_32x4d_fc512`` ResNeXt50 (groups=32, width=4) + FC.
     """
     
     def __init__(self, num_classes, loss, block, layers,

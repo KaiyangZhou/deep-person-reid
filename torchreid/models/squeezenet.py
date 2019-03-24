@@ -54,6 +54,11 @@ class SqueezeNet(nn.Module):
     Reference:
         Iandola et al. SqueezeNet: AlexNet-level accuracy with 50x fewer parameters
         and< 0.5 MB model size. arXiv:1602.07360.
+
+    Public keys:
+        - ``squeezenet1_0``: SqueezeNet (version=1.0).
+        - ``squeezenet1_1``: SqueezeNet (version=1.1).
+        - ``squeezenet1_0_fc512``: SqueezeNet (version=1.0) + FC.
     """
     
     def __init__(self, num_classes, loss, version=1.0, fc_dims=None, dropout_p=None, **kwargs):

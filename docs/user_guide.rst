@@ -5,6 +5,30 @@ How-to
    :local:
 
 
+Find model keys
+-----------------
+Keys are listed under the *Public keys* section within each model class in :ref:`torchreid_models`.
+
+
+Show available models
+----------------------
+
+.. code-block:: python
+    
+    import torchreid
+    torchreid.models.show_avai_models()
+
+
+Change the training sampler
+-----------------------------
+The default ``train_sampler`` is "RandomSampler". You can give the specific sampler name as input to ``train_sampler``, e.g. ``train_sampler='RandomIdentitySampler'`` for triplet loss.
+
+
+Choose an optimizer/lr_scheduler
+----------------------------------
+Please refer to the source code of ``build_optimizer``/``build_lr_scheduler`` in :ref:`torchreid_optim` for details.
+
+
 Resume training
 ----------------
 Suppose the checkpoint is saved in "log/resnet50/model.pth.tar-30", you can do
