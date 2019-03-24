@@ -18,6 +18,14 @@ It features:
 - visualization of ranking results
 
 
+Documentation: https://kaiyangzhou.github.io/deep-person-reid/.
+
+
+News
+------
+24-03-2019: `Torchreid documentation <https://kaiyangzhou.github.io/deep-person-reid/>`_ is out!
+
+
 Installation
 ---------------
 
