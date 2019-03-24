@@ -80,7 +80,7 @@ Get started: 30 seconds to Torchreid
         pretrained=True
     )
 
-    model = model.cuda() # move model to gpu
+    model = model.cuda()
 
     optimizer = torchreid.optim.build_optimizer(
         model,
