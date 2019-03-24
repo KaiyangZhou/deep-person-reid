@@ -18,9 +18,12 @@ It features:
 
 Installation
 ---------------
-1. Install step 1
-#. Install step 2
-#. Install step 3
+
+.. code-block:: bash
+    
+    $ git clone https://github.com/KaiyangZhou/deep-person-reid.git
+    $ cd deep-person-reid/
+    $ python setup.py install # or python3 setup.py install
 
 
 News
