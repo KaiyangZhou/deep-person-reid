@@ -40,11 +40,6 @@ Installation
     $ # python setup.py develop
 
 
-News
-------
-24-03-2019: Torchreid documentation is out!
-
-
 Get started: 30 seconds to Torchreid
 -------------------------------------
 1. Import ``torchreid``
