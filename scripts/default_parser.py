@@ -15,7 +15,7 @@ def init_parser():
     # ************************************************************
     # Datasets
     # ************************************************************
-    parser.add_argument('--root', type=str, default='data',
+    parser.add_argument('--root', type=str, default='reid-data',
                         help='root path to data directory')
     parser.add_argument('-s', '--sources', type=str, required=True, nargs='+',
                         help='source datasets (delimited by space)')
