@@ -40,7 +40,7 @@ Installation
 
 News
 ------
-xx-xx-2019: Torchreid documentation is out!
+24-03-2019: Torchreid documentation is out!
 
 
 Get started: 30 seconds to Torchreid
