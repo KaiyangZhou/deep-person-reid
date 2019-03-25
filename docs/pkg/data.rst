@@ -60,9 +60,6 @@ Image Datasets
 .. automodule:: torchreid.data.datasets.image.cuhk01
     :members:
 
-.. automodule:: torchreid.data.datasets.image.prid450s
-    :members:
-
 .. automodule:: torchreid.data.datasets.image.ilids
     :members:
 
