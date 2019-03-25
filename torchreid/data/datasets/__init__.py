@@ -14,7 +14,6 @@ __image_datasets = {
     'viper': VIPeR,
     'grid': GRID,
     'cuhk01': CUHK01,
-    'prid450s': PRID450S,
     'ilids': iLIDS,
     'sensereid': SenseReID,
     'prid': PRID
