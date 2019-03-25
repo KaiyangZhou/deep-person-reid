@@ -134,17 +134,6 @@ CUHK01 (``cuhk01``)
     cuhk01/
         campus/
 
-PRID450S :math:`^\dagger` (``prid450s``)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Create a folder named "prid450s" under ``$REID``.
-- Download the dataset from https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/prid450s and organize the data structure as follows
-
-.. code-block:: none
-    
-    prid450s/
-        cam_a/
-        cam_b/
-
 SenseReID (``sensereid``)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Create "sensereid" under ``$REID``.
