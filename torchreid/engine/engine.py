@@ -183,7 +183,7 @@ class Engine(object):
         targets = list(testloader.keys())
         
         for name in targets:
-            print('Evaluate {}'.format(name))
+            print('\nEvaluating {}'.format(name))
             queryloader = testloader[name]['query']
             galleryloader = testloader[name]['gallery']
             rank1 = self._evaluate(
