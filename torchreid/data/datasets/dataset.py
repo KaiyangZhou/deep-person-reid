@@ -75,8 +75,12 @@ class Dataset(object):
             camid += self.num_train_cams
             train.append((img_path, pid, camid))
 
-        return Dataset(train, self.query, self.gallery, transform=self.transform,
-                       mode=self.mode, combineall=self.combineall, verbose=self.verbose)
+        if isinstance(train[0][0], str):
+            return ImageDataset(train, self.query, self.gallery, transform=self.transform,
+                                mode=self.mode, combineall=self.combineall, verbose=self.verbose)
+        else:
+            return VideoDataset(train, self.query, self.gallery, transform=self.transform,
+                           mode=self.mode, combineall=self.combineall, verbose=self.verbose)
 
     def __radd__(self, other):
         """Supports sum([dataset1, dataset2, dataset3])."""
