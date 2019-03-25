@@ -11,9 +11,9 @@ import torch.utils.model_zoo as model_zoo
 
 model_urls = {
     # 1.0: top-1 71.3
-    'mobilenetv2_1dot0': 'http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/imagenet-pretrained/mobilenetv2_1.0-0f5d2d8f.pth',
+    'mobilenetv2_1dot0': 'http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/imagenet-pretrained/mobilenetv2_1.0-0f96a698.pth',
     # 1.4: top-1 73.9
-    'mobilenetv2_1dot4': 'http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/imagenet-pretrained/mobilenetv2_1.4-4d0d3520.pth',
+    'mobilenetv2_1dot4': 'http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/imagenet-pretrained/mobilenetv2_1.4-bc1cc36b.pth',
 }
 
 
