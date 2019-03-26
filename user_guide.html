@@ -375,7 +375,14 @@
 
         <span class="c1"># All you need to do here is to generate three lists,</span>
         <span class="c1"># which are train, query and gallery.</span>
-        <span class="c1"># Each list contains tuples of (img_path, pid, camid).</span>
+        <span class="c1"># Each list contains tuples of (img_path, pid, camid),</span>
+        <span class="c1"># where</span>
+        <span class="c1"># - img_path (str): absolute path to an image.</span>
+        <span class="c1"># - pid (int): person ID, e.g. 0, 1.</span>
+        <span class="c1"># - camid (int): camera ID, e.g. 0, 1.</span>
+        <span class="c1"># Note that</span>
+        <span class="c1"># - pid and camid should be 0-based.</span>
+        <span class="c1"># - query and gallery should share the same pid/camid system.</span>
         <span class="n">train</span> <span class="o">=</span> <span class="o">...</span>
         <span class="n">query</span> <span class="o">=</span> <span class="o">...</span>
         <span class="n">gallery</span> <span class="o">=</span> <span class="o">...</span>
