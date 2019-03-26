@@ -150,7 +150,7 @@ SenseReID (``sensereid``)
 QMUL-iLIDS :math:`^\dagger` (``ilids``)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Create a folder named "ilids" under ``$REID``.
-- Download the dataset from http://personal.ie.cuhk.edu.hk/~ccloy/files/datasets/underground_reid.zip and organize it to look like
+- Download the dataset from http://www.eecs.qmul.ac.uk/~jason/data/i-LIDS_Pedestrian.tgz and organize it to look like
 
 .. code-block:: none
     
