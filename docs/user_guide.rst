@@ -208,7 +208,14 @@ Use your own dataset
 
             # All you need to do here is to generate three lists,
             # which are train, query and gallery.
-            # Each list contains tuples of (img_path, pid, camid).
+            # Each list contains tuples of (img_path, pid, camid),
+            # where
+            # - img_path (str): absolute path to an image.
+            # - pid (int): person ID, e.g. 0, 1.
+            # - camid (int): camera ID, e.g. 0, 1.
+            # Note that
+            # - pid and camid should be 0-based.
+            # - query and gallery should share the same pid/camid system.
             train = ...
             query = ...
             gallery = ...
