@@ -310,7 +310,10 @@
                       <span class="n">loss_x</span><span class="o">=</span><span class="n">losses_x</span><span class="p">,</span>
                       <span class="n">acc</span><span class="o">=</span><span class="n">accs</span><span class="p">))</span>
             
-            <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span></div></div>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scheduler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scheduler</span><span class="o">.</span><span class="n">step</span><span class="p">()</span></div></div>
 </pre></div>
 
            </div>
