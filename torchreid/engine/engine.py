@@ -180,7 +180,8 @@ class Engine(object):
         targets = list(testloader.keys())
         
         for name in targets:
-            print('\nEvaluating {}'.format(name))
+            domain = 'source' if name in self.datamanager.sources else 'target'
+            print('\n##### Evaluating {} ({}) #####'.format(name, domain))
             queryloader = testloader[name]['query']
             galleryloader = testloader[name]['gallery']
             rank1 = self._evaluate(
