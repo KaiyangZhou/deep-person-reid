@@ -215,7 +215,11 @@ Use your own dataset
             # - camid (int): camera ID, e.g. 0, 1.
             # Note that
             # - pid and camid should be 0-based.
-            # - query and gallery should share the same pid/camid system.
+            # - query and gallery should share the same pid scope (e.g.
+            #   pid=0 in query refers to the same person as pid=0 in gallery).
+            # - train, query and gallery share the same camid scope (e.g.
+            #   camid=0 in train refers to the same camera as camid=0
+            #   in query/gallery).
             train = ...
             query = ...
             gallery = ...

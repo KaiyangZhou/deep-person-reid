@@ -382,7 +382,11 @@
         <span class="c1"># - camid (int): camera ID, e.g. 0, 1.</span>
         <span class="c1"># Note that</span>
         <span class="c1"># - pid and camid should be 0-based.</span>
-        <span class="c1"># - query and gallery should share the same pid/camid system.</span>
+        <span class="c1"># - query and gallery should share the same pid scope (e.g.</span>
+        <span class="c1">#   pid=0 in query refers to the same person as pid=0 in gallery).</span>
+        <span class="c1"># - train, query and gallery share the same camid scope (e.g.</span>
+        <span class="c1">#   camid=0 in train refers to the same camera as camid=0</span>
+        <span class="c1">#   in query/gallery).</span>
         <span class="n">train</span> <span class="o">=</span> <span class="o">...</span>
         <span class="n">query</span> <span class="o">=</span> <span class="o">...</span>
         <span class="n">gallery</span> <span class="o">=</span> <span class="o">...</span>
