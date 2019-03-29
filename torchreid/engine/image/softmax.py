@@ -128,5 +128,5 @@ class ImageSoftmaxEngine(engine.Engine):
             
             end = time.time()
 
-        if self.scheduler is not None:
+        if (self.scheduler is not None) and (not fixbase):
             self.scheduler.step()
