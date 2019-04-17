@@ -215,7 +215,8 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>inputs</strong> (<em>torch.Tensor</em>) – prediction matrix (before softmax) with
 shape (batch_size, num_classes).</li>
-<li><strong>targets</strong> (<em>torch.LongTensor</em>) – ground truth labels with shape (num_classes).</li>
+<li><strong>targets</strong> (<em>torch.LongTensor</em>) – ground truth labels with shape (batch_size).
+Each position contains the label index.</li>
 </ul>
 </td>
 </tr>

@@ -207,7 +207,8 @@
 <span class="sd">        Args:</span>
 <span class="sd">            inputs (torch.Tensor): prediction matrix (before softmax) with</span>
 <span class="sd">                shape (batch_size, num_classes).</span>
-<span class="sd">            targets (torch.LongTensor): ground truth labels with shape (num_classes).</span>
+<span class="sd">            targets (torch.LongTensor): ground truth labels with shape (batch_size).</span>
+<span class="sd">                Each position contains the label index.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">log_probs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logsoftmax</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
         <span class="n">targets</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">log_probs</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">scatter_</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">targets</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span> <span class="mi">1</span><span class="p">)</span>
