@@ -1,9 +1,9 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
-__version__ = '0.7.2'
+__version__ = '0.7.3'
 __author__ = 'Kaiyang Zhou'
-__description__ = 'Pytorch framework for deep-learning person re-identification'
+__description__ = 'Deep learning person re-identification in PyTorch'
 
 from torchreid import (
     engine,
