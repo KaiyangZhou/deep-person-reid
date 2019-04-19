@@ -29,22 +29,66 @@ News
 Installation
 ---------------
 
+The code works with both python2 and python3.
+
+Option 1
+^^^^^^^^^^^^
 1. Install PyTorch and torchvision following the `official instructions <https://pytorch.org/>`_.
-2. Install Cython.
-3. Clone ``deep-person-reid`` to your preferred directory.
+2. Clone ``deep-person-reid`` to your preferred directory
 
 .. code-block:: bash
     
     $ git clone https://github.com/KaiyangZhou/deep-person-reid.git
 
-4. Install ``torchreid`` via
+3. :code:`cd` to :code:`deep-person-reid` and install dependencies
 
 .. code-block:: bash
     
     $ cd deep-person-reid/
+    $ pip install -r requirements.txt
+
+4. Install ``torchreid``
+
+.. code-block:: bash
+    
     $ python setup.py install # or python3
     $ # If you wanna modify the source code without
-    $ # the need to re-build it, you can do
+    $ # the need to rebuild it, you can do
+    $ # python setup.py develop
+
+Option 2 (with conda)
+^^^^^^^^^^^^^^^^^^^^^^^^
+We also provide an environment.yml file for easy setup with conda.
+
+1. Clone ``deep-person-reid`` to your preferred directory
+
+.. code-block:: bash
+    
+    $ git clone https://github.com/KaiyangZhou/deep-person-reid.git
+
+2. :code:`cd` to :code:`deep-person-reid` and create an environment (named ``torchreid``)
+
+.. code-block:: bash
+    
+    $ cd deep-person-reid/
+    $ conda env create -f environment.yml
+
+In doing so, the dependencies will be automatically installed.
+
+3. Install PyTorch and torchvision (select the proper cuda version to suit your machine)
+
+.. code-block:: bash
+    
+    $ conda activate torchreid
+    $ conda install pytorch torchvision cudatoolkit=9.0 -c pytorch
+
+4. Install ``torchreid``
+
+.. code-block:: bash
+
+    $ python setup.py install
+    $ # If you wanna modify the source code without
+    $ # the need to rebuild it, you can do
     $ # python setup.py develop
 
 
@@ -203,4 +247,4 @@ Losses
 
 Citation
 ---------
-Please link this project in your paper
+If you find this code useful to your research, please link this repository in your paper.

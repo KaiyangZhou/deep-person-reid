@@ -1,0 +1,9 @@
+name: torchreid
+dependencies:
+- python=3.7
+- numpy
+- Cython
+- h5py
+- Pillow
+- six
+- scipy
