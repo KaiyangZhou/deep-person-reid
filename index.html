@@ -192,23 +192,66 @@
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>The code works with both python2 and python3.</p>
+<div class="section" id="option-1">
+<h3>Option 1<a class="headerlink" href="#option-1" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic simple">
 <li>Install PyTorch and torchvision following the <a class="reference external" href="https://pytorch.org/">official instructions</a>.</li>
-<li>Install Cython.</li>
-<li>Clone <code class="docutils literal notranslate"><span class="pre">deep-person-reid</span></code> to your preferred directory.</li>
+<li>Clone <code class="docutils literal notranslate"><span class="pre">deep-person-reid</span></code> to your preferred directory</li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/KaiyangZhou/deep-person-reid.git
 </pre></div>
 </div>
-<ol class="arabic simple" start="4">
-<li>Install <code class="docutils literal notranslate"><span class="pre">torchreid</span></code> via</li>
+<ol class="arabic simple" start="3">
+<li><code class="code docutils literal notranslate"><span class="pre">cd</span></code> to <code class="code docutils literal notranslate"><span class="pre">deep-person-reid</span></code> and install dependencies</li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> deep-person-reid/
-$ python setup.py install <span class="c1"># or python3</span>
+$ pip install -r requirements.txt
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>Install <code class="docutils literal notranslate"><span class="pre">torchreid</span></code></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python setup.py install <span class="c1"># or python3</span>
 $ <span class="c1"># If you wanna modify the source code without</span>
-$ <span class="c1"># the need to re-build it, you can do</span>
+$ <span class="c1"># the need to rebuild it, you can do</span>
 $ <span class="c1"># python setup.py develop</span>
 </pre></div>
+</div>
+</div>
+<div class="section" id="option-2-with-conda">
+<h3>Option 2 (with conda)<a class="headerlink" href="#option-2-with-conda" title="Permalink to this headline">¶</a></h3>
+<p>We also provide an environment.yml file for easy setup with conda.</p>
+<ol class="arabic simple">
+<li>Clone <code class="docutils literal notranslate"><span class="pre">deep-person-reid</span></code> to your preferred directory</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/KaiyangZhou/deep-person-reid.git
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><code class="code docutils literal notranslate"><span class="pre">cd</span></code> to <code class="code docutils literal notranslate"><span class="pre">deep-person-reid</span></code> and create an environment (named <code class="docutils literal notranslate"><span class="pre">torchreid</span></code>)</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> deep-person-reid/
+$ conda env create -f environment.yml
+</pre></div>
+</div>
+<p>In doing so, the dependencies will be automatically installed.</p>
+<ol class="arabic simple" start="3">
+<li>Install PyTorch and torchvision (select the proper cuda version to suit your machine)</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ conda activate torchreid
+$ conda install pytorch torchvision <span class="nv">cudatoolkit</span><span class="o">=</span><span class="m">9</span>.0 -c pytorch
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>Install <code class="docutils literal notranslate"><span class="pre">torchreid</span></code></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python setup.py install
+$ <span class="c1"># If you wanna modify the source code without</span>
+$ <span class="c1"># the need to rebuild it, you can do</span>
+$ <span class="c1"># python setup.py develop</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="get-started-30-seconds-to-torchreid">
@@ -371,7 +414,7 @@ $ <span class="c1"># python setup.py develop</span>
 </div>
 <div class="section" id="citation">
 <h2>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">¶</a></h2>
-<p>Please link this project in your paper</p>
+<p>If you find this code useful to your research, please link this repository in your paper.</p>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
