@@ -13,7 +13,7 @@ from default_parser import (
 import torchreid
 from torchreid.utils import (
     Logger, set_random_seed, check_isfile, resume_from_checkpoint,
-    load_pretrained_weights
+    load_pretrained_weights, count_num_param
 )
 
 
@@ -96,6 +96,8 @@ def main():
         warnings.warn('Currently using CPU, however, GPU is highly recommended')
 
     datamanager = build_datamanager(args)
+    
+    print('Building model: {}'.format(args.arch))
     model = torchreid.models.build_model(
         name=args.arch,
         num_classes=datamanager.num_train_pids,
@@ -103,6 +105,8 @@ def main():
         pretrained=(not args.no_pretrained),
         use_gpu=use_gpu
     )
+    model_size = count_num_param(model)
+    print('Model size: {:,}'.format(model_size))
 
     if args.load_weights and check_isfile(args.load_weights):
         load_pretrained_weights(model, args.load_weights)
@@ -110,15 +114,9 @@ def main():
     if use_gpu:
         model = nn.DataParallel(model).cuda()
 
-    optimizer = torchreid.optim.build_optimizer(
-        model,
-        **optimizer_kwargs(args)
-    )
+    optimizer = torchreid.optim.build_optimizer(model, **optimizer_kwargs(args))
 
-    scheduler = torchreid.optim.build_lr_scheduler(
-        optimizer,
-        **lr_scheduler_kwargs(args)
-    )
+    scheduler = torchreid.optim.build_lr_scheduler(optimizer, **lr_scheduler_kwargs(args))
 
     if args.resume and check_isfile(args.resume):
         args.start_epoch = resume_from_checkpoint(args.resume, model, optimizer=optimizer)

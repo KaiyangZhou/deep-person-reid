@@ -95,7 +95,6 @@ def build_model(name, num_classes, loss='softmax', pretrained=True, use_gpu=True
     avai_models = list(__model_factory.keys())
     if name not in avai_models:
         raise KeyError('Unknown model: {}. Must be one of {}'.format(name, avai_models))
-    print('Initializing model: {}'.format(name))
     return __model_factory[name](
         num_classes=num_classes,
         loss=loss,

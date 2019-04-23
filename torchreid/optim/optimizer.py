@@ -95,15 +95,9 @@ def build_optimizer(
             {'params': base_params, 'lr': lr * base_lr_mult},
             {'params': new_params},
         ]
-        
-        print('Use staged learning rate')
-        print('Base layers (lr*{}): {}'.format(base_lr_mult, base_layers))
-        print('New layers (lr): {}'.format(new_layers))
 
     else:
         param_groups = model.parameters()
-
-    print('Initializing optimizer: {}'.format(optim))
 
     if optim == 'adam':
         optimizer = torch.optim.Adam(

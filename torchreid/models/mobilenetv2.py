@@ -198,7 +198,6 @@ def init_pretrained_weights(model, model_url):
     pretrain_dict = {k: v for k, v in pretrain_dict.items() if k in model_dict and model_dict[k].size() == v.size()}
     model_dict.update(pretrain_dict)
     model.load_state_dict(model_dict)
-    print('Initialized model with pretrained weights from {}'.format(model_url))
 
 
 def mobilenetv2_1dot0(num_classes, loss, pretrained=True, **kwargs):

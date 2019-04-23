@@ -31,8 +31,6 @@ def build_lr_scheduler(optimizer, lr_scheduler, stepsize, gamma=0.1):
     """
     if lr_scheduler not in AVAI_SCH:
         raise ValueError('Unsupported scheduler: {}. Must be one of {}'.format(lr_scheduler, AVAI_SCH))
-
-    print('Initializing lr_scheduler: {}'.format(lr_scheduler))
     
     if lr_scheduler == 'single_step':
         if not isinstance(stepsize, int):

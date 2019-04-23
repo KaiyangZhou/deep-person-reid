@@ -357,7 +357,6 @@ class InceptionResNetV2(nn.Module):
         pretrain_dict = {k: v for k, v in pretrain_dict.items() if k in model_dict and model_dict[k].size() == v.size()}
         model_dict.update(pretrain_dict)
         self.load_state_dict(model_dict)
-        print('Initialized model with pretrained weights from {}'.format(settings['url']))
 
     def featuremaps(self, x):
         x = self.conv2d_1a(x)
