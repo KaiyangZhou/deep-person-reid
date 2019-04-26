@@ -200,6 +200,9 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unsupported scheduler: </span><span class="si">{}</span><span class="s1">. Must be one of </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lr_scheduler</span><span class="p">,</span> <span class="n">AVAI_SCH</span><span class="p">))</span>
     
     <span class="k">if</span> <span class="n">lr_scheduler</span> <span class="o">==</span> <span class="s1">&#39;single_step&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stepsize</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">stepsize</span> <span class="o">=</span> <span class="n">stepsize</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stepsize</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
                 <span class="s1">&#39;For single_step lr_scheduler, stepsize must &#39;</span>
