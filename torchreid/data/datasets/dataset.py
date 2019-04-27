@@ -76,13 +76,19 @@ class Dataset(object):
             camid += self.num_train_cams
             train.append((img_path, pid, camid))
 
-        # set verbose=False to avoid duplicate print
+        ###################################
+        # Things to do beforehand:
+        # 1. set verbose=False to avoid unnecessary print
+        # 2. set combineall=False because combineall would have been applied
+        #    if it was True for a specific dataset, setting it to True will
+        #    create new IDs that should have been included
+        ###################################
         if isinstance(train[0][0], str):
             return ImageDataset(
                 train, self.query, self.gallery,
                 transform=self.transform,
                 mode=self.mode,
-                combineall=self.combineall,
+                combineall=False,
                 verbose=False
             )
         else:
@@ -90,7 +96,7 @@ class Dataset(object):
                 train, self.query, self.gallery,
                 transform=self.transform,
                 mode=self.mode,
-                combineall=self.combineall,
+                combineall=False,
                 verbose=False
             )
 
@@ -102,7 +108,8 @@ class Dataset(object):
             return self.__add__(other)
 
     def parse_data(self, data):
-        """Parses data list.
+        """Parses data list and returns the number of person IDs
+        and the number of camera views.
 
         Args:
             data (list): contains tuples of (img_path(s), pid, camid)
