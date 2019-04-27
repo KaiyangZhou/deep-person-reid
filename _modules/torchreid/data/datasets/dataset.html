@@ -197,6 +197,7 @@
 <span class="sd">            dataset for training.</span>
 <span class="sd">        verbose (bool): show information.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_junk_pids</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># contains useless person IDs, e.g. background, false detections</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">gallery</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;train&#39;</span><span class="p">,</span>
                  <span class="n">combineall</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -244,11 +245,21 @@
 
         <span class="c1"># set verbose=False to avoid duplicate print</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">ImageDataset</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gallery</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span>
-                                <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">combineall</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">combineall</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ImageDataset</span><span class="p">(</span>
+                <span class="n">train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gallery</span><span class="p">,</span>
+                <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span>
+                <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
+                <span class="n">combineall</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">combineall</span><span class="p">,</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">VideoDataset</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gallery</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span>
-                           <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">combineall</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">combineall</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">VideoDataset</span><span class="p">(</span>
+                <span class="n">train</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gallery</span><span class="p">,</span>
+                <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span>
+                <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
+                <span class="n">combineall</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">combineall</span><span class="p">,</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__radd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Supports sum([dataset1, dataset2, dataset3]).&quot;&quot;&quot;</span>
@@ -286,17 +297,17 @@
         <span class="sd">&quot;&quot;&quot;Combines train, query and gallery in a dataset for training.&quot;&quot;&quot;</span>
         <span class="n">combined</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">)</span>
 
-        <span class="c1"># relabel pids in gallery</span>
+        <span class="c1"># relabel pids in gallery (query shares the same scope)</span>
         <span class="n">g_pids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gallery</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">pid</span><span class="o">==</span><span class="mi">0</span> <span class="ow">or</span> <span class="n">pid</span><span class="o">==-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_junk_pids</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="n">g_pids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
         <span class="n">pid2label</span> <span class="o">=</span> <span class="p">{</span><span class="n">pid</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">g_pids</span><span class="p">)}</span>
 
         <span class="k">def</span> <span class="nf">_combine_data</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">img_path</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">camid</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">pid</span><span class="o">==</span><span class="mi">0</span> <span class="ow">or</span> <span class="n">pid</span><span class="o">==-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">pid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_junk_pids</span><span class="p">:</span>
                     <span class="k">continue</span>
                 <span class="n">pid</span> <span class="o">=</span> <span class="n">pid2label</span><span class="p">[</span><span class="n">pid</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_train_pids</span>
                 <span class="n">combined</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">img_path</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">camid</span><span class="p">))</span>
