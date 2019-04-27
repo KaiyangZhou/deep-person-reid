@@ -30,6 +30,7 @@ class Dataset(object):
             dataset for training.
         verbose (bool): show information.
     """
+    _junk_pids = [] # contains useless person IDs, e.g. background, false detections
 
     def __init__(self, train, query, gallery, transform=None, mode='train',
                  combineall=False, verbose=True, **kwargs):
@@ -77,11 +78,21 @@ class Dataset(object):
 
         # set verbose=False to avoid duplicate print
         if isinstance(train[0][0], str):
-            return ImageDataset(train, self.query, self.gallery, transform=self.transform,
-                                mode=self.mode, combineall=self.combineall, verbose=False)
+            return ImageDataset(
+                train, self.query, self.gallery,
+                transform=self.transform,
+                mode=self.mode,
+                combineall=self.combineall,
+                verbose=False
+            )
         else:
-            return VideoDataset(train, self.query, self.gallery, transform=self.transform,
-                           mode=self.mode, combineall=self.combineall, verbose=False)
+            return VideoDataset(
+                train, self.query, self.gallery,
+                transform=self.transform,
+                mode=self.mode,
+                combineall=self.combineall,
+                verbose=False
+            )
 
     def __radd__(self, other):
         """Supports sum([dataset1, dataset2, dataset3])."""
@@ -119,17 +130,17 @@ class Dataset(object):
         """Combines train, query and gallery in a dataset for training."""
         combined = copy.deepcopy(self.train)
 
-        # relabel pids in gallery
+        # relabel pids in gallery (query shares the same scope)
         g_pids = set()
         for _, pid, _ in self.gallery:
-            if pid==0 or pid==-1:
+            if pid in self._junk_pids:
                 continue
             g_pids.add(pid)
         pid2label = {pid: i for i, pid in enumerate(g_pids)}
 
         def _combine_data(data):
             for img_path, pid, camid in data:
-                if pid==0 or pid==-1:
+                if pid in self._junk_pids:
                     continue
                 pid = pid2label[pid] + self.num_train_pids
                 combined.append((img_path, pid, camid))
