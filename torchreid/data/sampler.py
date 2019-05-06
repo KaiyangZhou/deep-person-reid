@@ -19,6 +19,10 @@ class RandomIdentitySampler(Sampler):
         num_instances (int): number of instances per identity in a batch.
     """
     def __init__(self, data_source, batch_size, num_instances):
+        if batch_size < num_instances:
+            raise ValueError('batch_size={} must be no less '
+                             'than num_instances={}'.format(batch_size, num_instances))
+
         self.data_source = data_source
         self.batch_size = batch_size
         self.num_instances = num_instances
