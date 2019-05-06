@@ -64,7 +64,7 @@ def build_engine(args, datamanager, model, optimizer, scheduler):
                 pooling_method=args.pooling_method
             )
         else:
-            engine = torchreid.engine.ImageTripletEngine(
+            engine = torchreid.engine.VideoTripletEngine(
                 datamanager,
                 model,
                 optimizer,
