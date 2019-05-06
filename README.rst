@@ -23,7 +23,8 @@ Documentation: https://kaiyangzhou.github.io/deep-person-reid/.
 
 News
 ------
-24-03-2019: `Torchreid documentation <https://kaiyangzhou.github.io/deep-person-reid/>`_ is out!
+- 06-05-2019: We released a tech report on `arxiv <https://arxiv.org/abs/1905.00953>`_. Code and models will be released.
+- 24-03-2019: `Torchreid documentation <https://kaiyangzhou.github.io/deep-person-reid/>`_ is out!
 
 
 Installation
@@ -247,4 +248,14 @@ Losses
 
 Citation
 ---------
-If you find this code useful to your research, please link this repository in your paper.
+If you find this code useful to your research, please cite the following publication.
+
+.. code-block:: bash
+    
+    @article{zhou2019osnet,
+    title={Omni-Scale Feature Learning for Person Re-Identification},
+    author={Kaiyang Zhou and Yongxin Yang and Andrea Cavallaro and Tao Xiang},
+    journal={arXiv preprint arXiv:1905.00953},
+    year={2019}
+    }
+

@@ -70,7 +70,7 @@ class VideoTripletEngine(ImageTripletEngine, VideoSoftmaxEngine):
             save_dir='log/resnet50-triplet-mars',
             print_freq=10
         )
-    """ 
+    """
 
     def __init__(self, datamanager, model, optimizer, margin=0.3,
                  weight_t=1, weight_x=1, scheduler=None, use_cpu=False,
