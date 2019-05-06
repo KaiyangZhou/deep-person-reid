@@ -186,6 +186,10 @@
 <span class="sd">        num_instances (int): number of instances per identity in a batch.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_source</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">num_instances</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">batch_size</span> <span class="o">&lt;</span> <span class="n">num_instances</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;batch_size=</span><span class="si">{}</span><span class="s1"> must be no less &#39;</span>
+                             <span class="s1">&#39;than num_instances=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">num_instances</span><span class="p">))</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">data_source</span> <span class="o">=</span> <span class="n">data_source</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_instances</span> <span class="o">=</span> <span class="n">num_instances</span>
