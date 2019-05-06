@@ -2,11 +2,18 @@
 Here is a collection of ReID-related research with links to codes and papers. You are welcome to submit [PR](https://help.github.com/articles/creating-a-pull-request/)s if you find something missing.
 
 ## Conferences
+- **[CVPR 2019](#cvpr-2019)**
 - **[AAAI 2019](#aaai-2019)**
 - **[NeurIPS 2018](#neurips-2018)**
 - **[ECCV 2018](#eccv-2018)**
 - **[CVPR 2018](#cvpr-2018)**
 - **[ArXiv](#arxiv)**
+
+### CVPR 2019
+- Invariance Matters: Exemplar Memory for Domain Adaptive Person Re-identification. [[paper](https://arxiv.org/abs/1904.01990)][[code](https://github.com/zhunzhong07/ECN)]
+- Dissecting Person Re-identification from the Viewpoint of Viewpoint. [[paper](https://arxiv.org/abs/1812.02162)][[code](https://github.com/sxzrt/Dissecting-Person-Re-ID-from-the-Viewpoint-of-Viewpoint)]
+- Unsupervised Person Re-identification by Soft Multilabel Learning. [[paper](https://arxiv.org/abs/1903.06325)][[code](https://github.com/KovenYu/MAR)]
+
 
 ### AAAI 2019
 - Spatial and Temporal Mutual Promotion for Video-based Person Re-identification. [[paper](https://arxiv.org/abs/1812.10305)][[code](https://github.com/yolomax/person-reid-lib)]
