@@ -23,6 +23,7 @@ Documentation: https://kaiyangzhou.github.io/deep-person-reid/.
 
 News
 ------
+- 09-05-2019: The `person re-ranking code <https://github.com/KaiyangZhou/deep-person-reid/issues/91#issuecomment-491093721>`_ has been added to this repo.
 - 06-05-2019: We released a tech report on `arxiv <https://arxiv.org/abs/1905.00953>`_. Code and models will be released.
 - 24-03-2019: `Torchreid documentation <https://kaiyangzhou.github.io/deep-person-reid/>`_ is out!
 
