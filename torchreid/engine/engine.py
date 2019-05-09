@@ -12,13 +12,13 @@ import torch
 import torch.nn as nn
 
 import torchreid
-from torchreid.utils import AverageMeter, visualize_ranked_results, save_checkpoint
+from torchreid.utils import AverageMeter, visualize_ranked_results, save_checkpoint, re_ranking
 from torchreid.losses import DeepSupervision
 from torchreid import metrics
 
 
 class Engine(object):
-    """A generic base Engine class for both image- and video-reid.
+    r"""A generic base Engine class for both image- and video-reid.
 
     Args:
         datamanager (DataManager): an instance of ``torchreid.data.ImageDataManager``
@@ -43,8 +43,8 @@ class Engine(object):
     def run(self, save_dir='log', max_epoch=0, start_epoch=0, fixbase_epoch=0, open_layers=None,
             start_eval=0, eval_freq=-1, test_only=False, print_freq=10,
             dist_metric='euclidean', visrank=False, visrank_topk=20,
-            use_metric_cuhk03=False, ranks=[1, 5, 10, 20]):
-        """A unified pipeline for training and evaluating a model.
+            use_metric_cuhk03=False, ranks=[1, 5, 10, 20], rerank=False):
+        r"""A unified pipeline for training and evaluating a model.
 
         Args:
             save_dir (str): directory to save model.
@@ -70,6 +70,8 @@ class Engine(object):
             use_metric_cuhk03 (bool, optional): use single-gallery-shot setting for cuhk03.
                 Default is False. This should be enabled when using cuhk03 classic split.
             ranks (list, optional): cmc ranks to be computed. Default is [1, 5, 10, 20].
+            rerank (bool, optional): use person re-ranking (by Zhong et al. CVPR'17).
+                Default is False. This is only enabled when test_only=True.
         """
         trainloader, testloader = self.datamanager.return_dataloaders()
 
@@ -82,7 +84,8 @@ class Engine(object):
                 visrank_topk=visrank_topk,
                 save_dir=save_dir,
                 use_metric_cuhk03=use_metric_cuhk03,
-                ranks=ranks
+                ranks=ranks,
+                rerank=rerank
             )
             return
 
@@ -131,7 +134,7 @@ class Engine(object):
         print('Elapsed {}'.format(elapsed))
 
     def train(self):
-        """Performs training on source datasets for one epoch.
+        r"""Performs training on source datasets for one epoch.
 
         This will be called every epoch in ``run()``, e.g.
 
@@ -147,8 +150,8 @@ class Engine(object):
         raise NotImplementedError
 
     def test(self, epoch, testloader, dist_metric='euclidean', visrank=False, visrank_topk=20,
-             save_dir='', use_metric_cuhk03=False, ranks=[1, 5, 10, 20]):
-        """Tests model on target datasets.
+             save_dir='', use_metric_cuhk03=False, ranks=[1, 5, 10, 20], rerank=False):
+        r"""Tests model on target datasets.
 
         .. note::
 
@@ -176,6 +179,8 @@ class Engine(object):
             use_metric_cuhk03 (bool, optional): use single-gallery-shot setting for cuhk03.
                 Default is False. This should be enabled when using cuhk03 classic split.
             ranks (list, optional): cmc ranks to be computed. Default is [1, 5, 10, 20].
+            rerank (bool, optional): use person re-ranking (by Zhong et al. CVPR'17).
+                Default is False.
         """
         targets = list(testloader.keys())
         
@@ -194,7 +199,8 @@ class Engine(object):
                 visrank_topk=visrank_topk,
                 save_dir=save_dir,
                 use_metric_cuhk03=use_metric_cuhk03,
-                ranks=ranks
+                ranks=ranks,
+                rerank=rerank
             )
         
         return rank1
@@ -202,13 +208,13 @@ class Engine(object):
     @torch.no_grad()
     def _evaluate(self, epoch, dataset_name='', queryloader=None, galleryloader=None,
                   dist_metric='euclidean', visrank=False, visrank_topk=20, save_dir='',
-                  use_metric_cuhk03=False, ranks=[1, 5, 10, 20]):
+                  use_metric_cuhk03=False, ranks=[1, 5, 10, 20], rerank=False):
         batch_time = AverageMeter()
 
         self.model.eval()
 
         print('Extracting features from query set ...')
-        qf, q_pids, q_camids = [], [], []
+        qf, q_pids, q_camids = [], [], [] # query features, query person IDs and query camera IDs
         for batch_idx, data in enumerate(queryloader):
             imgs, pids, camids = self._parse_data_for_eval(data)
             if self.use_gpu:
@@ -226,7 +232,7 @@ class Engine(object):
         print('Done, obtained {}-by-{} matrix'.format(qf.size(0), qf.size(1)))
 
         print('Extracting features from gallery set ...')
-        gf, g_pids, g_camids = [], [], []
+        gf, g_pids, g_camids = [], [], [] # gallery features, gallery person IDs and gallery camera IDs
         end = time.time()
         for batch_idx, data in enumerate(galleryloader):
             imgs, pids, camids = self._parse_data_for_eval(data)
@@ -248,6 +254,12 @@ class Engine(object):
 
         distmat = metrics.compute_distance_matrix(qf, gf, dist_metric)
         distmat = distmat.numpy()
+
+        if rerank:
+            print('Applying person re-ranking ...')
+            distmat_qq = metrics.compute_distance_matrix(qf, qf, dist_metric)
+            distmat_gg = metrics.compute_distance_matrix(gf, gf, dist_metric)
+            distmat = re_ranking(distmat, distmat_qq, distmat_gg)
 
         print('Computing CMC and mAP ...')
         cmc, mAP = metrics.evaluate_rank(

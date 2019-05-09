@@ -125,13 +125,13 @@ def init_parser():
                         help='learning rate decay')
 
     # ************************************************************
-    # Cross entropy loss-specific setting
+    # Cross entropy loss
     # ************************************************************
     parser.add_argument('--label-smooth', action='store_true',
                         help='use label smoothing regularizer in cross entropy loss')
 
     # ************************************************************
-    # Hard triplet loss-specific setting
+    # Hard triplet loss
     # ************************************************************
     parser.add_argument('--margin', type=float, default=0.3,
                         help='margin for triplet loss')
@@ -165,6 +165,13 @@ def init_parser():
                         help='distance metric')
     parser.add_argument('--ranks', type=str, default=[1, 5, 10, 20], nargs='+',
                         help='cmc ranks')
+    parser.add_argument('--rerank', action='store_true',
+                        help='use person re-ranking (by Zhong et al. CVPR2017)')
+
+    parser.add_argument('--visrank', action='store_true',
+                        help='visualize ranked results, only available in evaluation mode')
+    parser.add_argument('--visrank-topk', type=int, default=20,
+                        help='visualize topk ranks')
     
     # ************************************************************
     # Miscs
@@ -182,11 +189,7 @@ def init_parser():
     parser.add_argument('--gpu-devices', type=str, default='0',
                         help='gpu device ids for CUDA_VISIBLE_DEVICES')
     parser.add_argument('--use-avai-gpus', action='store_true',
-                        help='use available gpus instead of specified devices (useful when using managed clusters)')
-    parser.add_argument('--visrank', action='store_true',
-                        help='visualize ranked results, only available in evaluation mode')
-    parser.add_argument('--visrank-topk', type=int, default=20,
-                        help='visualize topk ranks')
+                        help='use available gpus instead of specified devices')
 
     return parser
 
@@ -278,5 +281,6 @@ def engine_run_kwargs(parsed_args):
         'visrank': parsed_args.visrank,
         'visrank_topk': parsed_args.visrank_topk,
         'use_metric_cuhk03': parsed_args.use_metric_cuhk03,
-        'ranks': parsed_args.ranks
+        'ranks': parsed_args.ranks,
+        'rerank': parsed_args.rerank
     }

@@ -5,3 +5,4 @@ from .loggers import *
 from .tools import *
 from .reidtools import *
 from .torchtools import *
+from .rerank import re_ranking
