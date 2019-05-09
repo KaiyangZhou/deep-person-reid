@@ -21,7 +21,7 @@ from .tools import mkdir_if_missing
 
 
 def save_checkpoint(state, save_dir, is_best=False, remove_module_from_keys=False):
-    """Saves checkpoint.
+    r"""Saves checkpoint.
 
     Args:
         state (dict): dictionary.
@@ -60,7 +60,7 @@ def save_checkpoint(state, save_dir, is_best=False, remove_module_from_keys=Fals
 
 
 def load_checkpoint(fpath):
-    """Loads checkpoint.
+    r"""Loads checkpoint.
 
     ``UnicodeDecodeError`` can be well handled, which means
     python2-saved files can be read from python3.
@@ -76,6 +76,10 @@ def load_checkpoint(fpath):
         >>> fpath = 'log/my_model/model.pth.tar-10'
         >>> checkpoint = load_checkpoint(fpath)
     """
+    if fpath is None:
+        raise ValueError('File path is None')
+    if not osp.exists(fpath):
+        raise FileNotFoundError('File is not found at "{}"'.format(fpath))
     map_location = None if torch.cuda.is_available() else 'cpu'
     try:
         checkpoint = torch.load(fpath, map_location=map_location)
@@ -90,7 +94,7 @@ def load_checkpoint(fpath):
 
 
 def resume_from_checkpoint(fpath, model, optimizer=None):
-    """Resumes training from a checkpoint.
+    r"""Resumes training from a checkpoint.
 
     This will load (1) model weights and (2) ``state_dict``
     of optimizer if ``optimizer`` is not None.
@@ -124,7 +128,7 @@ def resume_from_checkpoint(fpath, model, optimizer=None):
 
 def adjust_learning_rate(optimizer, base_lr, epoch, stepsize=20, gamma=0.1,
                          linear_decay=False, final_lr=0, max_epoch=100):
-    """Adjusts learning rate.
+    r"""Adjusts learning rate.
 
     Deprecated.
     """
@@ -141,7 +145,7 @@ def adjust_learning_rate(optimizer, base_lr, epoch, stepsize=20, gamma=0.1,
 
 
 def set_bn_to_eval(m):
-    """Sets BatchNorm layers to eval mode."""
+    r"""Sets BatchNorm layers to eval mode."""
     # 1. no update for running mean and var
     # 2. scale and shift parameters are still trainable
     classname = m.__class__.__name__
@@ -150,7 +154,7 @@ def set_bn_to_eval(m):
 
 
 def open_all_layers(model):
-    """Opens all layers in model for training.
+    r"""Opens all layers in model for training.
 
     Examples::
         >>> from torchreid.utils import open_all_layers
@@ -162,7 +166,7 @@ def open_all_layers(model):
 
 
 def open_specified_layers(model, open_layers):
-    """Opens specified layers in model for training while keeping
+    r"""Opens specified layers in model for training while keeping
     other layers frozen.
 
     Args:
@@ -199,7 +203,7 @@ def open_specified_layers(model, open_layers):
 
 
 def count_num_param(model):
-    """Counts number of parameters in a model.
+    r"""Counts number of parameters in a model.
 
     Args:
         model (nn.Module): network model.
@@ -221,7 +225,7 @@ def count_num_param(model):
 
 
 def load_pretrained_weights(model, weight_path):
-    """Loads pretrianed weights to model.
+    r"""Loads pretrianed weights to model.
 
     Features::
         - Incompatible layers (unmatched in name or size) will be ignored.
