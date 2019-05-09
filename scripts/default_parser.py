@@ -163,6 +163,8 @@ def init_parser():
                         help='start to evaluate after a specific epoch')
     parser.add_argument('--dist-metric', type=str, default='euclidean',
                         help='distance metric')
+    parser.add_argument('--normalize-feature', action='store_true',
+                        help='normalize feature vectors before calculating distance')
     parser.add_argument('--ranks', type=str, default=[1, 5, 10, 20], nargs='+',
                         help='cmc ranks')
     parser.add_argument('--rerank', action='store_true',
@@ -278,6 +280,7 @@ def engine_run_kwargs(parsed_args):
         'test_only': parsed_args.evaluate,
         'print_freq': parsed_args.print_freq,
         'dist_metric': parsed_args.dist_metric,
+        'normalize_feature': parsed_args.normalize_feature,
         'visrank': parsed_args.visrank,
         'visrank_topk': parsed_args.visrank_topk,
         'use_metric_cuhk03': parsed_args.use_metric_cuhk03,
