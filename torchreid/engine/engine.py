@@ -264,9 +264,11 @@ class Engine(object):
         print('Speed: {:.4f} sec/batch'.format(batch_time.avg))
 
         if normalize_feature:
+            print('Normalzing features with L2 norm ...')
             qf = F.normalize(qf, p=2, dim=1)
             gf = F.normalize(gf, p=2, dim=1)
 
+        print('Computing distance matrix with metric={} ...'.format(dist_metric))
         distmat = metrics.compute_distance_matrix(qf, gf, dist_metric)
         distmat = distmat.numpy()
 
