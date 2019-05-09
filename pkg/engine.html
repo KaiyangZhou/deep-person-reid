@@ -199,7 +199,7 @@ or <code class="docutils literal notranslate"><span class="pre">torchreid.data.V
 </table>
 <dl class="method">
 <dt id="torchreid.engine.engine.Engine.run">
-<code class="descname">run</code><span class="sig-paren">(</span><em>save_dir='log', max_epoch=0, start_epoch=0, fixbase_epoch=0, open_layers=None, start_eval=0, eval_freq=-1, test_only=False, print_freq=10, dist_metric='euclidean', visrank=False, visrank_topk=20, use_metric_cuhk03=False, ranks=[1, 5, 10, 20]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.run" title="Permalink to this definition">¶</a></dt>
+<code class="descname">run</code><span class="sig-paren">(</span><em>save_dir='log', max_epoch=0, start_epoch=0, fixbase_epoch=0, open_layers=None, start_eval=0, eval_freq=-1, test_only=False, print_freq=10, dist_metric='euclidean', normalize_feature=False, visrank=False, visrank_topk=20, use_metric_cuhk03=False, ranks=[1, 5, 10, 20], rerank=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>A unified pipeline for training and evaluating a model.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -221,6 +221,8 @@ Default is False.</li>
 <li><strong>print_freq</strong> (<em>int</em><em>, </em><em>optional</em>) – print_frequency. Default is 10.</li>
 <li><strong>dist_metric</strong> (<em>str</em><em>, </em><em>optional</em>) – distance metric used to compute distance matrix
 between query and gallery. Default is “euclidean”.</li>
+<li><strong>normalize_feature</strong> (<em>bool</em><em>, </em><em>optional</em>) – performs L2 normalization on feature vectors before
+computing feature distance. Default is False.</li>
 <li><strong>visrank</strong> (<em>bool</em><em>, </em><em>optional</em>) – visualizes ranked results. Default is False. Visualization
 will be performed every test time, so it is recommended to enable <code class="docutils literal notranslate"><span class="pre">visrank</span></code> when
 <code class="docutils literal notranslate"><span class="pre">test_only</span></code> is True. The ranked images will be saved to
@@ -229,6 +231,8 @@ will be performed every test time, so it is recommended to enable <code class="d
 <li><strong>use_metric_cuhk03</strong> (<em>bool</em><em>, </em><em>optional</em>) – use single-gallery-shot setting for cuhk03.
 Default is False. This should be enabled when using cuhk03 classic split.</li>
 <li><strong>ranks</strong> (<em>list</em><em>, </em><em>optional</em>) – cmc ranks to be computed. Default is [1, 5, 10, 20].</li>
+<li><strong>rerank</strong> (<em>bool</em><em>, </em><em>optional</em>) – uses person re-ranking (by Zhong et al. CVPR‘17).
+Default is False. This is only enabled when test_only=True.</li>
 </ul>
 </td>
 </tr>
@@ -238,7 +242,7 @@ Default is False. This should be enabled when using cuhk03 classic split.</li>
 
 <dl class="method">
 <dt id="torchreid.engine.engine.Engine.test">
-<code class="descname">test</code><span class="sig-paren">(</span><em>epoch, testloader, dist_metric='euclidean', visrank=False, visrank_topk=20, save_dir='', use_metric_cuhk03=False, ranks=[1, 5, 10, 20]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.test" title="Permalink to this definition">¶</a></dt>
+<code class="descname">test</code><span class="sig-paren">(</span><em>epoch, testloader, dist_metric='euclidean', normalize_feature=False, visrank=False, visrank_topk=20, save_dir='', use_metric_cuhk03=False, ranks=[1, 5, 10, 20], rerank=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests model on target datasets.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -261,6 +265,8 @@ but not a must. Please refer to the source code for more details.</p>
 {dataset_name: ‘query’: queryloader, ‘gallery’: galleryloader}.</li>
 <li><strong>dist_metric</strong> (<em>str</em><em>, </em><em>optional</em>) – distance metric used to compute distance matrix
 between query and gallery. Default is “euclidean”.</li>
+<li><strong>normalize_feature</strong> (<em>bool</em><em>, </em><em>optional</em>) – performs L2 normalization on feature vectors before
+computing feature distance. Default is False.</li>
 <li><strong>visrank</strong> (<em>bool</em><em>, </em><em>optional</em>) – visualizes ranked results. Default is False. Visualization
 will be performed every test time, so it is recommended to enable <code class="docutils literal notranslate"><span class="pre">visrank</span></code> when
 <code class="docutils literal notranslate"><span class="pre">test_only</span></code> is True. The ranked images will be saved to
@@ -270,6 +276,8 @@ will be performed every test time, so it is recommended to enable <code class="d
 <li><strong>use_metric_cuhk03</strong> (<em>bool</em><em>, </em><em>optional</em>) – use single-gallery-shot setting for cuhk03.
 Default is False. This should be enabled when using cuhk03 classic split.</li>
 <li><strong>ranks</strong> (<em>list</em><em>, </em><em>optional</em>) – cmc ranks to be computed. Default is [1, 5, 10, 20].</li>
+<li><strong>rerank</strong> (<em>bool</em><em>, </em><em>optional</em>) – uses person re-ranking (by Zhong et al. CVPR‘17).
+Default is False.</li>
 </ul>
 </td>
 </tr>

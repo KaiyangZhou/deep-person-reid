@@ -188,7 +188,7 @@
 
 
 <div class="viewcode-block" id="save_checkpoint"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.torchtools.save_checkpoint">[docs]</a><span class="k">def</span> <span class="nf">save_checkpoint</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">,</span> <span class="n">is_best</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">remove_module_from_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Saves checkpoint.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Saves checkpoint.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        state (dict): dictionary.</span>
@@ -227,7 +227,7 @@
 
 
 <div class="viewcode-block" id="load_checkpoint"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.torchtools.load_checkpoint">[docs]</a><span class="k">def</span> <span class="nf">load_checkpoint</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Loads checkpoint.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Loads checkpoint.</span>
 
 <span class="sd">    ``UnicodeDecodeError`` can be well handled, which means</span>
 <span class="sd">    python2-saved files can be read from python3.</span>
@@ -243,6 +243,10 @@
 <span class="sd">        &gt;&gt;&gt; fpath = &#39;log/my_model/model.pth.tar-10&#39;</span>
 <span class="sd">        &gt;&gt;&gt; checkpoint = load_checkpoint(fpath)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">fpath</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;File path is None&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">osp</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s1">&#39;File is not found at &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fpath</span><span class="p">))</span>
     <span class="n">map_location</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">checkpoint</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="n">map_location</span><span class="p">)</span>
@@ -257,7 +261,7 @@
 
 
 <div class="viewcode-block" id="resume_from_checkpoint"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.torchtools.resume_from_checkpoint">[docs]</a><span class="k">def</span> <span class="nf">resume_from_checkpoint</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Resumes training from a checkpoint.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Resumes training from a checkpoint.</span>
 
 <span class="sd">    This will load (1) model weights and (2) ``state_dict``</span>
 <span class="sd">    of optimizer if ``optimizer`` is not None.</span>
@@ -291,7 +295,7 @@
 
 <span class="k">def</span> <span class="nf">adjust_learning_rate</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">base_lr</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">stepsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
                          <span class="n">linear_decay</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">final_lr</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_epoch</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Adjusts learning rate.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Adjusts learning rate.</span>
 
 <span class="sd">    Deprecated.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -308,7 +312,7 @@
 
 
 <span class="k">def</span> <span class="nf">set_bn_to_eval</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Sets BatchNorm layers to eval mode.&quot;&quot;&quot;</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Sets BatchNorm layers to eval mode.&quot;&quot;&quot;</span>
     <span class="c1"># 1. no update for running mean and var</span>
     <span class="c1"># 2. scale and shift parameters are still trainable</span>
     <span class="n">classname</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
@@ -317,7 +321,7 @@
 
 
 <div class="viewcode-block" id="open_all_layers"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.torchtools.open_all_layers">[docs]</a><span class="k">def</span> <span class="nf">open_all_layers</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Opens all layers in model for training.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Opens all layers in model for training.</span>
 
 <span class="sd">    Examples::</span>
 <span class="sd">        &gt;&gt;&gt; from torchreid.utils import open_all_layers</span>
@@ -329,7 +333,7 @@
 
 
 <div class="viewcode-block" id="open_specified_layers"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.torchtools.open_specified_layers">[docs]</a><span class="k">def</span> <span class="nf">open_specified_layers</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">open_layers</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Opens specified layers in model for training while keeping</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Opens specified layers in model for training while keeping</span>
 <span class="sd">    other layers frozen.</span>
 
 <span class="sd">    Args:</span>
@@ -366,7 +370,7 @@
 
 
 <div class="viewcode-block" id="count_num_param"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.torchtools.count_num_param">[docs]</a><span class="k">def</span> <span class="nf">count_num_param</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Counts number of parameters in a model.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Counts number of parameters in a model.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        model (nn.Module): network model.</span>
@@ -388,7 +392,7 @@
 
 
 <div class="viewcode-block" id="load_pretrained_weights"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.torchtools.load_pretrained_weights">[docs]</a><span class="k">def</span> <span class="nf">load_pretrained_weights</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">weight_path</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Loads pretrianed weights to model.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Loads pretrianed weights to model.</span>
 
 <span class="sd">    Features::</span>
 <span class="sd">        - Incompatible layers (unmatched in name or size) will be ignored.</span>

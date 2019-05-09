@@ -177,15 +177,16 @@
 
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
 
 <span class="kn">import</span> <span class="nn">torchreid</span>
-<span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">AverageMeter</span><span class="p">,</span> <span class="n">visualize_ranked_results</span><span class="p">,</span> <span class="n">save_checkpoint</span>
+<span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">AverageMeter</span><span class="p">,</span> <span class="n">visualize_ranked_results</span><span class="p">,</span> <span class="n">save_checkpoint</span><span class="p">,</span> <span class="n">re_ranking</span>
 <span class="kn">from</span> <span class="nn">torchreid.losses</span> <span class="k">import</span> <span class="n">DeepSupervision</span>
 <span class="kn">from</span> <span class="nn">torchreid</span> <span class="k">import</span> <span class="n">metrics</span>
 
 
 <div class="viewcode-block" id="Engine"><a class="viewcode-back" href="../../../pkg/engine.html#torchreid.engine.engine.Engine">[docs]</a><span class="k">class</span> <span class="nc">Engine</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A generic base Engine class for both image- and video-reid.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;A generic base Engine class for both image- and video-reid.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        datamanager (DataManager): an instance of ``torchreid.data.ImageDataManager``</span>
@@ -209,9 +210,9 @@
 
 <div class="viewcode-block" id="Engine.run"><a class="viewcode-back" href="../../../pkg/engine.html#torchreid.engine.engine.Engine.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">max_epoch</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">start_epoch</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fixbase_epoch</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">open_layers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">start_eval</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">eval_freq</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">test_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">print_freq</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-            <span class="n">dist_metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">,</span> <span class="n">visrank</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visrank_topk</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-            <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ranks</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]):</span>
-        <span class="sd">&quot;&quot;&quot;A unified pipeline for training and evaluating a model.</span>
+            <span class="n">dist_metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">,</span> <span class="n">normalize_feature</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visrank</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visrank_topk</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+            <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ranks</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span> <span class="n">rerank</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;A unified pipeline for training and evaluating a model.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            save_dir (str): directory to save model.</span>
@@ -229,6 +230,8 @@
 <span class="sd">            print_freq (int, optional): print_frequency. Default is 10.</span>
 <span class="sd">            dist_metric (str, optional): distance metric used to compute distance matrix</span>
 <span class="sd">                between query and gallery. Default is &quot;euclidean&quot;.</span>
+<span class="sd">            normalize_feature (bool, optional): performs L2 normalization on feature vectors before</span>
+<span class="sd">                computing feature distance. Default is False.</span>
 <span class="sd">            visrank (bool, optional): visualizes ranked results. Default is False. Visualization</span>
 <span class="sd">                will be performed every test time, so it is recommended to enable ``visrank`` when</span>
 <span class="sd">                ``test_only`` is True. The ranked images will be saved to</span>
@@ -237,6 +240,8 @@
 <span class="sd">            use_metric_cuhk03 (bool, optional): use single-gallery-shot setting for cuhk03.</span>
 <span class="sd">                Default is False. This should be enabled when using cuhk03 classic split.</span>
 <span class="sd">            ranks (list, optional): cmc ranks to be computed. Default is [1, 5, 10, 20].</span>
+<span class="sd">            rerank (bool, optional): uses person re-ranking (by Zhong et al. CVPR&#39;17).</span>
+<span class="sd">                Default is False. This is only enabled when test_only=True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">trainloader</span><span class="p">,</span> <span class="n">testloader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span><span class="n">return_dataloaders</span><span class="p">()</span>
 
@@ -245,11 +250,13 @@
                 <span class="mi">0</span><span class="p">,</span>
                 <span class="n">testloader</span><span class="p">,</span>
                 <span class="n">dist_metric</span><span class="o">=</span><span class="n">dist_metric</span><span class="p">,</span>
+                <span class="n">normalize_feature</span><span class="o">=</span><span class="n">normalize_feature</span><span class="p">,</span>
                 <span class="n">visrank</span><span class="o">=</span><span class="n">visrank</span><span class="p">,</span>
                 <span class="n">visrank_topk</span><span class="o">=</span><span class="n">visrank_topk</span><span class="p">,</span>
                 <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,</span>
                 <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="n">use_metric_cuhk03</span><span class="p">,</span>
-                <span class="n">ranks</span><span class="o">=</span><span class="n">ranks</span>
+                <span class="n">ranks</span><span class="o">=</span><span class="n">ranks</span><span class="p">,</span>
+                <span class="n">rerank</span><span class="o">=</span><span class="n">rerank</span>
             <span class="p">)</span>
             <span class="k">return</span>
 
@@ -271,6 +278,7 @@
                     <span class="n">epoch</span><span class="p">,</span>
                     <span class="n">testloader</span><span class="p">,</span>
                     <span class="n">dist_metric</span><span class="o">=</span><span class="n">dist_metric</span><span class="p">,</span>
+                    <span class="n">normalize_feature</span><span class="o">=</span><span class="n">normalize_feature</span><span class="p">,</span>
                     <span class="n">visrank</span><span class="o">=</span><span class="n">visrank</span><span class="p">,</span>
                     <span class="n">visrank_topk</span><span class="o">=</span><span class="n">visrank_topk</span><span class="p">,</span>
                     <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,</span>
@@ -285,6 +293,7 @@
                 <span class="n">epoch</span><span class="p">,</span>
                 <span class="n">testloader</span><span class="p">,</span>
                 <span class="n">dist_metric</span><span class="o">=</span><span class="n">dist_metric</span><span class="p">,</span>
+                <span class="n">normalize_feature</span><span class="o">=</span><span class="n">normalize_feature</span><span class="p">,</span>
                 <span class="n">visrank</span><span class="o">=</span><span class="n">visrank</span><span class="p">,</span>
                 <span class="n">visrank_topk</span><span class="o">=</span><span class="n">visrank_topk</span><span class="p">,</span>
                 <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,</span>
@@ -298,7 +307,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Elapsed </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">elapsed</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Engine.train"><a class="viewcode-back" href="../../../pkg/engine.html#torchreid.engine.engine.Engine.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Performs training on source datasets for one epoch.</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Performs training on source datasets for one epoch.</span>
 
 <span class="sd">        This will be called every epoch in ``run()``, e.g.</span>
 
@@ -313,9 +322,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-<div class="viewcode-block" id="Engine.test"><a class="viewcode-back" href="../../../pkg/engine.html#torchreid.engine.engine.Engine.test">[docs]</a>    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">testloader</span><span class="p">,</span> <span class="n">dist_metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">,</span> <span class="n">visrank</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visrank_topk</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-             <span class="n">save_dir</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ranks</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]):</span>
-        <span class="sd">&quot;&quot;&quot;Tests model on target datasets.</span>
+<div class="viewcode-block" id="Engine.test"><a class="viewcode-back" href="../../../pkg/engine.html#torchreid.engine.engine.Engine.test">[docs]</a>    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">testloader</span><span class="p">,</span> <span class="n">dist_metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">,</span> <span class="n">normalize_feature</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+             <span class="n">visrank</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visrank_topk</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+             <span class="n">ranks</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span> <span class="n">rerank</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Tests model on target datasets.</span>
 
 <span class="sd">        .. note::</span>
 
@@ -334,6 +344,8 @@
 <span class="sd">                {dataset_name: &#39;query&#39;: queryloader, &#39;gallery&#39;: galleryloader}.</span>
 <span class="sd">            dist_metric (str, optional): distance metric used to compute distance matrix</span>
 <span class="sd">                between query and gallery. Default is &quot;euclidean&quot;.</span>
+<span class="sd">            normalize_feature (bool, optional): performs L2 normalization on feature vectors before</span>
+<span class="sd">                computing feature distance. Default is False.</span>
 <span class="sd">            visrank (bool, optional): visualizes ranked results. Default is False. Visualization</span>
 <span class="sd">                will be performed every test time, so it is recommended to enable ``visrank`` when</span>
 <span class="sd">                ``test_only`` is True. The ranked images will be saved to</span>
@@ -343,6 +355,8 @@
 <span class="sd">            use_metric_cuhk03 (bool, optional): use single-gallery-shot setting for cuhk03.</span>
 <span class="sd">                Default is False. This should be enabled when using cuhk03 classic split.</span>
 <span class="sd">            ranks (list, optional): cmc ranks to be computed. Default is [1, 5, 10, 20].</span>
+<span class="sd">            rerank (bool, optional): uses person re-ranking (by Zhong et al. CVPR&#39;17).</span>
+<span class="sd">                Default is False.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">targets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">testloader</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         
@@ -357,25 +371,28 @@
                 <span class="n">queryloader</span><span class="o">=</span><span class="n">queryloader</span><span class="p">,</span>
                 <span class="n">galleryloader</span><span class="o">=</span><span class="n">galleryloader</span><span class="p">,</span>
                 <span class="n">dist_metric</span><span class="o">=</span><span class="n">dist_metric</span><span class="p">,</span>
+                <span class="n">normalize_feature</span><span class="o">=</span><span class="n">normalize_feature</span><span class="p">,</span>
                 <span class="n">visrank</span><span class="o">=</span><span class="n">visrank</span><span class="p">,</span>
                 <span class="n">visrank_topk</span><span class="o">=</span><span class="n">visrank_topk</span><span class="p">,</span>
                 <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,</span>
                 <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="n">use_metric_cuhk03</span><span class="p">,</span>
-                <span class="n">ranks</span><span class="o">=</span><span class="n">ranks</span>
+                <span class="n">ranks</span><span class="o">=</span><span class="n">ranks</span><span class="p">,</span>
+                <span class="n">rerank</span><span class="o">=</span><span class="n">rerank</span>
             <span class="p">)</span>
         
         <span class="k">return</span> <span class="n">rank1</span></div>
 
     <span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">dataset_name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">queryloader</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">galleryloader</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                  <span class="n">dist_metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">,</span> <span class="n">visrank</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visrank_topk</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
-                  <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ranks</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]):</span>
+                  <span class="n">dist_metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">,</span> <span class="n">normalize_feature</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visrank</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                  <span class="n">visrank_topk</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ranks</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span>
+                  <span class="n">rerank</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="n">batch_time</span> <span class="o">=</span> <span class="n">AverageMeter</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Extracting features from query set ...&#39;</span><span class="p">)</span>
-        <span class="n">qf</span><span class="p">,</span> <span class="n">q_pids</span><span class="p">,</span> <span class="n">q_camids</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="n">qf</span><span class="p">,</span> <span class="n">q_pids</span><span class="p">,</span> <span class="n">q_camids</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span> <span class="c1"># query features, query person IDs and query camera IDs</span>
         <span class="k">for</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">queryloader</span><span class="p">):</span>
             <span class="n">imgs</span><span class="p">,</span> <span class="n">pids</span><span class="p">,</span> <span class="n">camids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_data_for_eval</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">:</span>
@@ -393,7 +410,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Done, obtained </span><span class="si">{}</span><span class="s1">-by-</span><span class="si">{}</span><span class="s1"> matrix&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">qf</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">qf</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Extracting features from gallery set ...&#39;</span><span class="p">)</span>
-        <span class="n">gf</span><span class="p">,</span> <span class="n">g_pids</span><span class="p">,</span> <span class="n">g_camids</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="n">gf</span><span class="p">,</span> <span class="n">g_pids</span><span class="p">,</span> <span class="n">g_camids</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span> <span class="c1"># gallery features, gallery person IDs and gallery camera IDs</span>
         <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">galleryloader</span><span class="p">):</span>
             <span class="n">imgs</span><span class="p">,</span> <span class="n">pids</span><span class="p">,</span> <span class="n">camids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_data_for_eval</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -413,8 +430,20 @@
 
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Speed: </span><span class="si">{:.4f}</span><span class="s1"> sec/batch&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">batch_time</span><span class="o">.</span><span class="n">avg</span><span class="p">))</span>
 
+        <span class="k">if</span> <span class="n">normalize_feature</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Normalzing features with L2 norm ...&#39;</span><span class="p">)</span>
+            <span class="n">qf</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">qf</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">gf</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">gf</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Computing distance matrix with metric=</span><span class="si">{}</span><span class="s1"> ...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dist_metric</span><span class="p">))</span>
         <span class="n">distmat</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">compute_distance_matrix</span><span class="p">(</span><span class="n">qf</span><span class="p">,</span> <span class="n">gf</span><span class="p">,</span> <span class="n">dist_metric</span><span class="p">)</span>
         <span class="n">distmat</span> <span class="o">=</span> <span class="n">distmat</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">rerank</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Applying person re-ranking ...&#39;</span><span class="p">)</span>
+            <span class="n">distmat_qq</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">compute_distance_matrix</span><span class="p">(</span><span class="n">qf</span><span class="p">,</span> <span class="n">qf</span><span class="p">,</span> <span class="n">dist_metric</span><span class="p">)</span>
+            <span class="n">distmat_gg</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">compute_distance_matrix</span><span class="p">(</span><span class="n">gf</span><span class="p">,</span> <span class="n">gf</span><span class="p">,</span> <span class="n">dist_metric</span><span class="p">)</span>
+            <span class="n">distmat</span> <span class="o">=</span> <span class="n">re_ranking</span><span class="p">(</span><span class="n">distmat</span><span class="p">,</span> <span class="n">distmat_qq</span><span class="p">,</span> <span class="n">distmat_gg</span><span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Computing CMC and mAP ...&#39;</span><span class="p">)</span>
         <span class="n">cmc</span><span class="p">,</span> <span class="n">mAP</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">evaluate_rank</span><span class="p">(</span>
