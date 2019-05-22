@@ -331,15 +331,16 @@ def compute_model_complexity(model, input_size, verbose=False, only_conv_linear=
             per_module_flops[layer.class_name].append(layer.flops)
 
     if verbose:
-        print('  {}'.format('-'*30))
-        print('  Model Complexity')
-        print('  {}'.format('-'*30))
+        num_udscore = 55
+        print('  {}'.format('-'*num_udscore))
+        print('  Model complexity with input size {}'.format(input_size))
+        print('  {}'.format('-'*num_udscore))
         for class_name in per_module_params:
             params = int(np.sum(per_module_params[class_name]))
             flops = int(np.sum(per_module_flops[class_name]))
             print('  {} (params={:,}, flops={:,})'.format(class_name, params, flops))
-        print('  {}'.format('-'*30))
+        print('  {}'.format('-'*num_udscore))
         print('  Total (params={:,}, flops={:,})'.format(total_params, total_flops))
-        print('  {}'.format('-'*30))
+        print('  {}'.format('-'*num_udscore))
 
     return total_params, total_flops
