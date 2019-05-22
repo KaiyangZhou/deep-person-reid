@@ -6,3 +6,4 @@ from .tools import *
 from .reidtools import *
 from .torchtools import *
 from .rerank import re_ranking
+from .model_complexity import compute_model_complexity
