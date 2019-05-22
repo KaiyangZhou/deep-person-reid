@@ -255,9 +255,12 @@ def compute_model_complexity(model, input_size, verbose=False, only_conv_linear=
     """Returns number of parameters and FLOPs.
 
     .. note::
-        Only layers that are used in the inference graph will be counted.
-        For instance, person ID classification layer is not counted because it
-        is typically discarded when doing feature extraction at test time.
+        (1) this function only provides an estimate of the theoretical time complexity
+        rather than the actual running time which depends on implementations and hardware,
+        and (2) the FLOPs is only counted for layers that are used at test time. This means
+        that redundant layers such as person ID classification layer will be ignored as it
+        is discarded when doing feature extraction. Note that the inference graph depends on
+        how you construct the computations in ``forward()``.
 
     Args:
         model (nn.Module): network model.

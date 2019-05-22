@@ -65,6 +65,8 @@ We provide a tool in ``torchreid.utils.model_complexity.py`` to automatically co
     # count flops for all layers including ReLU and BatchNorm
     utils.compute_model_complexity(model, (1, 3, 256, 128), verbose=True, only_conv_linear=False)
 
+It is worth noting that (1) this function only provides an estimate of the theoretical time complexity rather than the actual running time which depends on implementations and hardware, and (2) the FLOPs is only counted for layers that are used at test time. This means that redundant layers such as person ID classification layer will be ignored as it is discarded when doing feature extraction. Note that the inference graph depends on how you construct the computations in ``forward()``.
+
 
 Combine multiple datasets
 ---------------------------
