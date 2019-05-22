@@ -35,3 +35,7 @@ Torch Tools
 
 .. automodule:: torchreid.utils.torchtools
     :members:
+
+
+.. automodule:: torchreid.utils.model_complexity
+    :members:
