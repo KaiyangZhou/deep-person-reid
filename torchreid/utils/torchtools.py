@@ -27,7 +27,7 @@ def save_checkpoint(state, save_dir, is_best=False, remove_module_from_keys=Fals
         state (dict): dictionary.
         save_dir (str): directory to save checkpoint.
         is_best (bool, optional): if True, this checkpoint will be copied and named
-            "model-best.pth.tar". Default is False.
+            ``model-best.pth.tar``. Default is False.
         remove_module_from_keys (bool, optional): whether to remove "module."
             from layer names. Default is False.
 
@@ -71,7 +71,7 @@ def load_checkpoint(fpath):
     Returns:
         dict
 
-    Examples::
+    Examples::  
         >>> from torchreid.utils import load_checkpoint
         >>> fpath = 'log/my_model/model.pth.tar-10'
         >>> checkpoint = load_checkpoint(fpath)
@@ -203,7 +203,7 @@ def open_specified_layers(model, open_layers):
 
 
 def count_num_param(model):
-    r"""Counts number of parameters in a model.
+    r"""Counts number of parameters in a model while ignoring ``self.classifier``.
 
     Args:
         model (nn.Module): network model.
@@ -211,7 +211,14 @@ def count_num_param(model):
     Examples::
         >>> from torchreid.utils import count_num_param
         >>> model_size = count_num_param(model)
+
+    .. warning::
+        
+        This method is deprecated in favor of
+        ``torchreid.utils.compute_model_complexity``.
     """
+    warnings.warn('This method is deprecated and will be removed in the future.')
+
     num_param = sum(p.numel() for p in model.parameters())
 
     if isinstance(model, nn.DataParallel):

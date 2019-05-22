@@ -17,7 +17,7 @@ class Logger(object):
     Args:
         fpath (str): directory to save logging file.
 
-    Examples:
+    Examples::
        >>> import sys
        >>> import os
        >>> import os.path as osp
