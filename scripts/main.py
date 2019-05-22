@@ -13,7 +13,7 @@ from default_parser import (
 import torchreid
 from torchreid.utils import (
     Logger, set_random_seed, check_isfile, resume_from_checkpoint,
-    load_pretrained_weights, count_num_param
+    load_pretrained_weights, compute_model_complexity
 )
 
 
@@ -105,8 +105,7 @@ def main():
         pretrained=(not args.no_pretrained),
         use_gpu=use_gpu
     )
-    model_size = count_num_param(model)
-    print('Model size: {:,}'.format(model_size))
+    compute_model_complexity(model, (1, 3, args.height, args.width), verbose=True)
 
     if args.load_weights and check_isfile(args.load_weights):
         load_pretrained_weights(model, args.load_weights)
