@@ -105,7 +105,8 @@ def main():
         pretrained=(not args.no_pretrained),
         use_gpu=use_gpu
     )
-    compute_model_complexity(model, (1, 3, args.height, args.width), verbose=True)
+    num_params, flops = compute_model_complexity(model, (1, 3, args.height, args.width))
+    print('Model complexity: params={:,} flops={:,}'.format(num_params, flops))
 
     if args.load_weights and check_isfile(args.load_weights):
         load_pretrained_weights(model, args.load_weights)
