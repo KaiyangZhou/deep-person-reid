@@ -622,9 +622,12 @@ other layers frozen.</p>
 <dd><p>Returns number of parameters and FLOPs.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Only layers that are used in the inference graph will be counted.
-For instance, person ID classification layer is not counted because it
-is typically discarded when doing feature extraction at test time.</p>
+<p class="last">(1) this function only provides an estimate of the theoretical time complexity
+rather than the actual running time which depends on implementations and hardware,
+and (2) the FLOPs is only counted for layers that are used at test time. This means
+that redundant layers such as person ID classification layer will be ignored as it
+is discarded when doing feature extraction. Note that the inference graph depends on
+how you construct the computations in <code class="docutils literal notranslate"><span class="pre">forward()</span></code>.</p>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

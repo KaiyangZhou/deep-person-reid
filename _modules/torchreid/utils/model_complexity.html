@@ -422,9 +422,12 @@
     <span class="sd">&quot;&quot;&quot;Returns number of parameters and FLOPs.</span>
 
 <span class="sd">    .. note::</span>
-<span class="sd">        Only layers that are used in the inference graph will be counted.</span>
-<span class="sd">        For instance, person ID classification layer is not counted because it</span>
-<span class="sd">        is typically discarded when doing feature extraction at test time.</span>
+<span class="sd">        (1) this function only provides an estimate of the theoretical time complexity</span>
+<span class="sd">        rather than the actual running time which depends on implementations and hardware,</span>
+<span class="sd">        and (2) the FLOPs is only counted for layers that are used at test time. This means</span>
+<span class="sd">        that redundant layers such as person ID classification layer will be ignored as it</span>
+<span class="sd">        is discarded when doing feature extraction. Note that the inference graph depends on</span>
+<span class="sd">        how you construct the computations in ``forward()``.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        model (nn.Module): network model.</span>
