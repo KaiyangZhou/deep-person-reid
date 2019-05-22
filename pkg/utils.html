@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.utils &mdash; torchreid 0.7.5 documentation</title>
+  <title>torchreid.utils &mdash; torchreid 0.7.6 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.7.5
+                0.7.6
               </div>
             
           
@@ -211,8 +211,9 @@
 </tr>
 </tbody>
 </table>
-<p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
+<dl class="docutils">
+<dt>Examples::</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">Logger</span>
@@ -221,6 +222,8 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">log_name</span><span class="p">))</span>
 </pre></div>
 </div>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="class">
@@ -419,7 +422,7 @@ tuples of (img_path(s), pid, camid).</li>
 <li><strong>state</strong> (<em>dict</em>) – dictionary.</li>
 <li><strong>save_dir</strong> (<em>str</em>) – directory to save checkpoint.</li>
 <li><strong>is_best</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, this checkpoint will be copied and named
-“model-best.pth.tar”. Default is False.</li>
+<code class="docutils literal notranslate"><span class="pre">model-best.pth.tar</span></code>. Default is False.</li>
 <li><strong>remove_module_from_keys</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to remove “module.”
 from layer names. Default is False.</li>
 </ul>
@@ -554,7 +557,7 @@ other layers frozen.</p>
 <dl class="function">
 <dt id="torchreid.utils.torchtools.count_num_param">
 <code class="descclassname">torchreid.utils.torchtools.</code><code class="descname">count_num_param</code><span class="sig-paren">(</span><em>model</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/torchtools.html#count_num_param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.torchtools.count_num_param" title="Permalink to this definition">¶</a></dt>
-<dd><p>Counts number of parameters in a model.</p>
+<dd><p>Counts number of parameters in a model while ignoring <code class="docutils literal notranslate"><span class="pre">self.classifier</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -571,6 +574,11 @@ other layers frozen.</p>
 </div>
 </dd>
 </dl>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This method is deprecated in favor of
+<code class="docutils literal notranslate"><span class="pre">torchreid.utils.compute_model_complexity</span></code>.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -602,6 +610,44 @@ other layers frozen.</p>
 <dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">load_pretrained_weights</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">weight_path</span> <span class="o">=</span> <span class="s1">&#39;log/my_model/model-best.pth.tar&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">load_pretrained_weights</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">weight_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-torchreid.utils.model_complexity"></span><dl class="function">
+<dt id="torchreid.utils.model_complexity.compute_model_complexity">
+<code class="descclassname">torchreid.utils.model_complexity.</code><code class="descname">compute_model_complexity</code><span class="sig-paren">(</span><em>model</em>, <em>input_size</em>, <em>verbose=False</em>, <em>only_conv_linear=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/model_complexity.html#compute_model_complexity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.model_complexity.compute_model_complexity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns number of parameters and FLOPs.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Only layers that are used in the inference graph will be counted.
+For instance, person ID classification layer is not counted because it
+is typically discarded when doing feature extraction at test time.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>model</strong> (<em>nn.Module</em>) – network model.</li>
+<li><strong>input_size</strong> (<em>tuple</em>) – input size, e.g. (1, 3, 256, 128).</li>
+<li><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – shows detailed complexity of
+each module. Default is False.</li>
+<li><strong>only_conv_linear</strong> (<em>bool</em><em>, </em><em>optional</em>) – only considers convolution
+and linear layers when counting flops. Default is True.
+If set to False, flops of all layers will be counted.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Examples::</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid</span> <span class="k">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">utils</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">build_model</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;resnet50&#39;</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">num_params</span><span class="p">,</span> <span class="n">flops</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">compute_model_complexity</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd>

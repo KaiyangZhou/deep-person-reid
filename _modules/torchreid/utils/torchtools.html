@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.utils.torchtools &mdash; torchreid 0.7.5 documentation</title>
+  <title>torchreid.utils.torchtools &mdash; torchreid 0.7.6 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.7.5
+                0.7.6
               </div>
             
           
@@ -194,7 +194,7 @@
 <span class="sd">        state (dict): dictionary.</span>
 <span class="sd">        save_dir (str): directory to save checkpoint.</span>
 <span class="sd">        is_best (bool, optional): if True, this checkpoint will be copied and named</span>
-<span class="sd">            &quot;model-best.pth.tar&quot;. Default is False.</span>
+<span class="sd">            ``model-best.pth.tar``. Default is False.</span>
 <span class="sd">        remove_module_from_keys (bool, optional): whether to remove &quot;module.&quot;</span>
 <span class="sd">            from layer names. Default is False.</span>
 
@@ -238,7 +238,7 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        dict</span>
 
-<span class="sd">    Examples::</span>
+<span class="sd">    Examples::  </span>
 <span class="sd">        &gt;&gt;&gt; from torchreid.utils import load_checkpoint</span>
 <span class="sd">        &gt;&gt;&gt; fpath = &#39;log/my_model/model.pth.tar-10&#39;</span>
 <span class="sd">        &gt;&gt;&gt; checkpoint = load_checkpoint(fpath)</span>
@@ -370,7 +370,7 @@
 
 
 <div class="viewcode-block" id="count_num_param"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.torchtools.count_num_param">[docs]</a><span class="k">def</span> <span class="nf">count_num_param</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Counts number of parameters in a model.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Counts number of parameters in a model while ignoring ``self.classifier``.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        model (nn.Module): network model.</span>
@@ -378,7 +378,14 @@
 <span class="sd">    Examples::</span>
 <span class="sd">        &gt;&gt;&gt; from torchreid.utils import count_num_param</span>
 <span class="sd">        &gt;&gt;&gt; model_size = count_num_param(model)</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">        </span>
+<span class="sd">        This method is deprecated in favor of</span>
+<span class="sd">        ``torchreid.utils.compute_model_complexity``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;This method is deprecated and will be removed in the future.&#39;</span><span class="p">)</span>
+
     <span class="n">num_param</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">DataParallel</span><span class="p">):</span>

@@ -48,6 +48,24 @@ Suppose the checkpoint is saved in "log/resnet50/model.pth.tar-30", you can do
     )
 
 
+Compute model complexity
+--------------------------
+We provide a tool in ``torchreid.utils.model_complexity.py`` to automatically compute the model complexity, i.e. number of parameters and FLOPs.
+
+.. code-block:: python
+    
+    from torchreid import models, utils
+    
+    model = models.build_model(name='resnet50', num_classes=1000)
+    num_params, flops = utils.compute_model_complexity(model, (1, 3, 256, 128))
+
+    # show detailed complexity for each module
+    utils.compute_model_complexity(model, (1, 3, 256, 128), verbose=True)
+
+    # count flops for all layers including ReLU and BatchNorm
+    utils.compute_model_complexity(model, (1, 3, 256, 128), verbose=True, only_conv_linear=False)
+
+
 Combine multiple datasets
 ---------------------------
 Easy. Just give whatever datasets (keys) you want to the ``sources`` argument when instantiating a data manager. For example,
