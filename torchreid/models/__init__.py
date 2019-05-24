@@ -4,7 +4,6 @@ import torch
 
 from .resnet import *
 from .resnetmid import *
-from .resnext import *
 from .senet import *
 from .densenet import *
 from .inceptionresnetv2 import *
@@ -15,6 +14,7 @@ from .nasnet import *
 from .mobilenetv2 import *
 from .shufflenet import *
 from .squeezenet import *
+from .shufflenetv2 import *
 
 from .mudeep import *
 from .hacnn import *
@@ -29,9 +29,9 @@ __model_factory = {
     'resnet50': resnet50,
     'resnet101': resnet101,
     'resnet152': resnet152,
-    'resnet50_fc512': resnet50_fc512,
     'resnext50_32x4d': resnext50_32x4d,
-    'resnext50_32x4d_fc512': resnext50_32x4d_fc512,
+    'resnext101_32x8d': resnext101_32x8d,
+    'resnet50_fc512': resnet50_fc512,
     'se_resnet50': se_resnet50,
     'se_resnet50_fc512': se_resnet50_fc512,
     'se_resnet101': se_resnet101,
@@ -53,6 +53,10 @@ __model_factory = {
     'squeezenet1_0': squeezenet1_0,
     'squeezenet1_0_fc512': squeezenet1_0_fc512,
     'squeezenet1_1': squeezenet1_1,
+    'shufflenet_v2_x0_5': shufflenet_v2_x0_5,
+    'shufflenet_v2_x1_0': shufflenet_v2_x1_0,
+    'shufflenet_v2_x1_5': shufflenet_v2_x1_5,
+    'shufflenet_v2_x2_0': shufflenet_v2_x2_0,
     # reid-specific models
     'mudeep': MuDeep,
     'resnet50mid': resnet50mid,
