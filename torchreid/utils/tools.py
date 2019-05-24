@@ -3,7 +3,7 @@ from __future__ import print_function
 from __future__ import division
 
 __all__ = ['mkdir_if_missing', 'check_isfile', 'read_json', 'write_json',
-           'set_random_seed', 'download_url', 'read_image']
+           'set_random_seed', 'download_url', 'read_image', 'collect_env_info']
 
 import sys
 import os
@@ -15,6 +15,7 @@ from collections import OrderedDict
 import warnings
 import random
 import numpy as np
+import PIL
 from PIL import Image
 
 import torch
@@ -114,3 +115,14 @@ def read_image(path):
             print('IOError incurred when reading "{}". Will redo. Don\'t worry. Just chill.'.format(img_path))
             pass
     return img
+
+
+def collect_env_info():
+    """Returns env info as a string.
+
+    Code source: github.com/facebookresearch/maskrcnn-benchmark
+    """
+    from torch.utils.collect_env import get_pretty_env_info
+    env_str = get_pretty_env_info()
+    env_str += '\n        Pillow ({})'.format(PIL.__version__)
+    return env_str

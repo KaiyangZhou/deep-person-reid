@@ -2,6 +2,7 @@ import sys
 import os
 import os.path as osp
 import warnings
+import time
 
 import torch
 import torch.nn as nn
@@ -13,7 +14,7 @@ from default_parser import (
 import torchreid
 from torchreid.utils import (
     Logger, set_random_seed, check_isfile, resume_from_checkpoint,
-    load_pretrained_weights, compute_model_complexity
+    load_pretrained_weights, compute_model_complexity, collect_env_info
 )
 
 
@@ -85,12 +86,14 @@ def main():
     set_random_seed(args.seed)
     if not args.use_avai_gpus:
         os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_devices
-    use_gpu = (torch.cuda.is_available() and not args.use_cpu)
+    use_gpu = torch.cuda.is_available() and not args.use_cpu
     log_name = 'test.log' if args.evaluate else 'train.log'
+    log_name += time.strftime('-%Y-%m-%d-%H-%M-%S')
     sys.stdout = Logger(osp.join(args.save_dir, log_name))
     print('==========\nArgs:{}\n=========='.format(args))
+    print('Collecting env info ...')
+    print('** System info **\n{}\n'.format(collect_env_info()))
     if use_gpu:
-        print('Currently using GPU {}'.format(args.gpu_devices))
         torch.backends.cudnn.benchmark = True
     else:
         warnings.warn('Currently using CPU, however, GPU is highly recommended')
