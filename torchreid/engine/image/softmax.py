@@ -15,7 +15,7 @@ from torchreid import metrics
 
 
 class ImageSoftmaxEngine(engine.Engine):
-    """Softmax-loss engine for image-reid.
+    r"""Softmax-loss engine for image-reid.
 
     Args:
         datamanager (DataManager): an instance of ``torchreid.data.ImageDataManager``
@@ -72,24 +72,15 @@ class ImageSoftmaxEngine(engine.Engine):
             label_smooth=label_smooth
         )
 
-    def train(self, epoch, trainloader, fixbase=False, open_layers=None, print_freq=10):
-        """Trains the model for one epoch on source datasets using softmax loss.
-
-        Args:
-            epoch (int): current epoch.
-            trainloader (Dataloader): training dataloader.
-            fixbase (bool, optional): whether to fix base layers. Default is False.
-            open_layers (str or list, optional): layers open for training.
-            print_freq (int, optional): print frequency. Default is 10.
-        """
+    def train(self, epoch, max_epoch, trainloader, fixbase_epoch=0, open_layers=None, print_freq=10):
         losses = AverageMeter()
         accs = AverageMeter()
         batch_time = AverageMeter()
         data_time = AverageMeter()
 
         self.model.train()
-
-        if fixbase and (open_layers is not None):
+        if (epoch+1)<=fixbase_epoch and open_layers is not None:
+            print('* Only train {} (epoch: {}/{})'.format(open_layers, epoch+1, fixbase_epoch))
             open_specified_layers(self.model, open_layers)
         else:
             open_all_layers(self.model)
@@ -115,18 +106,28 @@ class ImageSoftmaxEngine(engine.Engine):
             accs.update(metrics.accuracy(outputs, pids)[0].item())
 
             if (batch_idx+1) % print_freq == 0:
-                print('Epoch: [{0}][{1}/{2}]\t'
+                # estimate remaining time
+                num_batches = len(trainloader)
+                eta_seconds = batch_time.avg * (num_batches-(batch_idx+1) + (max_epoch-(epoch+1))*num_batches)
+                eta_str = str(datetime.timedelta(seconds=int(eta_seconds)))
+                print('Epoch: [{0}/{1}][{2}/{3}]\t'
                       'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                       'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
                       'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
-                      'Acc {acc.val:.2f} ({acc.avg:.2f})\t'.format(
-                      epoch + 1, batch_idx + 1, len(trainloader),
+                      'Acc {acc.val:.2f} ({acc.avg:.2f})\t'
+                      'Lr {lr:.6f}\t'
+                      'Eta {eta}'.format(
+                      epoch+1, max_epoch, batch_idx+1, len(trainloader),
                       batch_time=batch_time,
                       data_time=data_time,
                       loss=losses,
-                      acc=accs))
+                      acc=accs,
+                      lr=self.optimizer.param_groups[0]['lr'],
+                      eta=eta_str
+                    )
+                )
             
             end = time.time()
 
-        if (self.scheduler is not None) and (not fixbase):
+        if self.scheduler is not None:
             self.scheduler.step()

@@ -52,7 +52,7 @@ class Engine(object):
             max_epoch (int): maximum epoch.
             start_epoch (int, optional): starting epoch. Default is 0.
             fixbase_epoch (int, optional): number of epochs to train ``open_layers`` (new layers)
-                while keeping base layers frozen. Default is 0. ``fixbase_epoch`` is not counted
+                while keeping base layers frozen. Default is 0. ``fixbase_epoch`` is counted
                 in ``max_epoch``.
             open_layers (str or list, optional): layers (attribute names) open for training.
             start_eval (int, optional): from which epoch to start evaluation. Default is 0.
@@ -96,15 +96,8 @@ class Engine(object):
         time_start = time.time()
         print('=> Start training')
 
-        if fixbase_epoch>0 and (open_layers is not None):
-            print('Pretrain open layers ({}) for {} epochs'.format(open_layers, fixbase_epoch))
-            for epoch in range(fixbase_epoch):
-                self.train(epoch, trainloader, fixbase=True, open_layers=open_layers,
-                           print_freq=print_freq)
-            print('Done. From now on all layers are open to train for {} epochs'.format(max_epoch))
-
         for epoch in range(start_epoch, max_epoch):
-            self.train(epoch, trainloader, print_freq=print_freq)
+            self.train(epoch, max_epoch, trainloader, fixbase_epoch, open_layers, print_freq)
             
             if (epoch+1)>start_eval and eval_freq>0 and (epoch+1)%eval_freq==0 and (epoch+1)!=max_epoch:
                 rank1 = self.test(
@@ -195,7 +188,7 @@ class Engine(object):
         
         for name in targets:
             domain = 'source' if name in self.datamanager.sources else 'target'
-            print('\n##### Evaluating {} ({}) #####'.format(name, domain))
+            print('##### Evaluating {} ({}) #####'.format(name, domain))
             queryloader = testloader[name]['query']
             galleryloader = testloader[name]['gallery']
             rank1 = self._evaluate(
