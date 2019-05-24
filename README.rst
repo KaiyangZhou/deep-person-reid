@@ -20,6 +20,8 @@ It features:
 
 Documentation: https://kaiyangzhou.github.io/deep-person-reid/.
 
+Code: https://github.com/KaiyangZhou/deep-person-reid.
+
 
 News
 ------
