@@ -91,6 +91,12 @@ class ShuffleNetV2(nn.Module):
     
     Reference:
         Ma et al. ShuffleNet V2: Practical Guidelines for Efficient CNN Architecture Design. ECCV 2018.
+
+    Public keys:
+        - ``shufflenet_v2_x0_5``: ShuffleNetV2 x0.5.
+        - ``shufflenet_v2_x1_0``: ShuffleNetV2 x1.0.
+        - ``shufflenet_v2_x1_5``: ShuffleNetV2 x1.5.
+        - ``shufflenet_v2_x2_0``: ShuffleNetV2 x2.0.
     """
 
     def __init__(self, num_classes, loss, stages_repeats, stages_out_channels, **kwargs):
