@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.engine.engine &mdash; torchreid 0.7.6 documentation</title>
+  <title>torchreid.engine.engine &mdash; torchreid 0.7.7 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.7.6
+                0.7.7
               </div>
             
           
@@ -219,7 +219,7 @@
 <span class="sd">            max_epoch (int): maximum epoch.</span>
 <span class="sd">            start_epoch (int, optional): starting epoch. Default is 0.</span>
 <span class="sd">            fixbase_epoch (int, optional): number of epochs to train ``open_layers`` (new layers)</span>
-<span class="sd">                while keeping base layers frozen. Default is 0. ``fixbase_epoch`` is not counted</span>
+<span class="sd">                while keeping base layers frozen. Default is 0. ``fixbase_epoch`` is counted</span>
 <span class="sd">                in ``max_epoch``.</span>
 <span class="sd">            open_layers (str or list, optional): layers (attribute names) open for training.</span>
 <span class="sd">            start_eval (int, optional): from which epoch to start evaluation. Default is 0.</span>
@@ -263,15 +263,8 @@
         <span class="n">time_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&gt; Start training&#39;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">fixbase_epoch</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">open_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Pretrain open layers (</span><span class="si">{}</span><span class="s1">) for </span><span class="si">{}</span><span class="s1"> epochs&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">open_layers</span><span class="p">,</span> <span class="n">fixbase_epoch</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fixbase_epoch</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">trainloader</span><span class="p">,</span> <span class="n">fixbase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">open_layers</span><span class="o">=</span><span class="n">open_layers</span><span class="p">,</span>
-                           <span class="n">print_freq</span><span class="o">=</span><span class="n">print_freq</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Done. From now on all layers are open to train for </span><span class="si">{}</span><span class="s1"> epochs&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">max_epoch</span><span class="p">))</span>
-
         <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_epoch</span><span class="p">,</span> <span class="n">max_epoch</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">trainloader</span><span class="p">,</span> <span class="n">print_freq</span><span class="o">=</span><span class="n">print_freq</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">max_epoch</span><span class="p">,</span> <span class="n">trainloader</span><span class="p">,</span> <span class="n">fixbase_epoch</span><span class="p">,</span> <span class="n">open_layers</span><span class="p">,</span> <span class="n">print_freq</span><span class="p">)</span>
             
             <span class="k">if</span> <span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span><span class="n">start_eval</span> <span class="ow">and</span> <span class="n">eval_freq</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">eval_freq</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">!=</span><span class="n">max_epoch</span><span class="p">:</span>
                 <span class="n">rank1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="p">(</span>
@@ -362,7 +355,7 @@
         
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
             <span class="n">domain</span> <span class="o">=</span> <span class="s1">&#39;source&#39;</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span><span class="n">sources</span> <span class="k">else</span> <span class="s1">&#39;target&#39;</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">##### Evaluating </span><span class="si">{}</span><span class="s1"> (</span><span class="si">{}</span><span class="s1">) #####&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">domain</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;##### Evaluating </span><span class="si">{}</span><span class="s1"> (</span><span class="si">{}</span><span class="s1">) #####&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">domain</span><span class="p">))</span>
             <span class="n">queryloader</span> <span class="o">=</span> <span class="n">testloader</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;query&#39;</span><span class="p">]</span>
             <span class="n">galleryloader</span> <span class="o">=</span> <span class="n">testloader</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;gallery&#39;</span><span class="p">]</span>
             <span class="n">rank1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate</span><span class="p">(</span>

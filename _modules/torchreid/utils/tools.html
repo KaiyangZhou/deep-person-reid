@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.utils.tools &mdash; torchreid 0.7.6 documentation</title>
+  <title>torchreid.utils.tools &mdash; torchreid 0.7.7 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.7.6
+                0.7.7
               </div>
             
           
@@ -170,7 +170,7 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mkdir_if_missing&#39;</span><span class="p">,</span> <span class="s1">&#39;check_isfile&#39;</span><span class="p">,</span> <span class="s1">&#39;read_json&#39;</span><span class="p">,</span> <span class="s1">&#39;write_json&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;set_random_seed&#39;</span><span class="p">,</span> <span class="s1">&#39;download_url&#39;</span><span class="p">,</span> <span class="s1">&#39;read_image&#39;</span><span class="p">]</span>
+           <span class="s1">&#39;set_random_seed&#39;</span><span class="p">,</span> <span class="s1">&#39;download_url&#39;</span><span class="p">,</span> <span class="s1">&#39;read_image&#39;</span><span class="p">,</span> <span class="s1">&#39;collect_env_info&#39;</span><span class="p">]</span>
 
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -182,6 +182,7 @@
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">PIL</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="k">import</span> <span class="n">Image</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
@@ -281,6 +282,17 @@
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;IOError incurred when reading &quot;</span><span class="si">{}</span><span class="s1">&quot;. Will redo. Don</span><span class="se">\&#39;</span><span class="s1">t worry. Just chill.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">img_path</span><span class="p">))</span>
             <span class="k">pass</span>
     <span class="k">return</span> <span class="n">img</span></div>
+
+
+<div class="viewcode-block" id="collect_env_info"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.tools.collect_env_info">[docs]</a><span class="k">def</span> <span class="nf">collect_env_info</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Returns env info as a string.</span>
+
+<span class="sd">    Code source: github.com/facebookresearch/maskrcnn-benchmark</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">torch.utils.collect_env</span> <span class="k">import</span> <span class="n">get_pretty_env_info</span>
+    <span class="n">env_str</span> <span class="o">=</span> <span class="n">get_pretty_env_info</span><span class="p">()</span>
+    <span class="n">env_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">        Pillow (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PIL</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">env_str</span></div>
 </pre></div>
 
            </div>

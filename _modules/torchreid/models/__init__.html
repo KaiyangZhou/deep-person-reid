@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.models.__init__ &mdash; torchreid 0.7.6 documentation</title>
+  <title>torchreid.models.__init__ &mdash; torchreid 0.7.7 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.7.6
+                0.7.7
               </div>
             
           
@@ -171,7 +171,6 @@
 
 <span class="kn">from</span> <span class="nn">.resnet</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.resnetmid</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">.resnext</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.senet</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.densenet</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.inceptionresnetv2</span> <span class="k">import</span> <span class="o">*</span>
@@ -182,6 +181,7 @@
 <span class="kn">from</span> <span class="nn">.mobilenetv2</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.shufflenet</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.squeezenet</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.shufflenetv2</span> <span class="k">import</span> <span class="o">*</span>
 
 <span class="kn">from</span> <span class="nn">.mudeep</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.hacnn</span> <span class="k">import</span> <span class="o">*</span>
@@ -196,9 +196,9 @@
     <span class="s1">&#39;resnet50&#39;</span><span class="p">:</span> <span class="n">resnet50</span><span class="p">,</span>
     <span class="s1">&#39;resnet101&#39;</span><span class="p">:</span> <span class="n">resnet101</span><span class="p">,</span>
     <span class="s1">&#39;resnet152&#39;</span><span class="p">:</span> <span class="n">resnet152</span><span class="p">,</span>
-    <span class="s1">&#39;resnet50_fc512&#39;</span><span class="p">:</span> <span class="n">resnet50_fc512</span><span class="p">,</span>
     <span class="s1">&#39;resnext50_32x4d&#39;</span><span class="p">:</span> <span class="n">resnext50_32x4d</span><span class="p">,</span>
-    <span class="s1">&#39;resnext50_32x4d_fc512&#39;</span><span class="p">:</span> <span class="n">resnext50_32x4d_fc512</span><span class="p">,</span>
+    <span class="s1">&#39;resnext101_32x8d&#39;</span><span class="p">:</span> <span class="n">resnext101_32x8d</span><span class="p">,</span>
+    <span class="s1">&#39;resnet50_fc512&#39;</span><span class="p">:</span> <span class="n">resnet50_fc512</span><span class="p">,</span>
     <span class="s1">&#39;se_resnet50&#39;</span><span class="p">:</span> <span class="n">se_resnet50</span><span class="p">,</span>
     <span class="s1">&#39;se_resnet50_fc512&#39;</span><span class="p">:</span> <span class="n">se_resnet50_fc512</span><span class="p">,</span>
     <span class="s1">&#39;se_resnet101&#39;</span><span class="p">:</span> <span class="n">se_resnet101</span><span class="p">,</span>
@@ -220,6 +220,10 @@
     <span class="s1">&#39;squeezenet1_0&#39;</span><span class="p">:</span> <span class="n">squeezenet1_0</span><span class="p">,</span>
     <span class="s1">&#39;squeezenet1_0_fc512&#39;</span><span class="p">:</span> <span class="n">squeezenet1_0_fc512</span><span class="p">,</span>
     <span class="s1">&#39;squeezenet1_1&#39;</span><span class="p">:</span> <span class="n">squeezenet1_1</span><span class="p">,</span>
+    <span class="s1">&#39;shufflenet_v2_x0_5&#39;</span><span class="p">:</span> <span class="n">shufflenet_v2_x0_5</span><span class="p">,</span>
+    <span class="s1">&#39;shufflenet_v2_x1_0&#39;</span><span class="p">:</span> <span class="n">shufflenet_v2_x1_0</span><span class="p">,</span>
+    <span class="s1">&#39;shufflenet_v2_x1_5&#39;</span><span class="p">:</span> <span class="n">shufflenet_v2_x1_5</span><span class="p">,</span>
+    <span class="s1">&#39;shufflenet_v2_x2_0&#39;</span><span class="p">:</span> <span class="n">shufflenet_v2_x2_0</span><span class="p">,</span>
     <span class="c1"># reid-specific models</span>
     <span class="s1">&#39;mudeep&#39;</span><span class="p">:</span> <span class="n">MuDeep</span><span class="p">,</span>
     <span class="s1">&#39;resnet50mid&#39;</span><span class="p">:</span> <span class="n">resnet50mid</span><span class="p">,</span>

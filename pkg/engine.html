@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.engine &mdash; torchreid 0.7.6 documentation</title>
+  <title>torchreid.engine &mdash; torchreid 0.7.7 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.7.6
+                0.7.7
               </div>
             
           
@@ -210,7 +210,7 @@ or <code class="docutils literal notranslate"><span class="pre">torchreid.data.V
 <li><strong>max_epoch</strong> (<em>int</em>) – maximum epoch.</li>
 <li><strong>start_epoch</strong> (<em>int</em><em>, </em><em>optional</em>) – starting epoch. Default is 0.</li>
 <li><strong>fixbase_epoch</strong> (<em>int</em><em>, </em><em>optional</em>) – number of epochs to train <code class="docutils literal notranslate"><span class="pre">open_layers</span></code> (new layers)
-while keeping base layers frozen. Default is 0. <code class="docutils literal notranslate"><span class="pre">fixbase_epoch</span></code> is not counted
+while keeping base layers frozen. Default is 0. <code class="docutils literal notranslate"><span class="pre">fixbase_epoch</span></code> is counted
 in <code class="docutils literal notranslate"><span class="pre">max_epoch</span></code>.</li>
 <li><strong>open_layers</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – layers (attribute names) open for training.</li>
 <li><strong>start_eval</strong> (<em>int</em><em>, </em><em>optional</em>) – from which epoch to start evaluation. Default is 0.</li>
@@ -363,23 +363,17 @@ or <code class="docutils literal notranslate"><span class="pre">torchreid.data.V
 </div>
 <dl class="method">
 <dt id="torchreid.engine.image.softmax.ImageSoftmaxEngine.train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>epoch</em>, <em>trainloader</em>, <em>fixbase=False</em>, <em>open_layers=None</em>, <em>print_freq=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/image/softmax.html#ImageSoftmaxEngine.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.image.softmax.ImageSoftmaxEngine.train" title="Permalink to this definition">¶</a></dt>
-<dd><p>Trains the model for one epoch on source datasets using softmax loss.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>epoch</strong> (<em>int</em>) – current epoch.</li>
-<li><strong>trainloader</strong> (<em>Dataloader</em>) – training dataloader.</li>
-<li><strong>fixbase</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to fix base layers. Default is False.</li>
-<li><strong>open_layers</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – layers open for training.</li>
-<li><strong>print_freq</strong> (<em>int</em><em>, </em><em>optional</em>) – print frequency. Default is 10.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
+<code class="descname">train</code><span class="sig-paren">(</span><em>epoch</em>, <em>max_epoch</em>, <em>trainloader</em>, <em>fixbase_epoch=0</em>, <em>open_layers=None</em>, <em>print_freq=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/image/softmax.html#ImageSoftmaxEngine.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.image.softmax.ImageSoftmaxEngine.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs training on source datasets for one epoch.</p>
+<p>This will be called every epoch in <code class="docutils literal notranslate"><span class="pre">run()</span></code>, e.g.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_epoch</span><span class="p">,</span> <span class="n">max_epoch</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">some_arguments</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This needs to be implemented in subclasses.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -448,23 +442,17 @@ or <code class="docutils literal notranslate"><span class="pre">torchreid.data.V
 </div>
 <dl class="method">
 <dt id="torchreid.engine.image.triplet.ImageTripletEngine.train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>epoch</em>, <em>trainloader</em>, <em>fixbase=False</em>, <em>open_layers=None</em>, <em>print_freq=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/image/triplet.html#ImageTripletEngine.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.image.triplet.ImageTripletEngine.train" title="Permalink to this definition">¶</a></dt>
-<dd><p>Trains the model for one epoch on source datasets using hard mining triplet loss.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>epoch</strong> (<em>int</em>) – current epoch.</li>
-<li><strong>trainloader</strong> (<em>Dataloader</em>) – training dataloader.</li>
-<li><strong>fixbase</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to fix base layers. Default is False.</li>
-<li><strong>open_layers</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – layers open for training.</li>
-<li><strong>print_freq</strong> (<em>int</em><em>, </em><em>optional</em>) – print frequency. Default is 10.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
+<code class="descname">train</code><span class="sig-paren">(</span><em>epoch</em>, <em>max_epoch</em>, <em>trainloader</em>, <em>fixbase_epoch=0</em>, <em>open_layers=None</em>, <em>print_freq=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/image/triplet.html#ImageTripletEngine.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.image.triplet.ImageTripletEngine.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs training on source datasets for one epoch.</p>
+<p>This will be called every epoch in <code class="docutils literal notranslate"><span class="pre">run()</span></code>, e.g.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_epoch</span><span class="p">,</span> <span class="n">max_epoch</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">some_arguments</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This needs to be implemented in subclasses.</p>
+</div>
 </dd></dl>
 
 </dd></dl>

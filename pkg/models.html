@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.models &mdash; torchreid 0.7.6 documentation</title>
+  <title>torchreid.models &mdash; torchreid 0.7.7 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.7.6
+                0.7.7
               </div>
             
           
@@ -231,11 +231,15 @@ Default is True.</li>
 <h2>ImageNet Classification Models<a class="headerlink" href="#imagenet-classification-models" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="torchreid.models.resnet.ResNet">
-<em class="property">class </em><code class="descclassname">torchreid.models.resnet.</code><code class="descname">ResNet</code><span class="sig-paren">(</span><em>num_classes</em>, <em>loss</em>, <em>block</em>, <em>layers</em>, <em>last_stride=2</em>, <em>fc_dims=None</em>, <em>dropout_p=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/resnet.html#ResNet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.resnet.ResNet" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">torchreid.models.resnet.</code><code class="descname">ResNet</code><span class="sig-paren">(</span><em>num_classes</em>, <em>loss</em>, <em>block</em>, <em>layers</em>, <em>zero_init_residual=False</em>, <em>groups=1</em>, <em>width_per_group=64</em>, <em>replace_stride_with_dilation=None</em>, <em>norm_layer=None</em>, <em>last_stride=2</em>, <em>fc_dims=None</em>, <em>dropout_p=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/resnet.html#ResNet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.resnet.ResNet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Residual network.</p>
 <dl class="docutils">
 <dt>Reference:</dt>
-<dd>He et al. Deep Residual Learning for Image Recognition. CVPR 2016.</dd>
+<dd><ul class="first last simple">
+<li>He et al. Deep Residual Learning for Image Recognition. CVPR 2016.</li>
+<li>Xie et al. Aggregated Residual Transformations for Deep Neural Networks. CVPR 2017.</li>
+</ul>
+</dd>
 <dt>Public keys:</dt>
 <dd><ul class="first last simple">
 <li><code class="docutils literal notranslate"><span class="pre">resnet18</span></code>: ResNet18.</li>
@@ -243,24 +247,9 @@ Default is True.</li>
 <li><code class="docutils literal notranslate"><span class="pre">resnet50</span></code>: ResNet50.</li>
 <li><code class="docutils literal notranslate"><span class="pre">resnet101</span></code>: ResNet101.</li>
 <li><code class="docutils literal notranslate"><span class="pre">resnet152</span></code>: ResNet152.</li>
+<li><code class="docutils literal notranslate"><span class="pre">resnext50_32x4d</span></code>: ResNeXt50.</li>
+<li><code class="docutils literal notranslate"><span class="pre">resnext101_32x8d</span></code>: ResNeXt101.</li>
 <li><code class="docutils literal notranslate"><span class="pre">resnet50_fc512</span></code>: ResNet50 + FC.</li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="class">
-<dt id="torchreid.models.resnext.ResNeXt">
-<em class="property">class </em><code class="descclassname">torchreid.models.resnext.</code><code class="descname">ResNeXt</code><span class="sig-paren">(</span><em>num_classes</em>, <em>loss</em>, <em>block</em>, <em>layers</em>, <em>groups=32</em>, <em>base_width=4</em>, <em>last_stride=2</em>, <em>fc_dims=None</em>, <em>dropout_p=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/resnext.html#ResNeXt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.resnext.ResNeXt" title="Permalink to this definition">¶</a></dt>
-<dd><p>ResNeXt.</p>
-<dl class="docutils">
-<dt>Reference:</dt>
-<dd>Xie et al. Aggregated Residual Transformations for Deep
-Neural Networks. CVPR 2017.</dd>
-<dt>Public keys:</dt>
-<dd><ul class="first last simple">
-<li><code class="docutils literal notranslate"><span class="pre">resnext50_32x4d</span></code>: ResNeXt50 (groups=32, width=4).</li>
-<li><code class="docutils literal notranslate"><span class="pre">resnext50_32x4d_fc512</span></code> ResNeXt50 (groups=32, width=4) + FC.</li>
 </ul>
 </dd>
 </dl>
@@ -419,6 +408,24 @@ and&lt; 0.5 MB model size. arXiv:1602.07360.</dd>
 <li><code class="docutils literal notranslate"><span class="pre">squeezenet1_0</span></code>: SqueezeNet (version=1.0).</li>
 <li><code class="docutils literal notranslate"><span class="pre">squeezenet1_1</span></code>: SqueezeNet (version=1.1).</li>
 <li><code class="docutils literal notranslate"><span class="pre">squeezenet1_0_fc512</span></code>: SqueezeNet (version=1.0) + FC.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.models.shufflenetv2.ShuffleNetV2">
+<em class="property">class </em><code class="descclassname">torchreid.models.shufflenetv2.</code><code class="descname">ShuffleNetV2</code><span class="sig-paren">(</span><em>num_classes</em>, <em>loss</em>, <em>stages_repeats</em>, <em>stages_out_channels</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/models/shufflenetv2.html#ShuffleNetV2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.models.shufflenetv2.ShuffleNetV2" title="Permalink to this definition">¶</a></dt>
+<dd><p>ShuffleNetV2.</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd>Ma et al. ShuffleNet V2: Practical Guidelines for Efficient CNN Architecture Design. ECCV 2018.</dd>
+<dt>Public keys:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">shufflenet_v2_x0_5</span></code>: ShuffleNetV2 x0.5.</li>
+<li><code class="docutils literal notranslate"><span class="pre">shufflenet_v2_x1_0</span></code>: ShuffleNetV2 x1.0.</li>
+<li><code class="docutils literal notranslate"><span class="pre">shufflenet_v2_x1_5</span></code>: ShuffleNetV2 x1.5.</li>
+<li><code class="docutils literal notranslate"><span class="pre">shufflenet_v2_x2_0</span></code>: ShuffleNetV2 x2.0.</li>
 </ul>
 </dd>
 </dl>
