@@ -14,7 +14,6 @@ ImageNet Classification Models
 -------------------------------
 
 .. autoclass:: torchreid.models.resnet.ResNet
-.. autoclass:: torchreid.models.resnext.ResNeXt
 .. autoclass:: torchreid.models.senet.SENet
 .. autoclass:: torchreid.models.densenet.DenseNet
 .. autoclass:: torchreid.models.inceptionresnetv2.InceptionResNetV2
@@ -29,6 +28,7 @@ Lightweight Models
 .. autoclass:: torchreid.models.mobilenetv2.MobileNetV2
 .. autoclass:: torchreid.models.shufflenet.ShuffleNet
 .. autoclass:: torchreid.models.squeezenet.SqueezeNet
+.. autoclass:: torchreid.models.shufflenetv2.ShuffleNetV2
 
 
 ReID-specific Models
