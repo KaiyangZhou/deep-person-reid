@@ -139,8 +139,8 @@ def init_parser():
                         help='number of instances per identity')
     parser.add_argument('--weight-t', type=float, default=1,
                         help='weight to balance hard triplet loss')
-    parser.add_argument('--weight-x', type=float, default=1,
-                        help='weight to balance cross entropy loss')
+    parser.add_argument('--weight-x', type=float, default=0,
+                        help='weight to balance cross entropy loss (default is 0)')
     
     # ************************************************************
     # Architecture
