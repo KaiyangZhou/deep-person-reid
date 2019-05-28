@@ -170,17 +170,17 @@
   <div class="section" id="model-zoo">
 <h1>Model Zoo<a class="headerlink" href="#model-zoo" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li>Results are presented in the format of <em>Rank-1 (mAP)</em>.</li>
-<li>Classification layer is ignored when computing the model size.</li>
+<li>Results are presented in the format of <em>&lt;Rank-1 (mAP)&gt;</em>.</li>
+<li>When computing FLOPs, only layers that are used at test time are considered (see <code class="docutils literal notranslate"><span class="pre">torchreid.utils.compute_model_complexity</span></code>).</li>
 <li>Unless specified otherwise, only <code class="docutils literal notranslate"><span class="pre">Random2DTranslation</span></code> and <code class="docutils literal notranslate"><span class="pre">RandomHorizontalFlip</span></code> are used for data augmentation.</li>
 <li>Asterisk (*) means the model is trained from scratch.</li>
-<li>Model weights can be downloaded by clicking the highlighted numbers.</li>
 </ul>
 <table border="1" class="docutils">
 <thead>
 <tr>
 <th align="left">Model</th>
-<th align="center"># param (M)</th>
+<th align="center"># Param (10^6)</th>
+<th align="center">GFLOPs</th>
 <th align="center">Loss</th>
 <th align="center">Input</th>
 <th align="center">market1501</th>
@@ -192,101 +192,62 @@
 <tr>
 <td align="left">resnet50</td>
 <td align="center">23.5</td>
+<td align="center">2.7</td>
 <td align="center">softmax</td>
 <td align="center">(256, 128)</td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_market_xent.zip">87.9 (70.4)</a></td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_duke_xent.zip">78.3 (58.9)</a></td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_msmt_xent.zip">63.2 (33.9)</a></td>
+<td align="center"><a href="https://mega.nz/#!FKZjVKaZ!4v_FR8pTvuHoMQIKdstJ_YCsRrtZW2hwWxc-T0JIlHE">87.9 (70.4)</a></td>
+<td align="center"><a href="https://mega.nz/#!JPZjCYhK!YVJbE_4vTc8DX19Rt_FB77YY4BaEA1P6Xb5sNJGep2M">78.3 (58.9)</a></td>
+<td align="center"><a href="https://mega.nz/#!APAxDY4Z!Iou9x8s3ATdYS2SlK2oiJbHrhvlzH7F1gE2qjM-GJGw">63.2 (33.9)</a></td>
 </tr>
 <tr>
 <td align="left">resnet50_fc512</td>
 <td align="center">24.6</td>
+<td align="center">4.1</td>
 <td align="center">softmax</td>
 <td align="center">(256, 128)</td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_fc512_market_xent.zip">90.8 (75.3)</a></td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_fc512_duke_xent.zip">81.0 (64.0)</a></td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50_fc512_msmt_xent.zip">69.6 (38.4)</a></td>
-</tr>
-<tr>
-<td align="left">densenet121_fc512</td>
-<td align="center">7.5</td>
-<td align="center">softmax</td>
-<td align="center">(256, 128)</td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_fc512_market_xent.zip">87.8 (68.0)</a></td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_fc512_duke_xent.zip">79.7 (58.8)</a></td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/densenet121_fc512_msmt_xent.zip">67.6 (35.0)</a></td>
-</tr>
-<tr>
-<td align="left">se_resnet50_fc512</td>
-<td align="center">27.1</td>
-<td align="center">softmax</td>
-<td align="center">(256, 128)</td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/se_resnet50_fc512_market_xent.zip">91.9 (75.8)</a></td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/se_resnet50_fc512_duke_xent.zip">81.5 (63.7)</a></td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/se_resnet50_fc512_msmt_xent.zip">71.1 (39.8)</a></td>
-</tr>
-<tr>
-<td align="left">shufflenet</td>
-<td align="center">0.9</td>
-<td align="center">softmax</td>
-<td align="center">(256, 128)</td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/shufflenet_market_xent.zip">84.1(64.1)</a></td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/shufflenet_duke_xent.zip">73.4(51.9)</a></td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/shufflenet_msmt_xent.zip">51.3(24.2)</a></td>
-</tr>
-<tr>
-<td align="left">squeezenet1_0_fc512</td>
-<td align="center">1.0</td>
-<td align="center">softmax</td>
-<td align="center">(256, 128)</td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/squeezenet1_0_fc512_market_xent.zip">79.3 (52.2)</a></td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/squeezenet1_0_fc512_duke_xent.zip">66.6 (42.6)</a></td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/squeezenet1_0_fc512_msmt_xent.zip">44.1 (17.1)</a></td>
-</tr>
-<tr>
-<td align="left">mobilenetv2_1dot0</td>
-<td align="center">2.2</td>
-<td align="center">softmax</td>
-<td align="center">(256, 128)</td>
-<td align="center"><a href="http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenetv2_1dot0_market.pth.tar">85.6 (67.3)</a></td>
-<td align="center"><a href="http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenetv2_1dot0_duke.pth.tar">74.2 (54.7)</a></td>
-<td align="center"><a href="http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenetv2_1dot0_msmt.pth.tar">57.4 (29.3)</a></td>
-</tr>
-<tr>
-<td align="left">mobilenetv2_1dot4</td>
-<td align="center">4.3</td>
-<td align="center">softmax</td>
-<td align="center">(256, 128)</td>
-<td align="center"><a href="http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenetv2_1dot4_market.pth.tar">87.0 (68.5)</a></td>
-<td align="center"><a href="http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenetv2_1dot4_duke.pth.tar">76.2 (55.8)</a></td>
-<td align="center"><a href="http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mobilenetv2_1dot4_msmt.pth.tar">60.1 (31.5)</a></td>
-</tr>
-<tr>
-<td align="left">resnet50mid</td>
-<td align="center">27.7</td>
-<td align="center">softmax</td>
-<td align="center">(256, 128)</td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50mid_market_xent.zip">90.2 (76.0)</a></td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50mid_duke_xent.zip">81.6 (64.0)</a></td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/resnet50mid_msmt_xent.zip">69.0 (38.0)</a></td>
+<td align="center"><a href="https://mega.nz/#!EaZjhKyS!lBvD3vAJ4DOmElZkNa7gyPM1RE661GUd2v9kK84gSZE">90.8 (75.3)</a></td>
+<td align="center"><a href="https://mega.nz/#!lXYDSKZa!lumiXkY2H5Sm8gEgTWPBdWKv3ujy4zjrffjERaXkc9I">81.0 (64.0)</a></td>
+<td align="center"><a href="https://mega.nz/#!9PQTXIpL!iI5wgieTCn0Jm-pyg9RCu0RkH43pV3ntHhr1PeqSyT4">69.6 (38.4)</a></td>
 </tr>
 <tr>
 <td align="left">mlfn</td>
 <td align="center">32.5</td>
+<td align="center">2.8</td>
 <td align="center">softmax</td>
 <td align="center">(256, 128)</td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mlfn_market_xent.zip">90.1 (74.3)</a></td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mlfn_duke_xent.zip">81.1 (63.2)</a></td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/mlfn_msmt_xent.zip">66.4 (37.2)</a></td>
+<td align="center"><a href="https://mega.nz/#!kHQ3ESLT!NoGc8eHEBZOJZM19THh3DFfRBXIPXzM-sdLmF1mvTXA">90.1 (74.3)</a></td>
+<td align="center"><a href="https://mega.nz/#!8PQXUCaI!mJO1vD9tI739hkNBj2QWUt0VPcZ-s89fSMMGPPP1msc">81.1 (63.2)</a></td>
+<td align="center"><a href="https://mega.nz/#!paIXFQCS!W3ZGkxyF1idwvQzTRDE2p0DhNDki2SBJRfp7S_Cwphk">66.4 (37.2)</a></td>
 </tr>
 <tr>
 <td align="left">hacnn<sup>*</sup></td>
-<td align="center">3.7</td>
+<td align="center">4.5</td>
+<td align="center">0.5</td>
 <td align="center">softmax</td>
 <td align="center">(160, 64)</td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/hacnn_market_xent.zip">90.9 (75.6)</a></td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/hacnn_duke_xent.zip">80.1 (63.2)</a></td>
-<td align="center"><a href="http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/image-models/hacnn_msmt_xent.zip">64.7 (37.2)</a></td>
+<td align="center"><a href="https://mega.nz/#!ULQXUQBK!S-8v_pR2xBD3ZpuY0I7Bqift-eX_V84gajHMDG6zUac">90.9 (75.6)</a></td>
+<td align="center"><a href="https://mega.nz/#!wPJTkAQR!XkKd39lsmBZMrCh3JjF6vnNafBZkouVIVdeBqQKdSzA">80.1 (63.2)</a></td>
+<td align="center"><a href="https://mega.nz/#!AXAziKjL!JtMwHz2UYy58gDMQLGakSmF3JOr72o8zmkqlQA-LIpQ">64.7 (37.2)</a></td>
+</tr>
+<tr>
+<td align="left">mobilenetv2_1dot0</td>
+<td align="center">2.2</td>
+<td align="center">0.2</td>
+<td align="center">softmax</td>
+<td align="center">(256, 128)</td>
+<td align="center"><a href="https://mega.nz/#!8KYTFAIB!3dL35WQLxSoTSClDTv0kxa81k3fh5hXmAWA4_a3qiOI">85.6 (67.3)</a></td>
+<td align="center"><a href="https://mega.nz/#!hbRXDSCL!YYgqJ6PVUf4clgtUuK2s5FRhYJdU3yTibLscwOTNnDk">74.2 (54.7)</a></td>
+<td align="center"><a href="https://mega.nz/#!5SJTmCYb!ZQ8O2MN9JF4-WDAeX04Xex1KyuBYQ_o2aoMIsTgQ748">57.4 (29.3)</a></td>
+</tr>
+<tr>
+<td align="left">mobilenetv2_1dot4</td>
+<td align="center">4.3</td>
+<td align="center">0.4</td>
+<td align="center">softmax</td>
+<td align="center">(256, 128)</td>
+<td align="center"><a href="https://mega.nz/#!4XZhEKCS!6lTuTRbHIWU5nzJzTPDGykA7sPME8_1ISGsUYFJXZWA">87.0 (68.5)</a></td>
+<td align="center"><a href="https://mega.nz/#!JbQVDIYQ!-7pnjIfpIDt1EoQOvpvuIEcTj3Qg8SE6o_3ZPGWrIcw">76.2 (55.8)</a></td>
+<td align="center"><a href="https://mega.nz/#!gOYDAQrK!sMJO7c_X4iIxoVfV_tXYdzeDJByPo5XkUjEN7Z2JTmM">60.1 (31.5)</a></td>
 </tr>
 </tbody>
 </table></div>

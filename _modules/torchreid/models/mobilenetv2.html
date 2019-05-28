@@ -178,9 +178,9 @@
 
 <span class="n">model_urls</span> <span class="o">=</span> <span class="p">{</span>
     <span class="c1"># 1.0: top-1 71.3</span>
-    <span class="s1">&#39;mobilenetv2_1dot0&#39;</span><span class="p">:</span> <span class="s1">&#39;http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/imagenet-pretrained/mobilenetv2_1.0-0f96a698.pth&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;mobilenetv2_1dot0&#39;</span><span class="p">:</span> <span class="s1">&#39;https://mega.nz/#!NKp2wAIA!1NH1pbNzY_M2hVk_hdsxNM1NUOWvvGPHhaNr-fASF6c&#39;</span><span class="p">,</span>
     <span class="c1"># 1.4: top-1 73.9</span>
-    <span class="s1">&#39;mobilenetv2_1dot4&#39;</span><span class="p">:</span> <span class="s1">&#39;http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/imagenet-pretrained/mobilenetv2_1.4-bc1cc36b.pth&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;mobilenetv2_1dot4&#39;</span><span class="p">:</span> <span class="s1">&#39;https://mega.nz/#!RGhgEIwS!xN2s2ZdyqI6vQ3EwgmRXLEW3khr9tpXg96G9SUJugGk&#39;</span><span class="p">,</span>
 <span class="p">}</span>
 
 
@@ -377,7 +377,9 @@
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">pretrained</span><span class="p">:</span>
-        <span class="n">init_pretrained_weights</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">model_urls</span><span class="p">[</span><span class="s1">&#39;mobilenetv2_1dot0&#39;</span><span class="p">])</span>
+        <span class="c1">#init_pretrained_weights(model, model_urls[&#39;mobilenetv2_1dot0&#39;])</span>
+        <span class="kn">import</span> <span class="nn">warnings</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;The imagenet pretrained weights need to be manually downloaded from </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_urls</span><span class="p">[</span><span class="s1">&#39;mobilenetv2_1dot0&#39;</span><span class="p">]))</span>
     <span class="k">return</span> <span class="n">model</span>
 
 
@@ -391,7 +393,9 @@
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">pretrained</span><span class="p">:</span>
-        <span class="n">init_pretrained_weights</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">model_urls</span><span class="p">[</span><span class="s1">&#39;mobilenetv2_1dot4&#39;</span><span class="p">])</span>
+        <span class="c1">#init_pretrained_weights(model, model_urls[&#39;mobilenetv2_1dot4&#39;])</span>
+        <span class="kn">import</span> <span class="nn">warnings</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;The imagenet pretrained weights need to be manually downloaded from </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_urls</span><span class="p">[</span><span class="s1">&#39;mobilenetv2_1dot4&#39;</span><span class="p">]))</span>
     <span class="k">return</span> <span class="n">model</span>
 </pre></div>
 
