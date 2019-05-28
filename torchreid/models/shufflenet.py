@@ -12,7 +12,7 @@ import torch.utils.model_zoo as model_zoo
 
 model_urls = {
     # training epoch = 90, top1 = 61.8
-    'imagenet': 'http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/imagenet-pretrained/shufflenet-bee1b265.pth.tar',
+    'imagenet': 'https://mega.nz/#!RDpUlQCY!tr_5xBEkelzDjveIYBBcGcovNCOrgfiJO9kiidz9fZM',
 }
 
 
@@ -161,5 +161,7 @@ def init_pretrained_weights(model, model_url):
 def shufflenet(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = ShuffleNet(num_classes, loss, **kwargs)
     if pretrained:
-        init_pretrained_weights(model, model_urls['imagenet'])
+        #init_pretrained_weights(model, model_urls['imagenet'])
+        import warnings
+        warnings.warn('The imagenet pretrained weights need to be manually downloaded from {}'.format(model_urls['imagenet']))
     return model

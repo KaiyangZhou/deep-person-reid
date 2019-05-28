@@ -12,7 +12,7 @@ import torch.utils.model_zoo as model_zoo
 
 model_urls = {
     # training epoch = 5, top1 = 51.6
-    'imagenet': 'http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/imagenet-pretrained/mlfn-9cb5a267.pth.tar',
+    'imagenet': 'https://mega.nz/#!YHxAhaxC!yu9E6zWl0x5zscSouTdbZu8gdFFytDdl-RAdD2DEfpk',
 }
 
 
@@ -209,5 +209,7 @@ def init_pretrained_weights(model, model_url):
 def mlfn(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = MLFN(num_classes, loss, **kwargs)
     if pretrained:
-        init_pretrained_weights(model, model_urls['imagenet'])
+        #init_pretrained_weights(model, model_urls['imagenet'])
+        import warnings
+        warnings.warn('The imagenet pretrained weights need to be manually downloaded from {}'.format(model_urls['imagenet']))
     return model

@@ -11,9 +11,9 @@ import torch.utils.model_zoo as model_zoo
 
 model_urls = {
     # 1.0: top-1 71.3
-    'mobilenetv2_1dot0': 'http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/imagenet-pretrained/mobilenetv2_1.0-0f96a698.pth',
+    'mobilenetv2_1dot0': 'https://mega.nz/#!NKp2wAIA!1NH1pbNzY_M2hVk_hdsxNM1NUOWvvGPHhaNr-fASF6c',
     # 1.4: top-1 73.9
-    'mobilenetv2_1dot4': 'http://eecs.qmul.ac.uk/~kz303/deep-person-reid/model-zoo/imagenet-pretrained/mobilenetv2_1.4-bc1cc36b.pth',
+    'mobilenetv2_1dot4': 'https://mega.nz/#!RGhgEIwS!xN2s2ZdyqI6vQ3EwgmRXLEW3khr9tpXg96G9SUJugGk',
 }
 
 
@@ -210,7 +210,9 @@ def mobilenetv2_1dot0(num_classes, loss, pretrained=True, **kwargs):
         **kwargs
     )
     if pretrained:
-        init_pretrained_weights(model, model_urls['mobilenetv2_1dot0'])
+        #init_pretrained_weights(model, model_urls['mobilenetv2_1dot0'])
+        import warnings
+        warnings.warn('The imagenet pretrained weights need to be manually downloaded from {}'.format(model_urls['mobilenetv2_1dot0']))
     return model
 
 
@@ -224,5 +226,7 @@ def mobilenetv2_1dot4(num_classes, loss, pretrained=True, **kwargs):
         **kwargs
     )
     if pretrained:
-        init_pretrained_weights(model, model_urls['mobilenetv2_1dot4'])
+        #init_pretrained_weights(model, model_urls['mobilenetv2_1dot4'])
+        import warnings
+        warnings.warn('The imagenet pretrained weights need to be manually downloaded from {}'.format(model_urls['mobilenetv2_1dot4']))
     return model
