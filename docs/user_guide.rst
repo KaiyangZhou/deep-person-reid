@@ -170,7 +170,7 @@ Do two-stepped transfer learning
 -------------------------------------
 To prevent the pretrained layers to be damaged by harmful gradients back-propagated from randomly initialized layers, one can adopt the *two-stepped transfer learning strategy* presented in `Deep Transfer Learning for Person Re-identification <https://arxiv.org/abs/1611.05244>`_. The basic idea is to pretrain the randomly initialized layers for few epochs while keeping the base layers frozen before training all layers end-to-end.
 
-This has been implemented in ``Engine.run()`` (see :ref:`torchreid_engine`). The arguments to enable this feature are ``fixbase_epoch`` and ``open_layers``. Intuitively, ``fixbase_epoch`` denotes the number of epochs to keep the base layers frozen; ``open_layers`` means which layers are open for training. Note that ``fixbase_epoch`` is not counted into ``max_epoch``.
+This has been implemented in ``Engine.train()`` (see :ref:`torchreid_engine`). The arguments to enable this feature are ``fixbase_epoch`` and ``open_layers``. Intuitively, ``fixbase_epoch`` denotes the number of epochs to keep the base layers frozen; ``open_layers`` means which layers are open for training.
 
 For example, say you want to pretrain the classification layer named "classifier" in ResNet50 for 5 epochs before training all layers, you can do
 
@@ -186,7 +186,9 @@ For example, say you want to pretrain the classification layer named "classifier
         open_layers='classifier'
     )
     # or open_layers=['fc', 'classifier'] if there is another fc layer that
-    # is randomly initialized
+    # is randomly initialized, like resnet50_fc512
+
+Note that ``fixbase_epoch`` is counted into ``max_epoch``. In the above example, the base network will be fixed for 5 epochs and then open for training for 55 epochs. Thus, if you want to freeze some layers throughout the training, what you can do is to set ``fixbase_epoch`` equal to ``max_epoch`` and put the layer names in ``open_layers`` which you want to train.
 
 
 Test a trained model
