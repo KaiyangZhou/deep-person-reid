@@ -9,9 +9,11 @@ import os.path as osp
 from torchreid.data.datasets import ImageDataset
 
 
-# To adapt to different versions
-# Log:
-# 22.01.2019: v1 and v2 only differ in dir names
+##### Log #####
+# 22.01.2019
+# - add v2
+# - v1 and v2 differ in dir names
+# - note that faces in v2 are blurred
 TRAIN_DIR_KEY = 'train_dir'
 TEST_DIR_KEY = 'test_dir'
 VERSION_DICT = {
