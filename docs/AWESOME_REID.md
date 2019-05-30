@@ -1,5 +1,5 @@
 # Awesome-ReID
-Here is a collection of ReID-related research with links to codes and papers. You are welcome to submit [PR](https://help.github.com/articles/creating-a-pull-request/)s if you find something missing.
+Here is a collection of ReID-related research with links to papers and code. You are welcome to submit [PR](https://help.github.com/articles/creating-a-pull-request/)s if you find something missing.
 
 ## Conferences
 - **[CVPR 2019](#cvpr-2019)**
@@ -13,6 +13,7 @@ Here is a collection of ReID-related research with links to codes and papers. Yo
 - Invariance Matters: Exemplar Memory for Domain Adaptive Person Re-identification. [[paper](https://arxiv.org/abs/1904.01990)][[code](https://github.com/zhunzhong07/ECN)]
 - Dissecting Person Re-identification from the Viewpoint of Viewpoint. [[paper](https://arxiv.org/abs/1812.02162)][[code](https://github.com/sxzrt/Dissecting-Person-Re-ID-from-the-Viewpoint-of-Viewpoint)]
 - Unsupervised Person Re-identification by Soft Multilabel Learning. [[paper](https://arxiv.org/abs/1903.06325)][[code](https://github.com/KovenYu/MAR)]
+- Patch-based Discriminative Feature Learning for Unsupervised Person Re-identification. [[paper](https://kovenyu.com/publication/2019-cvpr-pedal/)][[code](https://github.com/QizeYang/PAUL)]
 
 
 ### AAAI 2019
