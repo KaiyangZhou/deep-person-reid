@@ -308,7 +308,7 @@ class InceptionV4(nn.Module):
             Inception_C()
         )
         self.global_avgpool = nn.AdaptiveAvgPool2d(1)
-        self.last_linear = nn.Linear(1536, num_classes)
+        self.classifier = nn.Linear(1536, num_classes)
 
     def forward(self, x):
         f = self.features(x)
