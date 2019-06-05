@@ -233,6 +233,7 @@ Lightweight models
 - `NASNet <https://arxiv.org/abs/1707.07012>`_
 - `MobileNetV2 <https://arxiv.org/abs/1801.04381>`_
 - `ShuffleNet <https://arxiv.org/abs/1707.01083>`_
+- `ShuffleNetV2 <https://arxiv.org/abs/1807.11164>`_
 - `SqueezeNet <https://arxiv.org/abs/1602.07360>`_
 
 ReID-specific models
@@ -257,9 +258,9 @@ If you find this code useful to your research, please cite the following publica
 .. code-block:: bash
     
     @article{zhou2019osnet,
-    title={Omni-Scale Feature Learning for Person Re-Identification},
-    author={Kaiyang Zhou and Yongxin Yang and Andrea Cavallaro and Tao Xiang},
-    journal={arXiv preprint arXiv:1905.00953},
-    year={2019}
+      title={Omni-Scale Feature Learning for Person Re-Identification},
+      author={Zhou, Kaiyang and Yang, Yongxin and Cavallaro, Andrea and Xiang, Tao},
+      journal={arXiv preprint arXiv:1905.00953},
+      year={2019}
     }
 
