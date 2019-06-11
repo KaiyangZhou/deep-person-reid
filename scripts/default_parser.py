@@ -165,7 +165,7 @@ def init_parser():
                         help='distance metric')
     parser.add_argument('--normalize-feature', action='store_true',
                         help='normalize feature vectors before calculating distance')
-    parser.add_argument('--ranks', type=str, default=[1, 5, 10, 20], nargs='+',
+    parser.add_argument('--ranks', type=int, default=[1, 5, 10, 20], nargs='+',
                         help='cmc ranks')
     parser.add_argument('--rerank', action='store_true',
                         help='use person re-ranking (by Zhong et al. CVPR2017)')
