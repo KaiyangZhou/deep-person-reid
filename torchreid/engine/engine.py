@@ -99,7 +99,7 @@ class Engine(object):
         for epoch in range(start_epoch, max_epoch):
             self.train(epoch, max_epoch, trainloader, fixbase_epoch, open_layers, print_freq)
             
-            if (epoch+1)>start_eval and eval_freq>0 and (epoch+1)%eval_freq==0 and (epoch+1)!=max_epoch:
+            if (epoch+1)>=start_eval and eval_freq>0 and (epoch+1)%eval_freq==0 and (epoch+1)!=max_epoch:
                 rank1 = self.test(
                     epoch,
                     testloader,
