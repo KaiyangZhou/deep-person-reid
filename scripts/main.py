@@ -90,7 +90,12 @@ def main():
     log_name = 'test.log' if args.evaluate else 'train.log'
     log_name += time.strftime('-%Y-%m-%d-%H-%M-%S')
     sys.stdout = Logger(osp.join(args.save_dir, log_name))
-    print('==========\nArgs:{}\n=========='.format(args))
+    print('** Arguments **')
+    arg_keys = list(args.__dict__.keys())
+    arg_keys.sort()
+    for key in arg_keys:
+        print('{}: {}'.format(key, args.__dict__[key]))
+    print('\n')
     print('Collecting env info ...')
     print('** System info **\n{}\n'.format(collect_env_info()))
     if use_gpu:
