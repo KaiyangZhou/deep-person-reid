@@ -235,7 +235,7 @@ ReID-specific models
 - `HACNN <https://arxiv.org/abs/1802.08122>`_
 - `PCB <https://arxiv.org/abs/1711.09349>`_
 - `MLFN <https://arxiv.org/abs/1803.09132>`_
-
+- `OSNet <https://arxiv.org/abs/1905.00953>`_
 
 Losses
 ------
