@@ -15,7 +15,7 @@ class Random2DTranslation(object):
     """Randomly translates the input image with a probability.
 
     Specifically, given a predefined shape (height, width), the input is first
-    resized with a factor of 1.25, leading to (height*1.25, width*1.25), then
+    resized with a factor of 1.125, leading to (height*1.125, width*1.125), then
     a random crop is performed. Such operation is done with a probability.
 
     Args:
@@ -131,38 +131,54 @@ class ColorAugmentation(object):
         return tensor
 
 
-def build_transforms(height, width, random_erase=False, color_jitter=False,
-                     color_aug=False, norm_mean=[0.485, 0.456, 0.406],
+def build_transforms(height, width, transforms='random_flip', norm_mean=[0.485, 0.456, 0.406],
                      norm_std=[0.229, 0.224, 0.225], **kwargs):
-    """Builds train and test transform functions
+    """Builds train and test transform functions.
 
     Args:
         height (int): target image height.
         width (int): target image width.
-        random_erase (bool, optional): use random erasing. Default is False.
-        color_jitter (bool, optional): use color jittering. Default is False.
-        color_aug (bool, optional): use color augmentation. Default is False.
+        transforms (str or list of str, optional): transformations applied to model training.
+            Default is 'random_flip'.
         norm_mean (list): normalization mean values. Default is ImageNet means.
         norm_std (list): normalization standard deviation values. Default is
             ImageNet standard deviation values.
     """
+    if isinstance(transforms, str):
+        transforms = [transforms]
+
+    if not isinstance(transforms, list):
+        raise ValueError('transforms must be a list of strings, but found to be {}'.format(type(transforms)))
+
+    transforms = [t.lower() for t in transforms]
+    
     normalize = Normalize(mean=norm_mean, std=norm_std)
 
-    # build train transformations
+    print('Building train transforms ...')
     transform_tr = []
-    transform_tr += [Random2DTranslation(height, width)]
-    transform_tr += [RandomHorizontalFlip()]
-    if color_jitter:
+    if 'random_flip' in transforms:
+        print('+ random flip')
+        transform_tr += [RandomHorizontalFlip()]
+    if 'random_crop' in transforms:
+        print('+ random crop (enlarge to {}x{} and ' \
+              'crop {}x{})'.format(int(round(height*1.125)), int(round(width*1.125)), height, width))
+        transform_tr += [Random2DTranslation(height, width)]
+    if 'color_jitter' in transforms:
+        print('+ color jitter')
         transform_tr += [ColorJitter(brightness=0.2, contrast=0.15, saturation=0, hue=0)]
+    print('+ to torch tensor of range [0, 1]')
     transform_tr += [ToTensor()]
-    if color_aug:
-        transform_tr += [ColorAugmentation()]
+    print('+ normalization (mean={}, std={})'.format(norm_mean, norm_std))
     transform_tr += [normalize]
-    if random_erase:
+    if 'random_erase' in transforms:
+        print('+ random erase')
         transform_tr += [RandomErasing()]
     transform_tr = Compose(transform_tr)
 
-    # build test transformations
+    print('Building test transforms ...')
+    print('+ resize to {}x{}'.format(height, width))
+    print('+ to torch tensor of range [0, 1]')
+    print('+ normalization (mean={}, std={})'.format(norm_mean, norm_std))
     transform_te = Compose([
         Resize((height, width)),
         ToTensor(),

@@ -33,16 +33,8 @@ def init_parser():
                         help='sampler for trainloader')
     parser.add_argument('--combineall', action='store_true',
                         help='combine all data in a dataset (train+query+gallery) for training')
-    
-    # ************************************************************
-    # Data augmentation
-    # ************************************************************ 
-    parser.add_argument('--random-erase', action='store_true',
-                        help='use random erasing for data augmentation')
-    parser.add_argument('--color-jitter', action='store_true',
-                        help='randomly change the brightness, contrast and saturation')
-    parser.add_argument('--color-aug', action='store_true',
-                        help='randomly alter the intensities of RGB channels')
+    parser.add_argument('--transforms', type=str, default='random_flip', nargs='+',
+                        help='transformations applied to model training')
 
     # ************************************************************
     # Video datasets
@@ -203,9 +195,7 @@ def imagedata_kwargs(parsed_args):
         'targets': parsed_args.targets,
         'height': parsed_args.height,
         'width': parsed_args.width,
-        'random_erase': parsed_args.random_erase,
-        'color_jitter': parsed_args.color_jitter,
-        'color_aug': parsed_args.color_aug,
+        'transforms': parsed_args.transforms,
         'use_cpu': parsed_args.use_cpu,
         'split_id': parsed_args.split_id,
         'combineall': parsed_args.combineall,
@@ -227,9 +217,7 @@ def videodata_kwargs(parsed_args):
         'targets': parsed_args.targets,
         'height': parsed_args.height,
         'width': parsed_args.width,
-        'random_erase': parsed_args.random_erase,
-        'color_jitter': parsed_args.color_jitter,
-        'color_aug': parsed_args.color_aug,
+        'transforms': parsed_args.transforms,
         'use_cpu': parsed_args.use_cpu,
         'split_id': parsed_args.split_id,
         'combineall': parsed_args.combineall,

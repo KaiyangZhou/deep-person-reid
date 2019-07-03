@@ -10,7 +10,7 @@ from torchreid.data.datasets import init_image_dataset, init_video_dataset
 
 
 class DataManager(object):
-    """Base data manager.
+    r"""Base data manager.
 
     Args:
         sources (str or list): source dataset(s).
@@ -18,14 +18,13 @@ class DataManager(object):
             it equals to ``sources``.
         height (int, optional): target image height. Default is 256.
         width (int, optional): target image width. Default is 128.
-        random_erase (bool, optional): use random erasing. Default is False.
-        color_jitter (bool, optional): use color jittering. Default is False.
-        color_aug (bool, optional): use color augmentation. Default is False.
+        transforms (str or list of str, optional): transformations applied to model training.
+            Default is 'random_flip'.
         use_cpu (bool, optional): use cpu. Default is False.
     """
 
-    def __init__(self, sources=None, targets=None, height=256, width=128, random_erase=False,
-                 color_jitter=False, color_aug=False, use_cpu=False):
+    def __init__(self, sources=None, targets=None, height=256, width=128, transforms='random_flip',
+                 use_cpu=False):
         self.sources = sources
         self.targets = targets
 
@@ -42,10 +41,7 @@ class DataManager(object):
             self.targets = [self.targets]
 
         self.transform_tr, self.transform_te = build_transforms(
-            height, width,
-            random_erase=random_erase,
-            color_jitter=color_jitter,
-            color_aug=color_aug
+            height, width, transforms
         )
 
         self.use_gpu = (torch.cuda.is_available() and not use_cpu)
@@ -75,7 +71,7 @@ class DataManager(object):
 
 
 class ImageDataManager(DataManager):
-    """Image data manager.
+    r"""Image data manager.
 
     Args:
         root (str): root path to datasets.
@@ -84,9 +80,8 @@ class ImageDataManager(DataManager):
             it equals to ``sources``.
         height (int, optional): target image height. Default is 256.
         width (int, optional): target image width. Default is 128.
-        random_erase (bool, optional): use random erasing. Default is False.
-        color_jitter (bool, optional): use color jittering. Default is False.
-        color_aug (bool, optional): use color augmentation. Default is False.
+        transforms (str or list of str, optional): transformations applied to model training.
+            Default is 'random_flip'.
         use_cpu (bool, optional): use cpu. Default is False.
         split_id (int, optional): split id (*0-based*). Default is 0.
         combineall (bool, optional): combine train, query and gallery in a dataset for
@@ -114,14 +109,13 @@ class ImageDataManager(DataManager):
         )
     """
 
-    def __init__(self, root='', sources=None, targets=None, height=256, width=128, random_erase=False,
-                 color_jitter=False, color_aug=False, use_cpu=False, split_id=0, combineall=False,
+    def __init__(self, root='', sources=None, targets=None, height=256, width=128, transforms='random_flip',
+                 use_cpu=False, split_id=0, combineall=False,
                  batch_size=32, workers=4, num_instances=4, train_sampler='',
                  cuhk03_labeled=False, cuhk03_classic_split=False, market1501_500k=False):
         
         super(ImageDataManager, self).__init__(sources=sources, targets=targets, height=height, width=width,
-                                               random_erase=random_erase, color_jitter=color_jitter,
-                                               color_aug=color_aug, use_cpu=use_cpu)
+                                               transforms=transforms, use_cpu=use_cpu)
         
         print('=> Loading train (source) dataset')
         trainset = []  
@@ -223,7 +217,7 @@ class ImageDataManager(DataManager):
 
 
 class VideoDataManager(DataManager):
-    """Video data manager.
+    r"""Video data manager.
 
     Args:
         root (str): root path to datasets.
@@ -232,9 +226,8 @@ class VideoDataManager(DataManager):
             it equals to ``sources``.
         height (int, optional): target image height. Default is 256.
         width (int, optional): target image width. Default is 128.
-        random_erase (bool, optional): use random erasing. Default is False.
-        color_jitter (bool, optional): use color jittering. Default is False.
-        color_aug (bool, optional): use color augmentation. Default is False.
+        transforms (str or list of str, optional): transformations applied to model training.
+            Default is 'random_flip'.
         use_cpu (bool, optional): use cpu. Default is False.
         split_id (int, optional): split id (*0-based*). Default is 0.
         combineall (bool, optional): combine train, query and gallery in a dataset for
@@ -263,14 +256,13 @@ class VideoDataManager(DataManager):
         )
     """
 
-    def __init__(self, root='', sources=None, targets=None, height=256, width=128, random_erase=False,
-                 color_jitter=False, color_aug=False, use_cpu=False, split_id=0, combineall=False,
+    def __init__(self, root='', sources=None, targets=None, height=256, width=128, transforms='random_flip',
+                 use_cpu=False, split_id=0, combineall=False,
                  batch_size=3, workers=4, num_instances=4, train_sampler=None,
                  seq_len=15, sample_method='evenly'):
         
         super(VideoDataManager, self).__init__(sources=sources, targets=targets, height=height, width=width,
-                                               random_erase=random_erase, color_jitter=color_jitter,
-                                               color_aug=color_aug, use_cpu=use_cpu)
+                                               transforms=transforms, se_cpu=use_cpu)
 
         print('=> Loading train (source) dataset')
         trainset = []  
