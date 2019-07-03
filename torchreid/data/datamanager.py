@@ -254,6 +254,12 @@ class VideoDataManager(DataManager):
             seq_len=15,
             sample_method='evenly'
         )
+
+    .. note::
+        The current implementation only supports image-like training. Therefore, each image in a
+        sampled tracklet will undergo independent transformation functions. To achieve tracklet-aware
+        training, you need to modify the transformation functions for video reid such that each function
+        applies the same operation to all images in a tracklet to keep consistency.
     """
 
     def __init__(self, root='', sources=None, targets=None, height=256, width=128, transforms='random_flip',
