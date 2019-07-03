@@ -421,6 +421,12 @@
 <span class="sd">            seq_len=15,</span>
 <span class="sd">            sample_method=&#39;evenly&#39;</span>
 <span class="sd">        )</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">        The current implementation only supports image-like training. Therefore, each image in a</span>
+<span class="sd">        sampled tracklet will undergo independent transformation functions. To achieve tracklet-aware</span>
+<span class="sd">        training, you need to modify the transformation functions for video reid such that each function</span>
+<span class="sd">        applies the same operation to all images in a tracklet to keep consistency.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="s1">&#39;random_flip&#39;</span><span class="p">,</span>
