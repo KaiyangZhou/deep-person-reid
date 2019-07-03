@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 from __future__ import division
 
-__all__ = ['mobilenetv2_1dot0', 'mobilenetv2_1dot4']
+__all__ = ['mobilenetv2_x1_0', 'mobilenetv2_x1_4']
 
 import torch
 from torch import nn
@@ -11,9 +11,9 @@ import torch.utils.model_zoo as model_zoo
 
 model_urls = {
     # 1.0: top-1 71.3
-    'mobilenetv2_1dot0': 'https://mega.nz/#!NKp2wAIA!1NH1pbNzY_M2hVk_hdsxNM1NUOWvvGPHhaNr-fASF6c',
+    'mobilenetv2_x1_0': 'https://mega.nz/#!NKp2wAIA!1NH1pbNzY_M2hVk_hdsxNM1NUOWvvGPHhaNr-fASF6c',
     # 1.4: top-1 73.9
-    'mobilenetv2_1dot4': 'https://mega.nz/#!RGhgEIwS!xN2s2ZdyqI6vQ3EwgmRXLEW3khr9tpXg96G9SUJugGk',
+    'mobilenetv2_x1_4': 'https://mega.nz/#!RGhgEIwS!xN2s2ZdyqI6vQ3EwgmRXLEW3khr9tpXg96G9SUJugGk',
 }
 
 
@@ -72,8 +72,8 @@ class MobileNetV2(nn.Module):
         Linear Bottlenecks. CVPR 2018.
 
     Public keys:
-        - ``mobilenetv2_1dot0``: MobileNetV2 x1.0.
-        - ``mobilenetv2_1dot4``: MobileNetV2 x1.4.
+        - ``mobilenetv2_x1_0``: MobileNetV2 x1.0.
+        - ``mobilenetv2_x1_4``: MobileNetV2 x1.4.
     """
 
     def __init__(self, num_classes, width_mult=1, loss='softmax', fc_dims=None, dropout_p=None, **kwargs):
@@ -200,7 +200,7 @@ def init_pretrained_weights(model, model_url):
     model.load_state_dict(model_dict)
 
 
-def mobilenetv2_1dot0(num_classes, loss, pretrained=True, **kwargs):
+def mobilenetv2_x1_0(num_classes, loss, pretrained=True, **kwargs):
     model = MobileNetV2(
         num_classes,
         loss=loss,
@@ -210,13 +210,13 @@ def mobilenetv2_1dot0(num_classes, loss, pretrained=True, **kwargs):
         **kwargs
     )
     if pretrained:
-        #init_pretrained_weights(model, model_urls['mobilenetv2_1dot0'])
+        #init_pretrained_weights(model, model_urls['mobilenetv2_x1_0'])
         import warnings
-        warnings.warn('The imagenet pretrained weights need to be manually downloaded from {}'.format(model_urls['mobilenetv2_1dot0']))
+        warnings.warn('The imagenet pretrained weights need to be manually downloaded from {}'.format(model_urls['mobilenetv2_x1_0']))
     return model
 
 
-def mobilenetv2_1dot4(num_classes, loss, pretrained=True, **kwargs):
+def mobilenetv2_x1_4(num_classes, loss, pretrained=True, **kwargs):
     model = MobileNetV2(
         num_classes,
         loss=loss,
@@ -226,7 +226,7 @@ def mobilenetv2_1dot4(num_classes, loss, pretrained=True, **kwargs):
         **kwargs
     )
     if pretrained:
-        #init_pretrained_weights(model, model_urls['mobilenetv2_1dot4'])
+        #init_pretrained_weights(model, model_urls['mobilenetv2_x1_4'])
         import warnings
-        warnings.warn('The imagenet pretrained weights need to be manually downloaded from {}'.format(model_urls['mobilenetv2_1dot4']))
+        warnings.warn('The imagenet pretrained weights need to be manually downloaded from {}'.format(model_urls['mobilenetv2_x1_4']))
     return model

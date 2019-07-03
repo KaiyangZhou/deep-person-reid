@@ -47,8 +47,8 @@ __model_factory = {
     'xception': xception,
     # lightweight models
     'nasnsetmobile': nasnetamobile,
-    'mobilenetv2_1dot0': mobilenetv2_1dot0,
-    'mobilenetv2_1dot4': mobilenetv2_1dot4,
+    'mobilenetv2_x1_0': mobilenetv2_x1_0,
+    'mobilenetv2_x1_4': mobilenetv2_x1_4,
     'shufflenet': shufflenet,
     'squeezenet1_0': squeezenet1_0,
     'squeezenet1_0_fc512': squeezenet1_0_fc512,
