@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.data.transforms &mdash; torchreid 0.7.8 documentation</title>
+  <title>torchreid.data.transforms &mdash; torchreid 0.8.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.7.8
+                0.8.0
               </div>
             
           
@@ -182,7 +182,7 @@
     <span class="sd">&quot;&quot;&quot;Randomly translates the input image with a probability.</span>
 
 <span class="sd">    Specifically, given a predefined shape (height, width), the input is first</span>
-<span class="sd">    resized with a factor of 1.25, leading to (height*1.25, width*1.25), then</span>
+<span class="sd">    resized with a factor of 1.125, leading to (height*1.125, width*1.125), then</span>
 <span class="sd">    a random crop is performed. Such operation is done with a probability.</span>
 
 <span class="sd">    Args:</span>
@@ -298,38 +298,54 @@
         <span class="k">return</span> <span class="n">tensor</span></div>
 
 
-<div class="viewcode-block" id="build_transforms"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.transforms.build_transforms">[docs]</a><span class="k">def</span> <span class="nf">build_transforms</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">random_erase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">color_jitter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                     <span class="n">color_aug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">norm_mean</span><span class="o">=</span><span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">],</span>
+<div class="viewcode-block" id="build_transforms"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.transforms.build_transforms">[docs]</a><span class="k">def</span> <span class="nf">build_transforms</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="s1">&#39;random_flip&#39;</span><span class="p">,</span> <span class="n">norm_mean</span><span class="o">=</span><span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">],</span>
                      <span class="n">norm_std</span><span class="o">=</span><span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Builds train and test transform functions</span>
+    <span class="sd">&quot;&quot;&quot;Builds train and test transform functions.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        height (int): target image height.</span>
 <span class="sd">        width (int): target image width.</span>
-<span class="sd">        random_erase (bool, optional): use random erasing. Default is False.</span>
-<span class="sd">        color_jitter (bool, optional): use color jittering. Default is False.</span>
-<span class="sd">        color_aug (bool, optional): use color augmentation. Default is False.</span>
+<span class="sd">        transforms (str or list of str, optional): transformations applied to model training.</span>
+<span class="sd">            Default is &#39;random_flip&#39;.</span>
 <span class="sd">        norm_mean (list): normalization mean values. Default is ImageNet means.</span>
 <span class="sd">        norm_std (list): normalization standard deviation values. Default is</span>
 <span class="sd">            ImageNet standard deviation values.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transforms</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">transforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">transforms</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transforms</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;transforms must be a list of strings, but found to be </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">transforms</span><span class="p">)))</span>
+
+    <span class="n">transforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">]</span>
+    
     <span class="n">normalize</span> <span class="o">=</span> <span class="n">Normalize</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="n">norm_mean</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="n">norm_std</span><span class="p">)</span>
 
-    <span class="c1"># build train transformations</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Building train transforms ...&#39;</span><span class="p">)</span>
     <span class="n">transform_tr</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Random2DTranslation</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)]</span>
-    <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">RandomHorizontalFlip</span><span class="p">()]</span>
-    <span class="k">if</span> <span class="n">color_jitter</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s1">&#39;random_flip&#39;</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ random flip&#39;</span><span class="p">)</span>
+        <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">RandomHorizontalFlip</span><span class="p">()]</span>
+    <span class="k">if</span> <span class="s1">&#39;random_crop&#39;</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ random crop (enlarge to </span><span class="si">{}</span><span class="s1">x</span><span class="si">{}</span><span class="s1"> and &#39;</span> \
+              <span class="s1">&#39;crop </span><span class="si">{}</span><span class="s1">x</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">height</span><span class="o">*</span><span class="mf">1.125</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">width</span><span class="o">*</span><span class="mf">1.125</span><span class="p">)),</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))</span>
+        <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Random2DTranslation</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="s1">&#39;color_jitter&#39;</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ color jitter&#39;</span><span class="p">)</span>
         <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">ColorJitter</span><span class="p">(</span><span class="n">brightness</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">contrast</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">saturation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="mi">0</span><span class="p">)]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ to torch tensor of range [0, 1]&#39;</span><span class="p">)</span>
     <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">ToTensor</span><span class="p">()]</span>
-    <span class="k">if</span> <span class="n">color_aug</span><span class="p">:</span>
-        <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">ColorAugmentation</span><span class="p">()]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ normalization (mean=</span><span class="si">{}</span><span class="s1">, std=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">norm_mean</span><span class="p">,</span> <span class="n">norm_std</span><span class="p">))</span>
     <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">normalize</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">random_erase</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s1">&#39;random_erase&#39;</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ random erase&#39;</span><span class="p">)</span>
         <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">RandomErasing</span><span class="p">()]</span>
     <span class="n">transform_tr</span> <span class="o">=</span> <span class="n">Compose</span><span class="p">(</span><span class="n">transform_tr</span><span class="p">)</span>
 
-    <span class="c1"># build test transformations</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Building test transforms ...&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ resize to </span><span class="si">{}</span><span class="s1">x</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ to torch tensor of range [0, 1]&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ normalization (mean=</span><span class="si">{}</span><span class="s1">, std=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">norm_mean</span><span class="p">,</span> <span class="n">norm_std</span><span class="p">))</span>
     <span class="n">transform_te</span> <span class="o">=</span> <span class="n">Compose</span><span class="p">([</span>
         <span class="n">Resize</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)),</span>
         <span class="n">ToTensor</span><span class="p">(),</span>

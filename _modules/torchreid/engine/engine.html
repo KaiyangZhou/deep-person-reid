@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.engine.engine &mdash; torchreid 0.7.8 documentation</title>
+  <title>torchreid.engine.engine &mdash; torchreid 0.8.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.7.8
+                0.8.0
               </div>
             
           
@@ -266,7 +266,7 @@
         <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_epoch</span><span class="p">,</span> <span class="n">max_epoch</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">max_epoch</span><span class="p">,</span> <span class="n">trainloader</span><span class="p">,</span> <span class="n">fixbase_epoch</span><span class="p">,</span> <span class="n">open_layers</span><span class="p">,</span> <span class="n">print_freq</span><span class="p">)</span>
             
-            <span class="k">if</span> <span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span><span class="n">start_eval</span> <span class="ow">and</span> <span class="n">eval_freq</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">eval_freq</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">!=</span><span class="n">max_epoch</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;=</span><span class="n">start_eval</span> <span class="ow">and</span> <span class="n">eval_freq</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">eval_freq</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">!=</span><span class="n">max_epoch</span><span class="p">:</span>
                 <span class="n">rank1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="p">(</span>
                     <span class="n">epoch</span><span class="p">,</span>
                     <span class="n">testloader</span><span class="p">,</span>

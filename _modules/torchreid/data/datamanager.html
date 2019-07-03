@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.data.datamanager &mdash; torchreid 0.7.8 documentation</title>
+  <title>torchreid.data.datamanager &mdash; torchreid 0.8.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.7.8
+                0.8.0
               </div>
             
           
@@ -177,7 +177,7 @@
 
 
 <div class="viewcode-block" id="DataManager"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.datamanager.DataManager">[docs]</a><span class="k">class</span> <span class="nc">DataManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Base data manager.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Base data manager.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        sources (str or list): source dataset(s).</span>
@@ -185,14 +185,13 @@
 <span class="sd">            it equals to ``sources``.</span>
 <span class="sd">        height (int, optional): target image height. Default is 256.</span>
 <span class="sd">        width (int, optional): target image width. Default is 128.</span>
-<span class="sd">        random_erase (bool, optional): use random erasing. Default is False.</span>
-<span class="sd">        color_jitter (bool, optional): use color jittering. Default is False.</span>
-<span class="sd">        color_aug (bool, optional): use color augmentation. Default is False.</span>
+<span class="sd">        transforms (str or list of str, optional): transformations applied to model training.</span>
+<span class="sd">            Default is &#39;random_flip&#39;.</span>
 <span class="sd">        use_cpu (bool, optional): use cpu. Default is False.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">random_erase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">color_jitter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">color_aug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="s1">&#39;random_flip&#39;</span><span class="p">,</span>
+                 <span class="n">use_cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="n">sources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="n">targets</span>
 
@@ -209,10 +208,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">transform_tr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform_te</span> <span class="o">=</span> <span class="n">build_transforms</span><span class="p">(</span>
-            <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span>
-            <span class="n">random_erase</span><span class="o">=</span><span class="n">random_erase</span><span class="p">,</span>
-            <span class="n">color_jitter</span><span class="o">=</span><span class="n">color_jitter</span><span class="p">,</span>
-            <span class="n">color_aug</span><span class="o">=</span><span class="n">color_aug</span>
+            <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">transforms</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">use_cpu</span><span class="p">)</span>
@@ -242,7 +238,7 @@
 
 
 <div class="viewcode-block" id="ImageDataManager"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.datamanager.ImageDataManager">[docs]</a><span class="k">class</span> <span class="nc">ImageDataManager</span><span class="p">(</span><span class="n">DataManager</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Image data manager.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Image data manager.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        root (str): root path to datasets.</span>
@@ -251,9 +247,8 @@
 <span class="sd">            it equals to ``sources``.</span>
 <span class="sd">        height (int, optional): target image height. Default is 256.</span>
 <span class="sd">        width (int, optional): target image width. Default is 128.</span>
-<span class="sd">        random_erase (bool, optional): use random erasing. Default is False.</span>
-<span class="sd">        color_jitter (bool, optional): use color jittering. Default is False.</span>
-<span class="sd">        color_aug (bool, optional): use color augmentation. Default is False.</span>
+<span class="sd">        transforms (str or list of str, optional): transformations applied to model training.</span>
+<span class="sd">            Default is &#39;random_flip&#39;.</span>
 <span class="sd">        use_cpu (bool, optional): use cpu. Default is False.</span>
 <span class="sd">        split_id (int, optional): split id (*0-based*). Default is 0.</span>
 <span class="sd">        combineall (bool, optional): combine train, query and gallery in a dataset for</span>
@@ -281,14 +276,13 @@
 <span class="sd">        )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">random_erase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">color_jitter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">color_aug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">split_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">combineall</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="s1">&#39;random_flip&#39;</span><span class="p">,</span>
+                 <span class="n">use_cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">split_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">combineall</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">num_instances</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">train_sampler</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
                  <span class="n">cuhk03_labeled</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cuhk03_classic_split</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">market1501_500k</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         
         <span class="nb">super</span><span class="p">(</span><span class="n">ImageDataManager</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">sources</span><span class="o">=</span><span class="n">sources</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span>
-                                               <span class="n">random_erase</span><span class="o">=</span><span class="n">random_erase</span><span class="p">,</span> <span class="n">color_jitter</span><span class="o">=</span><span class="n">color_jitter</span><span class="p">,</span>
-                                               <span class="n">color_aug</span><span class="o">=</span><span class="n">color_aug</span><span class="p">,</span> <span class="n">use_cpu</span><span class="o">=</span><span class="n">use_cpu</span><span class="p">)</span>
+                                               <span class="n">transforms</span><span class="o">=</span><span class="n">transforms</span><span class="p">,</span> <span class="n">use_cpu</span><span class="o">=</span><span class="n">use_cpu</span><span class="p">)</span>
         
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&gt; Loading train (source) dataset&#39;</span><span class="p">)</span>
         <span class="n">trainset</span> <span class="o">=</span> <span class="p">[]</span>  
@@ -390,7 +384,7 @@
 
 
 <div class="viewcode-block" id="VideoDataManager"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.datamanager.VideoDataManager">[docs]</a><span class="k">class</span> <span class="nc">VideoDataManager</span><span class="p">(</span><span class="n">DataManager</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Video data manager.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Video data manager.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        root (str): root path to datasets.</span>
@@ -399,9 +393,8 @@
 <span class="sd">            it equals to ``sources``.</span>
 <span class="sd">        height (int, optional): target image height. Default is 256.</span>
 <span class="sd">        width (int, optional): target image width. Default is 128.</span>
-<span class="sd">        random_erase (bool, optional): use random erasing. Default is False.</span>
-<span class="sd">        color_jitter (bool, optional): use color jittering. Default is False.</span>
-<span class="sd">        color_aug (bool, optional): use color augmentation. Default is False.</span>
+<span class="sd">        transforms (str or list of str, optional): transformations applied to model training.</span>
+<span class="sd">            Default is &#39;random_flip&#39;.</span>
 <span class="sd">        use_cpu (bool, optional): use cpu. Default is False.</span>
 <span class="sd">        split_id (int, optional): split id (*0-based*). Default is 0.</span>
 <span class="sd">        combineall (bool, optional): combine train, query and gallery in a dataset for</span>
@@ -430,14 +423,13 @@
 <span class="sd">        )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">random_erase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">color_jitter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">color_aug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">split_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">combineall</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="s1">&#39;random_flip&#39;</span><span class="p">,</span>
+                 <span class="n">use_cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">split_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">combineall</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">batch_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">num_instances</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">train_sampler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">seq_len</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">sample_method</span><span class="o">=</span><span class="s1">&#39;evenly&#39;</span><span class="p">):</span>
         
         <span class="nb">super</span><span class="p">(</span><span class="n">VideoDataManager</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">sources</span><span class="o">=</span><span class="n">sources</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span>
-                                               <span class="n">random_erase</span><span class="o">=</span><span class="n">random_erase</span><span class="p">,</span> <span class="n">color_jitter</span><span class="o">=</span><span class="n">color_jitter</span><span class="p">,</span>
-                                               <span class="n">color_aug</span><span class="o">=</span><span class="n">color_aug</span><span class="p">,</span> <span class="n">use_cpu</span><span class="o">=</span><span class="n">use_cpu</span><span class="p">)</span>
+                                               <span class="n">transforms</span><span class="o">=</span><span class="n">transforms</span><span class="p">,</span> <span class="n">se_cpu</span><span class="o">=</span><span class="n">use_cpu</span><span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&gt; Loading train (source) dataset&#39;</span><span class="p">)</span>
         <span class="n">trainset</span> <span class="o">=</span> <span class="p">[]</span>  

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.data &mdash; torchreid 0.7.8 documentation</title>
+  <title>torchreid.data &mdash; torchreid 0.8.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.7.8
+                0.8.0
               </div>
             
           
@@ -182,7 +182,7 @@
 <span id="data-manager"></span><h2>Data Manager<a class="headerlink" href="#module-torchreid.data.datamanager" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="torchreid.data.datamanager.DataManager">
-<em class="property">class </em><code class="descclassname">torchreid.data.datamanager.</code><code class="descname">DataManager</code><span class="sig-paren">(</span><em>sources=None</em>, <em>targets=None</em>, <em>height=256</em>, <em>width=128</em>, <em>random_erase=False</em>, <em>color_jitter=False</em>, <em>color_aug=False</em>, <em>use_cpu=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#DataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.DataManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">torchreid.data.datamanager.</code><code class="descname">DataManager</code><span class="sig-paren">(</span><em>sources=None</em>, <em>targets=None</em>, <em>height=256</em>, <em>width=128</em>, <em>transforms='random_flip'</em>, <em>use_cpu=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#DataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.DataManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base data manager.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -194,9 +194,8 @@
 it equals to <code class="docutils literal notranslate"><span class="pre">sources</span></code>.</li>
 <li><strong>height</strong> (<em>int</em><em>, </em><em>optional</em>) – target image height. Default is 256.</li>
 <li><strong>width</strong> (<em>int</em><em>, </em><em>optional</em>) – target image width. Default is 128.</li>
-<li><strong>random_erase</strong> (<em>bool</em><em>, </em><em>optional</em>) – use random erasing. Default is False.</li>
-<li><strong>color_jitter</strong> (<em>bool</em><em>, </em><em>optional</em>) – use color jittering. Default is False.</li>
-<li><strong>color_aug</strong> (<em>bool</em><em>, </em><em>optional</em>) – use color augmentation. Default is False.</li>
+<li><strong>transforms</strong> (<em>str</em><em> or </em><em>list of str</em><em>, </em><em>optional</em>) – transformations applied to model training.
+Default is ‘random_flip’.</li>
 <li><strong>use_cpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – use cpu. Default is False.</li>
 </ul>
 </td>
@@ -240,7 +239,7 @@ tuples of (img_path(s), pid, camid).</p>
 
 <dl class="class">
 <dt id="torchreid.data.datamanager.ImageDataManager">
-<em class="property">class </em><code class="descclassname">torchreid.data.datamanager.</code><code class="descname">ImageDataManager</code><span class="sig-paren">(</span><em>root=''</em>, <em>sources=None</em>, <em>targets=None</em>, <em>height=256</em>, <em>width=128</em>, <em>random_erase=False</em>, <em>color_jitter=False</em>, <em>color_aug=False</em>, <em>use_cpu=False</em>, <em>split_id=0</em>, <em>combineall=False</em>, <em>batch_size=32</em>, <em>workers=4</em>, <em>num_instances=4</em>, <em>train_sampler=''</em>, <em>cuhk03_labeled=False</em>, <em>cuhk03_classic_split=False</em>, <em>market1501_500k=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#ImageDataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.ImageDataManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">torchreid.data.datamanager.</code><code class="descname">ImageDataManager</code><span class="sig-paren">(</span><em>root=''</em>, <em>sources=None</em>, <em>targets=None</em>, <em>height=256</em>, <em>width=128</em>, <em>transforms='random_flip'</em>, <em>use_cpu=False</em>, <em>split_id=0</em>, <em>combineall=False</em>, <em>batch_size=32</em>, <em>workers=4</em>, <em>num_instances=4</em>, <em>train_sampler=''</em>, <em>cuhk03_labeled=False</em>, <em>cuhk03_classic_split=False</em>, <em>market1501_500k=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#ImageDataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.ImageDataManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Image data manager.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -253,9 +252,8 @@ tuples of (img_path(s), pid, camid).</p>
 it equals to <code class="docutils literal notranslate"><span class="pre">sources</span></code>.</li>
 <li><strong>height</strong> (<em>int</em><em>, </em><em>optional</em>) – target image height. Default is 256.</li>
 <li><strong>width</strong> (<em>int</em><em>, </em><em>optional</em>) – target image width. Default is 128.</li>
-<li><strong>random_erase</strong> (<em>bool</em><em>, </em><em>optional</em>) – use random erasing. Default is False.</li>
-<li><strong>color_jitter</strong> (<em>bool</em><em>, </em><em>optional</em>) – use color jittering. Default is False.</li>
-<li><strong>color_aug</strong> (<em>bool</em><em>, </em><em>optional</em>) – use color augmentation. Default is False.</li>
+<li><strong>transforms</strong> (<em>str</em><em> or </em><em>list of str</em><em>, </em><em>optional</em>) – transformations applied to model training.
+Default is ‘random_flip’.</li>
 <li><strong>use_cpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – use cpu. Default is False.</li>
 <li><strong>split_id</strong> (<em>int</em><em>, </em><em>optional</em>) – split id (<em>0-based</em>). Default is 0.</li>
 <li><strong>combineall</strong> (<em>bool</em><em>, </em><em>optional</em>) – combine train, query and gallery in a dataset for
@@ -290,7 +288,7 @@ set in market1501. Default is False.</li>
 
 <dl class="class">
 <dt id="torchreid.data.datamanager.VideoDataManager">
-<em class="property">class </em><code class="descclassname">torchreid.data.datamanager.</code><code class="descname">VideoDataManager</code><span class="sig-paren">(</span><em>root=''</em>, <em>sources=None</em>, <em>targets=None</em>, <em>height=256</em>, <em>width=128</em>, <em>random_erase=False</em>, <em>color_jitter=False</em>, <em>color_aug=False</em>, <em>use_cpu=False</em>, <em>split_id=0</em>, <em>combineall=False</em>, <em>batch_size=3</em>, <em>workers=4</em>, <em>num_instances=4</em>, <em>train_sampler=None</em>, <em>seq_len=15</em>, <em>sample_method='evenly'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#VideoDataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.VideoDataManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">torchreid.data.datamanager.</code><code class="descname">VideoDataManager</code><span class="sig-paren">(</span><em>root=''</em>, <em>sources=None</em>, <em>targets=None</em>, <em>height=256</em>, <em>width=128</em>, <em>transforms='random_flip'</em>, <em>use_cpu=False</em>, <em>split_id=0</em>, <em>combineall=False</em>, <em>batch_size=3</em>, <em>workers=4</em>, <em>num_instances=4</em>, <em>train_sampler=None</em>, <em>seq_len=15</em>, <em>sample_method='evenly'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#VideoDataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.VideoDataManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Video data manager.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -303,9 +301,8 @@ set in market1501. Default is False.</li>
 it equals to <code class="docutils literal notranslate"><span class="pre">sources</span></code>.</li>
 <li><strong>height</strong> (<em>int</em><em>, </em><em>optional</em>) – target image height. Default is 256.</li>
 <li><strong>width</strong> (<em>int</em><em>, </em><em>optional</em>) – target image width. Default is 128.</li>
-<li><strong>random_erase</strong> (<em>bool</em><em>, </em><em>optional</em>) – use random erasing. Default is False.</li>
-<li><strong>color_jitter</strong> (<em>bool</em><em>, </em><em>optional</em>) – use color jittering. Default is False.</li>
-<li><strong>color_aug</strong> (<em>bool</em><em>, </em><em>optional</em>) – use color augmentation. Default is False.</li>
+<li><strong>transforms</strong> (<em>str</em><em> or </em><em>list of str</em><em>, </em><em>optional</em>) – transformations applied to model training.
+Default is ‘random_flip’.</li>
 <li><strong>use_cpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – use cpu. Default is False.</li>
 <li><strong>split_id</strong> (<em>int</em><em>, </em><em>optional</em>) – split id (<em>0-based</em>). Default is 0.</li>
 <li><strong>combineall</strong> (<em>bool</em><em>, </em><em>optional</em>) – combine train, query and gallery in a dataset for
@@ -410,7 +407,7 @@ Default is 0.5.</td>
 <em class="property">class </em><code class="descclassname">torchreid.data.transforms.</code><code class="descname">Random2DTranslation</code><span class="sig-paren">(</span><em>height</em>, <em>width</em>, <em>p=0.5</em>, <em>interpolation=2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/transforms.html#Random2DTranslation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.transforms.Random2DTranslation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Randomly translates the input image with a probability.</p>
 <p>Specifically, given a predefined shape (height, width), the input is first
-resized with a factor of 1.25, leading to (height*1.25, width*1.25), then
+resized with a factor of 1.125, leading to (height*1.125, width*1.125), then
 a random crop is performed. Such operation is done with a probability.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -459,8 +456,8 @@ Default is 0.5.</li>
 
 <dl class="function">
 <dt id="torchreid.data.transforms.build_transforms">
-<code class="descclassname">torchreid.data.transforms.</code><code class="descname">build_transforms</code><span class="sig-paren">(</span><em>height, width, random_erase=False, color_jitter=False, color_aug=False, norm_mean=[0.485, 0.456, 0.406], norm_std=[0.229, 0.224, 0.225], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/transforms.html#build_transforms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.transforms.build_transforms" title="Permalink to this definition">¶</a></dt>
-<dd><p>Builds train and test transform functions</p>
+<code class="descclassname">torchreid.data.transforms.</code><code class="descname">build_transforms</code><span class="sig-paren">(</span><em>height, width, transforms='random_flip', norm_mean=[0.485, 0.456, 0.406], norm_std=[0.229, 0.224, 0.225], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/transforms.html#build_transforms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.transforms.build_transforms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds train and test transform functions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -468,9 +465,8 @@ Default is 0.5.</li>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>height</strong> (<em>int</em>) – target image height.</li>
 <li><strong>width</strong> (<em>int</em>) – target image width.</li>
-<li><strong>random_erase</strong> (<em>bool</em><em>, </em><em>optional</em>) – use random erasing. Default is False.</li>
-<li><strong>color_jitter</strong> (<em>bool</em><em>, </em><em>optional</em>) – use color jittering. Default is False.</li>
-<li><strong>color_aug</strong> (<em>bool</em><em>, </em><em>optional</em>) – use color augmentation. Default is False.</li>
+<li><strong>transforms</strong> (<em>str</em><em> or </em><em>list of str</em><em>, </em><em>optional</em>) – transformations applied to model training.
+Default is ‘random_flip’.</li>
 <li><strong>norm_mean</strong> (<em>list</em>) – normalization mean values. Default is ImageNet means.</li>
 <li><strong>norm_std</strong> (<em>list</em>) – normalization standard deviation values. Default is
 ImageNet standard deviation values.</li>

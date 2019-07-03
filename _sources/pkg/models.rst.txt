@@ -39,3 +39,4 @@ ReID-specific Models
 .. autoclass:: torchreid.models.hacnn.HACNN
 .. autoclass:: torchreid.models.pcb.PCB
 .. autoclass:: torchreid.models.mlfn.MLFN
+.. autoclass:: torchreid.models.osnet.OSNet
