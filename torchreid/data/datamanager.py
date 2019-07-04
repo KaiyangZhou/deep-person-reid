@@ -268,7 +268,7 @@ class VideoDataManager(DataManager):
                  seq_len=15, sample_method='evenly'):
         
         super(VideoDataManager, self).__init__(sources=sources, targets=targets, height=height, width=width,
-                                               transforms=transforms, se_cpu=use_cpu)
+                                               transforms=transforms, use_cpu=use_cpu)
 
         print('=> Loading train (source) dataset')
         trainset = []  
