@@ -323,6 +323,7 @@
 
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Building train transforms ...&#39;</span><span class="p">)</span>
     <span class="n">transform_tr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Resize</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))]</span>
     <span class="k">if</span> <span class="s1">&#39;random_flip&#39;</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ random flip&#39;</span><span class="p">)</span>
         <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">RandomHorizontalFlip</span><span class="p">()]</span>
