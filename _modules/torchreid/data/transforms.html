@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.data.transforms &mdash; torchreid 0.8.0 documentation</title>
+  <title>torchreid.data.transforms &mdash; torchreid 0.8.1 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.8.0
+                0.8.1
               </div>
             
           
@@ -324,6 +324,7 @@
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Building train transforms ...&#39;</span><span class="p">)</span>
     <span class="n">transform_tr</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Resize</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ resize to </span><span class="si">{}</span><span class="s1">x</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))</span>
     <span class="k">if</span> <span class="s1">&#39;random_flip&#39;</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ random flip&#39;</span><span class="p">)</span>
         <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">RandomHorizontalFlip</span><span class="p">()]</span>
