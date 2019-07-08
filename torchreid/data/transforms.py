@@ -157,6 +157,7 @@ def build_transforms(height, width, transforms='random_flip', norm_mean=[0.485, 
     print('Building train transforms ...')
     transform_tr = []
     transform_tr += [Resize((height, width))]
+    print('+ resize to {}x{}'.format(height, width))
     if 'random_flip' in transforms:
         print('+ random flip')
         transform_tr += [RandomHorizontalFlip()]
