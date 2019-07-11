@@ -187,6 +187,7 @@
 </ul>
 <p>Documentation: <a class="reference external" href="https://kaiyangzhou.github.io/deep-person-reid/">https://kaiyangzhou.github.io/deep-person-reid/</a>.</p>
 <p>Code: <a class="reference external" href="https://github.com/KaiyangZhou/deep-person-reid">https://github.com/KaiyangZhou/deep-person-reid</a>.</p>
+<p>Model zoo: <a class="reference external" href="https://kaiyangzhou.github.io/deep-person-reid/MODEL_ZOO">https://kaiyangzhou.github.io/deep-person-reid/MODEL_ZOO</a>.</p>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <p>The code works with both python2 and python3.</p>
@@ -268,7 +269,7 @@ $ <span class="c1"># python setup.py develop</span>
     <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
     <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
     <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-    <span class="n">market1501_500k</span><span class="o">=</span><span class="bp">False</span>
+    <span class="n">transforms</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;random_flip&#39;</span><span class="p">,</span> <span class="s1">&#39;random_crop&#39;</span><span class="p">]</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -335,7 +336,8 @@ $ <span class="c1"># python setup.py develop</span>
 --max-epoch <span class="m">60</span> <span class="se">\</span>
 --stepsize <span class="m">20</span> <span class="m">40</span> <span class="se">\</span>
 --batch-size <span class="m">32</span> <span class="se">\</span>
---save-dir log/resnet50-market-softmax <span class="se">\</span>
+--transforms random_flip random_crop <span class="se">\</span>
+--save-dir log/resnet50-market1501-softmax <span class="se">\</span>
 --gpu-devices <span class="m">0</span>
 </pre></div>
 </div>
