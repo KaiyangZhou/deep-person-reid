@@ -22,6 +22,8 @@ Documentation: https://kaiyangzhou.github.io/deep-person-reid/.
 
 Code: https://github.com/KaiyangZhou/deep-person-reid.
 
+Model zoo: https://kaiyangzhou.github.io/deep-person-reid/MODEL_ZOO.
+
 
 Installation
 ---------------
@@ -107,7 +109,7 @@ Get started: 30 seconds to Torchreid
         height=256,
         width=128,
         batch_size=32,
-        market1501_500k=False
+        transforms=['random_flip', 'random_crop']
     )
 
 3 Build model, optimizer and lr_scheduler
@@ -178,7 +180,8 @@ In "deep-person-reid/scripts/", we provide a unified interface including a defau
     --max-epoch 60 \
     --stepsize 20 40 \
     --batch-size 32 \
-    --save-dir log/resnet50-market-softmax \
+    --transforms random_flip random_crop \
+    --save-dir log/resnet50-market1501-softmax \
     --gpu-devices 0
 
 Please refer to ``default_parser.py`` and ``main.py`` for more details.
