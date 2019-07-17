@@ -33,7 +33,7 @@ def init_parser():
                         help='sampler for trainloader')
     parser.add_argument('--combineall', action='store_true',
                         help='combine all data in a dataset (train+query+gallery) for training')
-    parser.add_argument('--transforms', type=str, default='random_flip', nargs='+',
+    parser.add_argument('--transforms', type=str, nargs='+',
                         help='transformations applied to model training')
 
     # ************************************************************

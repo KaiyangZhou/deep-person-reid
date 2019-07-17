@@ -144,13 +144,17 @@ def build_transforms(height, width, transforms='random_flip', norm_mean=[0.485, 
         norm_std (list): normalization standard deviation values. Default is
             ImageNet standard deviation values.
     """
+    if transforms is None:
+        transforms = []
+    
     if isinstance(transforms, str):
         transforms = [transforms]
 
     if not isinstance(transforms, list):
         raise ValueError('transforms must be a list of strings, but found to be {}'.format(type(transforms)))
-
-    transforms = [t.lower() for t in transforms]
+    
+    if len(transforms) > 0:
+        transforms = [t.lower() for t in transforms]
     
     normalize = Normalize(mean=norm_mean, std=norm_std)
 
