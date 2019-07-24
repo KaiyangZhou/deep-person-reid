@@ -10,7 +10,6 @@ Here is a collection of ReID-related research with links to papers and code. You
 - **[ArXiv](#arxiv)**
 
 ### CVPR 2019
-- Patch-based Discriminative Feature Learning for Unsupervised Person Re-identification. [[paper](https://kovenyu.com/papers/2019_CVPR_PEDAL.pdf)] [[code](https://github.com/QizeYang/PAUL)]
 - Joint Discriminative and Generative Learning for Person Re-identification. [[paper](https://arxiv.org/abs/1904.07223)][[code](https://github.com/NVlabs/DG-Net)]
 - Invariance Matters: Exemplar Memory for Domain Adaptive Person Re-identification. [[paper](https://arxiv.org/abs/1904.01990)][[code](https://github.com/zhunzhong07/ECN)]
 - Dissecting Person Re-identification from the Viewpoint of Viewpoint. [[paper](https://arxiv.org/abs/1812.02162)][[code](https://github.com/sxzrt/Dissecting-Person-Re-ID-from-the-Viewpoint-of-Viewpoint)]
