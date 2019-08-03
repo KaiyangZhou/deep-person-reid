@@ -292,8 +292,10 @@ class OSNet(nn.Module):
         x = self.conv5(x)
         return x
 
-    def forward(self, x):
+    def forward(self, x, output_featuremaps_only=True):
         x = self.featuremaps(x)
+        if output_featuremaps_only:
+            return x
         v = self.global_avgpool(x)
         v = v.view(v.size(0), -1)
         if self.fc is not None:

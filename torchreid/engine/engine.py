@@ -2,6 +2,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import division
 
+import sys
 import os
 import os.path as osp
 import time
@@ -305,9 +306,6 @@ class Engine(object):
             - Zhou et al. Omni-Scale Feature Learning for Person Re-Identification. ICCV, 2019.
         """
         self.model.eval()
-        if not hasattr(self.model, 'featuremaps'):
-            raise AttributeError('Model must have method featuremaps(), which returns the feature maps '
-                                 'of shape (b, c, h, w)')
         
         imagenet_mean = [0.485, 0.456, 0.406]
         imagenet_std = [0.229, 0.224, 0.225]
@@ -329,7 +327,13 @@ class Engine(object):
                     imgs = imgs.cuda()
                 
                 # forward to get convolutional feature maps
-                outputs = self.model.featuremaps(imgs)
+                try:
+                    outputs = self.model(imgs, output_featuremaps_only=True)
+                except TypeError:
+                    raise TypeError('forward() got unexpected keyword argument "output_featuremaps_only". ' \
+                                    'Please add output_featuremaps_only as an input argument to forward(). When ' \
+                                    'output_featuremaps_only=True, return feature maps only.')
+                
                 if outputs.dim() != 4:
                     raise ValueError('The model output is supposed to have ' \
                                      'shape of (b, c, h, w), i.e. 4 dimensions, but got {} dimensions. '
