@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>How-to &mdash; torchreid 0.9.0 documentation</title>
+  <title>How-to &mdash; torchreid 0.9.1 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.9.0
+                0.9.1
               </div>
             
           
@@ -402,6 +402,10 @@
 --save-dir log/eval-osnet_x1_0 <span class="se">\</span>
 --gpu-devices <span class="m">0</span>
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In order to visualize activation maps, the CNN needs to output the last convolutional feature maps at eval mode. See <code class="docutils literal notranslate"><span class="pre">torchreid/models/osnet.py</span></code> for example.</p>
 </div>
 </div>
 <div class="section" id="use-your-own-dataset">

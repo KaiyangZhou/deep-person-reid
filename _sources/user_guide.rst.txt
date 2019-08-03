@@ -245,6 +245,9 @@ An example command line using ``scripts/main.py`` is
     --gpu-devices 0
 
 
+.. note::
+    In order to visualize activation maps, the CNN needs to output the last convolutional feature maps at eval mode. See ``torchreid/models/osnet.py`` for example.
+
 
 Use your own dataset
 ----------------------
