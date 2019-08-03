@@ -7,3 +7,5 @@ dependencies:
 - Pillow
 - six
 - scipy
+- opencv
+- matplotlib
