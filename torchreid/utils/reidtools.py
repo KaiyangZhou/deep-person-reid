@@ -36,8 +36,8 @@ def visualize_ranked_results(distmat, dataset, data_type, width=128, height=256,
     """
     num_q, num_g = distmat.shape
 
-    print('Visualizing top-{} ranks ...'.format(topk))
     print('# query: {}\n# gallery {}'.format(num_q, num_g))
+    print('Visualizing top-{} ranks ...'.format(topk))
     
     query, gallery = dataset
     assert num_q == len(query)
@@ -109,5 +109,8 @@ def visualize_ranked_results(distmat, dataset, data_type, width=128, height=256,
             imname = osp.basename(osp.splitext(qimg_path)[0])
             fig.savefig(osp.join(save_dir, imname+'.pdf'), bbox_inches='tight')
             plt.close()
+
+        if (q_idx+1) % 100 == 0:
+            print('- done {}/{}'.format(q_idx+1, num_q))
 
     print('Done. Images have been saved to "{}" ...'.format(save_dir))
