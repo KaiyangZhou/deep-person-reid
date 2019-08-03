@@ -20,7 +20,7 @@ GREEN = (0, 255, 0)
 RED = (0, 0, 255)
 
 
-def visualize_ranked_results(distmat, dataset, data_type, width=128, height=256, save_dir='', topk=20):
+def visualize_ranked_results(distmat, dataset, data_type, width=128, height=256, save_dir='', topk=10):
     """Visualizes ranked results.
 
     Supports both image-reid and video-reid.
@@ -37,6 +37,7 @@ def visualize_ranked_results(distmat, dataset, data_type, width=128, height=256,
         height (int, optional): resized image height. Default is 256.
         save_dir (str): directory to save output images.
         topk (int, optional): denoting top-k images in the rank list to be visualized.
+            Default is 10.
     """
     num_q, num_g = distmat.shape
     mkdir_if_missing(save_dir)

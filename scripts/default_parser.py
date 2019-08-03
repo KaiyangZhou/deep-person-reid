@@ -164,7 +164,7 @@ def init_parser():
 
     parser.add_argument('--visrank', action='store_true',
                         help='visualize ranked results, only available in evaluation mode')
-    parser.add_argument('--visrank-topk', type=int, default=15,
+    parser.add_argument('--visrank-topk', type=int, default=10,
                         help='visualize topk ranks')
     parser.add_argument('--visactmap', action='store_true',
                         help='visualize CNN activation maps')
