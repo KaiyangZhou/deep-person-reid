@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.models.osnet &mdash; torchreid 0.8.1 documentation</title>
+  <title>torchreid.models.osnet &mdash; torchreid 0.9.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.9.0
               </div>
             
           
@@ -367,8 +367,7 @@
     <span class="sd">&quot;&quot;&quot;Omni-Scale Network.</span>
 <span class="sd">    </span>
 <span class="sd">    Reference:</span>
-<span class="sd">        - Zhou et al. Omni-Scale Feature Learning for Person Re-Identification. ArXiv preprint, 2019.</span>
-<span class="sd">          https://arxiv.org/abs/1905.00953</span>
+<span class="sd">        - Zhou et al. Omni-Scale Feature Learning for Person Re-Identification. ICCV, 2019.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">,</span> <span class="n">blocks</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">feature_dim</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span> <span class="n">IN</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -460,8 +459,10 @@
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv5</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">x</span>
 
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">output_featuremaps_only</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">featuremaps</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">output_featuremaps_only</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span>
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_avgpool</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

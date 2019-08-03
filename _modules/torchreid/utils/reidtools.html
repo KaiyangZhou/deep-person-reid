@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.utils.reidtools &mdash; torchreid 0.8.1 documentation</title>
+  <title>torchreid.utils.reidtools &mdash; torchreid 0.9.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.9.0
               </div>
             
           
@@ -174,45 +174,65 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 
 <span class="kn">from</span> <span class="nn">.tools</span> <span class="k">import</span> <span class="n">mkdir_if_missing</span>
 
 
-<div class="viewcode-block" id="visualize_ranked_results"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.reidtools.visualize_ranked_results">[docs]</a><span class="k">def</span> <span class="nf">visualize_ranked_results</span><span class="p">(</span><span class="n">distmat</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">topk</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+<span class="n">GRID_SPACING</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">QUERY_EXTRA_SPACING</span> <span class="o">=</span> <span class="mi">90</span>
+<span class="n">BW</span> <span class="o">=</span> <span class="mi">5</span> <span class="c1"># border width</span>
+<span class="n">GREEN</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">RED</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="visualize_ranked_results"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.reidtools.visualize_ranked_results">[docs]</a><span class="k">def</span> <span class="nf">visualize_ranked_results</span><span class="p">(</span><span class="n">distmat</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">data_type</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">topk</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Visualizes ranked results.</span>
 
 <span class="sd">    Supports both image-reid and video-reid.</span>
+
+<span class="sd">    For image-reid, ranks will be plotted in a single figure. For video-reid, ranks will be</span>
+<span class="sd">    saved in folders each containing a tracklet.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        distmat (numpy.ndarray): distance matrix of shape (num_query, num_gallery).</span>
 <span class="sd">        dataset (tuple): a 2-tuple containing (query, gallery), each of which contains</span>
 <span class="sd">            tuples of (img_path(s), pid, camid).</span>
+<span class="sd">        data_type (str): &quot;image&quot; or &quot;video&quot;.</span>
+<span class="sd">        width (int, optional): resized image width. Default is 128.</span>
+<span class="sd">        height (int, optional): resized image height. Default is 256.</span>
 <span class="sd">        save_dir (str): directory to save output images.</span>
 <span class="sd">        topk (int, optional): denoting top-k images in the rank list to be visualized.</span>
+<span class="sd">            Default is 10.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">num_q</span><span class="p">,</span> <span class="n">num_g</span> <span class="o">=</span> <span class="n">distmat</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">mkdir_if_missing</span><span class="p">(</span><span class="n">save_dir</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Visualizing top-</span><span class="si">{}</span><span class="s1"> ranks&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">topk</span><span class="p">))</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;# query: </span><span class="si">{}</span><span class="se">\n</span><span class="s1"># gallery </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_q</span><span class="p">,</span> <span class="n">num_g</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Saving images to &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">save_dir</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Visualizing top-</span><span class="si">{}</span><span class="s1"> ranks ...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">topk</span><span class="p">))</span>
     
     <span class="n">query</span><span class="p">,</span> <span class="n">gallery</span> <span class="o">=</span> <span class="n">dataset</span>
     <span class="k">assert</span> <span class="n">num_q</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">num_g</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">gallery</span><span class="p">)</span>
     
     <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">distmat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">mkdir_if_missing</span><span class="p">(</span><span class="n">save_dir</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_cp_img_to</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_cp_img_to</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">matched</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Args:</span>
 <span class="sd">            src: image path or tuple (for vidreid)</span>
 <span class="sd">            dst: target directory</span>
 <span class="sd">            rank: int, denoting ranked position, starting from 1</span>
 <span class="sd">            prefix: string</span>
+<span class="sd">            matched: bool</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="n">dst</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">+</span> <span class="s1">&#39;_top&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rank</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">prefix</span> <span class="o">==</span> <span class="s1">&#39;gallery&#39;</span><span class="p">:</span>
+                <span class="n">suffix</span> <span class="o">=</span> <span class="s1">&#39;TRUE&#39;</span> <span class="k">if</span> <span class="n">matched</span> <span class="k">else</span> <span class="s1">&#39;FALSE&#39;</span>
+                <span class="n">dst</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">+</span> <span class="s1">&#39;_top&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rank</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">suffix</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dst</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">+</span> <span class="s1">&#39;_top&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rank</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
             <span class="n">mkdir_if_missing</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">img_path</span> <span class="ow">in</span> <span class="n">src</span><span class="p">:</span>
                 <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">img_path</span><span class="p">,</span> <span class="n">dst</span><span class="p">)</span>
@@ -222,24 +242,50 @@
 
     <span class="k">for</span> <span class="n">q_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_q</span><span class="p">):</span>
         <span class="n">qimg_path</span><span class="p">,</span> <span class="n">qpid</span><span class="p">,</span> <span class="n">qcamid</span> <span class="o">=</span> <span class="n">query</span><span class="p">[</span><span class="n">q_idx</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">qimg_path</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">qimg_path</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="n">qdir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">osp</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">qimg_path</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">num_cols</span> <span class="o">=</span> <span class="n">topk</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">grid_img</span> <span class="o">=</span> <span class="mi">255</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">num_cols</span><span class="o">*</span><span class="n">width</span><span class="o">+</span><span class="n">topk</span><span class="o">*</span><span class="n">GRID_SPACING</span><span class="o">+</span><span class="n">QUERY_EXTRA_SPACING</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s1">&#39;image&#39;</span><span class="p">:</span>
+            <span class="n">qimg</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">qimg_path</span><span class="p">)</span>
+            <span class="n">qimg</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">qimg</span><span class="p">,</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+            <span class="n">qimg</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">copyMakeBorder</span><span class="p">(</span><span class="n">qimg</span><span class="p">,</span> <span class="n">BW</span><span class="p">,</span> <span class="n">BW</span><span class="p">,</span> <span class="n">BW</span><span class="p">,</span> <span class="n">BW</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">BORDER_CONSTANT</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="n">qimg</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">qimg</span><span class="p">,</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span> <span class="c1"># resize twice to ensure that the border width is consistent across images</span>
+            <span class="n">grid_img</span><span class="p">[:,</span> <span class="p">:</span><span class="n">width</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">qimg</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">qdir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">osp</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">qimg_path</span><span class="p">))</span>
-        <span class="n">mkdir_if_missing</span><span class="p">(</span><span class="n">qdir</span><span class="p">)</span>
-        <span class="n">_cp_img_to</span><span class="p">(</span><span class="n">qimg_path</span><span class="p">,</span> <span class="n">qdir</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;query&#39;</span><span class="p">)</span>
+            <span class="n">qdir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">osp</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">qimg_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">mkdir_if_missing</span><span class="p">(</span><span class="n">qdir</span><span class="p">)</span>
+            <span class="n">_cp_img_to</span><span class="p">(</span><span class="n">qimg_path</span><span class="p">,</span> <span class="n">qdir</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;query&#39;</span><span class="p">)</span>
 
         <span class="n">rank_idx</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">for</span> <span class="n">g_idx</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">[</span><span class="n">q_idx</span><span class="p">,:]:</span>
             <span class="n">gimg_path</span><span class="p">,</span> <span class="n">gpid</span><span class="p">,</span> <span class="n">gcamid</span> <span class="o">=</span> <span class="n">gallery</span><span class="p">[</span><span class="n">g_idx</span><span class="p">]</span>
             <span class="n">invalid</span> <span class="o">=</span> <span class="p">(</span><span class="n">qpid</span> <span class="o">==</span> <span class="n">gpid</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">qcamid</span> <span class="o">==</span> <span class="n">gcamid</span><span class="p">)</span>
+            
             <span class="k">if</span> <span class="ow">not</span> <span class="n">invalid</span><span class="p">:</span>
-                <span class="n">_cp_img_to</span><span class="p">(</span><span class="n">gimg_path</span><span class="p">,</span> <span class="n">qdir</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="n">rank_idx</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;gallery&#39;</span><span class="p">)</span>
+                <span class="n">matched</span> <span class="o">=</span> <span class="n">gpid</span><span class="o">==</span><span class="n">qpid</span>
+                <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s1">&#39;image&#39;</span><span class="p">:</span>
+                    <span class="n">border_color</span> <span class="o">=</span> <span class="n">GREEN</span> <span class="k">if</span> <span class="n">matched</span> <span class="k">else</span> <span class="n">RED</span>
+                    <span class="n">gimg</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">gimg_path</span><span class="p">)</span>
+                    <span class="n">gimg</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">gimg</span><span class="p">,</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+                    <span class="n">gimg</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">copyMakeBorder</span><span class="p">(</span><span class="n">gimg</span><span class="p">,</span> <span class="n">BW</span><span class="p">,</span> <span class="n">BW</span><span class="p">,</span> <span class="n">BW</span><span class="p">,</span> <span class="n">BW</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">BORDER_CONSTANT</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">border_color</span><span class="p">)</span>
+                    <span class="n">gimg</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">gimg</span><span class="p">,</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+                    <span class="n">start</span> <span class="o">=</span> <span class="n">rank_idx</span><span class="o">*</span><span class="n">width</span> <span class="o">+</span> <span class="n">rank_idx</span><span class="o">*</span><span class="n">GRID_SPACING</span> <span class="o">+</span> <span class="n">QUERY_EXTRA_SPACING</span>
+                    <span class="n">end</span> <span class="o">=</span> <span class="p">(</span><span class="n">rank_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">width</span> <span class="o">+</span> <span class="n">rank_idx</span><span class="o">*</span><span class="n">GRID_SPACING</span> <span class="o">+</span> <span class="n">QUERY_EXTRA_SPACING</span>
+                    <span class="n">grid_img</span><span class="p">[:,</span> <span class="n">start</span><span class="p">:</span> <span class="n">end</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">gimg</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">_cp_img_to</span><span class="p">(</span><span class="n">gimg_path</span><span class="p">,</span> <span class="n">qdir</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="n">rank_idx</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;gallery&#39;</span><span class="p">,</span> <span class="n">matched</span><span class="o">=</span><span class="n">matched</span><span class="p">)</span>
+                
                 <span class="n">rank_idx</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="k">if</span> <span class="n">rank_idx</span> <span class="o">&gt;</span> <span class="n">topk</span><span class="p">:</span>
                     <span class="k">break</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span></div>
+        <span class="n">imname</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">qimg_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">imname</span><span class="o">+</span><span class="s1">&#39;.jpg&#39;</span><span class="p">),</span> <span class="n">grid_img</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">q_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- done </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">q_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_q</span><span class="p">))</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Done. Images have been saved to &quot;</span><span class="si">{}</span><span class="s1">&quot; ...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">save_dir</span><span class="p">))</span></div>
 </pre></div>
 
            </div>

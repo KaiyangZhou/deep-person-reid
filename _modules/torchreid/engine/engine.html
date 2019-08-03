@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.engine.engine &mdash; torchreid 0.8.1 documentation</title>
+  <title>torchreid.engine.engine &mdash; torchreid 0.9.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.9.0
               </div>
             
           
@@ -169,20 +169,27 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
 
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 <span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
+<span class="kn">import</span> <span class="nn">torchvision</span>
 
 <span class="kn">import</span> <span class="nn">torchreid</span>
-<span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">AverageMeter</span><span class="p">,</span> <span class="n">visualize_ranked_results</span><span class="p">,</span> <span class="n">save_checkpoint</span><span class="p">,</span> <span class="n">re_ranking</span>
+<span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">AverageMeter</span><span class="p">,</span> <span class="n">visualize_ranked_results</span><span class="p">,</span> <span class="n">save_checkpoint</span><span class="p">,</span> <span class="n">re_ranking</span><span class="p">,</span> <span class="n">mkdir_if_missing</span>
 <span class="kn">from</span> <span class="nn">torchreid.losses</span> <span class="k">import</span> <span class="n">DeepSupervision</span>
 <span class="kn">from</span> <span class="nn">torchreid</span> <span class="k">import</span> <span class="n">metrics</span>
+
+
+<span class="n">GRID_SPACING</span> <span class="o">=</span> <span class="mi">10</span>
 
 
 <div class="viewcode-block" id="Engine"><a class="viewcode-back" href="../../../pkg/engine.html#torchreid.engine.engine.Engine">[docs]</a><span class="k">class</span> <span class="nc">Engine</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -210,8 +217,8 @@
 
 <div class="viewcode-block" id="Engine.run"><a class="viewcode-back" href="../../../pkg/engine.html#torchreid.engine.engine.Engine.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">max_epoch</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">start_epoch</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fixbase_epoch</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">open_layers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">start_eval</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">eval_freq</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">test_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">print_freq</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-            <span class="n">dist_metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">,</span> <span class="n">normalize_feature</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visrank</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visrank_topk</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-            <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ranks</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span> <span class="n">rerank</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="n">dist_metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">,</span> <span class="n">normalize_feature</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visrank</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visrank_topk</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ranks</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span> <span class="n">rerank</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visactmap</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;A unified pipeline for training and evaluating a model.</span>
 
 <span class="sd">        Args:</span>
@@ -232,18 +239,21 @@
 <span class="sd">                between query and gallery. Default is &quot;euclidean&quot;.</span>
 <span class="sd">            normalize_feature (bool, optional): performs L2 normalization on feature vectors before</span>
 <span class="sd">                computing feature distance. Default is False.</span>
-<span class="sd">            visrank (bool, optional): visualizes ranked results. Default is False. Visualization</span>
-<span class="sd">                will be performed every test time, so it is recommended to enable ``visrank`` when</span>
-<span class="sd">                ``test_only`` is True. The ranked images will be saved to</span>
-<span class="sd">                &quot;save_dir/ranks-epoch/dataset_name&quot;, e.g. &quot;save_dir/ranks-60/market1501&quot;.</span>
-<span class="sd">            visrank_topk (int, optional): top-k ranked images to be visualized. Default is 20.</span>
+<span class="sd">            visrank (bool, optional): visualizes ranked results. Default is False. It is recommended to</span>
+<span class="sd">                enable ``visrank`` when ``test_only`` is True. The ranked images will be saved to</span>
+<span class="sd">                &quot;save_dir/visrank_dataset&quot;, e.g. &quot;save_dir/visrank_market1501&quot;.</span>
+<span class="sd">            visrank_topk (int, optional): top-k ranked images to be visualized. Default is 10.</span>
 <span class="sd">            use_metric_cuhk03 (bool, optional): use single-gallery-shot setting for cuhk03.</span>
 <span class="sd">                Default is False. This should be enabled when using cuhk03 classic split.</span>
 <span class="sd">            ranks (list, optional): cmc ranks to be computed. Default is [1, 5, 10, 20].</span>
 <span class="sd">            rerank (bool, optional): uses person re-ranking (by Zhong et al. CVPR&#39;17).</span>
 <span class="sd">                Default is False. This is only enabled when test_only=True.</span>
+<span class="sd">            visactmap (bool, optional): visualizes activation maps. Default is False.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">trainloader</span><span class="p">,</span> <span class="n">testloader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span><span class="n">return_dataloaders</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">visrank</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">test_only</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;visrank=True is valid only if test_only=True&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">test_only</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="p">(</span>
@@ -258,6 +268,10 @@
                 <span class="n">ranks</span><span class="o">=</span><span class="n">ranks</span><span class="p">,</span>
                 <span class="n">rerank</span><span class="o">=</span><span class="n">rerank</span>
             <span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">visactmap</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">visactmap</span><span class="p">(</span><span class="n">testloader</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="n">print_freq</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="n">time_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -311,45 +325,25 @@
 
 <span class="sd">        .. note::</span>
 <span class="sd">            </span>
-<span class="sd">            This needs to be implemented in subclasses.</span>
+<span class="sd">            This must be implemented in subclasses.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 <div class="viewcode-block" id="Engine.test"><a class="viewcode-back" href="../../../pkg/engine.html#torchreid.engine.engine.Engine.test">[docs]</a>    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">testloader</span><span class="p">,</span> <span class="n">dist_metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">,</span> <span class="n">normalize_feature</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-             <span class="n">visrank</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visrank_topk</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+             <span class="n">visrank</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visrank_topk</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
              <span class="n">ranks</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span> <span class="n">rerank</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Tests model on target datasets.</span>
 
 <span class="sd">        .. note::</span>
 
-<span class="sd">            This function has been called in ``run()`` when necessary.</span>
+<span class="sd">            This function has been called in ``run()``.</span>
 
 <span class="sd">        .. note::</span>
 
 <span class="sd">            The test pipeline implemented in this function suits both image- and</span>
 <span class="sd">            video-reid. In general, a subclass of Engine only needs to re-implement</span>
-<span class="sd">            ``_extract_features()`` and ``_parse_data_for_eval()`` when necessary,</span>
+<span class="sd">            ``_extract_features()`` and ``_parse_data_for_eval()`` (most of the time),</span>
 <span class="sd">            but not a must. Please refer to the source code for more details.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            epoch (int): current epoch.</span>
-<span class="sd">            testloader (dict): dictionary containing</span>
-<span class="sd">                {dataset_name: &#39;query&#39;: queryloader, &#39;gallery&#39;: galleryloader}.</span>
-<span class="sd">            dist_metric (str, optional): distance metric used to compute distance matrix</span>
-<span class="sd">                between query and gallery. Default is &quot;euclidean&quot;.</span>
-<span class="sd">            normalize_feature (bool, optional): performs L2 normalization on feature vectors before</span>
-<span class="sd">                computing feature distance. Default is False.</span>
-<span class="sd">            visrank (bool, optional): visualizes ranked results. Default is False. Visualization</span>
-<span class="sd">                will be performed every test time, so it is recommended to enable ``visrank`` when</span>
-<span class="sd">                ``test_only`` is True. The ranked images will be saved to</span>
-<span class="sd">                &quot;save_dir/ranks-epoch/dataset_name&quot;, e.g. &quot;save_dir/ranks-60/market1501&quot;.</span>
-<span class="sd">            visrank_topk (int, optional): top-k ranked images to be visualized. Default is 20.</span>
-<span class="sd">            save_dir (str): directory to save visualized results if ``visrank`` is True.</span>
-<span class="sd">            use_metric_cuhk03 (bool, optional): use single-gallery-shot setting for cuhk03.</span>
-<span class="sd">                Default is False. This should be enabled when using cuhk03 classic split.</span>
-<span class="sd">            ranks (list, optional): cmc ranks to be computed. Default is [1, 5, 10, 20].</span>
-<span class="sd">            rerank (bool, optional): uses person re-ranking (by Zhong et al. CVPR&#39;17).</span>
-<span class="sd">                Default is False.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">targets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">testloader</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         
@@ -378,7 +372,7 @@
     <span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">_evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">dataset_name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">queryloader</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">galleryloader</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">dist_metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">,</span> <span class="n">normalize_feature</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visrank</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                  <span class="n">visrank_topk</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ranks</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span>
+                  <span class="n">visrank_topk</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ranks</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span>
                   <span class="n">rerank</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="n">batch_time</span> <span class="o">=</span> <span class="n">AverageMeter</span><span class="p">()</span>
 
@@ -458,11 +452,101 @@
             <span class="n">visualize_ranked_results</span><span class="p">(</span>
                 <span class="n">distmat</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span><span class="n">return_testdataset_by_name</span><span class="p">(</span><span class="n">dataset_name</span><span class="p">),</span>
-                <span class="n">save_dir</span><span class="o">=</span><span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="s1">&#39;visrank-&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">dataset_name</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span><span class="n">data_type</span><span class="p">,</span>
+                <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
+                <span class="n">height</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
+                <span class="n">save_dir</span><span class="o">=</span><span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="s1">&#39;visrank_&#39;</span><span class="o">+</span><span class="n">dataset_name</span><span class="p">),</span>
                 <span class="n">topk</span><span class="o">=</span><span class="n">visrank_topk</span>
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">cmc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Engine.visactmap"><a class="viewcode-back" href="../../../pkg/engine.html#torchreid.engine.engine.Engine.visactmap">[docs]</a>    <span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">visactmap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">testloader</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">print_freq</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Visualizes CNN activation maps to see where the CNN focuses on to extract features.</span>
+
+<span class="sd">        This function takes as input the query images of target datasets</span>
+
+<span class="sd">        Reference:</span>
+<span class="sd">            - Zagoruyko and Komodakis. Paying more attention to attention: Improving the</span>
+<span class="sd">              performance of convolutional neural networks via attention transfer. ICLR, 2017</span>
+<span class="sd">            - Zhou et al. Omni-Scale Feature Learning for Person Re-Identification. ICCV, 2019.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        
+        <span class="n">imagenet_mean</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">]</span>
+        <span class="n">imagenet_std</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">testloader</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">queryloader</span> <span class="o">=</span> <span class="n">testloader</span><span class="p">[</span><span class="n">target</span><span class="p">][</span><span class="s1">&#39;query&#39;</span><span class="p">]</span>
+            <span class="c1"># original images and activation maps are saved individually</span>
+            <span class="n">actmap_dir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="s1">&#39;actmap_&#39;</span><span class="o">+</span><span class="n">target</span><span class="p">)</span>
+            <span class="n">mkdir_if_missing</span><span class="p">(</span><span class="n">actmap_dir</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Visualizing activation maps for </span><span class="si">{}</span><span class="s1"> ...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="p">))</span>
+
+            <span class="k">for</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">queryloader</span><span class="p">):</span>
+                <span class="n">imgs</span><span class="p">,</span> <span class="n">paths</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">:</span>
+                    <span class="n">imgs</span> <span class="o">=</span> <span class="n">imgs</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+                
+                <span class="c1"># forward to get convolutional feature maps</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="n">output_featuremaps_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;forward() got unexpected keyword argument &quot;output_featuremaps_only&quot;. &#39;</span> \
+                                    <span class="s1">&#39;Please add output_featuremaps_only as an input argument to forward(). When &#39;</span> \
+                                    <span class="s1">&#39;output_featuremaps_only=True, return feature maps only.&#39;</span><span class="p">)</span>
+                
+                <span class="k">if</span> <span class="n">outputs</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The model output is supposed to have &#39;</span> \
+                                     <span class="s1">&#39;shape of (b, c, h, w), i.e. 4 dimensions, but got </span><span class="si">{}</span><span class="s1"> dimensions. &#39;</span>
+                                     <span class="s1">&#39;Please make sure you set the model output at eval mode &#39;</span>
+                                     <span class="s1">&#39;to be the last convolutional feature maps&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">outputs</span><span class="o">.</span><span class="n">dim</span><span class="p">()))</span>
+                
+                <span class="c1"># compute activation maps</span>
+                <span class="n">outputs</span> <span class="o">=</span> <span class="p">(</span><span class="n">outputs</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">b</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+                <span class="n">outputs</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">h</span><span class="o">*</span><span class="n">w</span><span class="p">)</span>
+                <span class="n">outputs</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">outputs</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+                
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">:</span>
+                    <span class="n">imgs</span><span class="p">,</span> <span class="n">outputs</span> <span class="o">=</span> <span class="n">imgs</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span> <span class="n">outputs</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
+
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">outputs</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)):</span>
+                    <span class="c1"># get image name</span>
+                    <span class="n">path</span> <span class="o">=</span> <span class="n">paths</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                    <span class="n">imname</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">path</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+                    
+                    <span class="c1"># RGB image</span>
+                    <span class="n">img</span> <span class="o">=</span> <span class="n">imgs</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">imagenet_mean</span><span class="p">,</span> <span class="n">imagenet_std</span><span class="p">):</span>
+                        <span class="n">t</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="o">.</span><span class="n">clamp_</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">img_np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span> <span class="o">*</span> <span class="mi">255</span><span class="p">))</span>
+                    <span class="n">img_np</span> <span class="o">=</span> <span class="n">img_np</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="c1"># (c, h, w) -&gt; (h, w, c)</span>
+                    
+                    <span class="c1"># activation map</span>
+                    <span class="n">am</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+                    <span class="n">am</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">am</span><span class="p">,</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+                    <span class="n">am</span> <span class="o">=</span> <span class="mi">255</span> <span class="o">*</span> <span class="p">(</span><span class="n">am</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">am</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">am</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">am</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">)</span>
+                    <span class="n">am</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">am</span><span class="p">))</span>
+                    <span class="n">am</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">applyColorMap</span><span class="p">(</span><span class="n">am</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLORMAP_JET</span><span class="p">)</span>
+                    
+                    <span class="c1"># overlapped</span>
+                    <span class="n">overlapped</span> <span class="o">=</span> <span class="n">img_np</span> <span class="o">*</span> <span class="mf">0.3</span> <span class="o">+</span> <span class="n">am</span> <span class="o">*</span> <span class="mf">0.7</span>
+                    <span class="n">overlapped</span><span class="p">[</span><span class="n">overlapped</span><span class="o">&gt;</span><span class="mi">255</span><span class="p">]</span> <span class="o">=</span> <span class="mi">255</span>
+                    <span class="n">overlapped</span> <span class="o">=</span> <span class="n">overlapped</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+
+                    <span class="c1"># save images in a single figure (add white spacing between images)</span>
+                    <span class="c1"># from left to right: original image, activation map, overlapped image</span>
+                    <span class="n">grid_img</span> <span class="o">=</span> <span class="mi">255</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">width</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">GRID_SPACING</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+                    <span class="n">grid_img</span><span class="p">[:,</span> <span class="p">:</span><span class="n">width</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">img_np</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">grid_img</span><span class="p">[:,</span> <span class="n">width</span><span class="o">+</span><span class="n">GRID_SPACING</span><span class="p">:</span> <span class="mi">2</span><span class="o">*</span><span class="n">width</span><span class="o">+</span><span class="n">GRID_SPACING</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">am</span>
+                    <span class="n">grid_img</span><span class="p">[:,</span> <span class="mi">2</span><span class="o">*</span><span class="n">width</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">GRID_SPACING</span><span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">overlapped</span>
+                    <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">actmap_dir</span><span class="p">,</span> <span class="n">imname</span><span class="o">+</span><span class="s1">&#39;.jpg&#39;</span><span class="p">),</span> <span class="n">grid_img</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">batch_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">print_freq</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- done batch </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">batch_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">queryloader</span><span class="p">)))</span></div>
 
     <span class="k">def</span> <span class="nf">_compute_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>

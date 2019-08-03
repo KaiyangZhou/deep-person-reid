@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.engine &mdash; torchreid 0.8.1 documentation</title>
+  <title>torchreid.engine &mdash; torchreid 0.9.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.9.0
               </div>
             
           
@@ -199,7 +199,7 @@ or <code class="docutils literal notranslate"><span class="pre">torchreid.data.V
 </table>
 <dl class="method">
 <dt id="torchreid.engine.engine.Engine.run">
-<code class="descname">run</code><span class="sig-paren">(</span><em>save_dir='log', max_epoch=0, start_epoch=0, fixbase_epoch=0, open_layers=None, start_eval=0, eval_freq=-1, test_only=False, print_freq=10, dist_metric='euclidean', normalize_feature=False, visrank=False, visrank_topk=20, use_metric_cuhk03=False, ranks=[1, 5, 10, 20], rerank=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.run" title="Permalink to this definition">¶</a></dt>
+<code class="descname">run</code><span class="sig-paren">(</span><em>save_dir='log', max_epoch=0, start_epoch=0, fixbase_epoch=0, open_layers=None, start_eval=0, eval_freq=-1, test_only=False, print_freq=10, dist_metric='euclidean', normalize_feature=False, visrank=False, visrank_topk=10, use_metric_cuhk03=False, ranks=[1, 5, 10, 20], rerank=False, visactmap=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>A unified pipeline for training and evaluating a model.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -223,16 +223,16 @@ Default is False.</li>
 between query and gallery. Default is “euclidean”.</li>
 <li><strong>normalize_feature</strong> (<em>bool</em><em>, </em><em>optional</em>) – performs L2 normalization on feature vectors before
 computing feature distance. Default is False.</li>
-<li><strong>visrank</strong> (<em>bool</em><em>, </em><em>optional</em>) – visualizes ranked results. Default is False. Visualization
-will be performed every test time, so it is recommended to enable <code class="docutils literal notranslate"><span class="pre">visrank</span></code> when
-<code class="docutils literal notranslate"><span class="pre">test_only</span></code> is True. The ranked images will be saved to
-“save_dir/ranks-epoch/dataset_name”, e.g. “save_dir/ranks-60/market1501”.</li>
-<li><strong>visrank_topk</strong> (<em>int</em><em>, </em><em>optional</em>) – top-k ranked images to be visualized. Default is 20.</li>
+<li><strong>visrank</strong> (<em>bool</em><em>, </em><em>optional</em>) – visualizes ranked results. Default is False. It is recommended to
+enable <code class="docutils literal notranslate"><span class="pre">visrank</span></code> when <code class="docutils literal notranslate"><span class="pre">test_only</span></code> is True. The ranked images will be saved to
+“save_dir/visrank_dataset”, e.g. “save_dir/visrank_market1501”.</li>
+<li><strong>visrank_topk</strong> (<em>int</em><em>, </em><em>optional</em>) – top-k ranked images to be visualized. Default is 10.</li>
 <li><strong>use_metric_cuhk03</strong> (<em>bool</em><em>, </em><em>optional</em>) – use single-gallery-shot setting for cuhk03.
 Default is False. This should be enabled when using cuhk03 classic split.</li>
 <li><strong>ranks</strong> (<em>list</em><em>, </em><em>optional</em>) – cmc ranks to be computed. Default is [1, 5, 10, 20].</li>
 <li><strong>rerank</strong> (<em>bool</em><em>, </em><em>optional</em>) – uses person re-ranking (by Zhong et al. CVPR‘17).
 Default is False. This is only enabled when test_only=True.</li>
+<li><strong>visactmap</strong> (<em>bool</em><em>, </em><em>optional</em>) – visualizes activation maps. Default is False.</li>
 </ul>
 </td>
 </tr>
@@ -242,47 +242,19 @@ Default is False. This is only enabled when test_only=True.</li>
 
 <dl class="method">
 <dt id="torchreid.engine.engine.Engine.test">
-<code class="descname">test</code><span class="sig-paren">(</span><em>epoch, testloader, dist_metric='euclidean', normalize_feature=False, visrank=False, visrank_topk=20, save_dir='', use_metric_cuhk03=False, ranks=[1, 5, 10, 20], rerank=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.test" title="Permalink to this definition">¶</a></dt>
+<code class="descname">test</code><span class="sig-paren">(</span><em>epoch, testloader, dist_metric='euclidean', normalize_feature=False, visrank=False, visrank_topk=10, save_dir='', use_metric_cuhk03=False, ranks=[1, 5, 10, 20], rerank=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests model on target datasets.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This function has been called in <code class="docutils literal notranslate"><span class="pre">run()</span></code> when necessary.</p>
+<p class="last">This function has been called in <code class="docutils literal notranslate"><span class="pre">run()</span></code>.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The test pipeline implemented in this function suits both image- and
 video-reid. In general, a subclass of Engine only needs to re-implement
-<code class="docutils literal notranslate"><span class="pre">_extract_features()</span></code> and <code class="docutils literal notranslate"><span class="pre">_parse_data_for_eval()</span></code> when necessary,
+<code class="docutils literal notranslate"><span class="pre">_extract_features()</span></code> and <code class="docutils literal notranslate"><span class="pre">_parse_data_for_eval()</span></code> (most of the time),
 but not a must. Please refer to the source code for more details.</p>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>epoch</strong> (<em>int</em>) – current epoch.</li>
-<li><strong>testloader</strong> (<em>dict</em>) – dictionary containing
-{dataset_name: ‘query’: queryloader, ‘gallery’: galleryloader}.</li>
-<li><strong>dist_metric</strong> (<em>str</em><em>, </em><em>optional</em>) – distance metric used to compute distance matrix
-between query and gallery. Default is “euclidean”.</li>
-<li><strong>normalize_feature</strong> (<em>bool</em><em>, </em><em>optional</em>) – performs L2 normalization on feature vectors before
-computing feature distance. Default is False.</li>
-<li><strong>visrank</strong> (<em>bool</em><em>, </em><em>optional</em>) – visualizes ranked results. Default is False. Visualization
-will be performed every test time, so it is recommended to enable <code class="docutils literal notranslate"><span class="pre">visrank</span></code> when
-<code class="docutils literal notranslate"><span class="pre">test_only</span></code> is True. The ranked images will be saved to
-“save_dir/ranks-epoch/dataset_name”, e.g. “save_dir/ranks-60/market1501”.</li>
-<li><strong>visrank_topk</strong> (<em>int</em><em>, </em><em>optional</em>) – top-k ranked images to be visualized. Default is 20.</li>
-<li><strong>save_dir</strong> (<em>str</em>) – directory to save visualized results if <code class="docutils literal notranslate"><span class="pre">visrank</span></code> is True.</li>
-<li><strong>use_metric_cuhk03</strong> (<em>bool</em><em>, </em><em>optional</em>) – use single-gallery-shot setting for cuhk03.
-Default is False. This should be enabled when using cuhk03 classic split.</li>
-<li><strong>ranks</strong> (<em>list</em><em>, </em><em>optional</em>) – cmc ranks to be computed. Default is [1, 5, 10, 20].</li>
-<li><strong>rerank</strong> (<em>bool</em><em>, </em><em>optional</em>) – uses person re-ranking (by Zhong et al. CVPR‘17).
-Default is False.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="method">
@@ -296,8 +268,24 @@ Default is False.</li>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This needs to be implemented in subclasses.</p>
+<p class="last">This must be implemented in subclasses.</p>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="torchreid.engine.engine.Engine.visactmap">
+<code class="descname">visactmap</code><span class="sig-paren">(</span><em>testloader</em>, <em>save_dir</em>, <em>width</em>, <em>height</em>, <em>print_freq</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.visactmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.visactmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visualizes CNN activation maps to see where the CNN focuses on to extract features.</p>
+<p>This function takes as input the query images of target datasets</p>
+<dl class="docutils">
+<dt>Reference:</dt>
+<dd><ul class="first last simple">
+<li>Zagoruyko and Komodakis. Paying more attention to attention: Improving the
+performance of convolutional neural networks via attention transfer. ICLR, 2017</li>
+<li>Zhou et al. Omni-Scale Feature Learning for Person Re-Identification. ICCV, 2019.</li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -372,7 +360,7 @@ or <code class="docutils literal notranslate"><span class="pre">torchreid.data.V
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This needs to be implemented in subclasses.</p>
+<p class="last">This must be implemented in subclasses.</p>
 </div>
 </dd></dl>
 
@@ -451,7 +439,7 @@ or <code class="docutils literal notranslate"><span class="pre">torchreid.data.V
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This needs to be implemented in subclasses.</p>
+<p class="last">This must be implemented in subclasses.</p>
 </div>
 </dd></dl>
 
