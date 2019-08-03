@@ -21,6 +21,9 @@ from torchreid.losses import DeepSupervision
 from torchreid import metrics
 
 
+PLOT_FONT_SIZE = 5
+
+
 class Engine(object):
     r"""A generic base Engine class for both image- and video-reid.
 
@@ -302,7 +305,7 @@ class Engine(object):
             - Zhou et al. Omni-Scale Feature Learning for Person Re-Identification. ICCV, 2019.
         """
         self.model.eval()
-        if not hasattr(self.model , 'featuremaps'):
+        if not hasattr(self.model, 'featuremaps'):
             raise AttributeError('Model must have method featuremaps(), which returns the feature maps '
                                  'of shape (b, c, h, w)')
         
@@ -375,11 +378,11 @@ class Engine(object):
                     fig = plt.figure()
                     fig.add_subplot(1, 3, 1)
                     plt.axis('off')
-                    plt.title('Original image')
+                    plt.title('Original image', fontsize=PLOT_FONT_SIZE)
                     plt.imshow(img_np)
                     fig.add_subplot(1, 3, 2)
                     plt.axis('off')
-                    plt.title('Activation map')
+                    plt.title('Activation map', fontsize=PLOT_FONT_SIZE)
                     plt.imshow(out[:, :, ::-1])
                     fig.add_subplot(1, 3, 3)
                     plt.axis('off')
