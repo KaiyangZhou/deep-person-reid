@@ -309,7 +309,6 @@ class Engine(object):
         
         imagenet_mean = [0.485, 0.456, 0.406]
         imagenet_std = [0.229, 0.224, 0.225]
-        tensor2pil = torchvision.transforms.ToPILImage()
 
         for target in list(testloader.keys()):
             queryloader = testloader[target]['query']

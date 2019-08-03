@@ -198,15 +198,56 @@ You can load a trained model using :code:`torchreid.utils.load_pretrained_weight
 
 Visualize ranked results
 -------------------------
-Ranked images can be visualized by setting the ``visrank`` to True in ``engine.run()``. ``visrank_topk`` determines the top-k images to be visualized (Default is ``visrank_topk=20``). Typically, ``visrank`` is used in test mode, i.e. setting ``test_only=True`` in ``engine.run()``. The images are saved under ``osp.join(save_dir, 'visrank-'+str(epoch+1), dataset_name``.
+Ranked images can be visualized by setting ``visrank`` to True in ``engine.run()``. ``visrank_topk`` determines the top-k images to be visualized (Default is ``visrank_topk=10``). Note that ``visrank`` can only be used in test mode, i.e. setting ``test_only=True`` in ``engine.run()``. The images will be saved under ``save_dir/visrank_dataset`` where each image sketches the ranked list given a query. An example image is shown below. Red and green denote incorrect and correct matches respectively.
 
 .. image:: figures/ranked_results.jpg
-    :width: 600px
+    :width: 800px
+    :align: center
+
+An example command line using ``scripts/main.py`` is
+
+.. code-block:: shell
+
+    python scripts/main.py \
+    --root $DATA \
+    -s market1501 \
+    -t market1501 \
+    -a osnet_x1_0 \
+    --load-weights PATH_TO_WEIGHTS \
+    --evaluate \
+    --visrank \
+    --visrank-topk 15 \
+    --save-dir log/eval-osnet_x1_0 \
+    --gpu-devices 0
+
+
+Visualize activation maps
+--------------------------
+To understand where the CNN focuses on to extract features for ReID, you can visualize the activation maps as did in `OSNet <https://arxiv.org/abs/1905.00953>`_. This can be achieved by setting ``visactmap=True`` in ``engine.run()``. Images will be saved in ``save_dir/actmap_dataset``. An example image is shown below (from left to right: image, activation map, overlapped image)
+
+.. image:: figures/actmap.jpg
+    :width: 300px
     :align: center
 
 
+An example command line using ``scripts/main.py`` is
+
+.. code-block:: shell
+
+    python scripts/main.py \
+    --root $DATA \
+    -s market1501 \
+    -t market1501 \
+    -a osnet_x1_0 \
+    --load-weights PATH_TO_WEIGHTS \
+    --visactmap \
+    --save-dir log/eval-osnet_x1_0 \
+    --gpu-devices 0
+
+
+
 Use your own dataset
------------------------
+----------------------
 1. Write your own dataset class. Below is a template for image dataset. However, it can also be applied to a video dataset class, for which you simply change ``ImageDataset`` to ``VideoDataset``.
 
 .. code-block:: python
