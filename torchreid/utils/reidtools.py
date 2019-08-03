@@ -13,7 +13,11 @@ from matplotlib import pyplot as plt
 from .tools import mkdir_if_missing
 
 
-PLOT_FONT_SIZE = 3
+GRID_SPACING = 10
+QUERY_EXTRA_SPACING = 90
+BW = 5 # border width
+GREEN = (0, 255, 0)
+RED = (0, 0, 255)
 
 
 def visualize_ranked_results(distmat, dataset, data_type, width=128, height=256, save_dir='', topk=20):
@@ -35,6 +39,7 @@ def visualize_ranked_results(distmat, dataset, data_type, width=128, height=256,
         topk (int, optional): denoting top-k images in the rank list to be visualized.
     """
     num_q, num_g = distmat.shape
+    mkdir_if_missing(save_dir)
 
     print('# query: {}\n# gallery {}'.format(num_q, num_g))
     print('Visualizing top-{} ranks ...'.format(topk))
@@ -44,7 +49,6 @@ def visualize_ranked_results(distmat, dataset, data_type, width=128, height=256,
     assert num_g == len(gallery)
     
     indices = np.argsort(distmat, axis=1)
-    mkdir_if_missing(save_dir)
 
     def _cp_img_to(src, dst, rank, prefix, matched=False):
         """
@@ -70,15 +74,15 @@ def visualize_ranked_results(distmat, dataset, data_type, width=128, height=256,
 
     for q_idx in range(num_q):
         qimg_path, qpid, qcamid = query[q_idx]
+        num_cols = topk + 1
+        grid_img = 255 * np.ones((height, num_cols*width+topk*GRID_SPACING+QUERY_EXTRA_SPACING, 3), dtype=np.uint8)
 
         if data_type == 'image':
             qimg = cv2.imread(qimg_path)
             qimg = cv2.resize(qimg, (width, height))
-            fig = plt.figure()
-            fig.add_subplot(1, topk+1, 1) # totally 1 query and topk gallery
-            plt.axis('off')
-            plt.title('Query', fontsize=PLOT_FONT_SIZE)
-            plt.imshow(qimg)
+            qimg = cv2.copyMakeBorder(qimg, BW, BW, BW, BW, cv2.BORDER_CONSTANT, value=(0, 0, 0))
+            qimg = cv2.resize(qimg, (width, height)) # resize twice to ensure that the border width is consistent across images
+            grid_img[:, :width, :] = qimg
         else:
             qdir = osp.join(save_dir, osp.basename(osp.splitext(qimg_path)[0]))
             mkdir_if_missing(qdir)
@@ -90,25 +94,25 @@ def visualize_ranked_results(distmat, dataset, data_type, width=128, height=256,
             invalid = (qpid == gpid) & (qcamid == gcamid)
             
             if not invalid:
+                matched = gpid==qpid
                 if data_type == 'image':
+                    border_color = GREEN if matched else RED
                     gimg = cv2.imread(gimg_path)
                     gimg = cv2.resize(gimg, (width, height))
-                    fig.add_subplot(1, topk+1, rank_idx+1)
-                    plt.axis('off')
-                    title_color = 'green' if gpid == qpid else 'red'
-                    plt.title('Rank-'+str(rank_idx), fontsize=PLOT_FONT_SIZE, color=title_color)
-                    plt.imshow(gimg)
+                    gimg = cv2.copyMakeBorder(gimg, BW, BW, BW, BW, cv2.BORDER_CONSTANT, value=border_color)
+                    gimg = cv2.resize(gimg, (width, height))
+                    start = rank_idx*width + rank_idx*GRID_SPACING + QUERY_EXTRA_SPACING
+                    end = (rank_idx+1)*width + rank_idx*GRID_SPACING + QUERY_EXTRA_SPACING
+                    grid_img[:, start: end, :] = gimg
                 else:
-                    _cp_img_to(gimg_path, qdir, rank=rank_idx, prefix='gallery')
+                    _cp_img_to(gimg_path, qdir, rank=rank_idx, prefix='gallery', matched=matched)
                 
                 rank_idx += 1
                 if rank_idx > topk:
                     break
 
-        if data_type == 'image':
-            imname = osp.basename(osp.splitext(qimg_path)[0])
-            fig.savefig(osp.join(save_dir, imname+'.pdf'), bbox_inches='tight')
-            plt.close()
+        imname = osp.basename(osp.splitext(qimg_path)[0])
+        cv2.imwrite(osp.join(save_dir, imname+'.jpg'), grid_img)
 
         if (q_idx+1) % 100 == 0:
             print('- done {}/{}'.format(q_idx+1, num_q))
