@@ -200,8 +200,7 @@ class OSNet(nn.Module):
     """Omni-Scale Network.
     
     Reference:
-        - Zhou et al. Omni-Scale Feature Learning for Person Re-Identification. ArXiv preprint, 2019.
-          https://arxiv.org/abs/1905.00953
+        - Zhou et al. Omni-Scale Feature Learning for Person Re-Identification. ICCV, 2019.
     """
 
     def __init__(self, num_classes, blocks, layers, channels, feature_dim=512, loss='softmax', IN=False, **kwargs):

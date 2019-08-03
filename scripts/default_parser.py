@@ -164,8 +164,10 @@ def init_parser():
 
     parser.add_argument('--visrank', action='store_true',
                         help='visualize ranked results, only available in evaluation mode')
-    parser.add_argument('--visrank-topk', type=int, default=20,
+    parser.add_argument('--visrank-topk', type=int, default=15,
                         help='visualize topk ranks')
+    parser.add_argument('--visactmap', action='store_true',
+                        help='visualize CNN activation maps')
     
     # ************************************************************
     # Miscs
@@ -273,5 +275,6 @@ def engine_run_kwargs(parsed_args):
         'visrank_topk': parsed_args.visrank_topk,
         'use_metric_cuhk03': parsed_args.use_metric_cuhk03,
         'ranks': parsed_args.ranks,
-        'rerank': parsed_args.rerank
+        'rerank': parsed_args.rerank,
+        'visactmap': parsed_args.visactmap
     }

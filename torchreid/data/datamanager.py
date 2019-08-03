@@ -27,6 +27,8 @@ class DataManager(object):
                  use_cpu=False):
         self.sources = sources
         self.targets = targets
+        self.height = height
+        self.width = width
 
         if self.sources is None:
             raise ValueError('sources must not be None')
@@ -41,7 +43,7 @@ class DataManager(object):
             self.targets = [self.targets]
 
         self.transform_tr, self.transform_te = build_transforms(
-            height, width, transforms
+            self.height, self.width, transforms
         )
 
         self.use_gpu = (torch.cuda.is_available() and not use_cpu)
@@ -108,6 +110,7 @@ class ImageDataManager(DataManager):
             batch_size=32
         )
     """
+    data_type = 'image'
 
     def __init__(self, root='', sources=None, targets=None, height=256, width=128, transforms='random_flip',
                  use_cpu=False, split_id=0, combineall=False,
@@ -261,6 +264,7 @@ class VideoDataManager(DataManager):
         training, you need to modify the transformation functions for video reid such that each function
         applies the same operation to all images in a tracklet to keep consistency.
     """
+    data_type = 'video'
 
     def __init__(self, root='', sources=None, targets=None, height=256, width=128, transforms='random_flip',
                  use_cpu=False, split_id=0, combineall=False,
