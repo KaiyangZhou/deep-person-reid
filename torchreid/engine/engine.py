@@ -50,7 +50,7 @@ class Engine(object):
 
     def run(self, save_dir='log', max_epoch=0, start_epoch=0, fixbase_epoch=0, open_layers=None,
             start_eval=0, eval_freq=-1, test_only=False, print_freq=10,
-            dist_metric='euclidean', normalize_feature=False, visrank=False, visrank_topk=20,
+            dist_metric='euclidean', normalize_feature=False, visrank=False, visrank_topk=10,
             use_metric_cuhk03=False, ranks=[1, 5, 10, 20], rerank=False, visactmap=False):
         r"""A unified pipeline for training and evaluating a model.
 
@@ -75,7 +75,7 @@ class Engine(object):
             visrank (bool, optional): visualizes ranked results. Default is False. It is recommended to
                 enable ``visrank`` when ``test_only`` is True. The ranked images will be saved to
                 "save_dir/visrank_dataset", e.g. "save_dir/visrank_market1501".
-            visrank_topk (int, optional): top-k ranked images to be visualized. Default is 20.
+            visrank_topk (int, optional): top-k ranked images to be visualized. Default is 10.
             use_metric_cuhk03 (bool, optional): use single-gallery-shot setting for cuhk03.
                 Default is False. This should be enabled when using cuhk03 classic split.
             ranks (list, optional): cmc ranks to be computed. Default is [1, 5, 10, 20].
@@ -163,7 +163,7 @@ class Engine(object):
         raise NotImplementedError
 
     def test(self, epoch, testloader, dist_metric='euclidean', normalize_feature=False,
-             visrank=False, visrank_topk=20, save_dir='', use_metric_cuhk03=False,
+             visrank=False, visrank_topk=10, save_dir='', use_metric_cuhk03=False,
              ranks=[1, 5, 10, 20], rerank=False):
         r"""Tests model on target datasets.
 
@@ -205,7 +205,7 @@ class Engine(object):
     @torch.no_grad()
     def _evaluate(self, epoch, dataset_name='', queryloader=None, galleryloader=None,
                   dist_metric='euclidean', normalize_feature=False, visrank=False,
-                  visrank_topk=20, save_dir='', use_metric_cuhk03=False, ranks=[1, 5, 10, 20],
+                  visrank_topk=10, save_dir='', use_metric_cuhk03=False, ranks=[1, 5, 10, 20],
                   rerank=False):
         batch_time = AverageMeter()
 
@@ -374,7 +374,7 @@ class Engine(object):
                     # save images in a single figure (add white spacing between images)
                     # from left to right: original image, activation map, overlapped image
                     grid_img = 255 * np.ones((height, 3*width+2*GRID_SPACING, 3), dtype=np.uint8)
-                    grid_img[:, :width, :] = img_np
+                    grid_img[:, :width, :] = img_np[:, :, ::-1]
                     grid_img[:, width+GRID_SPACING: 2*width+GRID_SPACING, :] = am
                     grid_img[:, 2*width+2*GRID_SPACING:, :] = overlapped
                     cv2.imwrite(osp.join(actmap_dir, imname+'.jpg'), grid_img)
