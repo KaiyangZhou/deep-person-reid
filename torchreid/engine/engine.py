@@ -22,7 +22,7 @@ from torchreid.losses import DeepSupervision
 from torchreid import metrics
 
 
-PLOT_FONT_SIZE = 5
+GRID_SPACING = 10
 
 
 class Engine(object):
@@ -314,11 +314,8 @@ class Engine(object):
         for target in list(testloader.keys()):
             queryloader = testloader[target]['query']
             # original images and activation maps are saved individually
-            actmap_image_dir = osp.join(save_dir, 'actmap_'+target, 'images')
-            mkdir_if_missing(actmap_image_dir)
-            # original image and activation map are saved in one single figure
-            actmap_fig_dir = osp.join(save_dir, 'actmap_'+target, 'single_figure')
-            mkdir_if_missing(actmap_fig_dir)
+            actmap_dir = osp.join(save_dir, 'actmap_'+target)
+            mkdir_if_missing(actmap_dir)
             print('Visualizing activation maps for {} ...'.format(target))
 
             for batch_idx, data in enumerate(queryloader):
@@ -359,40 +356,28 @@ class Engine(object):
                     img = imgs[j, ...]
                     for t, m, s in zip(img, imagenet_mean, imagenet_std):
                         t.mul_(s).add_(m).clamp_(0, 1)
-                    img_pil = tensor2pil(img)
-                    img_pil.save(osp.join(actmap_image_dir, imname+'_image.jpg'))
-                    
-                    # activation map
                     img_np = np.uint8(np.floor(img.numpy() * 255))
                     img_np = img_np.transpose((1, 2, 0)) # (c, h, w) -> (h, w, c)
-                    out = outputs[j, ...].numpy()
-                    out = cv2.resize(out, (width, height))
-                    out = 255 * (out - np.max(out)) / (np.max(out) - np.min(out) + 1e-12)
-                    out = np.uint8(np.floor(out))
-                    out = cv2.applyColorMap(out, cv2.COLORMAP_JET)
                     
-                    # combined
-                    combined = img_np * 0.5 + out * 0.5
-                    combined[combined>255] = 255
-                    combined = combined.astype(np.uint8)
-                    cv2.imwrite(osp.join(actmap_image_dir, imname+'_combined.jpg'), combined)
-                    cv2.imwrite(osp.join(actmap_image_dir, imname+'_map.jpg'), out)
+                    # activation map
+                    am = outputs[j, ...].numpy()
+                    am = cv2.resize(am, (width, height))
+                    am = 255 * (am - np.max(am)) / (np.max(am) - np.min(am) + 1e-12)
+                    am = np.uint8(np.floor(am))
+                    am = cv2.applyColorMap(am, cv2.COLORMAP_JET)
+                    
+                    # overlapped
+                    overlapped = img_np * 0.3 + am * 0.7
+                    overlapped[overlapped>255] = 255
+                    overlapped = overlapped.astype(np.uint8)
 
-                    # save images in a single figure
-                    fig = plt.figure()
-                    fig.add_subplot(1, 3, 1)
-                    plt.axis('off')
-                    plt.title('Original image', fontsize=PLOT_FONT_SIZE)
-                    plt.imshow(img_np)
-                    fig.add_subplot(1, 3, 2)
-                    plt.axis('off')
-                    plt.title('Activation map', fontsize=PLOT_FONT_SIZE)
-                    plt.imshow(out[:, :, ::-1])
-                    fig.add_subplot(1, 3, 3)
-                    plt.axis('off')
-                    plt.imshow(combined[:, :, ::-1])
-                    fig.savefig(osp.join(actmap_fig_dir, imname+'.pdf'), bbox_inches='tight')
-                    plt.close()
+                    # save images in a single figure (add white spacing between images)
+                    # from left to right: original image, activation map, overlapped image
+                    grid_img = 255 * np.ones((height, 3*width+2*GRID_SPACING, 3), dtype=np.uint8)
+                    grid_img[:, :width, :] = img_np
+                    grid_img[:, width+GRID_SPACING: 2*width+GRID_SPACING, :] = am
+                    grid_img[:, 2*width+2*GRID_SPACING:, :] = overlapped
+                    cv2.imwrite(osp.join(actmap_dir, imname+'.jpg'), grid_img)
 
                 if (batch_idx+1) % print_freq == 0:
                     print('- done batch {}/{}'.format(batch_idx+1, len(queryloader)))
