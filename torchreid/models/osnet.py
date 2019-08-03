@@ -292,7 +292,7 @@ class OSNet(nn.Module):
         x = self.conv5(x)
         return x
 
-    def forward(self, x, output_featuremaps_only=True):
+    def forward(self, x, output_featuremaps_only=False):
         x = self.featuremaps(x)
         if output_featuremaps_only:
             return x
