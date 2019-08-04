@@ -15,7 +15,7 @@ It features:
 - implementations of state-of-the-art deep reid models
 - access to pretrained reid models
 - advanced training techniques
-- visualization of ranking results
+- visualization tools
 
 
 Documentation: https://kaiyangzhou.github.io/deep-person-reid/.
