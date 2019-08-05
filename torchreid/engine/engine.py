@@ -324,11 +324,11 @@ class Engine(object):
                 
                 # forward to get convolutional feature maps
                 try:
-                    outputs = self.model(imgs, output_featuremaps_only=True)
+                    outputs = self.model(imgs, return_featuremaps=True)
                 except TypeError:
-                    raise TypeError('forward() got unexpected keyword argument "output_featuremaps_only". ' \
-                                    'Please add output_featuremaps_only as an input argument to forward(). When ' \
-                                    'output_featuremaps_only=True, return feature maps only.')
+                    raise TypeError('forward() got unexpected keyword argument "return_featuremaps". ' \
+                                    'Please add return_featuremaps as an input argument to forward(). When ' \
+                                    'return_featuremaps=True, return feature maps only.')
                 
                 if outputs.dim() != 4:
                     raise ValueError('The model output is supposed to have ' \
