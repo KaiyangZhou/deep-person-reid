@@ -491,11 +491,11 @@
                 
                 <span class="c1"># forward to get convolutional feature maps</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="n">output_featuremaps_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="n">return_featuremaps</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;forward() got unexpected keyword argument &quot;output_featuremaps_only&quot;. &#39;</span> \
-                                    <span class="s1">&#39;Please add output_featuremaps_only as an input argument to forward(). When &#39;</span> \
-                                    <span class="s1">&#39;output_featuremaps_only=True, return feature maps only.&#39;</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;forward() got unexpected keyword argument &quot;return_featuremaps&quot;. &#39;</span> \
+                                    <span class="s1">&#39;Please add return_featuremaps as an input argument to forward(). When &#39;</span> \
+                                    <span class="s1">&#39;return_featuremaps=True, return feature maps only.&#39;</span><span class="p">)</span>
                 
                 <span class="k">if</span> <span class="n">outputs</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The model output is supposed to have &#39;</span> \
