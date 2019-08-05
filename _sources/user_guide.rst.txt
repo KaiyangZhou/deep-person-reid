@@ -193,12 +193,12 @@ Note that ``fixbase_epoch`` is counted into ``max_epoch``. In the above example,
 
 Test a trained model
 ----------------------
-You can load a trained model using :code:`torchreid.utils.load_pretrained_weights(model, weight_path)` and set ``test_only=True`` in ``engine.run()``.
+You can load a trained model using :code:`torchreid.utils.load_pretrained_weights(model, weight_path)` and set ``test_only=True`` in ``engine.run()``. If you use ``scripts/main.py``, you can do ``--evaluate --load-weights PATH_TO_WEIGHTS``.
 
 
 Visualize ranked results
 -------------------------
-Ranked images can be visualized by setting ``visrank`` to True in ``engine.run()``. ``visrank_topk`` determines the top-k images to be visualized (Default is ``visrank_topk=10``). Note that ``visrank`` can only be used in test mode, i.e. setting ``test_only=True`` in ``engine.run()``. The images will be saved under ``save_dir/visrank_dataset`` where each image sketches the ranked list given a query. An example image is shown below. Red and green denote incorrect and correct matches respectively.
+Ranked images can be visualized by setting ``visrank`` to True in ``engine.run()``. ``visrank_topk`` determines the top-k images to be visualized (Default is ``visrank_topk=10``). Note that ``visrank`` can only be used in test mode, i.e. ``test_only=True`` in ``engine.run()``. The images will be saved under ``save_dir/visrank_DATASETNAME`` where each image sketches the ranked list given a query. An example is shown below. Red and green denote incorrect and correct matches respectively.
 
 .. image:: figures/ranked_results.jpg
     :width: 800px
@@ -223,7 +223,7 @@ An example command line using ``scripts/main.py`` is
 
 Visualize activation maps
 --------------------------
-To understand where the CNN focuses on to extract features for ReID, you can visualize the activation maps as did in `OSNet <https://arxiv.org/abs/1905.00953>`_. This can be achieved by setting ``visactmap=True`` in ``engine.run()``. Images will be saved in ``save_dir/actmap_dataset``. An example image is shown below (from left to right: image, activation map, overlapped image)
+To understand where the CNN focuses on to extract features for ReID, you can visualize the activation maps as in `OSNet <https://arxiv.org/abs/1905.00953>`_. This can be achieved by setting ``visactmap=True`` in ``engine.run()`` (``test_only`` does not have to be True as ``visactmap`` is independent of ``test_only``. See the code for details). Images will be saved in ``save_dir/actmap_DATASETNAME``. An example is shown below (from left to right: image, activation map, overlapped image)
 
 .. image:: figures/actmap.jpg
     :width: 300px
