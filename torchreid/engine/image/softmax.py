@@ -85,6 +85,7 @@ class ImageSoftmaxEngine(engine.Engine):
         else:
             open_all_layers(self.model)
 
+        num_batches = len(trainloader)
         end = time.time()
         for batch_idx, data in enumerate(trainloader):
             data_time.update(time.time() - end)
@@ -107,7 +108,6 @@ class ImageSoftmaxEngine(engine.Engine):
 
             if (batch_idx+1) % print_freq == 0:
                 # estimate remaining time
-                num_batches = len(trainloader)
                 eta_seconds = batch_time.avg * (num_batches-(batch_idx+1) + (max_epoch-(epoch+1))*num_batches)
                 eta_str = str(datetime.timedelta(seconds=int(eta_seconds)))
                 print('Epoch: [{0}/{1}][{2}/{3}]\t'
@@ -116,8 +116,8 @@ class ImageSoftmaxEngine(engine.Engine):
                       'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
                       'Acc {acc.val:.2f} ({acc.avg:.2f})\t'
                       'Lr {lr:.6f}\t'
-                      'Eta {eta}'.format(
-                      epoch+1, max_epoch, batch_idx+1, len(trainloader),
+                      'eta {eta}'.format(
+                      epoch+1, max_epoch, batch_idx+1, num_batches,
                       batch_time=batch_time,
                       data_time=data_time,
                       loss=losses,

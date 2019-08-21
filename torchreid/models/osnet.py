@@ -177,7 +177,7 @@ class OSBlock(nn.Module):
             self.IN = nn.InstanceNorm2d(out_channels, affine=True)
 
     def forward(self, x):
-        residual = x
+        identity = x
         x1 = self.conv1(x)
         x2a = self.conv2a(x1)
         x2b = self.conv2b(x1)
@@ -186,8 +186,8 @@ class OSBlock(nn.Module):
         x2 = self.gate(x2a) + self.gate(x2b) + self.gate(x2c) + self.gate(x2d)
         x3 = self.conv3(x2)
         if self.downsample is not None:
-            residual = self.downsample(residual)
-        out = x3 + residual
+            identity = self.downsample(identity)
+        out = x3 + identity
         if self.IN is not None:
             out = self.IN(out)
         return F.relu(out)
