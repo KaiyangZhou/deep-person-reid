@@ -15,6 +15,7 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 import torchvision
+from torch.utils.tensorboard import SummaryWriter
 
 import torchreid
 from torchreid.utils import AverageMeter, visualize_ranked_results, save_checkpoint, re_ranking, mkdir_if_missing
@@ -43,6 +44,7 @@ class Engine(object):
         self.optimizer = optimizer
         self.scheduler = scheduler
         self.use_gpu = (torch.cuda.is_available() and not use_cpu)
+        self.writer = None
 
         # check attributes
         if not isinstance(self.model, nn.Module):
@@ -103,6 +105,9 @@ class Engine(object):
             )
             return
 
+        if self.writer is None:
+            self.writer = SummaryWriter(log_dir=save_dir)
+
         if visactmap:
             self.visactmap(testloader, save_dir, self.datamanager.width, self.datamanager.height, print_freq)
             return
@@ -145,6 +150,8 @@ class Engine(object):
         elapsed = round(time.time() - time_start)
         elapsed = str(datetime.timedelta(seconds=elapsed))
         print('Elapsed {}'.format(elapsed))
+        if self.writer is None:
+            self.writer.close()
 
     def train(self):
         r"""Performs training on source datasets for one epoch.
@@ -208,8 +215,6 @@ class Engine(object):
                   visrank_topk=10, save_dir='', use_metric_cuhk03=False, ranks=[1, 5, 10, 20],
                   rerank=False):
         batch_time = AverageMeter()
-
-        self.model.eval()
 
         print('Extracting features from query set ...')
         qf, q_pids, q_camids = [], [], [] # query features, query person IDs and query camera IDs

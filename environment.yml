@@ -9,3 +9,4 @@ dependencies:
 - scipy
 - opencv
 - matplotlib
+- future

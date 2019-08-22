@@ -126,6 +126,14 @@ class ImageSoftmaxEngine(engine.Engine):
                       eta=eta_str
                     )
                 )
+
+            if self.writer is not None:
+                n_iter = epoch * num_batches + batch_idx
+                self.writer.add_scalar('Train/Time', batch_time.avg, n_iter)
+                self.writer.add_scalar('Train/Data', data_time.avg, n_iter)
+                self.writer.add_scalar('Train/Loss', losses.avg, n_iter)
+                self.writer.add_scalar('Train/Acc', accs.avg, n_iter)
+                self.writer.add_scalar('Train/Lr', self.optimizer.param_groups[0]['lr'], n_iter)
             
             end = time.time()
 
