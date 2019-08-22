@@ -15,7 +15,7 @@ It features:
 - implementations of state-of-the-art deep reid models
 - access to pretrained reid models
 - advanced training techniques
-- visualization tools
+- visualization tools (tensorboard, ranks, etc.)
 
 
 Documentation: https://kaiyangzhou.github.io/deep-person-reid/.
@@ -28,67 +28,41 @@ Model zoo: https://kaiyangzhou.github.io/deep-person-reid/MODEL_ZOO.
 Installation
 ---------------
 
-The code works with both python2 and python3.
+We recommend using `conda <https://www.anaconda.com/distribution/>`_ to manage the packages.
 
-Option 1
-^^^^^^^^^^^^
-1. Install PyTorch and torchvision following the `official instructions <https://pytorch.org/>`_.
-2. Clone ``deep-person-reid`` to your preferred directory
+1. Clone ``deep-person-reid`` to your preferred directory.
 
 .. code-block:: bash
     
     $ git clone https://github.com/KaiyangZhou/deep-person-reid.git
 
-3. :code:`cd` to :code:`deep-person-reid` and install dependencies
-
-.. code-block:: bash
-    
-    $ cd deep-person-reid/
-    $ pip install -r requirements.txt
-
-4. Install ``torchreid``
-
-.. code-block:: bash
-    
-    $ python setup.py install # or python3
-    $ # If you wanna modify the source code without
-    $ # the need to rebuild it, you can do
-    $ # python setup.py develop
-
-Option 2 (with conda)
-^^^^^^^^^^^^^^^^^^^^^^^^
-We also provide an environment.yml file for easy setup with conda.
-
-1. Clone ``deep-person-reid`` to your preferred directory
-
-.. code-block:: bash
-    
-    $ git clone https://github.com/KaiyangZhou/deep-person-reid.git
-
-2. :code:`cd` to :code:`deep-person-reid` and create an environment (named ``torchreid``)
+2. Create a conda environment (the default name is ``torchreid``).
 
 .. code-block:: bash
     
     $ cd deep-person-reid/
     $ conda env create -f environment.yml
+    $ conda activate torchreid
 
-In doing so, the dependencies will be automatically installed.
+Do check whether ``which python`` and ``which pip`` point to the right path.
 
-3. Install PyTorch and torchvision (select the proper cuda version to suit your machine)
+3. Install tensorboard.
 
 .. code-block:: bash
     
-    $ conda activate torchreid
+    $ pip install tb-nightly
+
+4. Install PyTorch and torchvision (select the proper cuda version to suit your machine)
+
+.. code-block:: bash
+    
     $ conda install pytorch torchvision cudatoolkit=9.0 -c pytorch
 
-4. Install ``torchreid``
+5. Install ``torchreid``
 
 .. code-block:: bash
 
-    $ python setup.py install
-    $ # If you wanna modify the source code without
-    $ # the need to rebuild it, you can do
-    $ # python setup.py develop
+    $ python setup.py develop
 
 
 Get started: 30 seconds to Torchreid
@@ -258,4 +232,3 @@ If you find this code useful to your research, please cite the following publica
       journal={arXiv preprint arXiv:1905.00953},
       year={2019}
     }
-
