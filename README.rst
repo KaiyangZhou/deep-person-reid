@@ -52,13 +52,13 @@ Do check whether ``which python`` and ``which pip`` point to the right path.
     
     $ pip install tb-nightly
 
-4. Install PyTorch and torchvision (select the proper cuda version to suit your machine)
+4. Install PyTorch and torchvision (select the proper cuda version to suit your machine).
 
 .. code-block:: bash
     
     $ conda install pytorch torchvision cudatoolkit=9.0 -c pytorch
 
-5. Install ``torchreid``
+5. Install ``torchreid``.
 
 .. code-block:: bash
 
