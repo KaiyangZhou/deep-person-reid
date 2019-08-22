@@ -4,20 +4,20 @@ from __future__ import print_function
 import torch
 
 
-AVAI_SCH = ['single_step', 'multi_step']
+AVAI_SCH = ['single_step', 'multi_step', 'cosine']
 
 
-def build_lr_scheduler(optimizer, lr_scheduler, stepsize, gamma=0.1):
+def build_lr_scheduler(optimizer, lr_scheduler='single_step', stepsize=1, gamma=0.1, max_epoch=1):
     """A function wrapper for building a learning rate scheduler.
 
     Args:
         optimizer (Optimizer): an Optimizer.
-        lr_scheduler (str): learning rate scheduler method. Currently supports
-            "single_step" and "multi_step".
-        stepsize (int or list): step size to decay learning rate. When ``lr_scheduler`` is
-            "single_step", ``stepsize`` should be an integer. When ``lr_scheduler`` is
-            "multi_step", ``stepsize`` is a list.
+        lr_scheduler (str, optional): learning rate scheduler method. Default is single_step.
+        stepsize (int or list, optional): step size to decay learning rate. When ``lr_scheduler``
+            is "single_step", ``stepsize`` should be an integer. When ``lr_scheduler`` is
+            "multi_step", ``stepsize`` is a list. Default is 1.
         gamma (float, optional): decay rate. Default is 0.1.
+        max_epoch (int, optional): maximum epoch (for cosine annealing). Default is 1.
 
     Examples::
         >>> # Decay learning rate by every 20 epochs.
@@ -55,6 +55,11 @@ def build_lr_scheduler(optimizer, lr_scheduler, stepsize, gamma=0.1):
 
         scheduler = torch.optim.lr_scheduler.MultiStepLR(
             optimizer, milestones=stepsize, gamma=gamma
+        )
+
+    elif lr_scheduler == 'cosine':
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+            optimizer, float(max_epoch)
         )
 
     return scheduler
