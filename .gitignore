@@ -122,14 +122,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-
-# ReID
-reid-data/
-log/
-saved-models/
-model-zoo/
-debug.py
-
 # Cython eval code
 *.c
 *.html
@@ -139,3 +131,10 @@ debug.py
 .Spotlight-V100
 .Trashes
 ._*
+
+# ReID
+reid-data/
+log/
+saved-models/
+model-zoo/
+debug*
