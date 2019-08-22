@@ -196,6 +196,11 @@ Test a trained model
 You can load a trained model using :code:`torchreid.utils.load_pretrained_weights(model, weight_path)` and set ``test_only=True`` in ``engine.run()``. If you use ``scripts/main.py``, you can do ``--evaluate --load-weights PATH_TO_WEIGHTS``.
 
 
+Visualize learning curves with tensorboard
+--------------------------------------------
+The ``SummaryWriter()`` for tensorboard will be automatically initialized in ``engine.run()`` when you are training your model. Therefore, you do not need to do extra jobs. After the training is done, the ``*tf.events*`` file will be saved in ``save_dir``. Then, you just call ``tensorboard --logdir=your_save_dir`` in your terminal and visit ``http://localhost:6006/`` in your web browser. See `pytorch tensorboard <https://pytorch.org/docs/stable/tensorboard.html>`_ for further information.
+
+
 Visualize ranked results
 -------------------------
 Ranked images can be visualized by setting ``visrank`` to True in ``engine.run()``. ``visrank_topk`` determines the top-k images to be visualized (Default is ``visrank_topk=10``). Note that ``visrank`` can only be used in test mode, i.e. ``test_only=True`` in ``engine.run()``. The images will be saved under ``save_dir/visrank_DATASETNAME`` where each image sketches the ranked list given a query. An example is shown below. Red and green denote incorrect and correct matches respectively.

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>How-to &mdash; torchreid 0.9.1 documentation</title>
+  <title>How-to &mdash; torchreid 0.9.3 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.9.1
+                0.9.3
               </div>
             
           
@@ -99,6 +99,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#optimize-layers-with-different-learning-rates">Optimize layers with different learning rates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#do-two-stepped-transfer-learning">Do two-stepped transfer learning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#test-a-trained-model">Test a trained model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#visualize-learning-curves-with-tensorboard">Visualize learning curves with tensorboard</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#visualize-ranked-results">Visualize ranked results</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#visualize-activation-maps">Visualize activation maps</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#use-your-own-dataset">Use your own dataset</a></li>
@@ -190,22 +191,23 @@
 <h1>How-to<a class="headerlink" href="#how-to" title="Permalink to this headline">¶</a></h1>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#find-model-keys" id="id1">Find model keys</a></li>
-<li><a class="reference internal" href="#show-available-models" id="id2">Show available models</a></li>
-<li><a class="reference internal" href="#change-the-training-sampler" id="id3">Change the training sampler</a></li>
-<li><a class="reference internal" href="#choose-an-optimizer-lr-scheduler" id="id4">Choose an optimizer/lr_scheduler</a></li>
-<li><a class="reference internal" href="#resume-training" id="id5">Resume training</a></li>
-<li><a class="reference internal" href="#compute-model-complexity" id="id6">Compute model complexity</a></li>
-<li><a class="reference internal" href="#combine-multiple-datasets" id="id7">Combine multiple datasets</a></li>
-<li><a class="reference internal" href="#do-cross-dataset-evaluation" id="id8">Do cross-dataset evaluation</a></li>
-<li><a class="reference internal" href="#combine-train-query-and-gallery" id="id9">Combine train, query and gallery</a></li>
-<li><a class="reference internal" href="#optimize-layers-with-different-learning-rates" id="id10">Optimize layers with different learning rates</a></li>
-<li><a class="reference internal" href="#do-two-stepped-transfer-learning" id="id11">Do two-stepped transfer learning</a></li>
-<li><a class="reference internal" href="#test-a-trained-model" id="id12">Test a trained model</a></li>
-<li><a class="reference internal" href="#visualize-ranked-results" id="id13">Visualize ranked results</a></li>
-<li><a class="reference internal" href="#visualize-activation-maps" id="id14">Visualize activation maps</a></li>
-<li><a class="reference internal" href="#use-your-own-dataset" id="id15">Use your own dataset</a></li>
-<li><a class="reference internal" href="#design-your-own-engine" id="id16">Design your own Engine</a></li>
+<li><p><a class="reference internal" href="#find-model-keys" id="id1">Find model keys</a></p></li>
+<li><p><a class="reference internal" href="#show-available-models" id="id2">Show available models</a></p></li>
+<li><p><a class="reference internal" href="#change-the-training-sampler" id="id3">Change the training sampler</a></p></li>
+<li><p><a class="reference internal" href="#choose-an-optimizer-lr-scheduler" id="id4">Choose an optimizer/lr_scheduler</a></p></li>
+<li><p><a class="reference internal" href="#resume-training" id="id5">Resume training</a></p></li>
+<li><p><a class="reference internal" href="#compute-model-complexity" id="id6">Compute model complexity</a></p></li>
+<li><p><a class="reference internal" href="#combine-multiple-datasets" id="id7">Combine multiple datasets</a></p></li>
+<li><p><a class="reference internal" href="#do-cross-dataset-evaluation" id="id8">Do cross-dataset evaluation</a></p></li>
+<li><p><a class="reference internal" href="#combine-train-query-and-gallery" id="id9">Combine train, query and gallery</a></p></li>
+<li><p><a class="reference internal" href="#optimize-layers-with-different-learning-rates" id="id10">Optimize layers with different learning rates</a></p></li>
+<li><p><a class="reference internal" href="#do-two-stepped-transfer-learning" id="id11">Do two-stepped transfer learning</a></p></li>
+<li><p><a class="reference internal" href="#test-a-trained-model" id="id12">Test a trained model</a></p></li>
+<li><p><a class="reference internal" href="#visualize-learning-curves-with-tensorboard" id="id13">Visualize learning curves with tensorboard</a></p></li>
+<li><p><a class="reference internal" href="#visualize-ranked-results" id="id14">Visualize ranked results</a></p></li>
+<li><p><a class="reference internal" href="#visualize-activation-maps" id="id15">Visualize activation maps</a></p></li>
+<li><p><a class="reference internal" href="#use-your-own-dataset" id="id16">Use your own dataset</a></p></li>
+<li><p><a class="reference internal" href="#design-your-own-engine" id="id17">Design your own Engine</a></p></li>
 </ul>
 </div>
 <div class="section" id="find-model-keys">
@@ -368,8 +370,12 @@
 <h2><a class="toc-backref" href="#id12">Test a trained model</a><a class="headerlink" href="#test-a-trained-model" title="Permalink to this headline">¶</a></h2>
 <p>You can load a trained model using <code class="code docutils literal notranslate"><span class="pre">torchreid.utils.load_pretrained_weights(model,</span> <span class="pre">weight_path)</span></code> and set <code class="docutils literal notranslate"><span class="pre">test_only=True</span></code> in <code class="docutils literal notranslate"><span class="pre">engine.run()</span></code>. If you use <code class="docutils literal notranslate"><span class="pre">scripts/main.py</span></code>, you can do <code class="docutils literal notranslate"><span class="pre">--evaluate</span> <span class="pre">--load-weights</span> <span class="pre">PATH_TO_WEIGHTS</span></code>.</p>
 </div>
+<div class="section" id="visualize-learning-curves-with-tensorboard">
+<h2><a class="toc-backref" href="#id13">Visualize learning curves with tensorboard</a><a class="headerlink" href="#visualize-learning-curves-with-tensorboard" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">SummaryWriter()</span></code> for tensorboard will be automatically initialized in <code class="docutils literal notranslate"><span class="pre">engine.run()</span></code> when you are training your model. Therefore, you do not need to do extra jobs. After the training is done, the <code class="docutils literal notranslate"><span class="pre">*tf.events*</span></code> file will be saved in <code class="docutils literal notranslate"><span class="pre">save_dir</span></code>. Then, you just call <code class="docutils literal notranslate"><span class="pre">tensorboard</span> <span class="pre">--logdir=your_save_dir</span></code> in your terminal and visit <code class="docutils literal notranslate"><span class="pre">http://localhost:6006/</span></code> in your web browser. See <a class="reference external" href="https://pytorch.org/docs/stable/tensorboard.html">pytorch tensorboard</a> for further information.</p>
+</div>
 <div class="section" id="visualize-ranked-results">
-<h2><a class="toc-backref" href="#id13">Visualize ranked results</a><a class="headerlink" href="#visualize-ranked-results" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id14">Visualize ranked results</a><a class="headerlink" href="#visualize-ranked-results" title="Permalink to this headline">¶</a></h2>
 <p>Ranked images can be visualized by setting <code class="docutils literal notranslate"><span class="pre">visrank</span></code> to True in <code class="docutils literal notranslate"><span class="pre">engine.run()</span></code>. <code class="docutils literal notranslate"><span class="pre">visrank_topk</span></code> determines the top-k images to be visualized (Default is <code class="docutils literal notranslate"><span class="pre">visrank_topk=10</span></code>). Note that <code class="docutils literal notranslate"><span class="pre">visrank</span></code> can only be used in test mode, i.e. <code class="docutils literal notranslate"><span class="pre">test_only=True</span></code> in <code class="docutils literal notranslate"><span class="pre">engine.run()</span></code>. The images will be saved under <code class="docutils literal notranslate"><span class="pre">save_dir/visrank_DATASETNAME</span></code> where each image sketches the ranked list given a query. An example is shown below. Red and green denote incorrect and correct matches respectively.</p>
 <a class="reference internal image-reference" href="_images/ranked_results.jpg"><img alt="_images/ranked_results.jpg" class="align-center" src="_images/ranked_results.jpg" style="width: 800px;" /></a>
 <p>An example command line using <code class="docutils literal notranslate"><span class="pre">scripts/main.py</span></code> is</p>
@@ -388,7 +394,7 @@
 </div>
 </div>
 <div class="section" id="visualize-activation-maps">
-<h2><a class="toc-backref" href="#id14">Visualize activation maps</a><a class="headerlink" href="#visualize-activation-maps" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id15">Visualize activation maps</a><a class="headerlink" href="#visualize-activation-maps" title="Permalink to this headline">¶</a></h2>
 <p>To understand where the CNN focuses on to extract features for ReID, you can visualize the activation maps as in <a class="reference external" href="https://arxiv.org/abs/1905.00953">OSNet</a>. This can be achieved by setting <code class="docutils literal notranslate"><span class="pre">visactmap=True</span></code> in <code class="docutils literal notranslate"><span class="pre">engine.run()</span></code> (<code class="docutils literal notranslate"><span class="pre">test_only</span></code> does not have to be True as <code class="docutils literal notranslate"><span class="pre">visactmap</span></code> is independent of <code class="docutils literal notranslate"><span class="pre">test_only</span></code>. See the code for details). Images will be saved in <code class="docutils literal notranslate"><span class="pre">save_dir/actmap_DATASETNAME</span></code>. An example is shown below (from left to right: image, activation map, overlapped image)</p>
 <a class="reference internal image-reference" href="_images/actmap.jpg"><img alt="_images/actmap.jpg" class="align-center" src="_images/actmap.jpg" style="width: 300px;" /></a>
 <p>An example command line using <code class="docutils literal notranslate"><span class="pre">scripts/main.py</span></code> is</p>
@@ -404,14 +410,14 @@
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">In order to visualize activation maps, the CNN needs to output the last convolutional feature maps at eval mode. See <code class="docutils literal notranslate"><span class="pre">torchreid/models/osnet.py</span></code> for example.</p>
+<p class="admonition-title">Note</p>
+<p>In order to visualize activation maps, the CNN needs to output the last convolutional feature maps at eval mode. See <code class="docutils literal notranslate"><span class="pre">torchreid/models/osnet.py</span></code> for example.</p>
 </div>
 </div>
 <div class="section" id="use-your-own-dataset">
-<h2><a class="toc-backref" href="#id15">Use your own dataset</a><a class="headerlink" href="#use-your-own-dataset" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id16">Use your own dataset</a><a class="headerlink" href="#use-your-own-dataset" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Write your own dataset class. Below is a template for image dataset. However, it can also be applied to a video dataset class, for which you simply change <code class="docutils literal notranslate"><span class="pre">ImageDataset</span></code> to <code class="docutils literal notranslate"><span class="pre">VideoDataset</span></code>.</li>
+<li><p>Write your own dataset class. Below is a template for image dataset. However, it can also be applied to a video dataset class, for which you simply change <code class="docutils literal notranslate"><span class="pre">ImageDataset</span></code> to <code class="docutils literal notranslate"><span class="pre">VideoDataset</span></code>.</p></li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
@@ -452,14 +458,14 @@
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li>Register your dataset.</li>
+<li><p>Register your dataset.</p></li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torchreid</span>
 <span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">register_image_dataset</span><span class="p">(</span><span class="s1">&#39;new_dataset&#39;</span><span class="p">,</span> <span class="n">NewDataset</span><span class="p">)</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
-<li>Initialize a data manager with your dataset.</li>
+<li><p>Initialize a data manager with your dataset.</p></li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># use your own dataset only</span>
 <span class="n">datamanager</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ImageDataManager</span><span class="p">(</span>
@@ -481,7 +487,7 @@
 </div>
 </div>
 <div class="section" id="design-your-own-engine">
-<h2><a class="toc-backref" href="#id16">Design your own Engine</a><a class="headerlink" href="#design-your-own-engine" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id17">Design your own Engine</a><a class="headerlink" href="#design-your-own-engine" title="Permalink to this headline">¶</a></h2>
 <p>A new Engine should be designed if you have your own loss function. The base Engine class <code class="docutils literal notranslate"><span class="pre">torchreid.engine.Engine</span></code> has implemented some generic methods which you want to inherit to avoid re-writing. Please refer to the source code for more details. You are suggested to see how <code class="docutils literal notranslate"><span class="pre">ImageSoftmaxEngine</span></code> and <code class="docutils literal notranslate"><span class="pre">ImageTripletEngine</span></code> are constructed (also <code class="docutils literal notranslate"><span class="pre">VideoSoftmaxEngine</span></code> and <code class="docutils literal notranslate"><span class="pre">VideoTripletEngine</span></code>). All you need to implement might be just a <code class="docutils literal notranslate"><span class="pre">train()</span></code> function.</p>
 </div>
 </div>

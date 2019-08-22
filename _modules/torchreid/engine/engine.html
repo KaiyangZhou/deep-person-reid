@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.engine.engine &mdash; torchreid 0.9.1 documentation</title>
+  <title>torchreid.engine.engine &mdash; torchreid 0.9.3 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.9.1
+                0.9.3
               </div>
             
           
@@ -182,6 +182,7 @@
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 <span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
 <span class="kn">import</span> <span class="nn">torchvision</span>
+<span class="kn">from</span> <span class="nn">torch.utils.tensorboard</span> <span class="k">import</span> <span class="n">SummaryWriter</span>
 
 <span class="kn">import</span> <span class="nn">torchreid</span>
 <span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">AverageMeter</span><span class="p">,</span> <span class="n">visualize_ranked_results</span><span class="p">,</span> <span class="n">save_checkpoint</span><span class="p">,</span> <span class="n">re_ranking</span><span class="p">,</span> <span class="n">mkdir_if_missing</span>
@@ -210,6 +211,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizer</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scheduler</span> <span class="o">=</span> <span class="n">scheduler</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">use_cpu</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># check attributes</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -270,6 +272,9 @@
             <span class="p">)</span>
             <span class="k">return</span>
 
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="n">SummaryWriter</span><span class="p">(</span><span class="n">log_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">visactmap</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">visactmap</span><span class="p">(</span><span class="n">testloader</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="n">print_freq</span><span class="p">)</span>
             <span class="k">return</span>
@@ -311,7 +316,9 @@
 
         <span class="n">elapsed</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">time_start</span><span class="p">)</span>
         <span class="n">elapsed</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">elapsed</span><span class="p">))</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Elapsed </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">elapsed</span><span class="p">))</span></div>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Elapsed </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">elapsed</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Engine.train"><a class="viewcode-back" href="../../../pkg/engine.html#torchreid.engine.engine.Engine.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Performs training on source datasets for one epoch.</span>
@@ -375,8 +382,6 @@
                   <span class="n">visrank_topk</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ranks</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span>
                   <span class="n">rerank</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="n">batch_time</span> <span class="o">=</span> <span class="n">AverageMeter</span><span class="p">()</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Extracting features from query set ...&#39;</span><span class="p">)</span>
         <span class="n">qf</span><span class="p">,</span> <span class="n">q_pids</span><span class="p">,</span> <span class="n">q_camids</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span> <span class="c1"># query features, query person IDs and query camera IDs</span>

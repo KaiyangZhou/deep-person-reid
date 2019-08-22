@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.engine.image.softmax &mdash; torchreid 0.9.1 documentation</title>
+  <title>torchreid.engine.image.softmax &mdash; torchreid 0.9.3 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.9.1
+                0.9.3
               </div>
             
           
@@ -293,6 +293,14 @@
                       <span class="n">eta</span><span class="o">=</span><span class="n">eta_str</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">n_iter</span> <span class="o">=</span> <span class="n">epoch</span> <span class="o">*</span> <span class="n">num_batches</span> <span class="o">+</span> <span class="n">batch_idx</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Train/Time&#39;</span><span class="p">,</span> <span class="n">batch_time</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Train/Data&#39;</span><span class="p">,</span> <span class="n">data_time</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Train/Loss&#39;</span><span class="p">,</span> <span class="n">losses</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Train/Acc&#39;</span><span class="p">,</span> <span class="n">accs</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Train/Lr&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">param_groups</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;lr&#39;</span><span class="p">],</span> <span class="n">n_iter</span><span class="p">)</span>
             
             <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
