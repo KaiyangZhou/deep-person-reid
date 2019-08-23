@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
-__version__ = '0.9.3'
+__version__ = '0.9.4'
 __author__ = 'Kaiyang Zhou'
 __description__ = 'Deep learning person re-identification in PyTorch'
 
