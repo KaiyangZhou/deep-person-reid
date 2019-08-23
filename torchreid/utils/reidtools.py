@@ -60,7 +60,7 @@ def visualize_ranked_results(distmat, dataset, data_type, width=128, height=256,
             prefix: string
             matched: bool
         """
-        if isinstance(src, tuple) or isinstance(src, list):
+        if isinstance(src, (tuple, list)):
             if prefix == 'gallery':
                 suffix = 'TRUE' if matched else 'FALSE'
                 dst = osp.join(dst, prefix + '_top' + str(rank).zfill(3)) + '_' + suffix
