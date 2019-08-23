@@ -296,9 +296,11 @@ $ conda activate torchreid
 </div>
 <div class="section" id="a-unified-interface">
 <h2>A unified interface<a class="headerlink" href="#a-unified-interface" title="Permalink to this headline">¶</a></h2>
-<p>In “deep-person-reid/scripts/”, we provide a unified interface including a default parser file <code class="docutils literal notranslate"><span class="pre">default_parser.py</span></code> and the main script <code class="docutils literal notranslate"><span class="pre">main.py</span></code>. For example, to train an image reid model on Market1501 using softmax, you can do</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python main.py <span class="se">\</span>
---root path/to/reid-data <span class="se">\</span>
+<p>In “deep-person-reid/scripts/”, we provide a unified interface to train and test a model.</p>
+<p>For instance, to train an image reid model on Market1501 using softmax, you can do</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># suppose you are in deep-person-reid/</span>
+python scripts/main.py <span class="se">\</span>
+--root PATH_TO_DATA <span class="se">\</span>
 --app image <span class="se">\</span>
 --loss softmax <span class="se">\</span>
 --label-smooth <span class="se">\</span>
@@ -311,6 +313,20 @@ $ conda activate torchreid
 --batch-size <span class="m">32</span> <span class="se">\</span>
 --transforms random_flip random_crop <span class="se">\</span>
 --save-dir log/resnet50-market1501-softmax <span class="se">\</span>
+--gpu-devices <span class="m">0</span>
+</pre></div>
+</div>
+<p>To evaluate a trained model, do</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python scripts/main.py <span class="se">\</span>
+--root PATH_TO_DATA <span class="se">\</span>
+--app image <span class="se">\</span>
+--loss softmax <span class="se">\</span>
+-s market1501 <span class="se">\</span>
+-a resnet50 <span class="se">\</span>
+--batch-size <span class="m">32</span> <span class="se">\</span>
+--evaluate <span class="se">\</span>
+--load-weights log/resnet50-market1501-softmax/model.pth.tar-60 <span class="se">\</span>
+--save-dir log/eval-resnet50 <span class="se">\</span>
 --gpu-devices <span class="m">0</span>
 </pre></div>
 </div>
