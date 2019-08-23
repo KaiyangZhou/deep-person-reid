@@ -138,12 +138,15 @@ Get started: 30 seconds to Torchreid
 
 A unified interface
 -----------------------
-In "deep-person-reid/scripts/", we provide a unified interface including a default parser file ``default_parser.py`` and the main script ``main.py``. For example, to train an image reid model on Market1501 using softmax, you can do
+In "deep-person-reid/scripts/", we provide a unified interface to train and test a model.
+
+For instance, to train an image reid model on Market1501 using softmax, you can do
 
 .. code-block:: bash
     
-    python main.py \
-    --root path/to/reid-data \
+    # suppose you are in deep-person-reid/
+    python scripts/main.py \
+    --root PATH_TO_DATA \
     --app image \
     --loss softmax \
     --label-smooth \
@@ -156,6 +159,22 @@ In "deep-person-reid/scripts/", we provide a unified interface including a defau
     --batch-size 32 \
     --transforms random_flip random_crop \
     --save-dir log/resnet50-market1501-softmax \
+    --gpu-devices 0
+
+To evaluate a trained model, do
+
+.. code-block:: bash
+    
+    python scripts/main.py \
+    --root PATH_TO_DATA \
+    --app image \
+    --loss softmax \
+    -s market1501 \
+    -a resnet50 \
+    --batch-size 32 \
+    --evaluate \
+    --load-weights log/resnet50-market1501-softmax/model.pth.tar-60 \
+    --save-dir log/eval-resnet50 \
     --gpu-devices 0
 
 Please refer to ``default_parser.py`` and ``main.py`` for more details.
