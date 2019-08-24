@@ -2,12 +2,20 @@
 Here is a collection of ReID-related research with links to papers and code. You are welcome to submit [PR](https://help.github.com/articles/creating-a-pull-request/)s if you find something missing.
 
 ## Conferences
+- **[ICCV 2019](#iccv-2019)**
 - **[CVPR 2019](#cvpr-2019)**
 - **[AAAI 2019](#aaai-2019)**
 - **[NeurIPS 2018](#neurips-2018)**
 - **[ECCV 2018](#eccv-2018)**
 - **[CVPR 2018](#cvpr-2018)**
 - **[ArXiv](#arxiv)**
+
+
+### ICCV 2019
+- ABD-Net: Attentive but Diverse Person Re-Identification. [[paper](https://arxiv.org/abs/1908.01114)] [[code](https://github.com/TAMU-VITA/ABD-Net)]
+- Omni-Scale Feature Learning for Person Re-Identification
+. [[paper](https://arxiv.org/abs/1905.00953)] [[code](https://github.com/KaiyangZhou/deep-person-reid)]
+
 
 ### CVPR 2019
 - Joint Discriminative and Generative Learning for Person Re-identification. [[paper](https://arxiv.org/abs/1904.07223)][[code](https://github.com/NVlabs/DG-Net)]
