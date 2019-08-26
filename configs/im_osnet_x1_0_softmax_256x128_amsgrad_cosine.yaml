@@ -23,7 +23,7 @@ train:
   max_epoch: 250
   batch_size: 64
   fixbase_epoch: 10
-  open_layers: ['classsifier']
+  open_layers: ['classifier']
   lr_scheduler: 'cosine'
 
 test:

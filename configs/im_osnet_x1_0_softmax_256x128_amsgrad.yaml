@@ -23,7 +23,7 @@ train:
   max_epoch: 150
   batch_size: 64
   fixbase_epoch: 10
-  open_layers: ['classsifier']
+  open_layers: ['classifier']
   lr_scheduler: 'single_step'
   stepsize: [60]
 
