@@ -155,13 +155,12 @@ The config file sets Market1501 as the default dataset. If you wanna use DukeMTM
     -t dukemtmcreid \
     --transforms random_flip random_erase \
     --root $PATH_TO_DATA \
-    --gpu-devices 0
+    --gpu-devices 0 \
+    data.save_dir log/osnet_x1_0_dukemtmcreid_softmax_cosinelr
 
-The code will automatically (download and) load the ImageNet pretrained weights. After the training is done, the model will be saved as "log/osnet_x1_0_market1501_softmax_cosinelr/model.pth.tar-250".
+The code will automatically (download and) load the ImageNet pretrained weights. After the training is done, the model will be saved as "log/osnet_x1_0_market1501_softmax_cosinelr/model.pth.tar-250". Under the same folder, you can also find the `tensorboard <https://pytorch.org/docs/stable/tensorboard.html>`_ file. To visualize the learning curves, you can run :code:`tensorboard --logdir=log/osnet_x1_0_market1501_softmax_cosinelr` in the terminal and visit :code:`http://localhost:6006/` in your web browser.
 
-Evaluation will be automatically performed at the end of training.
-
-To run the test again using the trained model, do
+Evaluation is automatically performed at the end of training. To run the test again using the trained model, do
 
 .. code-block:: bash
 
@@ -188,7 +187,7 @@ Suppose you wanna train OSNet on DukeMTMC-reID and test its performance on Marke
     --root $PATH_TO_DATA \
     --gpu-devices 0
 
-Here we only test the cross-domain performance. However, if you also want to test the same-domain performance, you can set :code:`-t dukemtmcreid market1501`, which will evaluate the model on the two datasets separately.
+Here we only test the cross-domain performance. However, if you also want to test the performance on the source dataset, i.e. DukeMTMC-reID, you can set :code:`-t dukemtmcreid market1501`, which will evaluate the model on the two datasets separately.
 
 Different from the same-domain setting, here we replace :code:`random_erase` with :code:`color_jitter`. This can improve the generalization performance on the unseen target dataset.
 
