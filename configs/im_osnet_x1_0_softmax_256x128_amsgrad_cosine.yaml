@@ -31,6 +31,6 @@ test:
   dist_metric: 'euclidean'
   normalize_feature: False
   evaluate: False
-  eval_freq: 10
+  eval_freq: -1
   rerank: False
   visactmap: False
