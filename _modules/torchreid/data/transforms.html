@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.data.transforms &mdash; torchreid 0.9.4 documentation</title>
+  <title>torchreid.data.transforms &mdash; torchreid 1.0.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.9.4
+                1.0.0
               </div>
             
           
@@ -307,8 +307,8 @@
 <span class="sd">        width (int): target image width.</span>
 <span class="sd">        transforms (str or list of str, optional): transformations applied to model training.</span>
 <span class="sd">            Default is &#39;random_flip&#39;.</span>
-<span class="sd">        norm_mean (list): normalization mean values. Default is ImageNet means.</span>
-<span class="sd">        norm_std (list): normalization standard deviation values. Default is</span>
+<span class="sd">        norm_mean (list or None, optional): normalization mean values. Default is ImageNet means.</span>
+<span class="sd">        norm_std (list or None, optional): normalization standard deviation values. Default is</span>
 <span class="sd">            ImageNet standard deviation values.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">transforms</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -323,6 +323,9 @@
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">transforms</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">transforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">]</span>
     
+    <span class="k">if</span> <span class="n">norm_mean</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">norm_std</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">norm_mean</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">]</span> <span class="c1"># imagenet mean</span>
+        <span class="n">norm_std</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">]</span> <span class="c1"># imagenet std</span>
     <span class="n">normalize</span> <span class="o">=</span> <span class="n">Normalize</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="n">norm_mean</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="n">norm_std</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Building train transforms ...&#39;</span><span class="p">)</span>

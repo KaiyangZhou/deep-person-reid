@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.data.datamanager &mdash; torchreid 0.9.4 documentation</title>
+  <title>torchreid.data.datamanager &mdash; torchreid 1.0.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.9.4
+                1.0.0
               </div>
             
           
@@ -187,11 +187,13 @@
 <span class="sd">        width (int, optional): target image width. Default is 128.</span>
 <span class="sd">        transforms (str or list of str, optional): transformations applied to model training.</span>
 <span class="sd">            Default is &#39;random_flip&#39;.</span>
-<span class="sd">        use_cpu (bool, optional): use cpu. Default is False.</span>
+<span class="sd">        norm_mean (list or None, optional): data mean. Default is None (use imagenet mean).</span>
+<span class="sd">        norm_std (list or None, optional): data std. Default is None (use imagenet std).</span>
+<span class="sd">        use_gpu (bool, optional): use gpu. Default is True.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="s1">&#39;random_flip&#39;</span><span class="p">,</span>
-                 <span class="n">use_cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                 <span class="n">norm_mean</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="n">sources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="n">targets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
@@ -210,10 +212,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">transform_tr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform_te</span> <span class="o">=</span> <span class="n">build_transforms</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">transforms</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="n">transforms</span><span class="p">,</span>
+            <span class="n">norm_mean</span><span class="o">=</span><span class="n">norm_mean</span><span class="p">,</span> <span class="n">norm_std</span><span class="o">=</span><span class="n">norm_std</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">use_cpu</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="ow">and</span> <span class="n">use_gpu</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">num_train_pids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -251,11 +254,14 @@
 <span class="sd">        width (int, optional): target image width. Default is 128.</span>
 <span class="sd">        transforms (str or list of str, optional): transformations applied to model training.</span>
 <span class="sd">            Default is &#39;random_flip&#39;.</span>
-<span class="sd">        use_cpu (bool, optional): use cpu. Default is False.</span>
+<span class="sd">        norm_mean (list or None, optional): data mean. Default is None (use imagenet mean).</span>
+<span class="sd">        norm_std (list or None, optional): data std. Default is None (use imagenet std).</span>
+<span class="sd">        use_gpu (bool, optional): use gpu. Default is True.</span>
 <span class="sd">        split_id (int, optional): split id (*0-based*). Default is 0.</span>
 <span class="sd">        combineall (bool, optional): combine train, query and gallery in a dataset for</span>
 <span class="sd">            training. Default is False.</span>
-<span class="sd">        batch_size (int, optional): number of images in a batch. Default is 32.</span>
+<span class="sd">        batch_size_train (int, optional): number of images in a training batch. Default is 32.</span>
+<span class="sd">        batch_size_test (int, optional): number of images in a test batch. Default is 32.</span>
 <span class="sd">        workers (int, optional): number of workers. Default is 4.</span>
 <span class="sd">        num_instances (int, optional): number of instances per identity in a batch.</span>
 <span class="sd">            Default is 4.</span>
@@ -274,18 +280,20 @@
 <span class="sd">            sources=&#39;market1501&#39;,</span>
 <span class="sd">            height=256,</span>
 <span class="sd">            width=128,</span>
-<span class="sd">            batch_size=32</span>
+<span class="sd">            batch_size_train=32,</span>
+<span class="sd">            batch_size_test=100</span>
 <span class="sd">        )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">data_type</span> <span class="o">=</span> <span class="s1">&#39;image&#39;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="s1">&#39;random_flip&#39;</span><span class="p">,</span>
-                 <span class="n">use_cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">split_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">combineall</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">num_instances</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">train_sampler</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                 <span class="n">norm_mean</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">split_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">combineall</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">batch_size_train</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">batch_size_test</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">num_instances</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">train_sampler</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
                  <span class="n">cuhk03_labeled</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cuhk03_classic_split</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">market1501_500k</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         
         <span class="nb">super</span><span class="p">(</span><span class="n">ImageDataManager</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">sources</span><span class="o">=</span><span class="n">sources</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span>
-                                               <span class="n">transforms</span><span class="o">=</span><span class="n">transforms</span><span class="p">,</span> <span class="n">use_cpu</span><span class="o">=</span><span class="n">use_cpu</span><span class="p">)</span>
+                                               <span class="n">transforms</span><span class="o">=</span><span class="n">transforms</span><span class="p">,</span> <span class="n">norm_mean</span><span class="o">=</span><span class="n">norm_mean</span><span class="p">,</span> <span class="n">norm_std</span><span class="o">=</span><span class="n">norm_std</span><span class="p">,</span>
+                                               <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
         
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&gt; Loading train (source) dataset&#39;</span><span class="p">)</span>
         <span class="n">trainset</span> <span class="o">=</span> <span class="p">[]</span>  
@@ -309,14 +317,14 @@
 
         <span class="n">train_sampler</span> <span class="o">=</span> <span class="n">build_train_sampler</span><span class="p">(</span>
             <span class="n">trainset</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">train_sampler</span><span class="p">,</span>
-            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size_train</span><span class="p">,</span>
             <span class="n">num_instances</span><span class="o">=</span><span class="n">num_instances</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">trainloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
             <span class="n">trainset</span><span class="p">,</span>
             <span class="n">sampler</span><span class="o">=</span><span class="n">train_sampler</span><span class="p">,</span>
-            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size_train</span><span class="p">,</span>
             <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">num_workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span>
             <span class="n">pin_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span>
@@ -342,7 +350,7 @@
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">testloader</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;query&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
                 <span class="n">queryset</span><span class="p">,</span>
-                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size_test</span><span class="p">,</span>
                 <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">num_workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span>
                 <span class="n">pin_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span>
@@ -364,7 +372,7 @@
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">testloader</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;gallery&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
                 <span class="n">galleryset</span><span class="p">,</span>
-                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size_test</span><span class="p">,</span>
                 <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">num_workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span>
                 <span class="n">pin_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span>
@@ -398,19 +406,22 @@
 <span class="sd">        width (int, optional): target image width. Default is 128.</span>
 <span class="sd">        transforms (str or list of str, optional): transformations applied to model training.</span>
 <span class="sd">            Default is &#39;random_flip&#39;.</span>
-<span class="sd">        use_cpu (bool, optional): use cpu. Default is False.</span>
+<span class="sd">        norm_mean (list or None, optional): data mean. Default is None (use imagenet mean).</span>
+<span class="sd">        norm_std (list or None, optional): data std. Default is None (use imagenet std).</span>
+<span class="sd">        use_gpu (bool, optional): use gpu. Default is True.</span>
 <span class="sd">        split_id (int, optional): split id (*0-based*). Default is 0.</span>
 <span class="sd">        combineall (bool, optional): combine train, query and gallery in a dataset for</span>
 <span class="sd">            training. Default is False.</span>
-<span class="sd">        batch_size (int, optional): number of *tracklets* in a batch. Default is 3.</span>
+<span class="sd">        batch_size_train (int, optional): number of tracklets in a training batch. Default is 3.</span>
+<span class="sd">        batch_size_test (int, optional): number of tracklets in a test batch. Default is 3.</span>
 <span class="sd">        workers (int, optional): number of workers. Default is 4.</span>
 <span class="sd">        num_instances (int, optional): number of instances per identity in a batch.</span>
 <span class="sd">            Default is 4.</span>
 <span class="sd">        train_sampler (str, optional): sampler. Default is empty (``RandomSampler``).</span>
 <span class="sd">        seq_len (int, optional): how many images to sample in a tracklet. Default is 15.</span>
 <span class="sd">        sample_method (str, optional): how to sample images in a tracklet. Default is &quot;evenly&quot;.</span>
-<span class="sd">            Choices are [&quot;evenly&quot;, &quot;random&quot;, &quot;all&quot;]. &quot;evenly&quot; and &quot;random&quot; sample ``seq_len``</span>
-<span class="sd">            images in a tracklet while &quot;all&quot; samples all images in a tracklet, thus ``batch_size``</span>
+<span class="sd">            Choices are [&quot;evenly&quot;, &quot;random&quot;, &quot;all&quot;]. &quot;evenly&quot; and &quot;random&quot; will sample ``seq_len``</span>
+<span class="sd">            images in a tracklet while &quot;all&quot; samples all images in a tracklet, where the batch size</span>
 <span class="sd">            needs to be set to 1.</span>
 
 <span class="sd">    Examples::</span>
@@ -420,7 +431,8 @@
 <span class="sd">            sources=&#39;mars&#39;,</span>
 <span class="sd">            height=256,</span>
 <span class="sd">            width=128,</span>
-<span class="sd">            batch_size=3,</span>
+<span class="sd">            batch_size_train=3,</span>
+<span class="sd">            batch_size_test=3,</span>
 <span class="sd">            seq_len=15,</span>
 <span class="sd">            sample_method=&#39;evenly&#39;</span>
 <span class="sd">        )</span>
@@ -434,12 +446,13 @@
     <span class="n">data_type</span> <span class="o">=</span> <span class="s1">&#39;video&#39;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="s1">&#39;random_flip&#39;</span><span class="p">,</span>
-                 <span class="n">use_cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">split_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">combineall</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">batch_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">num_instances</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">train_sampler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">norm_mean</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">split_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">combineall</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">batch_size_train</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">batch_size_test</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">num_instances</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">train_sampler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">seq_len</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">sample_method</span><span class="o">=</span><span class="s1">&#39;evenly&#39;</span><span class="p">):</span>
         
         <span class="nb">super</span><span class="p">(</span><span class="n">VideoDataManager</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">sources</span><span class="o">=</span><span class="n">sources</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span>
-                                               <span class="n">transforms</span><span class="o">=</span><span class="n">transforms</span><span class="p">,</span> <span class="n">use_cpu</span><span class="o">=</span><span class="n">use_cpu</span><span class="p">)</span>
+                                               <span class="n">transforms</span><span class="o">=</span><span class="n">transforms</span><span class="p">,</span> <span class="n">norm_mean</span><span class="o">=</span><span class="n">norm_mean</span><span class="p">,</span> <span class="n">norm_std</span><span class="o">=</span><span class="n">norm_std</span><span class="p">,</span>
+                                               <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&gt; Loading train (source) dataset&#39;</span><span class="p">)</span>
         <span class="n">trainset</span> <span class="o">=</span> <span class="p">[]</span>  
@@ -462,14 +475,14 @@
 
         <span class="n">train_sampler</span> <span class="o">=</span> <span class="n">build_train_sampler</span><span class="p">(</span>
             <span class="n">trainset</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">train_sampler</span><span class="p">,</span>
-            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size_train</span><span class="p">,</span>
             <span class="n">num_instances</span><span class="o">=</span><span class="n">num_instances</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">trainloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
             <span class="n">trainset</span><span class="p">,</span>
             <span class="n">sampler</span><span class="o">=</span><span class="n">train_sampler</span><span class="p">,</span>
-            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size_train</span><span class="p">,</span>
             <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">num_workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span>
             <span class="n">pin_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span>
@@ -494,7 +507,7 @@
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">testloader</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;query&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
                 <span class="n">queryset</span><span class="p">,</span>
-                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size_test</span><span class="p">,</span>
                 <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">num_workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span>
                 <span class="n">pin_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span>
@@ -515,7 +528,7 @@
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">testloader</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;gallery&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
                 <span class="n">galleryset</span><span class="p">,</span>
-                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size_test</span><span class="p">,</span>
                 <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">num_workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span>
                 <span class="n">pin_memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span>

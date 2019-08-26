@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.engine.video.softmax &mdash; torchreid 0.9.4 documentation</title>
+  <title>torchreid.engine.video.softmax &mdash; torchreid 1.0.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.9.4
+                1.0.0
               </div>
             
           
@@ -187,7 +187,7 @@
 <span class="sd">        model (nn.Module): model instance.</span>
 <span class="sd">        optimizer (Optimizer): an Optimizer.</span>
 <span class="sd">        scheduler (LRScheduler, optional): if None, no learning rate decay will be performed.</span>
-<span class="sd">        use_cpu (bool, optional): use cpu. Default is False.</span>
+<span class="sd">        use_gpu (bool, optional): use gpu. Default is True.</span>
 <span class="sd">        label_smooth (bool, optional): use label smoothing regularizer. Default is True.</span>
 <span class="sd">        pooling_method (str, optional): how to pool features for a tracklet.</span>
 <span class="sd">            Default is &quot;avg&quot; (average). Choices are [&quot;avg&quot;, &quot;max&quot;].</span>
@@ -232,9 +232,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamanager</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">use_cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">label_smooth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pooling_method</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">):</span>
+                 <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label_smooth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pooling_method</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">VideoSoftmaxEngine</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">datamanager</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="n">scheduler</span><span class="p">,</span>
-                                                 <span class="n">use_cpu</span><span class="o">=</span><span class="n">use_cpu</span><span class="p">,</span> <span class="n">label_smooth</span><span class="o">=</span><span class="n">label_smooth</span><span class="p">)</span>
+                                                 <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">,</span> <span class="n">label_smooth</span><span class="o">=</span><span class="n">label_smooth</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pooling_method</span> <span class="o">=</span> <span class="n">pooling_method</span>
 
     <span class="k">def</span> <span class="nf">_parse_data_for_train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>

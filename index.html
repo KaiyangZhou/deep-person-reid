@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Torchreid &mdash; torchreid 0.9.4 documentation</title>
+  <title>Torchreid &mdash; torchreid 1.0.0 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.9.4
+                1.0.0
               </div>
             
           
@@ -172,76 +172,65 @@
 <p>Torchreid is a library built on <a class="reference external" href="https://pytorch.org/">PyTorch</a> for deep-learning person re-identification.</p>
 <p>It features:</p>
 <ul class="simple">
-<li>multi-GPU training</li>
-<li>support both image- and video-reid</li>
-<li>end-to-end training and evaluation</li>
-<li>incredibly easy preparation of reid datasets</li>
-<li>multi-dataset training</li>
-<li>cross-dataset evaluation</li>
-<li>standard protocol used by most research papers</li>
-<li>highly extensible (easy to add models, datasets, training methods, etc.)</li>
-<li>implementations of state-of-the-art deep reid models</li>
-<li>access to pretrained reid models</li>
-<li>advanced training techniques</li>
-<li>visualization tools (tensorboard, ranks, etc.)</li>
+<li><p>multi-GPU training</p></li>
+<li><p>support both image- and video-reid</p></li>
+<li><p>end-to-end training and evaluation</p></li>
+<li><p>incredibly easy preparation of reid datasets</p></li>
+<li><p>multi-dataset training</p></li>
+<li><p>cross-dataset evaluation</p></li>
+<li><p>standard protocol used by most research papers</p></li>
+<li><p>highly extensible (easy to add models, datasets, training methods, etc.)</p></li>
+<li><p>implementations of state-of-the-art deep reid models</p></li>
+<li><p>access to pretrained reid models</p></li>
+<li><p>advanced training techniques</p></li>
+<li><p>visualization tools (tensorboard, ranks, etc.)</p></li>
 </ul>
-<p>Documentation: <a class="reference external" href="https://kaiyangzhou.github.io/deep-person-reid/">https://kaiyangzhou.github.io/deep-person-reid/</a>.</p>
 <p>Code: <a class="reference external" href="https://github.com/KaiyangZhou/deep-person-reid">https://github.com/KaiyangZhou/deep-person-reid</a>.</p>
+<p>Documentation: <a class="reference external" href="https://kaiyangzhou.github.io/deep-person-reid/">https://kaiyangzhou.github.io/deep-person-reid/</a>.</p>
+<p>How-to instructions: <a class="reference external" href="https://kaiyangzhou.github.io/deep-person-reid/user_guide">https://kaiyangzhou.github.io/deep-person-reid/user_guide</a>.</p>
 <p>Model zoo: <a class="reference external" href="https://kaiyangzhou.github.io/deep-person-reid/MODEL_ZOO">https://kaiyangzhou.github.io/deep-person-reid/MODEL_ZOO</a>.</p>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>We recommend using <a class="reference external" href="https://www.anaconda.com/distribution/">conda</a> to manage the packages.</p>
-<ol class="arabic simple">
-<li>Clone <code class="docutils literal notranslate"><span class="pre">deep-person-reid</span></code> to your preferred directory.</li>
-</ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/KaiyangZhou/deep-person-reid.git
-</pre></div>
-</div>
-<ol class="arabic simple" start="2">
-<li>Create a conda environment (the default name is <code class="docutils literal notranslate"><span class="pre">torchreid</span></code>).</li>
-</ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> deep-person-reid/
-$ conda env create -f environment.yml
-$ conda activate torchreid
-</pre></div>
-</div>
-<p>Do check whether <code class="docutils literal notranslate"><span class="pre">which</span> <span class="pre">python</span></code> and <code class="docutils literal notranslate"><span class="pre">which</span> <span class="pre">pip</span></code> point to the right path.</p>
-<ol class="arabic simple" start="3">
-<li>Install tensorboard.</li>
-</ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install tb-nightly
-</pre></div>
-</div>
-<ol class="arabic simple" start="4">
-<li>Install PyTorch and torchvision (select the proper cuda version to suit your machine).</li>
-</ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ conda install pytorch torchvision <span class="nv">cudatoolkit</span><span class="o">=</span><span class="m">9</span>.0 -c pytorch
-</pre></div>
-</div>
-<ol class="arabic simple" start="5">
-<li>Install <code class="docutils literal notranslate"><span class="pre">torchreid</span></code>.</li>
-</ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python setup.py develop
+<p>Make sure your <a class="reference external" href="https://www.anaconda.com/distribution/">conda</a> is installed.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># cd to your preferred directory and clone this repo</span>
+git clone https://github.com/KaiyangZhou/deep-person-reid.git
+
+<span class="c1"># create environment</span>
+<span class="nb">cd</span> deep-person-reid/
+conda create --name torchreid <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.7
+conda activate torchreid
+
+<span class="c1"># install dependencies</span>
+<span class="c1"># make sure `which python` and `which pip` point to the correct path</span>
+pip install -r requirements.txt
+
+<span class="c1"># install torch and torchvision (select the proper cuda version to suit your machine)</span>
+conda install pytorch torchvision <span class="nv">cudatoolkit</span><span class="o">=</span><span class="m">9</span>.0 -c pytorch
+
+<span class="c1"># install torchreid (don&#39;t need to re-build it if you modify the source code)</span>
+python setup.py develop
 </pre></div>
 </div>
 </div>
 <div class="section" id="get-started-30-seconds-to-torchreid">
 <h2>Get started: 30 seconds to Torchreid<a class="headerlink" href="#get-started-30-seconds-to-torchreid" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Import <code class="docutils literal notranslate"><span class="pre">torchreid</span></code></li>
+<li><p>Import <code class="docutils literal notranslate"><span class="pre">torchreid</span></code></p></li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torchreid</span>
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li>Load data manager</li>
+<li><p>Load data manager</p></li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">datamanager</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ImageDataManager</span><span class="p">(</span>
     <span class="n">root</span><span class="o">=</span><span class="s1">&#39;reid-data&#39;</span><span class="p">,</span>
     <span class="n">sources</span><span class="o">=</span><span class="s1">&#39;market1501&#39;</span><span class="p">,</span>
+    <span class="n">targets</span><span class="o">=</span><span class="s1">&#39;market1501&#39;</span><span class="p">,</span>
     <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
     <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
-    <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+    <span class="n">batch_size_train</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+    <span class="n">batch_size_test</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
     <span class="n">transforms</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;random_flip&#39;</span><span class="p">,</span> <span class="s1">&#39;random_crop&#39;</span><span class="p">]</span>
 <span class="p">)</span>
 </pre></div>
@@ -270,7 +259,7 @@ $ conda activate torchreid
 </pre></div>
 </div>
 <ol class="arabic simple" start="4">
-<li>Build engine</li>
+<li><p>Build engine</p></li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">ImageSoftmaxEngine</span><span class="p">(</span>
     <span class="n">datamanager</span><span class="p">,</span>
@@ -282,7 +271,7 @@ $ conda activate torchreid
 </pre></div>
 </div>
 <ol class="arabic simple" start="5">
-<li>Run training and test</li>
+<li><p>Run training and test</p></li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
     <span class="n">save_dir</span><span class="o">=</span><span class="s1">&#39;log/resnet50&#39;</span><span class="p">,</span>
@@ -296,66 +285,81 @@ $ conda activate torchreid
 </div>
 <div class="section" id="a-unified-interface">
 <h2>A unified interface<a class="headerlink" href="#a-unified-interface" title="Permalink to this headline">¶</a></h2>
-<p>In “deep-person-reid/scripts/”, we provide a unified interface to train and test a model.</p>
-<p>For instance, to train an image reid model on Market1501 using softmax, you can do</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># suppose you are in deep-person-reid/</span>
-python scripts/main.py <span class="se">\</span>
---root PATH_TO_DATA <span class="se">\</span>
---app image <span class="se">\</span>
---loss softmax <span class="se">\</span>
---label-smooth <span class="se">\</span>
--s market1501 <span class="se">\</span>
--a resnet50 <span class="se">\</span>
---optim adam <span class="se">\</span>
---lr <span class="m">0</span>.0003 <span class="se">\</span>
---max-epoch <span class="m">60</span> <span class="se">\</span>
---stepsize <span class="m">20</span> <span class="m">40</span> <span class="se">\</span>
---batch-size <span class="m">32</span> <span class="se">\</span>
---transforms random_flip random_crop <span class="se">\</span>
---save-dir log/resnet50-market1501-softmax <span class="se">\</span>
---gpu-devices <span class="m">0</span>
-</pre></div>
-</div>
-<p>To evaluate a trained model, do</p>
+<p>In “deep-person-reid/scripts/”, we provide a unified interface to train and test a model. See “scripts/main.py” and “scripts/default_config.py” for more details. “configs/” contains some predefined configs which you can use as a starting point.</p>
+<p>Below we provide examples to train and test <a class="reference external" href="https://arxiv.org/abs/1905.00953">OSNet (Zhou et al. ICCV’19)</a>. Assume <code class="code docutils literal notranslate"><span class="pre">PATH_TO_DATA</span></code> is the directory containing reid datasets.</p>
+<div class="section" id="conventional-setting">
+<h3>Conventional setting<a class="headerlink" href="#conventional-setting" title="Permalink to this headline">¶</a></h3>
+<p>To train OSNet on Market1501, do</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python scripts/main.py <span class="se">\</span>
---root PATH_TO_DATA <span class="se">\</span>
---app image <span class="se">\</span>
---loss softmax <span class="se">\</span>
--s market1501 <span class="se">\</span>
--a resnet50 <span class="se">\</span>
---batch-size <span class="m">32</span> <span class="se">\</span>
---evaluate <span class="se">\</span>
---load-weights log/resnet50-market1501-softmax/model.pth.tar-60 <span class="se">\</span>
---save-dir log/eval-resnet50 <span class="se">\</span>
+--config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad_cosine.yaml <span class="se">\</span>
+--transforms random_flip random_erase <span class="se">\</span>
+--root <span class="nv">$PATH_TO_DATA</span> <span class="se">\</span>
 --gpu-devices <span class="m">0</span>
 </pre></div>
 </div>
-<p>Please refer to <code class="docutils literal notranslate"><span class="pre">default_parser.py</span></code> and <code class="docutils literal notranslate"><span class="pre">main.py</span></code> for more details.</p>
+<p>The config file sets Market1501 as the default dataset. If you wanna use DukeMTMC-reID, do</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python scripts/main.py <span class="se">\</span>
+--config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad_cosine.yaml <span class="se">\</span>
+-s dukemtmcreid <span class="se">\</span>
+-t dukemtmcreid <span class="se">\</span>
+--transforms random_flip random_erase <span class="se">\</span>
+--root <span class="nv">$PATH_TO_DATA</span> <span class="se">\</span>
+--gpu-devices <span class="m">0</span> <span class="se">\</span>
+data.save_dir log/osnet_x1_0_dukemtmcreid_softmax_cosinelr
+</pre></div>
+</div>
+<p>The code will automatically (download and) load the ImageNet pretrained weights. After the training is done, the model will be saved as “log/osnet_x1_0_market1501_softmax_cosinelr/model.pth.tar-250”. Under the same folder, you can find the <a class="reference external" href="https://pytorch.org/docs/stable/tensorboard.html">tensorboard</a> file. To visualize the learning curves using tensorboard, you can run <code class="code docutils literal notranslate"><span class="pre">tensorboard</span> <span class="pre">--logdir=log/osnet_x1_0_market1501_softmax_cosinelr</span></code> in the terminal and visit <code class="code docutils literal notranslate"><span class="pre">http://localhost:6006/</span></code> in your web browser.</p>
+<p>Evaluation is automatically performed at the end of training. To run the test again using the trained model, do</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python scripts/main.py <span class="se">\</span>
+--config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad_cosine.yaml <span class="se">\</span>
+--root <span class="nv">$PATH_TO_DATA</span> <span class="se">\</span>
+--gpu-devices <span class="m">0</span> <span class="se">\</span>
+model.load_weights log/osnet_x1_0_market1501_softmax_cosinelr/model.pth.tar-250 <span class="se">\</span>
+test.evaluate True
+</pre></div>
+</div>
+</div>
+<div class="section" id="cross-domain-setting">
+<h3>Cross-domain setting<a class="headerlink" href="#cross-domain-setting" title="Permalink to this headline">¶</a></h3>
+<p>Suppose you wanna train OSNet on DukeMTMC-reID and test its performance on Market1501, you can do</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python scripts/main.py <span class="se">\</span>
+--config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad.yaml <span class="se">\</span>
+-s dukemtmcreid <span class="se">\</span>
+-t market1501 <span class="se">\</span>
+--transforms random_flip color_jitter <span class="se">\</span>
+--root <span class="nv">$PATH_TO_DATA</span> <span class="se">\</span>
+--gpu-devices <span class="m">0</span>
+</pre></div>
+</div>
+<p>Here we only test the cross-domain performance. However, if you also want to test the performance on the source dataset, i.e. DukeMTMC-reID, you can set <code class="code docutils literal notranslate"><span class="pre">-t</span> <span class="pre">dukemtmcreid</span> <span class="pre">market1501</span></code>, which will evaluate the model on the two datasets separately.</p>
+<p>Different from the same-domain setting, here we replace <code class="code docutils literal notranslate"><span class="pre">random_erase</span></code> with <code class="code docutils literal notranslate"><span class="pre">color_jitter</span></code>. This can improve the generalization performance on the unseen target dataset.</p>
+<p>Pretrained models are available in the <a class="reference external" href="https://kaiyangzhou.github.io/deep-person-reid/MODEL_ZOO.html">Model Zoo</a>.</p>
+</div>
 </div>
 <div class="section" id="datasets">
 <h2>Datasets<a class="headerlink" href="#datasets" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="image-reid-datasets">
 <h3>Image-reid datasets<a class="headerlink" href="#image-reid-datasets" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><a class="reference external" href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Zheng_Scalable_Person_Re-Identification_ICCV_2015_paper.pdf">Market1501</a></li>
-<li><a class="reference external" href="https://www.cv-foundation.org/openaccess/content_cvpr_2014/papers/Li_DeepReID_Deep_Filter_2014_CVPR_paper.pdf">CUHK03</a></li>
-<li><a class="reference external" href="https://arxiv.org/abs/1701.07717">DukeMTMC-reID</a></li>
-<li><a class="reference external" href="https://arxiv.org/abs/1711.08565">MSMT17</a></li>
-<li><a class="reference external" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.331.7285&amp;rep=rep1&amp;type=pdf">VIPeR</a></li>
-<li><a class="reference external" href="http://www.eecs.qmul.ac.uk/~txiang/publications/LoyXiangGong_cvpr_2009.pdf">GRID</a></li>
-<li><a class="reference external" href="http://www.ee.cuhk.edu.hk/~xgwang/papers/liZWaccv12.pdf">CUHK01</a></li>
-<li><a class="reference external" href="http://openaccess.thecvf.com/content_cvpr_2017/papers/Zhao_Spindle_Net_Person_CVPR_2017_paper.pdf">SenseReID</a></li>
-<li><a class="reference external" href="http://www.eecs.qmul.ac.uk/~sgg/papers/ZhengGongXiang_BMVC09.pdf">QMUL-iLIDS</a></li>
-<li><a class="reference external" href="https://pdfs.semanticscholar.org/4c1b/f0592be3e535faf256c95e27982db9b3d3d3.pdf">PRID</a></li>
+<li><p><a class="reference external" href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Zheng_Scalable_Person_Re-Identification_ICCV_2015_paper.pdf">Market1501</a></p></li>
+<li><p><a class="reference external" href="https://www.cv-foundation.org/openaccess/content_cvpr_2014/papers/Li_DeepReID_Deep_Filter_2014_CVPR_paper.pdf">CUHK03</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1701.07717">DukeMTMC-reID</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1711.08565">MSMT17</a></p></li>
+<li><p><a class="reference external" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.331.7285&amp;rep=rep1&amp;type=pdf">VIPeR</a></p></li>
+<li><p><a class="reference external" href="http://www.eecs.qmul.ac.uk/~txiang/publications/LoyXiangGong_cvpr_2009.pdf">GRID</a></p></li>
+<li><p><a class="reference external" href="http://www.ee.cuhk.edu.hk/~xgwang/papers/liZWaccv12.pdf">CUHK01</a></p></li>
+<li><p><a class="reference external" href="http://openaccess.thecvf.com/content_cvpr_2017/papers/Zhao_Spindle_Net_Person_CVPR_2017_paper.pdf">SenseReID</a></p></li>
+<li><p><a class="reference external" href="http://www.eecs.qmul.ac.uk/~sgg/papers/ZhengGongXiang_BMVC09.pdf">QMUL-iLIDS</a></p></li>
+<li><p><a class="reference external" href="https://pdfs.semanticscholar.org/4c1b/f0592be3e535faf256c95e27982db9b3d3d3.pdf">PRID</a></p></li>
 </ul>
 </div>
 <div class="section" id="video-reid-datasets">
 <h3>Video-reid datasets<a class="headerlink" href="#video-reid-datasets" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><a class="reference external" href="http://www.liangzheng.org/1320.pdf">MARS</a></li>
-<li><a class="reference external" href="https://www.eecs.qmul.ac.uk/~sgg/papers/WangEtAl_ECCV14.pdf">iLIDS-VID</a></li>
-<li><a class="reference external" href="https://pdfs.semanticscholar.org/4c1b/f0592be3e535faf256c95e27982db9b3d3d3.pdf">PRID2011</a></li>
-<li><a class="reference external" href="http://openaccess.thecvf.com/content_cvpr_2018/papers/Wu_Exploit_the_Unknown_CVPR_2018_paper.pdf">DukeMTMC-VideoReID</a></li>
+<li><p><a class="reference external" href="http://www.liangzheng.org/1320.pdf">MARS</a></p></li>
+<li><p><a class="reference external" href="https://www.eecs.qmul.ac.uk/~sgg/papers/WangEtAl_ECCV14.pdf">iLIDS-VID</a></p></li>
+<li><p><a class="reference external" href="https://pdfs.semanticscholar.org/4c1b/f0592be3e535faf256c95e27982db9b3d3d3.pdf">PRID2011</a></p></li>
+<li><p><a class="reference external" href="http://openaccess.thecvf.com/content_cvpr_2018/papers/Wu_Exploit_the_Unknown_CVPR_2018_paper.pdf">DukeMTMC-VideoReID</a></p></li>
 </ul>
 </div>
 </div>
@@ -364,42 +368,42 @@ python scripts/main.py <span class="se">\</span>
 <div class="section" id="imagenet-classification-models">
 <h3>ImageNet classification models<a class="headerlink" href="#imagenet-classification-models" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><a class="reference external" href="https://arxiv.org/abs/1512.03385">ResNet</a></li>
-<li><a class="reference external" href="https://arxiv.org/abs/1611.05431">ResNeXt</a></li>
-<li><a class="reference external" href="https://arxiv.org/abs/1709.01507">SENet</a></li>
-<li><a class="reference external" href="https://arxiv.org/abs/1608.06993">DenseNet</a></li>
-<li><a class="reference external" href="https://arxiv.org/abs/1602.07261">Inception-ResNet-V2</a></li>
-<li><a class="reference external" href="https://arxiv.org/abs/1602.07261">Inception-V4</a></li>
-<li><a class="reference external" href="https://arxiv.org/abs/1610.02357">Xception</a></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1512.03385">ResNet</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1611.05431">ResNeXt</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1709.01507">SENet</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1608.06993">DenseNet</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1602.07261">Inception-ResNet-V2</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1602.07261">Inception-V4</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1610.02357">Xception</a></p></li>
 </ul>
 </div>
 <div class="section" id="lightweight-models">
 <h3>Lightweight models<a class="headerlink" href="#lightweight-models" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><a class="reference external" href="https://arxiv.org/abs/1707.07012">NASNet</a></li>
-<li><a class="reference external" href="https://arxiv.org/abs/1801.04381">MobileNetV2</a></li>
-<li><a class="reference external" href="https://arxiv.org/abs/1707.01083">ShuffleNet</a></li>
-<li><a class="reference external" href="https://arxiv.org/abs/1807.11164">ShuffleNetV2</a></li>
-<li><a class="reference external" href="https://arxiv.org/abs/1602.07360">SqueezeNet</a></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1707.07012">NASNet</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1801.04381">MobileNetV2</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1707.01083">ShuffleNet</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1807.11164">ShuffleNetV2</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1602.07360">SqueezeNet</a></p></li>
 </ul>
 </div>
 <div class="section" id="reid-specific-models">
 <h3>ReID-specific models<a class="headerlink" href="#reid-specific-models" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><a class="reference external" href="https://arxiv.org/abs/1709.05165">MuDeep</a></li>
-<li><a class="reference external" href="https://arxiv.org/abs/1711.08106">ResNet-mid</a></li>
-<li><a class="reference external" href="https://arxiv.org/abs/1802.08122">HACNN</a></li>
-<li><a class="reference external" href="https://arxiv.org/abs/1711.09349">PCB</a></li>
-<li><a class="reference external" href="https://arxiv.org/abs/1803.09132">MLFN</a></li>
-<li><a class="reference external" href="https://arxiv.org/abs/1905.00953">OSNet</a></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1709.05165">MuDeep</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1711.08106">ResNet-mid</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1802.08122">HACNN</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1711.09349">PCB</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1803.09132">MLFN</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1905.00953">OSNet</a></p></li>
 </ul>
 </div>
 </div>
 <div class="section" id="losses">
 <h2>Losses<a class="headerlink" href="#losses" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><a class="reference external" href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Szegedy_Rethinking_the_Inception_CVPR_2016_paper.pdf">Softmax (cross entropy loss with label smoothing)</a></li>
-<li><a class="reference external" href="https://arxiv.org/abs/1703.07737">Triplet (hard example mining triplet loss)</a></li>
+<li><p><a class="reference external" href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Szegedy_Rethinking_the_Inception_CVPR_2016_paper.pdf">Softmax (cross entropy loss with label smoothing)</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1703.07737">Triplet (hard example mining triplet loss)</a></p></li>
 </ul>
 </div>
 <div class="section" id="citation">
@@ -424,8 +428,8 @@ python scripts/main.py <span class="se">\</span>
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 </ul>
 </div>
 

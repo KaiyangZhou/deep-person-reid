@@ -193,7 +193,7 @@ Note that ``fixbase_epoch`` is counted into ``max_epoch``. In the above example,
 
 Test a trained model
 ----------------------
-You can load a trained model using :code:`torchreid.utils.load_pretrained_weights(model, weight_path)` and set ``test_only=True`` in ``engine.run()``. If you use ``scripts/main.py``, you can do ``--evaluate --load-weights PATH_TO_WEIGHTS``.
+You can load a trained model using :code:`torchreid.utils.load_pretrained_weights(model, weight_path)` and set ``test_only=True`` in ``engine.run()``.
 
 
 Visualize learning curves with tensorboard
@@ -209,22 +209,6 @@ Ranked images can be visualized by setting ``visrank`` to true in ``engine.run()
     :width: 800px
     :align: center
 
-Example command for ``scripts/main.py`` is
-
-.. code-block:: shell
-
-    python scripts/main.py \
-    --root $DATA \
-    -s market1501 \
-    -t market1501 \
-    -a osnet_x1_0 \
-    --load-weights PATH_TO_WEIGHTS \
-    --evaluate \
-    --visrank \
-    --visrank-topk 15 \
-    --save-dir log/eval-osnet_x1_0 \
-    --gpu-devices 0
-
 
 Visualize activation maps
 --------------------------
@@ -233,21 +217,6 @@ To understand where the CNN focuses on to extract features for ReID, you can vis
 .. image:: figures/actmap.jpg
     :width: 300px
     :align: center
-
-
-Example command for ``scripts/main.py`` is
-
-.. code-block:: shell
-
-    python scripts/main.py \
-    --root $DATA \
-    -s market1501 \
-    -t market1501 \
-    -a osnet_x1_0 \
-    --load-weights PATH_TO_WEIGHTS \
-    --visactmap \
-    --save-dir log/eval-osnet_x1_0 \
-    --gpu-devices 0
 
 
 .. note::
