@@ -28,41 +28,28 @@ Model zoo: https://kaiyangzhou.github.io/deep-person-reid/MODEL_ZOO.
 Installation
 ---------------
 
-We recommend using `conda <https://www.anaconda.com/distribution/>`_ to manage the packages.
+Make sure your `conda <https://www.anaconda.com/distribution/>`_ is installed.
 
-1. Clone ``deep-person-reid`` to your preferred directory.
-
-.. code-block:: bash
-    
-    $ git clone https://github.com/KaiyangZhou/deep-person-reid.git
-
-2. Create a conda environment (the default name is ``torchreid``).
-
-.. code-block:: bash
-    
-    $ cd deep-person-reid/
-    $ conda env create -f environment.yml
-    $ conda activate torchreid
-
-Do check whether ``which python`` and ``which pip`` point to the right path.
-
-3. Install tensorboard.
-
-.. code-block:: bash
-    
-    $ pip install tb-nightly
-
-4. Install PyTorch and torchvision (select the proper cuda version to suit your machine).
-
-.. code-block:: bash
-    
-    $ conda install pytorch torchvision cudatoolkit=9.0 -c pytorch
-
-5. Install ``torchreid``.
 
 .. code-block:: bash
 
-    $ python setup.py develop
+    # cd to your preferred directory and clone this repo
+    git clone https://github.com/KaiyangZhou/deep-person-reid.git
+
+    # create environment
+    cd deep-person-reid/
+    conda create --name torchreid python=3.7
+    conda activate torchreid
+
+    # install dependencies
+    # make sure `which python` and `which pip` point to the correct path
+    pip install -r requirements.txt
+
+    # install torch and torchvision (select the proper cuda version to suit your machine)
+    conda install pytorch torchvision cudatoolkit=9.0 -c pytorch
+
+    # install torchreid (don't need to re-build it if you modify the source code)
+    python setup.py develop
 
 
 Get started: 30 seconds to Torchreid
@@ -80,9 +67,11 @@ Get started: 30 seconds to Torchreid
     datamanager = torchreid.data.ImageDataManager(
         root='reid-data',
         sources='market1501',
+        targets='market1501',
         height=256,
         width=128,
-        batch_size=32,
+        batch_size_train=32,
+        batch_size_test=100,
         transforms=['random_flip', 'random_crop']
     )
 
@@ -138,46 +127,72 @@ Get started: 30 seconds to Torchreid
 
 A unified interface
 -----------------------
-In "deep-person-reid/scripts/", we provide a unified interface to train and test a model.
+In "deep-person-reid/scripts/", we provide a unified interface to train and test a model. See "scripts/main.py" and "scripts/default_config.py" for more details. "configs/" contains some predefined configs which you can use as a starting point.
 
-For instance, to train an image reid model on Market1501 using softmax, you can do
+Below we provide examples to train and test `OSNet <https://arxiv.org/abs/1905.00953>`_. Assume :code:`PATH_TO_DATA` is the directory containing reid datasets.
 
-.. code-block:: bash
-    
-    # suppose you are in deep-person-reid/
-    python scripts/main.py \
-    --root PATH_TO_DATA \
-    --app image \
-    --loss softmax \
-    --label-smooth \
-    -s market1501 \
-    -a resnet50 \
-    --optim adam \
-    --lr 0.0003 \
-    --max-epoch 60 \
-    --stepsize 20 40 \
-    --batch-size 32 \
-    --transforms random_flip random_crop \
-    --save-dir log/resnet50-market1501-softmax \
-    --gpu-devices 0
+Conventional setting
+^^^^^^^^^^^^^^^^^^^^^
 
-To evaluate a trained model, do
+To train OSNet on Market1501, do
 
 .. code-block:: bash
-    
+
     python scripts/main.py \
-    --root PATH_TO_DATA \
-    --app image \
-    --loss softmax \
-    -s market1501 \
-    -a resnet50 \
-    --batch-size 32 \
-    --evaluate \
-    --load-weights log/resnet50-market1501-softmax/model.pth.tar-60 \
-    --save-dir log/eval-resnet50 \
+    --config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad_cosine.yaml \
+    --transforms random_flip random_erase \
+    --root $PATH_TO_DATA \
     --gpu-devices 0
 
-Please refer to ``default_parser.py`` and ``main.py`` for more details.
+
+The config file sets Market1501 as the default dataset. If you wanna use DukeMTMC-reID, do
+
+.. code-block:: bash
+
+    python scripts/main.py \
+    --config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad_cosine.yaml \
+    -s dukemtmcreid \
+    -t dukemtmcreid \
+    --transforms random_flip random_erase \
+    --root $PATH_TO_DATA \
+    --gpu-devices 0
+
+The code will automatically (download and) load the ImageNet pretrained weights. After the training is done, the model will be saved as "log/osnet_x1_0_market1501_softmax_cosinelr/model.pth.tar-250".
+
+Evaluation will be automatically performed at the end of training.
+
+To run the test again using the trained model, do
+
+.. code-block:: bash
+
+    python scripts/main.py \
+    --config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad_cosine.yaml \
+    --root $PATH_TO_DATA \
+    --gpu-devices 0 \
+    model.load_weights log/osnet_x1_0_market1501_softmax_cosinelr/model.pth.tar-250 \
+    test.evaluate True
+
+
+Cross-domain setting
+^^^^^^^^^^^^^^^^^^^^^
+
+Suppose you wanna train OSNet on DukeMTMC-reID and test its performance on Market1501, you can do
+
+.. code-block:: bash
+
+    python scripts/main.py \
+    --config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad.yaml \
+    -s dukemtmcreid \
+    -t market1501 \
+    --transforms random_flip color_jitter \
+    --root $PATH_TO_DATA \
+    --gpu-devices 0
+
+Here we only test the cross-domain performance. However, if you also want to test the same-domain performance, you can set :code:`-t dukemtmcreid market1501`, which will evaluate the model on the two datasets separately.
+
+Different from the same-domain setting, here we replace :code:`random_erase` with :code:`color_jitter`. This can improve the generalization performance on the unseen target dataset.
+
+Pretrained models are available in the `Model Zoo <https://kaiyangzhou.github.io/deep-person-reid/MODEL_ZOO.html>`_.
 
 
 Datasets

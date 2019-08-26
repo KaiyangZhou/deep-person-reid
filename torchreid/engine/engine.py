@@ -35,15 +35,15 @@ class Engine(object):
         model (nn.Module): model instance.
         optimizer (Optimizer): an Optimizer.
         scheduler (LRScheduler, optional): if None, no learning rate decay will be performed.
-        use_cpu (bool, optional): use cpu. Default is False.
+        use_gpu (bool, optional): use gpu. Default is True.
     """
 
-    def __init__(self, datamanager, model, optimizer=None, scheduler=None, use_cpu=False):
+    def __init__(self, datamanager, model, optimizer=None, scheduler=None, use_gpu=True):
         self.datamanager = datamanager
         self.model = model
         self.optimizer = optimizer
         self.scheduler = scheduler
-        self.use_gpu = (torch.cuda.is_available() and not use_cpu)
+        self.use_gpu = (torch.cuda.is_available() and use_gpu)
         self.writer = None
 
         # check attributes

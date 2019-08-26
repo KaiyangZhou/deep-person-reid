@@ -24,7 +24,7 @@ class VideoTripletEngine(ImageTripletEngine, VideoSoftmaxEngine):
         weight_t (float, optional): weight for triplet loss. Default is 1.
         weight_x (float, optional): weight for softmax loss. Default is 1.
         scheduler (LRScheduler, optional): if None, no learning rate decay will be performed.
-        use_cpu (bool, optional): use cpu. Default is False.
+        use_gpu (bool, optional): use gpu. Default is True.
         label_smooth (bool, optional): use label smoothing regularizer. Default is True.
         pooling_method (str, optional): how to pool features for a tracklet.
             Default is "avg" (average). Choices are ["avg", "max"].
@@ -73,10 +73,10 @@ class VideoTripletEngine(ImageTripletEngine, VideoSoftmaxEngine):
     """
 
     def __init__(self, datamanager, model, optimizer, margin=0.3,
-                 weight_t=1, weight_x=1, scheduler=None, use_cpu=False,
+                 weight_t=1, weight_x=1, scheduler=None, use_gpu=False,
                  label_smooth=True, pooling_method='avg'):
         super(VideoTripletEngine, self).__init__(datamanager, model, optimizer, margin=margin,
                                                  weight_t=weight_t, weight_x=weight_x,
-                                                 scheduler=scheduler, use_cpu=use_cpu,
+                                                 scheduler=scheduler, use_gpu=use_gpu,
                                                  label_smooth=label_smooth)
         self.pooling_method = pooling_method

@@ -26,7 +26,7 @@ class ImageTripletEngine(engine.Engine):
         weight_t (float, optional): weight for triplet loss. Default is 1.
         weight_x (float, optional): weight for softmax loss. Default is 1.
         scheduler (LRScheduler, optional): if None, no learning rate decay will be performed.
-        use_cpu (bool, optional): use cpu. Default is False.
+        use_gpu (bool, optional): use gpu. Default is True.
         label_smooth (bool, optional): use label smoothing regularizer. Default is True.
 
     Examples::
@@ -69,9 +69,9 @@ class ImageTripletEngine(engine.Engine):
     """   
 
     def __init__(self, datamanager, model, optimizer, margin=0.3,
-                 weight_t=1, weight_x=1, scheduler=None, use_cpu=False,
+                 weight_t=1, weight_x=1, scheduler=None, use_gpu=True,
                  label_smooth=True):
-        super(ImageTripletEngine, self).__init__(datamanager, model, optimizer, scheduler, use_cpu)
+        super(ImageTripletEngine, self).__init__(datamanager, model, optimizer, scheduler, use_gpu)
 
         self.weight_t = weight_t
         self.weight_x = weight_x

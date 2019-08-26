@@ -23,7 +23,7 @@ class ImageSoftmaxEngine(engine.Engine):
         model (nn.Module): model instance.
         optimizer (Optimizer): an Optimizer.
         scheduler (LRScheduler, optional): if None, no learning rate decay will be performed.
-        use_cpu (bool, optional): use cpu. Default is False.
+        use_gpu (bool, optional): use gpu. Default is True.
         label_smooth (bool, optional): use label smoothing regularizer. Default is True.
 
     Examples::
@@ -62,9 +62,9 @@ class ImageSoftmaxEngine(engine.Engine):
         )
     """
 
-    def __init__(self, datamanager, model, optimizer, scheduler=None, use_cpu=False,
+    def __init__(self, datamanager, model, optimizer, scheduler=None, use_gpu=True,
                  label_smooth=True):
-        super(ImageSoftmaxEngine, self).__init__(datamanager, model, optimizer, scheduler, use_cpu)
+        super(ImageSoftmaxEngine, self).__init__(datamanager, model, optimizer, scheduler, use_gpu)
         
         self.criterion = CrossEntropyLoss(
             num_classes=self.datamanager.num_train_pids,

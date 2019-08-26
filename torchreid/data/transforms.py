@@ -140,8 +140,8 @@ def build_transforms(height, width, transforms='random_flip', norm_mean=[0.485, 
         width (int): target image width.
         transforms (str or list of str, optional): transformations applied to model training.
             Default is 'random_flip'.
-        norm_mean (list): normalization mean values. Default is ImageNet means.
-        norm_std (list): normalization standard deviation values. Default is
+        norm_mean (list or None, optional): normalization mean values. Default is ImageNet means.
+        norm_std (list or None, optional): normalization standard deviation values. Default is
             ImageNet standard deviation values.
     """
     if transforms is None:
@@ -156,6 +156,9 @@ def build_transforms(height, width, transforms='random_flip', norm_mean=[0.485, 
     if len(transforms) > 0:
         transforms = [t.lower() for t in transforms]
     
+    if norm_mean is None or norm_std is None:
+        norm_mean = [0.485, 0.456, 0.406] # imagenet mean
+        norm_std = [0.229, 0.224, 0.225] # imagenet std
     normalize = Normalize(mean=norm_mean, std=norm_std)
 
     print('Building train transforms ...')

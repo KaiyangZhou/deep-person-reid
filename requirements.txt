@@ -8,3 +8,5 @@ opencv-python
 matplotlib
 tb-nightly
 future
+yacs
+gdown
