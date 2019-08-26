@@ -18,9 +18,11 @@ It features:
 - visualization tools (tensorboard, ranks, etc.)
 
 
+Code: https://github.com/KaiyangZhou/deep-person-reid.
+
 Documentation: https://kaiyangzhou.github.io/deep-person-reid/.
 
-Code: https://github.com/KaiyangZhou/deep-person-reid.
+How-to instructions: https://kaiyangzhou.github.io/deep-person-reid/user_guide.
 
 Model zoo: https://kaiyangzhou.github.io/deep-person-reid/MODEL_ZOO.
 
@@ -129,7 +131,7 @@ A unified interface
 -----------------------
 In "deep-person-reid/scripts/", we provide a unified interface to train and test a model. See "scripts/main.py" and "scripts/default_config.py" for more details. "configs/" contains some predefined configs which you can use as a starting point.
 
-Below we provide examples to train and test `OSNet <https://arxiv.org/abs/1905.00953>`_. Assume :code:`PATH_TO_DATA` is the directory containing reid datasets.
+Below we provide examples to train and test `OSNet (Zhou et al. ICCV'19) <https://arxiv.org/abs/1905.00953>`_. Assume :code:`PATH_TO_DATA` is the directory containing reid datasets.
 
 Conventional setting
 ^^^^^^^^^^^^^^^^^^^^^
@@ -158,7 +160,7 @@ The config file sets Market1501 as the default dataset. If you wanna use DukeMTM
     --gpu-devices 0 \
     data.save_dir log/osnet_x1_0_dukemtmcreid_softmax_cosinelr
 
-The code will automatically (download and) load the ImageNet pretrained weights. After the training is done, the model will be saved as "log/osnet_x1_0_market1501_softmax_cosinelr/model.pth.tar-250". Under the same folder, you can also find the `tensorboard <https://pytorch.org/docs/stable/tensorboard.html>`_ file. To visualize the learning curves, you can run :code:`tensorboard --logdir=log/osnet_x1_0_market1501_softmax_cosinelr` in the terminal and visit :code:`http://localhost:6006/` in your web browser.
+The code will automatically (download and) load the ImageNet pretrained weights. After the training is done, the model will be saved as "log/osnet_x1_0_market1501_softmax_cosinelr/model.pth.tar-250". Under the same folder, you can find the `tensorboard <https://pytorch.org/docs/stable/tensorboard.html>`_ file. To visualize the learning curves using tensorboard, you can run :code:`tensorboard --logdir=log/osnet_x1_0_market1501_softmax_cosinelr` in the terminal and visit :code:`http://localhost:6006/` in your web browser.
 
 Evaluation is automatically performed at the end of training. To run the test again using the trained model, do
 
