@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Model Zoo &mdash; torchreid 1.0.0 documentation</title>
+  <title>Model Zoo &mdash; torchreid 1.0.1 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                1.0.0
+                1.0.1
               </div>
             
           
@@ -182,12 +182,12 @@
 <h1>Model Zoo<a class="headerlink" href="#model-zoo" title="Permalink to this headline">¶</a></h1>
 <p>In general,</p>
 <ul class="simple">
-<li><p>results are presented in the format of <em>&lt;Rank-1 (mAP)&gt;</em>, unless specified otherwise.</p></li>
-<li><p>when computing model size and FLOPs, only layers that are used at test time are considered (see <code class="docutils literal notranslate"><span class="pre">torchreid.utils.compute_model_complexity</span></code>).</p></li>
-<li><p>asterisk (*) means the model is trained from scratch.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">combineall=True</span></code> means all images in the dataset are used for model training.</p></li>
-<li><p>for the cuhk03 dataset, we use the 767/700 split by <a class="reference external" href="https://arxiv.org/abs/1701.08398">Zhong et al. CVPR’17</a>.</p></li>
-<li><p><a class="reference external" href="https://arxiv.org/abs/1512.00567">label smoothing regularizer</a> is used in the softmax loss.</p></li>
+<li>results are presented in the format of <em>&lt;Rank-1 (mAP)&gt;</em>, unless specified otherwise.</li>
+<li>when computing model size and FLOPs, only layers that are used at test time are considered (see <code class="docutils literal notranslate"><span class="pre">torchreid.utils.compute_model_complexity</span></code>).</li>
+<li>asterisk (*) means the model is trained from scratch.</li>
+<li><code class="docutils literal notranslate"><span class="pre">combineall=True</span></code> means all images in the dataset are used for model training.</li>
+<li>for the cuhk03 dataset, we use the 767/700 split by <a class="reference external" href="https://arxiv.org/abs/1701.08398">Zhong et al. CVPR’17</a>.</li>
+<li><a class="reference external" href="https://arxiv.org/abs/1512.00567">label smoothing regularizer</a> is used in the softmax loss.</li>
 </ul>
 <div class="section" id="imagenet-pretrained-models">
 <h2>ImageNet pretrained models<a class="headerlink" href="#imagenet-pretrained-models" title="Permalink to this headline">¶</a></h2>

@@ -239,6 +239,7 @@ Use your own dataset
 
     from torchreid.data import ImageDataset
 
+
     class NewDataset(ImageDataset):
         dataset_dir = 'new_dataset'
 
