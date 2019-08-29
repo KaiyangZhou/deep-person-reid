@@ -16,7 +16,8 @@ __image_datasets = {
     'cuhk01': CUHK01,
     'ilids': iLIDS,
     'sensereid': SenseReID,
-    'prid': PRID
+    'prid': PRID,
+    'cuhk02': CUHK02
 }
 
 

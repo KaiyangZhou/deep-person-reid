@@ -171,6 +171,22 @@ PRID (``prid``)
             single_shot/
             multi_shot/
 
+CUHK02 (``cuhk02``)
+^^^^^^^^^^^^^^^^^^^^^
+- Create a folder named "cuhk02" under ``$REID``.
+- Download the data from http://www.ee.cuhk.edu.hk/~xgwang/CUHK_identification.html and put it under "cuhk02/".
+- Extract the file so the data structure looks like
+
+.. code-block:: none
+    
+    cuhk02/
+        Dataset/
+            P1/
+            P2/
+            P3/
+            P4/
+            P5/
+
 Video Datasets
 --------------
 

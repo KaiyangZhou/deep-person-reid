@@ -11,3 +11,4 @@ from .cuhk01 import CUHK01
 from .ilids import iLIDS
 from .sensereid import SenseReID
 from .prid import PRID
+from .cuhk02 import CUHK02
