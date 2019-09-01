@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.engine &mdash; torchreid 1.0.1 documentation</title>
+  <title>torchreid.engine &mdash; torchreid 1.0.2 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.0.1
+                1.0.2
               </div>
             
           
@@ -179,78 +179,70 @@
 <h2>Base Engine<a class="headerlink" href="#base-engine" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="torchreid.engine.engine.Engine">
-<em class="property">class </em><code class="descclassname">torchreid.engine.engine.</code><code class="descname">Engine</code><span class="sig-paren">(</span><em>datamanager</em>, <em>model</em>, <em>optimizer=None</em>, <em>scheduler=None</em>, <em>use_gpu=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">torchreid.engine.engine.</code><code class="sig-name descname">Engine</code><span class="sig-paren">(</span><em class="sig-param">datamanager</em>, <em class="sig-param">model</em>, <em class="sig-param">optimizer=None</em>, <em class="sig-param">scheduler=None</em>, <em class="sig-param">use_gpu=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine" title="Permalink to this definition">¶</a></dt>
 <dd><p>A generic base Engine class for both image- and video-reid.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>datamanager</strong> (<a class="reference internal" href="data.html#torchreid.data.datamanager.DataManager" title="torchreid.data.datamanager.DataManager"><em>DataManager</em></a>) – an instance of <code class="docutils literal notranslate"><span class="pre">torchreid.data.ImageDataManager</span></code>
-or <code class="docutils literal notranslate"><span class="pre">torchreid.data.VideoDataManager</span></code>.</li>
-<li><strong>model</strong> (<em>nn.Module</em>) – model instance.</li>
-<li><strong>optimizer</strong> (<em>Optimizer</em>) – an Optimizer.</li>
-<li><strong>scheduler</strong> (<em>LRScheduler</em><em>, </em><em>optional</em>) – if None, no learning rate decay will be performed.</li>
-<li><strong>use_gpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – use gpu. Default is True.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datamanager</strong> (<a class="reference internal" href="data.html#torchreid.data.datamanager.DataManager" title="torchreid.data.datamanager.DataManager"><em>DataManager</em></a>) – an instance of <code class="docutils literal notranslate"><span class="pre">torchreid.data.ImageDataManager</span></code>
+or <code class="docutils literal notranslate"><span class="pre">torchreid.data.VideoDataManager</span></code>.</p></li>
+<li><p><strong>model</strong> (<em>nn.Module</em>) – model instance.</p></li>
+<li><p><strong>optimizer</strong> (<em>Optimizer</em>) – an Optimizer.</p></li>
+<li><p><strong>scheduler</strong> (<em>LRScheduler</em><em>, </em><em>optional</em>) – if None, no learning rate decay will be performed.</p></li>
+<li><p><strong>use_gpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – use gpu. Default is True.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <dl class="method">
 <dt id="torchreid.engine.engine.Engine.run">
-<code class="descname">run</code><span class="sig-paren">(</span><em>save_dir='log', max_epoch=0, start_epoch=0, fixbase_epoch=0, open_layers=None, start_eval=0, eval_freq=-1, test_only=False, print_freq=10, dist_metric='euclidean', normalize_feature=False, visrank=False, visrank_topk=10, use_metric_cuhk03=False, ranks=[1, 5, 10, 20], rerank=False, visactmap=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">save_dir='log', max_epoch=0, start_epoch=0, fixbase_epoch=0, open_layers=None, start_eval=0, eval_freq=-1, test_only=False, print_freq=10, dist_metric='euclidean', normalize_feature=False, visrank=False, visrank_topk=10, use_metric_cuhk03=False, ranks=[1, 5, 10, 20], rerank=False, visactmap=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>A unified pipeline for training and evaluating a model.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>save_dir</strong> (<em>str</em>) – directory to save model.</li>
-<li><strong>max_epoch</strong> (<em>int</em>) – maximum epoch.</li>
-<li><strong>start_epoch</strong> (<em>int</em><em>, </em><em>optional</em>) – starting epoch. Default is 0.</li>
-<li><strong>fixbase_epoch</strong> (<em>int</em><em>, </em><em>optional</em>) – number of epochs to train <code class="docutils literal notranslate"><span class="pre">open_layers</span></code> (new layers)
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>save_dir</strong> (<em>str</em>) – directory to save model.</p></li>
+<li><p><strong>max_epoch</strong> (<em>int</em>) – maximum epoch.</p></li>
+<li><p><strong>start_epoch</strong> (<em>int</em><em>, </em><em>optional</em>) – starting epoch. Default is 0.</p></li>
+<li><p><strong>fixbase_epoch</strong> (<em>int</em><em>, </em><em>optional</em>) – number of epochs to train <code class="docutils literal notranslate"><span class="pre">open_layers</span></code> (new layers)
 while keeping base layers frozen. Default is 0. <code class="docutils literal notranslate"><span class="pre">fixbase_epoch</span></code> is counted
-in <code class="docutils literal notranslate"><span class="pre">max_epoch</span></code>.</li>
-<li><strong>open_layers</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – layers (attribute names) open for training.</li>
-<li><strong>start_eval</strong> (<em>int</em><em>, </em><em>optional</em>) – from which epoch to start evaluation. Default is 0.</li>
-<li><strong>eval_freq</strong> (<em>int</em><em>, </em><em>optional</em>) – evaluation frequency. Default is -1 (meaning evaluation
-is only performed at the end of training).</li>
-<li><strong>test_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, only runs evaluation on test datasets.
-Default is False.</li>
-<li><strong>print_freq</strong> (<em>int</em><em>, </em><em>optional</em>) – print_frequency. Default is 10.</li>
-<li><strong>dist_metric</strong> (<em>str</em><em>, </em><em>optional</em>) – distance metric used to compute distance matrix
-between query and gallery. Default is “euclidean”.</li>
-<li><strong>normalize_feature</strong> (<em>bool</em><em>, </em><em>optional</em>) – performs L2 normalization on feature vectors before
-computing feature distance. Default is False.</li>
-<li><strong>visrank</strong> (<em>bool</em><em>, </em><em>optional</em>) – visualizes ranked results. Default is False. It is recommended to
+in <code class="docutils literal notranslate"><span class="pre">max_epoch</span></code>.</p></li>
+<li><p><strong>open_layers</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – layers (attribute names) open for training.</p></li>
+<li><p><strong>start_eval</strong> (<em>int</em><em>, </em><em>optional</em>) – from which epoch to start evaluation. Default is 0.</p></li>
+<li><p><strong>eval_freq</strong> (<em>int</em><em>, </em><em>optional</em>) – evaluation frequency. Default is -1 (meaning evaluation
+is only performed at the end of training).</p></li>
+<li><p><strong>test_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, only runs evaluation on test datasets.
+Default is False.</p></li>
+<li><p><strong>print_freq</strong> (<em>int</em><em>, </em><em>optional</em>) – print_frequency. Default is 10.</p></li>
+<li><p><strong>dist_metric</strong> (<em>str</em><em>, </em><em>optional</em>) – distance metric used to compute distance matrix
+between query and gallery. Default is “euclidean”.</p></li>
+<li><p><strong>normalize_feature</strong> (<em>bool</em><em>, </em><em>optional</em>) – performs L2 normalization on feature vectors before
+computing feature distance. Default is False.</p></li>
+<li><p><strong>visrank</strong> (<em>bool</em><em>, </em><em>optional</em>) – visualizes ranked results. Default is False. It is recommended to
 enable <code class="docutils literal notranslate"><span class="pre">visrank</span></code> when <code class="docutils literal notranslate"><span class="pre">test_only</span></code> is True. The ranked images will be saved to
-“save_dir/visrank_dataset”, e.g. “save_dir/visrank_market1501”.</li>
-<li><strong>visrank_topk</strong> (<em>int</em><em>, </em><em>optional</em>) – top-k ranked images to be visualized. Default is 10.</li>
-<li><strong>use_metric_cuhk03</strong> (<em>bool</em><em>, </em><em>optional</em>) – use single-gallery-shot setting for cuhk03.
-Default is False. This should be enabled when using cuhk03 classic split.</li>
-<li><strong>ranks</strong> (<em>list</em><em>, </em><em>optional</em>) – cmc ranks to be computed. Default is [1, 5, 10, 20].</li>
-<li><strong>rerank</strong> (<em>bool</em><em>, </em><em>optional</em>) – uses person re-ranking (by Zhong et al. CVPR‘17).
-Default is False. This is only enabled when test_only=True.</li>
-<li><strong>visactmap</strong> (<em>bool</em><em>, </em><em>optional</em>) – visualizes activation maps. Default is False.</li>
+“save_dir/visrank_dataset”, e.g. “save_dir/visrank_market1501”.</p></li>
+<li><p><strong>visrank_topk</strong> (<em>int</em><em>, </em><em>optional</em>) – top-k ranked images to be visualized. Default is 10.</p></li>
+<li><p><strong>use_metric_cuhk03</strong> (<em>bool</em><em>, </em><em>optional</em>) – use single-gallery-shot setting for cuhk03.
+Default is False. This should be enabled when using cuhk03 classic split.</p></li>
+<li><p><strong>ranks</strong> (<em>list</em><em>, </em><em>optional</em>) – cmc ranks to be computed. Default is [1, 5, 10, 20].</p></li>
+<li><p><strong>rerank</strong> (<em>bool</em><em>, </em><em>optional</em>) – uses person re-ranking (by Zhong et al. CVPR’17).
+Default is False. This is only enabled when test_only=True.</p></li>
+<li><p><strong>visactmap</strong> (<em>bool</em><em>, </em><em>optional</em>) – visualizes activation maps. Default is False.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="torchreid.engine.engine.Engine.test">
-<code class="descname">test</code><span class="sig-paren">(</span><em>epoch, testloader, dist_metric='euclidean', normalize_feature=False, visrank=False, visrank_topk=10, save_dir='', use_metric_cuhk03=False, ranks=[1, 5, 10, 20], rerank=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.test" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">test</code><span class="sig-paren">(</span><em class="sig-param">epoch, testloader, dist_metric='euclidean', normalize_feature=False, visrank=False, visrank_topk=10, save_dir='', use_metric_cuhk03=False, ranks=[1, 5, 10, 20], rerank=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests model on target datasets.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This function has been called in <code class="docutils literal notranslate"><span class="pre">run()</span></code>.</p>
+<p class="admonition-title">Note</p>
+<p>This function has been called in <code class="docutils literal notranslate"><span class="pre">run()</span></code>.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The test pipeline implemented in this function suits both image- and
+<p class="admonition-title">Note</p>
+<p>The test pipeline implemented in this function suits both image- and
 video-reid. In general, a subclass of Engine only needs to re-implement
 <code class="docutils literal notranslate"><span class="pre">_extract_features()</span></code> and <code class="docutils literal notranslate"><span class="pre">_parse_data_for_eval()</span></code> (most of the time),
 but not a must. Please refer to the source code for more details.</p>
@@ -259,7 +251,7 @@ but not a must. Please refer to the source code for more details.</p>
 
 <dl class="method">
 <dt id="torchreid.engine.engine.Engine.train">
-<code class="descname">train</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.train" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs training on source datasets for one epoch.</p>
 <p>This will be called every epoch in <code class="docutils literal notranslate"><span class="pre">run()</span></code>, e.g.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_epoch</span><span class="p">,</span> <span class="n">max_epoch</span><span class="p">):</span>
@@ -267,22 +259,21 @@ but not a must. Please refer to the source code for more details.</p>
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This must be implemented in subclasses.</p>
+<p class="admonition-title">Note</p>
+<p>This must be implemented in subclasses.</p>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="torchreid.engine.engine.Engine.visactmap">
-<code class="descname">visactmap</code><span class="sig-paren">(</span><em>testloader</em>, <em>save_dir</em>, <em>width</em>, <em>height</em>, <em>print_freq</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.visactmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.visactmap" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">visactmap</code><span class="sig-paren">(</span><em class="sig-param">testloader</em>, <em class="sig-param">save_dir</em>, <em class="sig-param">width</em>, <em class="sig-param">height</em>, <em class="sig-param">print_freq</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.visactmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.visactmap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Visualizes CNN activation maps to see where the CNN focuses on to extract features.</p>
 <p>This function takes as input the query images of target datasets</p>
-<dl class="docutils">
-<dt>Reference:</dt>
-<dd><ul class="first last simple">
-<li>Zagoruyko and Komodakis. Paying more attention to attention: Improving the
-performance of convolutional neural networks via attention transfer. ICLR, 2017</li>
-<li>Zhou et al. Omni-Scale Feature Learning for Person Re-Identification. ICCV, 2019.</li>
+<dl class="simple">
+<dt>Reference:</dt><dd><ul class="simple">
+<li><p>Zagoruyko and Komodakis. Paying more attention to attention: Improving the
+performance of convolutional neural networks via attention transfer. ICLR, 2017</p></li>
+<li><p>Zhou et al. Omni-Scale Feature Learning for Person Re-Identification. ICCV, 2019.</p></li>
 </ul>
 </dd>
 </dl>
@@ -295,25 +286,21 @@ performance of convolutional neural networks via attention transfer. ICLR, 2017<
 <h2>Image Engines<a class="headerlink" href="#image-engines" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="torchreid.engine.image.softmax.ImageSoftmaxEngine">
-<em class="property">class </em><code class="descclassname">torchreid.engine.image.softmax.</code><code class="descname">ImageSoftmaxEngine</code><span class="sig-paren">(</span><em>datamanager</em>, <em>model</em>, <em>optimizer</em>, <em>scheduler=None</em>, <em>use_gpu=True</em>, <em>label_smooth=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/image/softmax.html#ImageSoftmaxEngine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.image.softmax.ImageSoftmaxEngine" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">torchreid.engine.image.softmax.</code><code class="sig-name descname">ImageSoftmaxEngine</code><span class="sig-paren">(</span><em class="sig-param">datamanager</em>, <em class="sig-param">model</em>, <em class="sig-param">optimizer</em>, <em class="sig-param">scheduler=None</em>, <em class="sig-param">use_gpu=True</em>, <em class="sig-param">label_smooth=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/image/softmax.html#ImageSoftmaxEngine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.image.softmax.ImageSoftmaxEngine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Softmax-loss engine for image-reid.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>datamanager</strong> (<a class="reference internal" href="data.html#torchreid.data.datamanager.DataManager" title="torchreid.data.datamanager.DataManager"><em>DataManager</em></a>) – an instance of <code class="docutils literal notranslate"><span class="pre">torchreid.data.ImageDataManager</span></code>
-or <code class="docutils literal notranslate"><span class="pre">torchreid.data.VideoDataManager</span></code>.</li>
-<li><strong>model</strong> (<em>nn.Module</em>) – model instance.</li>
-<li><strong>optimizer</strong> (<em>Optimizer</em>) – an Optimizer.</li>
-<li><strong>scheduler</strong> (<em>LRScheduler</em><em>, </em><em>optional</em>) – if None, no learning rate decay will be performed.</li>
-<li><strong>use_gpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – use gpu. Default is True.</li>
-<li><strong>label_smooth</strong> (<em>bool</em><em>, </em><em>optional</em>) – use label smoothing regularizer. Default is True.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datamanager</strong> (<a class="reference internal" href="data.html#torchreid.data.datamanager.DataManager" title="torchreid.data.datamanager.DataManager"><em>DataManager</em></a>) – an instance of <code class="docutils literal notranslate"><span class="pre">torchreid.data.ImageDataManager</span></code>
+or <code class="docutils literal notranslate"><span class="pre">torchreid.data.VideoDataManager</span></code>.</p></li>
+<li><p><strong>model</strong> (<em>nn.Module</em>) – model instance.</p></li>
+<li><p><strong>optimizer</strong> (<em>Optimizer</em>) – an Optimizer.</p></li>
+<li><p><strong>scheduler</strong> (<em>LRScheduler</em><em>, </em><em>optional</em>) – if None, no learning rate decay will be performed.</p></li>
+<li><p><strong>use_gpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – use gpu. Default is True.</p></li>
+<li><p><strong>label_smooth</strong> (<em>bool</em><em>, </em><em>optional</em>) – use label smoothing regularizer. Default is True.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p>Examples:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torchreid</span>
@@ -351,7 +338,7 @@ or <code class="docutils literal notranslate"><span class="pre">torchreid.data.V
 </div>
 <dl class="method">
 <dt id="torchreid.engine.image.softmax.ImageSoftmaxEngine.train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>epoch</em>, <em>max_epoch</em>, <em>trainloader</em>, <em>fixbase_epoch=0</em>, <em>open_layers=None</em>, <em>print_freq=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/image/softmax.html#ImageSoftmaxEngine.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.image.softmax.ImageSoftmaxEngine.train" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">epoch</em>, <em class="sig-param">max_epoch</em>, <em class="sig-param">trainloader</em>, <em class="sig-param">fixbase_epoch=0</em>, <em class="sig-param">open_layers=None</em>, <em class="sig-param">print_freq=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/image/softmax.html#ImageSoftmaxEngine.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.image.softmax.ImageSoftmaxEngine.train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs training on source datasets for one epoch.</p>
 <p>This will be called every epoch in <code class="docutils literal notranslate"><span class="pre">run()</span></code>, e.g.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_epoch</span><span class="p">,</span> <span class="n">max_epoch</span><span class="p">):</span>
@@ -359,8 +346,8 @@ or <code class="docutils literal notranslate"><span class="pre">torchreid.data.V
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This must be implemented in subclasses.</p>
+<p class="admonition-title">Note</p>
+<p>This must be implemented in subclasses.</p>
 </div>
 </dd></dl>
 
@@ -368,28 +355,24 @@ or <code class="docutils literal notranslate"><span class="pre">torchreid.data.V
 
 <dl class="class">
 <dt id="torchreid.engine.image.triplet.ImageTripletEngine">
-<em class="property">class </em><code class="descclassname">torchreid.engine.image.triplet.</code><code class="descname">ImageTripletEngine</code><span class="sig-paren">(</span><em>datamanager</em>, <em>model</em>, <em>optimizer</em>, <em>margin=0.3</em>, <em>weight_t=1</em>, <em>weight_x=1</em>, <em>scheduler=None</em>, <em>use_gpu=True</em>, <em>label_smooth=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/image/triplet.html#ImageTripletEngine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.image.triplet.ImageTripletEngine" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">torchreid.engine.image.triplet.</code><code class="sig-name descname">ImageTripletEngine</code><span class="sig-paren">(</span><em class="sig-param">datamanager</em>, <em class="sig-param">model</em>, <em class="sig-param">optimizer</em>, <em class="sig-param">margin=0.3</em>, <em class="sig-param">weight_t=1</em>, <em class="sig-param">weight_x=1</em>, <em class="sig-param">scheduler=None</em>, <em class="sig-param">use_gpu=True</em>, <em class="sig-param">label_smooth=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/image/triplet.html#ImageTripletEngine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.image.triplet.ImageTripletEngine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Triplet-loss engine for image-reid.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>datamanager</strong> (<a class="reference internal" href="data.html#torchreid.data.datamanager.DataManager" title="torchreid.data.datamanager.DataManager"><em>DataManager</em></a>) – an instance of <code class="docutils literal notranslate"><span class="pre">torchreid.data.ImageDataManager</span></code>
-or <code class="docutils literal notranslate"><span class="pre">torchreid.data.VideoDataManager</span></code>.</li>
-<li><strong>model</strong> (<em>nn.Module</em>) – model instance.</li>
-<li><strong>optimizer</strong> (<em>Optimizer</em>) – an Optimizer.</li>
-<li><strong>margin</strong> (<em>float</em><em>, </em><em>optional</em>) – margin for triplet loss. Default is 0.3.</li>
-<li><strong>weight_t</strong> (<em>float</em><em>, </em><em>optional</em>) – weight for triplet loss. Default is 1.</li>
-<li><strong>weight_x</strong> (<em>float</em><em>, </em><em>optional</em>) – weight for softmax loss. Default is 1.</li>
-<li><strong>scheduler</strong> (<em>LRScheduler</em><em>, </em><em>optional</em>) – if None, no learning rate decay will be performed.</li>
-<li><strong>use_gpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – use gpu. Default is True.</li>
-<li><strong>label_smooth</strong> (<em>bool</em><em>, </em><em>optional</em>) – use label smoothing regularizer. Default is True.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datamanager</strong> (<a class="reference internal" href="data.html#torchreid.data.datamanager.DataManager" title="torchreid.data.datamanager.DataManager"><em>DataManager</em></a>) – an instance of <code class="docutils literal notranslate"><span class="pre">torchreid.data.ImageDataManager</span></code>
+or <code class="docutils literal notranslate"><span class="pre">torchreid.data.VideoDataManager</span></code>.</p></li>
+<li><p><strong>model</strong> (<em>nn.Module</em>) – model instance.</p></li>
+<li><p><strong>optimizer</strong> (<em>Optimizer</em>) – an Optimizer.</p></li>
+<li><p><strong>margin</strong> (<em>float</em><em>, </em><em>optional</em>) – margin for triplet loss. Default is 0.3.</p></li>
+<li><p><strong>weight_t</strong> (<em>float</em><em>, </em><em>optional</em>) – weight for triplet loss. Default is 1.</p></li>
+<li><p><strong>weight_x</strong> (<em>float</em><em>, </em><em>optional</em>) – weight for softmax loss. Default is 1.</p></li>
+<li><p><strong>scheduler</strong> (<em>LRScheduler</em><em>, </em><em>optional</em>) – if None, no learning rate decay will be performed.</p></li>
+<li><p><strong>use_gpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – use gpu. Default is True.</p></li>
+<li><p><strong>label_smooth</strong> (<em>bool</em><em>, </em><em>optional</em>) – use label smoothing regularizer. Default is True.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p>Examples:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torchreid</span>
@@ -430,7 +413,7 @@ or <code class="docutils literal notranslate"><span class="pre">torchreid.data.V
 </div>
 <dl class="method">
 <dt id="torchreid.engine.image.triplet.ImageTripletEngine.train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>epoch</em>, <em>max_epoch</em>, <em>trainloader</em>, <em>fixbase_epoch=0</em>, <em>open_layers=None</em>, <em>print_freq=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/image/triplet.html#ImageTripletEngine.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.image.triplet.ImageTripletEngine.train" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">epoch</em>, <em class="sig-param">max_epoch</em>, <em class="sig-param">trainloader</em>, <em class="sig-param">fixbase_epoch=0</em>, <em class="sig-param">open_layers=None</em>, <em class="sig-param">print_freq=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/image/triplet.html#ImageTripletEngine.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.image.triplet.ImageTripletEngine.train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs training on source datasets for one epoch.</p>
 <p>This will be called every epoch in <code class="docutils literal notranslate"><span class="pre">run()</span></code>, e.g.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_epoch</span><span class="p">,</span> <span class="n">max_epoch</span><span class="p">):</span>
@@ -438,8 +421,8 @@ or <code class="docutils literal notranslate"><span class="pre">torchreid.data.V
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This must be implemented in subclasses.</p>
+<p class="admonition-title">Note</p>
+<p>This must be implemented in subclasses.</p>
 </div>
 </dd></dl>
 
@@ -450,27 +433,23 @@ or <code class="docutils literal notranslate"><span class="pre">torchreid.data.V
 <h2>Video Engines<a class="headerlink" href="#video-engines" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="torchreid.engine.video.softmax.VideoSoftmaxEngine">
-<em class="property">class </em><code class="descclassname">torchreid.engine.video.softmax.</code><code class="descname">VideoSoftmaxEngine</code><span class="sig-paren">(</span><em>datamanager</em>, <em>model</em>, <em>optimizer</em>, <em>scheduler=None</em>, <em>use_gpu=True</em>, <em>label_smooth=True</em>, <em>pooling_method='avg'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/video/softmax.html#VideoSoftmaxEngine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.video.softmax.VideoSoftmaxEngine" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">torchreid.engine.video.softmax.</code><code class="sig-name descname">VideoSoftmaxEngine</code><span class="sig-paren">(</span><em class="sig-param">datamanager</em>, <em class="sig-param">model</em>, <em class="sig-param">optimizer</em>, <em class="sig-param">scheduler=None</em>, <em class="sig-param">use_gpu=True</em>, <em class="sig-param">label_smooth=True</em>, <em class="sig-param">pooling_method='avg'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/video/softmax.html#VideoSoftmaxEngine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.video.softmax.VideoSoftmaxEngine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Softmax-loss engine for video-reid.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>datamanager</strong> (<a class="reference internal" href="data.html#torchreid.data.datamanager.DataManager" title="torchreid.data.datamanager.DataManager"><em>DataManager</em></a>) – an instance of <code class="docutils literal notranslate"><span class="pre">torchreid.data.ImageDataManager</span></code>
-or <code class="docutils literal notranslate"><span class="pre">torchreid.data.VideoDataManager</span></code>.</li>
-<li><strong>model</strong> (<em>nn.Module</em>) – model instance.</li>
-<li><strong>optimizer</strong> (<em>Optimizer</em>) – an Optimizer.</li>
-<li><strong>scheduler</strong> (<em>LRScheduler</em><em>, </em><em>optional</em>) – if None, no learning rate decay will be performed.</li>
-<li><strong>use_gpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – use gpu. Default is True.</li>
-<li><strong>label_smooth</strong> (<em>bool</em><em>, </em><em>optional</em>) – use label smoothing regularizer. Default is True.</li>
-<li><strong>pooling_method</strong> (<em>str</em><em>, </em><em>optional</em>) – how to pool features for a tracklet.
-Default is “avg” (average). Choices are [“avg”, “max”].</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datamanager</strong> (<a class="reference internal" href="data.html#torchreid.data.datamanager.DataManager" title="torchreid.data.datamanager.DataManager"><em>DataManager</em></a>) – an instance of <code class="docutils literal notranslate"><span class="pre">torchreid.data.ImageDataManager</span></code>
+or <code class="docutils literal notranslate"><span class="pre">torchreid.data.VideoDataManager</span></code>.</p></li>
+<li><p><strong>model</strong> (<em>nn.Module</em>) – model instance.</p></li>
+<li><p><strong>optimizer</strong> (<em>Optimizer</em>) – an Optimizer.</p></li>
+<li><p><strong>scheduler</strong> (<em>LRScheduler</em><em>, </em><em>optional</em>) – if None, no learning rate decay will be performed.</p></li>
+<li><p><strong>use_gpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – use gpu. Default is True.</p></li>
+<li><p><strong>label_smooth</strong> (<em>bool</em><em>, </em><em>optional</em>) – use label smoothing regularizer. Default is True.</p></li>
+<li><p><strong>pooling_method</strong> (<em>str</em><em>, </em><em>optional</em>) – how to pool features for a tracklet.
+Default is “avg” (average). Choices are [“avg”, “max”].</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p>Examples:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torchreid</span>
@@ -513,30 +492,26 @@ Default is “avg” (average). Choices are [“avg”, “max”].</li>
 
 <dl class="class">
 <dt id="torchreid.engine.video.triplet.VideoTripletEngine">
-<em class="property">class </em><code class="descclassname">torchreid.engine.video.triplet.</code><code class="descname">VideoTripletEngine</code><span class="sig-paren">(</span><em>datamanager</em>, <em>model</em>, <em>optimizer</em>, <em>margin=0.3</em>, <em>weight_t=1</em>, <em>weight_x=1</em>, <em>scheduler=None</em>, <em>use_gpu=False</em>, <em>label_smooth=True</em>, <em>pooling_method='avg'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/video/triplet.html#VideoTripletEngine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.video.triplet.VideoTripletEngine" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">torchreid.engine.video.triplet.</code><code class="sig-name descname">VideoTripletEngine</code><span class="sig-paren">(</span><em class="sig-param">datamanager</em>, <em class="sig-param">model</em>, <em class="sig-param">optimizer</em>, <em class="sig-param">margin=0.3</em>, <em class="sig-param">weight_t=1</em>, <em class="sig-param">weight_x=1</em>, <em class="sig-param">scheduler=None</em>, <em class="sig-param">use_gpu=False</em>, <em class="sig-param">label_smooth=True</em>, <em class="sig-param">pooling_method='avg'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/video/triplet.html#VideoTripletEngine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.video.triplet.VideoTripletEngine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Triplet-loss engine for video-reid.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>datamanager</strong> (<a class="reference internal" href="data.html#torchreid.data.datamanager.DataManager" title="torchreid.data.datamanager.DataManager"><em>DataManager</em></a>) – an instance of <code class="docutils literal notranslate"><span class="pre">torchreid.data.ImageDataManager</span></code>
-or <code class="docutils literal notranslate"><span class="pre">torchreid.data.VideoDataManager</span></code>.</li>
-<li><strong>model</strong> (<em>nn.Module</em>) – model instance.</li>
-<li><strong>optimizer</strong> (<em>Optimizer</em>) – an Optimizer.</li>
-<li><strong>margin</strong> (<em>float</em><em>, </em><em>optional</em>) – margin for triplet loss. Default is 0.3.</li>
-<li><strong>weight_t</strong> (<em>float</em><em>, </em><em>optional</em>) – weight for triplet loss. Default is 1.</li>
-<li><strong>weight_x</strong> (<em>float</em><em>, </em><em>optional</em>) – weight for softmax loss. Default is 1.</li>
-<li><strong>scheduler</strong> (<em>LRScheduler</em><em>, </em><em>optional</em>) – if None, no learning rate decay will be performed.</li>
-<li><strong>use_gpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – use gpu. Default is True.</li>
-<li><strong>label_smooth</strong> (<em>bool</em><em>, </em><em>optional</em>) – use label smoothing regularizer. Default is True.</li>
-<li><strong>pooling_method</strong> (<em>str</em><em>, </em><em>optional</em>) – how to pool features for a tracklet.
-Default is “avg” (average). Choices are [“avg”, “max”].</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datamanager</strong> (<a class="reference internal" href="data.html#torchreid.data.datamanager.DataManager" title="torchreid.data.datamanager.DataManager"><em>DataManager</em></a>) – an instance of <code class="docutils literal notranslate"><span class="pre">torchreid.data.ImageDataManager</span></code>
+or <code class="docutils literal notranslate"><span class="pre">torchreid.data.VideoDataManager</span></code>.</p></li>
+<li><p><strong>model</strong> (<em>nn.Module</em>) – model instance.</p></li>
+<li><p><strong>optimizer</strong> (<em>Optimizer</em>) – an Optimizer.</p></li>
+<li><p><strong>margin</strong> (<em>float</em><em>, </em><em>optional</em>) – margin for triplet loss. Default is 0.3.</p></li>
+<li><p><strong>weight_t</strong> (<em>float</em><em>, </em><em>optional</em>) – weight for triplet loss. Default is 1.</p></li>
+<li><p><strong>weight_x</strong> (<em>float</em><em>, </em><em>optional</em>) – weight for softmax loss. Default is 1.</p></li>
+<li><p><strong>scheduler</strong> (<em>LRScheduler</em><em>, </em><em>optional</em>) – if None, no learning rate decay will be performed.</p></li>
+<li><p><strong>use_gpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – use gpu. Default is True.</p></li>
+<li><p><strong>label_smooth</strong> (<em>bool</em><em>, </em><em>optional</em>) – use label smoothing regularizer. Default is True.</p></li>
+<li><p><strong>pooling_method</strong> (<em>str</em><em>, </em><em>optional</em>) – how to pool features for a tracklet.
+Default is “avg” (average). Choices are [“avg”, “max”].</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p>Examples:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torchreid</span>
