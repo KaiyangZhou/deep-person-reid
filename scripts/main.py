@@ -105,7 +105,6 @@ def main():
         cfg.merge_from_file(args.config_file)
     reset_config(cfg, args)
     cfg.merge_from_list(args.opts)
-    cfg.freeze()
     set_random_seed(cfg.train.seed)
 
     if cfg.use_gpu and args.gpu_devices:
@@ -145,7 +144,7 @@ def main():
     scheduler = torchreid.optim.build_lr_scheduler(optimizer, **lr_scheduler_kwargs(cfg))
 
     if cfg.model.resume and check_isfile(cfg.model.resume):
-        args.start_epoch = resume_from_checkpoint(cfg.model.resume, model, optimizer=optimizer)
+        cfg.train.start_epoch = resume_from_checkpoint(cfg.model.resume, model, optimizer=optimizer)
 
     print('Building {}-engine for {}-reid'.format(cfg.loss.name, cfg.data.type))
     engine = build_engine(cfg, datamanager, model, optimizer, scheduler)
