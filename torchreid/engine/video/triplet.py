@@ -73,7 +73,7 @@ class VideoTripletEngine(ImageTripletEngine, VideoSoftmaxEngine):
     """
 
     def __init__(self, datamanager, model, optimizer, margin=0.3,
-                 weight_t=1, weight_x=1, scheduler=None, use_gpu=False,
+                 weight_t=1, weight_x=1, scheduler=None, use_gpu=True,
                  label_smooth=True, pooling_method='avg'):
         super(VideoTripletEngine, self).__init__(datamanager, model, optimizer, margin=margin,
                                                  weight_t=weight_t, weight_x=weight_x,

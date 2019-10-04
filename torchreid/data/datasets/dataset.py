@@ -97,7 +97,9 @@ class Dataset(object):
                 transform=self.transform,
                 mode=self.mode,
                 combineall=False,
-                verbose=False
+                verbose=False,
+                seq_len=self.seq_len,
+                sample_method=self.sample_method
             )
 
     def __radd__(self, other):
