@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.engine &mdash; torchreid 1.0.2 documentation</title>
+  <title>torchreid.engine &mdash; torchreid 1.0.3 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.0.2
+                1.0.3
               </div>
             
           
@@ -492,7 +492,7 @@ Default is “avg” (average). Choices are [“avg”, “max”].</p></li>
 
 <dl class="class">
 <dt id="torchreid.engine.video.triplet.VideoTripletEngine">
-<em class="property">class </em><code class="sig-prename descclassname">torchreid.engine.video.triplet.</code><code class="sig-name descname">VideoTripletEngine</code><span class="sig-paren">(</span><em class="sig-param">datamanager</em>, <em class="sig-param">model</em>, <em class="sig-param">optimizer</em>, <em class="sig-param">margin=0.3</em>, <em class="sig-param">weight_t=1</em>, <em class="sig-param">weight_x=1</em>, <em class="sig-param">scheduler=None</em>, <em class="sig-param">use_gpu=False</em>, <em class="sig-param">label_smooth=True</em>, <em class="sig-param">pooling_method='avg'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/video/triplet.html#VideoTripletEngine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.video.triplet.VideoTripletEngine" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">torchreid.engine.video.triplet.</code><code class="sig-name descname">VideoTripletEngine</code><span class="sig-paren">(</span><em class="sig-param">datamanager</em>, <em class="sig-param">model</em>, <em class="sig-param">optimizer</em>, <em class="sig-param">margin=0.3</em>, <em class="sig-param">weight_t=1</em>, <em class="sig-param">weight_x=1</em>, <em class="sig-param">scheduler=None</em>, <em class="sig-param">use_gpu=True</em>, <em class="sig-param">label_smooth=True</em>, <em class="sig-param">pooling_method='avg'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/video/triplet.html#VideoTripletEngine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.video.triplet.VideoTripletEngine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Triplet-loss engine for video-reid.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
