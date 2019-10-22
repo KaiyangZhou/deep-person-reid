@@ -6,8 +6,10 @@ import warnings
 import torch
 import torch.nn as nn
 
+from .radam import RAdam
 
-AVAI_OPTIMS = ['adam', 'amsgrad', 'sgd', 'rmsprop']
+
+AVAI_OPTIMS = ['adam', 'amsgrad', 'sgd', 'rmsprop', 'radam']
 
 
 def build_optimizer(
@@ -133,6 +135,14 @@ def build_optimizer(
             momentum=momentum,
             weight_decay=weight_decay,
             alpha=rmsprop_alpha,
+        )
+
+    elif optim == 'radam':
+        optimizer = RAdam(
+            param_groups,
+            lr=lr,
+            weight_decay=weight_decay,
+            betas=(adam_beta1, adam_beta2)
         )
 
     return optimizer
