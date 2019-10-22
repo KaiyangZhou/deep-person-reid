@@ -137,13 +137,15 @@ class RandomPatch(object):
 
     There is a patch pool that stores randomly extracted pathces from person images.
     
-    For each input image,
-        1) we extract a random patch and store the patch in the patch pool;
-        2) randomly select a patch from the patch pool and paste it on the
-           input to simulate occlusion.
+    For each input image, RandomPatch
+        1) extracts a random patch and stores the patch in the patch pool;
+        2) randomly selects a patch from the patch pool and pastes it on the
+           input (at random position) to simulate occlusion.
 
     Reference:
         - Zhou et al. Omni-Scale Feature Learning for Person Re-Identification. ICCV, 2019.
+        - Zhou et al. Learning Generalisable Omni-Scale Representations
+          for Person Re-Identification. arXiv preprint, 2019.
     """
     
     def __init__(self, prob_happen=0.5, pool_capacity=50000, min_sample_size=100,
