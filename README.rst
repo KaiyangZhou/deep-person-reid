@@ -1,5 +1,20 @@
 Torchreid
 ===========
+.. image:: https://img.shields.io/github/license/KaiyangZhou/deep-person-reid
+   :alt: GitHub license
+   :target: https://github.com/KaiyangZhou/deep-person-reid/blob/master/LICENSE
+
+.. image:: https://img.shields.io/github/v/release/KaiyangZhou/deep-person-reid
+   :alt: GitHub release (latest by date)
+
+.. image:: https://img.shields.io/github/stars/KaiyangZhou/deep-person-reid
+   :alt: GitHub stars
+   :target: https://github.com/KaiyangZhou/deep-person-reid/stargazers
+
+.. image:: https://img.shields.io/github/forks/KaiyangZhou/deep-person-reid
+   :alt: GitHub forks
+   :target: https://github.com/KaiyangZhou/deep-person-reid/network
+
 Torchreid is a library built on `PyTorch <https://pytorch.org/>`_ for deep-learning person re-identification.
 
 It features:
@@ -25,6 +40,8 @@ Documentation: https://kaiyangzhou.github.io/deep-person-reid/.
 How-to instructions: https://kaiyangzhou.github.io/deep-person-reid/user_guide.
 
 Model zoo: https://kaiyangzhou.github.io/deep-person-reid/MODEL_ZOO.
+
+Tech report: https://arxiv.org/abs/1910.10093.
 
 
 Installation
@@ -248,6 +265,7 @@ ReID-specific models
 - `PCB <https://arxiv.org/abs/1711.09349>`_
 - `MLFN <https://arxiv.org/abs/1803.09132>`_
 - `OSNet <https://arxiv.org/abs/1905.00953>`_
+- `OSNet-AIN <https://arxiv.org/abs/1910.06827>`_
 
 Losses
 ------
@@ -257,13 +275,27 @@ Losses
 
 Citation
 ---------
-If you find this code useful to your research, please cite the following publication.
+If you find this code useful to your research, please cite the following publications.
 
 .. code-block:: bash
+
+    @article{torchreid,
+      title={Torchreid: A Library for Deep Learning Person Re-Identification in Pytorch},
+      author={Zhou, Kaiyang and Xiang, Tao},
+      journal={arXiv preprint arXiv:1910.10093},
+      year={2019}
+    }
     
-    @article{zhou2019osnet,
+    @inproceedings{zhou2019osnet,
       title={Omni-Scale Feature Learning for Person Re-Identification},
       author={Zhou, Kaiyang and Yang, Yongxin and Cavallaro, Andrea and Xiang, Tao},
-      journal={arXiv preprint arXiv:1905.00953},
+      booktitle={ICCV},
+      year={2019}
+    }
+
+    @article{zhou2019learning,
+      title={Learning Generalisable Omni-Scale Representations for Person Re-Identification},
+      author={Zhou, Kaiyang and Yang, Yongxin and Cavallaro, Andrea and Xiang, Tao},
+      journal={arXiv preprint arXiv:1910.06827},
       year={2019}
     }
