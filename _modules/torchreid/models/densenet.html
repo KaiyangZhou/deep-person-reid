@@ -174,14 +174,12 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;densenet121&#39;</span><span class="p">,</span> <span class="s1">&#39;densenet169&#39;</span><span class="p">,</span> <span class="s1">&#39;densenet201&#39;</span><span class="p">,</span> <span class="s1">&#39;densenet161&#39;</span><span class="p">,</span> <span class="s1">&#39;densenet121_fc512&#39;</span><span class="p">]</span>
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
-<span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">re</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 <span class="kn">from</span> <span class="nn">torch.utils</span> <span class="k">import</span> <span class="n">model_zoo</span>
 <span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
-<span class="kn">import</span> <span class="nn">torchvision</span>
 
 
 <span class="n">model_urls</span> <span class="o">=</span> <span class="p">{</span>

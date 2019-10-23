@@ -169,8 +169,6 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
 
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
 <span class="kn">from</span> <span class="nn">scipy.io</span> <span class="k">import</span> <span class="n">loadmat</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
@@ -243,9 +241,9 @@
         <span class="k">assert</span> <span class="n">home_dir</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;bbox_train&#39;</span><span class="p">,</span> <span class="s1">&#39;bbox_test&#39;</span><span class="p">]</span>
         <span class="n">num_tracklets</span> <span class="o">=</span> <span class="n">meta_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">pid_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">meta_data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
-        <span class="n">num_pids</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pid_list</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">relabel</span><span class="p">:</span> <span class="n">pid2label</span> <span class="o">=</span> <span class="p">{</span><span class="n">pid</span><span class="p">:</span><span class="n">label</span> <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">pid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pid_list</span><span class="p">)}</span>
+        <span class="k">if</span> <span class="n">relabel</span><span class="p">:</span>
+            <span class="n">pid2label</span> <span class="o">=</span> <span class="p">{</span><span class="n">pid</span><span class="p">:</span><span class="n">label</span> <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">pid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pid_list</span><span class="p">)}</span>
         <span class="n">tracklets</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">tracklet_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_tracklets</span><span class="p">):</span>

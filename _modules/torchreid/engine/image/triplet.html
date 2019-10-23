@@ -172,16 +172,13 @@
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 
-<span class="kn">import</span> <span class="nn">torch</span>
-
-<span class="kn">import</span> <span class="nn">torchreid</span>
-<span class="kn">from</span> <span class="nn">torchreid.engine</span> <span class="k">import</span> <span class="n">engine</span>
+<span class="kn">from</span> <span class="nn">torchreid.engine</span> <span class="k">import</span> <span class="n">Engine</span>
 <span class="kn">from</span> <span class="nn">torchreid.losses</span> <span class="k">import</span> <span class="n">CrossEntropyLoss</span><span class="p">,</span> <span class="n">TripletLoss</span>
 <span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">AverageMeter</span><span class="p">,</span> <span class="n">open_specified_layers</span><span class="p">,</span> <span class="n">open_all_layers</span>
 <span class="kn">from</span> <span class="nn">torchreid</span> <span class="k">import</span> <span class="n">metrics</span>
 
 
-<div class="viewcode-block" id="ImageTripletEngine"><a class="viewcode-back" href="../../../../pkg/engine.html#torchreid.engine.image.triplet.ImageTripletEngine">[docs]</a><span class="k">class</span> <span class="nc">ImageTripletEngine</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">Engine</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageTripletEngine"><a class="viewcode-back" href="../../../../pkg/engine.html#torchreid.engine.image.triplet.ImageTripletEngine">[docs]</a><span class="k">class</span> <span class="nc">ImageTripletEngine</span><span class="p">(</span><span class="n">Engine</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Triplet-loss engine for image-reid.</span>
 
 <span class="sd">    Args:</span>
@@ -198,7 +195,6 @@
 
 <span class="sd">    Examples::</span>
 <span class="sd">        </span>
-<span class="sd">        import torch</span>
 <span class="sd">        import torchreid</span>
 <span class="sd">        datamanager = torchreid.data.ImageDataManager(</span>
 <span class="sd">            root=&#39;path/to/reid-data&#39;,</span>

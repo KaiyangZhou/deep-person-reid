@@ -165,22 +165,17 @@
            <div itemprop="articleBody">
             
   <h1>Source code for torchreid.models.inceptionresnetv2</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Code imported from https://github.com/Cadene/pretrained-models.pytorch</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;inceptionresnetv2&#39;</span><span class="p">]</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
-<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
 <span class="kn">import</span> <span class="nn">torch.utils.model_zoo</span> <span class="k">as</span> <span class="nn">model_zoo</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-
-
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Code imported from https://github.com/Cadene/pretrained-models.pytorch</span>
-<span class="sd">&quot;&quot;&quot;</span>
 
 
 <span class="n">pretrained_settings</span> <span class="o">=</span> <span class="p">{</span>
@@ -405,36 +400,6 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">noReLU</span><span class="p">:</span>
             <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">out</span>
-
-
-<span class="k">def</span> <span class="nf">inceptionresnetv2</span><span class="p">(</span><span class="n">num_classes</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="s1">&#39;imagenet&#39;</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;InceptionResNetV2 model architecture from the</span>
-<span class="sd">    `&quot;InceptionV4, Inception-ResNet...&quot; &lt;https://arxiv.org/abs/1602.07261&gt;`_ paper.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">pretrained</span><span class="p">:</span>
-        <span class="n">settings</span> <span class="o">=</span> <span class="n">pretrained_settings</span><span class="p">[</span><span class="s1">&#39;inceptionresnetv2&#39;</span><span class="p">][</span><span class="n">pretrained</span><span class="p">]</span>
-        <span class="k">assert</span> <span class="n">num_classes</span> <span class="o">==</span> <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;num_classes&#39;</span><span class="p">],</span> \
-            <span class="s1">&#39;num_classes should be </span><span class="si">{}</span><span class="s1">, but is </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;num_classes&#39;</span><span class="p">],</span> <span class="n">num_classes</span><span class="p">)</span>
-
-        <span class="c1"># both &#39;imagenet&#39;&amp;&#39;imagenet+background&#39; are loaded from same parameters</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">InceptionResNetV2</span><span class="p">(</span><span class="n">num_classes</span><span class="o">=</span><span class="mi">1001</span><span class="p">)</span>
-        <span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">model_zoo</span><span class="o">.</span><span class="n">load_url</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]))</span>
-        
-        <span class="k">if</span> <span class="n">pretrained</span> <span class="o">==</span> <span class="s1">&#39;imagenet&#39;</span><span class="p">:</span>
-            <span class="n">new_last_linear</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">1536</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
-            <span class="n">new_last_linear</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">last_linear</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-            <span class="n">new_last_linear</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">last_linear</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-            <span class="n">model</span><span class="o">.</span><span class="n">last_linear</span> <span class="o">=</span> <span class="n">new_last_linear</span>
-        
-        <span class="n">model</span><span class="o">.</span><span class="n">input_space</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;input_space&#39;</span><span class="p">]</span>
-        <span class="n">model</span><span class="o">.</span><span class="n">input_size</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;input_size&#39;</span><span class="p">]</span>
-        <span class="n">model</span><span class="o">.</span><span class="n">input_range</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;input_range&#39;</span><span class="p">]</span>
-        
-        <span class="n">model</span><span class="o">.</span><span class="n">mean</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">]</span>
-        <span class="n">model</span><span class="o">.</span><span class="n">std</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">InceptionResNetV2</span><span class="p">(</span><span class="n">num_classes</span><span class="o">=</span><span class="n">num_classes</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">model</span>
 
 
 <span class="c1">##################### Model Definition #########################</span>
