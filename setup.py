@@ -45,9 +45,8 @@ def get_requirements(filename='requirements.txt'):
 setup(
     name='torchreid',
     version=find_version(),
-    description='Pytorch framework for deep-learning person re-identification',
+    description='A library for deep learning person re-identification in PyTorch',
     author='Kaiyang Zhou',
-    author_email='k.zhou.vision@gmail.com',
     license='MIT',
     long_description=readme(),
     url='https://github.com/KaiyangZhou/deep-person-reid',
