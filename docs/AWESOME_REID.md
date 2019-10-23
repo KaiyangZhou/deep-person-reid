@@ -53,3 +53,4 @@ Here is a collection of ReID-related research with links to papers and code. You
 
 ### ArXiv
 - Revisiting Temporal Modeling for Video-based Person ReID. [[paper](https://arxiv.org/abs/1805.02104)][[code](https://github.com/jiyanggao/Video-Person-ReID)]
+- Learning Generalisable Omni-Scale Representations for Person Re-Identification [[paper](https://arxiv.org/abs/1910.06827)][[code](https://github.com/KaiyangZhou/deep-person-reid)]
