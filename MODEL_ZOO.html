@@ -108,8 +108,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#cross-domain-reid">Cross-domain ReID</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#market1501-dukemtmc-reid">Market1501 -&gt; DukeMTMC-reID</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dukemtmc-reid-market1501">DukeMTMC-reID -&gt; Market1501</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#msmt17-market1501-dukemtmc-reid-cuhk03">MSMT17 -&gt; Market1501, DukeMTMC-reID &amp; CUHK03</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#msmt17-combineall-true-market1501-dukemtmc-reid-cuhk03">MSMT17 (<code class="docutils literal notranslate"><span class="pre">combineall=True</span></code>) -&gt; Market1501, DukeMTMC-reID &amp; CUHK03</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#msmt17-combineall-true-market1501-dukemtmc-reid">MSMT17 (<code class="docutils literal notranslate"><span class="pre">combineall=True</span></code>) -&gt; Market1501 &amp; DukeMTMC-reID</a></li>
 </ul>
 </li>
 </ul>
@@ -180,14 +179,11 @@
             
   <div class="section" id="model-zoo">
 <h1>Model Zoo<a class="headerlink" href="#model-zoo" title="Permalink to this headline">¶</a></h1>
-<p>In general,</p>
 <ul class="simple">
-<li><p>results are presented in the format of <em>&lt;Rank-1 (mAP)&gt;</em>, unless specified otherwise.</p></li>
-<li><p>when computing model size and FLOPs, only layers that are used at test time are considered (see <code class="docutils literal notranslate"><span class="pre">torchreid.utils.compute_model_complexity</span></code>).</p></li>
-<li><p>asterisk (*) means the model is trained from scratch.</p></li>
+<li><p>Results are presented in the format of <em>&lt;Rank-1 (mAP)&gt;</em>.</p></li>
+<li><p>When computing model size and FLOPs, only layers that are used at test time are considered (see <code class="docutils literal notranslate"><span class="pre">torchreid.utils.compute_model_complexity</span></code>).</p></li>
+<li><p>Asterisk (*) means the model is trained from scratch.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">combineall=True</span></code> means all images in the dataset are used for model training.</p></li>
-<li><p>for the cuhk03 dataset, we use the 767/700 split by <a class="reference external" href="https://arxiv.org/abs/1701.08398">Zhong et al. CVPR’17</a>.</p></li>
-<li><p><a class="reference external" href="https://arxiv.org/abs/1512.00567">label smoothing regularizer</a> is used in the softmax loss.</p></li>
 </ul>
 <div class="section" id="imagenet-pretrained-models">
 <h2>ImageNet pretrained models<a class="headerlink" href="#imagenet-pretrained-models" title="Permalink to this headline">¶</a></h2>
@@ -234,6 +230,10 @@
 <tr>
 <td align="left">osnet_ibn_x1_0</td>
 <td align="center"><a href="https://mega.nz/#!8Wo2kSDR!bNvgu4V0VkCQp_L2ZUDaudYKYRCkkSNdzcA1CcZGZTE">model</a></td>
+</tr>
+<tr>
+<td align="left">osnet_ain_x1_0</td>
+<td align="center"><a href="https://drive.google.com/open?id=1-CaioD9NaqbHK_kzSMW8VE4_3KcsRjEo">model</a></td>
 </tr>
 </tbody>
 </table></div>
@@ -394,7 +394,6 @@
 <th align="center">Rank-1</th>
 <th align="center">Rank-5</th>
 <th align="center">Rank-10</th>
-<th align="center">Rank-20</th>
 <th align="center">mAP</th>
 <th align="center">Download</th>
 </tr>
@@ -411,9 +410,22 @@
 <td align="center">48.5</td>
 <td align="center">62.3</td>
 <td align="center">67.4</td>
-<td align="center">72.2</td>
 <td align="center">26.7</td>
 <td align="center"><a href="https://mega.nz/#!wXwGxKxK!f8EMk8hBt6AjxU3JIPGMFSMvX7j-Nt5Lp1Gpbqso1Ts">model</a></td>
+</tr>
+<tr>
+<td align="left">osnet_ain_x1_0</td>
+<td align="center">2.2</td>
+<td align="center">0.98</td>
+<td align="center">softmax</td>
+<td align="center">(256, 128)</td>
+<td align="center"><code>random_flip</code>, <code>color_jitter</code></td>
+<td align="center"><code>cosine</code></td>
+<td align="center">52.4</td>
+<td align="center">66.1</td>
+<td align="center">71.2</td>
+<td align="center">30.5</td>
+<td align="center"><a href="https://mega.nz/#!QLJE2CRI!FXYc3Vm6Y5Scwx0xvRwBJxId56kf06fIXNLwA_b_1FE">model</a></td>
 </tr>
 </tbody>
 </table></div>
@@ -432,7 +444,6 @@
 <th align="center">Rank-1</th>
 <th align="center">Rank-5</th>
 <th align="center">Rank-10</th>
-<th align="center">Rank-20</th>
 <th align="center">mAP</th>
 <th align="center">Download</th>
 </tr>
@@ -449,48 +460,27 @@
 <td align="center">57.7</td>
 <td align="center">73.7</td>
 <td align="center">80.0</td>
-<td align="center">84.8</td>
 <td align="center">26.1</td>
 <td align="center"><a href="https://mega.nz/#!FD4WEKJS!ZGgI-2IwVuX6re09xylChR03o6Dkjpi6KSebrbS0fAA">model</a></td>
 </tr>
-</tbody>
-</table></div>
-<div class="section" id="msmt17-market1501-dukemtmc-reid-cuhk03">
-<h3>MSMT17 -&gt; Market1501, DukeMTMC-reID &amp; CUHK03<a class="headerlink" href="#msmt17-market1501-dukemtmc-reid-cuhk03" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="docutils">
-<thead>
 <tr>
-<th align="left">Model</th>
-<th align="center"># Param (10^6)</th>
-<th align="center">GFLOPs</th>
-<th align="center">Loss</th>
-<th align="center">Input</th>
-<th align="center">Transforms</th>
-<th align="center">Distance</th>
-<th align="center">msmt17 -&gt; market1501</th>
-<th align="center">msmt17 -&gt; dukemtmcreid</th>
-<th align="center">msmt17 -&gt; cuhk03</th>
-<th align="center">Download</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="left">osnet_ibn_x1_0</td>
+<td align="left">osnet_ain_x1_0</td>
 <td align="center">2.2</td>
 <td align="center">0.98</td>
 <td align="center">softmax</td>
 <td align="center">(256, 128)</td>
 <td align="center"><code>random_flip</code>, <code>color_jitter</code></td>
-<td align="center"><code>euclidean</code></td>
-<td align="center">60.2 (29.9)</td>
-<td align="center">59.9 (37.4)</td>
-<td align="center">15.1 (14.1)</td>
-<td align="center"><a href="https://mega.nz/#!0HgmGSwY!RoUlNAOA92epmFetZYPeyl2xOrEkUkEgcKRyluOXchM">model</a></td>
+<td align="center"><code>cosine</code></td>
+<td align="center">61.0</td>
+<td align="center">77.0</td>
+<td align="center">82.5</td>
+<td align="center">30.6</td>
+<td align="center"><a href="https://mega.nz/#!4PBQlCCL!9yMHu1WyyBVxqssubLAEyoEfHUiNP4Ggg5On0nCX2S4">model</a></td>
 </tr>
 </tbody>
 </table></div>
-<div class="section" id="msmt17-combineall-true-market1501-dukemtmc-reid-cuhk03">
-<h3>MSMT17 (<code class="docutils literal notranslate"><span class="pre">combineall=True</span></code>) -&gt; Market1501, DukeMTMC-reID &amp; CUHK03<a class="headerlink" href="#msmt17-combineall-true-market1501-dukemtmc-reid-cuhk03" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="msmt17-combineall-true-market1501-dukemtmc-reid">
+<h3>MSMT17 (<code class="docutils literal notranslate"><span class="pre">combineall=True</span></code>) -&gt; Market1501 &amp; DukeMTMC-reID<a class="headerlink" href="#msmt17-combineall-true-market1501-dukemtmc-reid" title="Permalink to this headline">¶</a></h3>
 <table border="1" class="docutils">
 <thead>
 <tr>
@@ -503,7 +493,6 @@
 <th align="center">Distance</th>
 <th align="center">msmt17 -&gt; market1501</th>
 <th align="center">msmt17 -&gt; dukemtmcreid</th>
-<th align="center">msmt17 -&gt; cuhk03</th>
 <th align="center">Download</th>
 </tr>
 </thead>
@@ -518,7 +507,6 @@
 <td align="center"><code>euclidean</code></td>
 <td align="center">46.3 (22.8)</td>
 <td align="center">52.3 (32.1)</td>
-<td align="center">11.7 (13.1)</td>
 <td align="center"><a href="https://mega.nz/#!VTpkWSbS!Y8gDnmg7u-sPwnZDhWXrtZNYOj7UYL4QzZkhDf1qWW4">model</a></td>
 </tr>
 <tr>
@@ -531,7 +519,6 @@
 <td align="center"><code>euclidean</code></td>
 <td align="center">66.6 (37.5)</td>
 <td align="center">66.0 (45.3)</td>
-<td align="center">21.0 (19.9)</td>
 <td align="center"><a href="https://mega.nz/#!MepG3QRC!Lb-C9d7rdS_YJjGSoJ5cRlzjYcP28P_1Cm5S5WSslW0">model</a></td>
 </tr>
 <tr>
@@ -544,7 +531,6 @@
 <td align="center"><code>euclidean</code></td>
 <td align="center">63.6 (35.5)</td>
 <td align="center">65.3 (44.5)</td>
-<td align="center">20.0 (19.4)</td>
 <td align="center"><a href="https://mega.nz/#!tO4WDagL!8Tl6kdJWRXRHQb16GeUHR008tJqW3N7_3fyVMu-LcKM">model</a></td>
 </tr>
 <tr>
@@ -557,7 +543,6 @@
 <td align="center"><code>euclidean</code></td>
 <td align="center">64.3 (34.9)</td>
 <td align="center">65.2 (43.3)</td>
-<td align="center">19.6 (19.2)</td>
 <td align="center"><a href="https://mega.nz/#!papSWQhY!IId-QfcHj7nXQ_muUubgv9_n0SsnZzarmb5mQgcMv74">model</a></td>
 </tr>
 <tr>
@@ -570,7 +555,6 @@
 <td align="center"><code>euclidean</code></td>
 <td align="center">59.9 (31.0)</td>
 <td align="center">61.5 (39.6)</td>
-<td align="center">14.5 (14.5)</td>
 <td align="center"><a href="https://mega.nz/#!QCoE0Kpa!BITLANumgjiR68TUFteL__N_RIoDKkL0M5Bl3Q8LC3U">model</a></td>
 </tr>
 <tr>
@@ -583,8 +567,19 @@
 <td align="center"><code>euclidean</code></td>
 <td align="center">66.5 (37.2)</td>
 <td align="center">67.4 (45.6)</td>
-<td align="center">22.0 (20.8)</td>
 <td align="center"><a href="https://mega.nz/#!dL4Q2K5B!ZdHQ_X_rs2T-xmggigM5YvzJhmT1orkr6aQ1_fHgunM">model</a></td>
+</tr>
+<tr>
+<td align="left">osnet_ain_x1_0</td>
+<td align="center">2.2</td>
+<td align="center">0.98</td>
+<td align="center">softmax</td>
+<td align="center">(256, 128)</td>
+<td align="center"><code>random_flip</code>, <code>color_jitter</code></td>
+<td align="center"><code>cosine</code></td>
+<td align="center">71.1 (52.7)</td>
+<td align="center">70.1 (43.3)</td>
+<td align="center"><a href="https://mega.nz/#!YTZFnSJY!wlbo_5oa2TpDAGyWCTKTX1hh4d6DvJhh_RUA2z6i_so">model</a></td>
 </tr>
 </tbody>
 </table></div>

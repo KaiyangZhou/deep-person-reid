@@ -1,12 +1,9 @@
 # Model Zoo
 
-In general,
-- results are presented in the format of *<Rank-1 (mAP)>*, unless specified otherwise.
-- when computing model size and FLOPs, only layers that are used at test time are considered (see `torchreid.utils.compute_model_complexity`).
-- asterisk (\*) means the model is trained from scratch.
+- Results are presented in the format of *<Rank-1 (mAP)>*.
+- When computing model size and FLOPs, only layers that are used at test time are considered (see `torchreid.utils.compute_model_complexity`).
+- Asterisk (\*) means the model is trained from scratch.
 - `combineall=True` means all images in the dataset are used for model training.
-- for the cuhk03 dataset, we use the 767/700 split by [Zhong et al. CVPR'17](https://arxiv.org/abs/1701.08398).
-- [label smoothing regularizer](https://arxiv.org/abs/1512.00567) is used in the softmax loss.
 
 
 ## ImageNet pretrained models
@@ -23,6 +20,7 @@ In general,
 | osnet_x0_5 | [model](https://mega.nz/#!NO4ihQSJ!oMIRSZ0HlJF_8FKUbXT8Ei0vzH0xUYs5tWaf_KLrODg) |
 | osnet_x0_25 | [model](https://mega.nz/#!IDwQwaxT!TbQ_33gPK-ZchPFTf43UMc45rlNKWiWMqH4rTXB1T7k) |
 | osnet_ibn_x1_0 | [model](https://mega.nz/#!8Wo2kSDR!bNvgu4V0VkCQp_L2ZUDaudYKYRCkkSNdzcA1CcZGZTE) |
+| osnet_ain_x1_0 | [model](https://drive.google.com/open?id=1-CaioD9NaqbHK_kzSMW8VE4_3KcsRjEo) |
 
 
 ## Same-domain ReID
@@ -47,35 +45,30 @@ In general,
 #### Market1501 -> DukeMTMC-reID
 
 
-| Model | # Param (10^6) | GFLOPs | Loss | Input | Transforms | Distance  | Rank-1 | Rank-5 | Rank-10 | Rank-20 | mAP | Download |
-| :--- | :---: | :---: | :---: | :---: |  :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| osnet_ibn_x1_0 | 2.2 | 0.98  | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 48.5 | 62.3 | 67.4 | 72.2 | 26.7 | [model](https://mega.nz/#!wXwGxKxK!f8EMk8hBt6AjxU3JIPGMFSMvX7j-Nt5Lp1Gpbqso1Ts) |
+| Model | # Param (10^6) | GFLOPs | Loss | Input | Transforms | Distance  | Rank-1 | Rank-5 | Rank-10 | mAP | Download |
+| :--- | :---: | :---: | :---: | :---: |  :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| osnet_ibn_x1_0 | 2.2 | 0.98  | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 48.5 | 62.3 | 67.4 | 26.7 | [model](https://mega.nz/#!wXwGxKxK!f8EMk8hBt6AjxU3JIPGMFSMvX7j-Nt5Lp1Gpbqso1Ts) |
+| osnet_ain_x1_0 | 2.2 | 0.98  | softmax | (256, 128) | `random_flip`, `color_jitter` | `cosine` | 52.4 | 66.1 | 71.2 | 30.5 | [model](https://mega.nz/#!QLJE2CRI!FXYc3Vm6Y5Scwx0xvRwBJxId56kf06fIXNLwA_b_1FE) |
 
 
 #### DukeMTMC-reID -> Market1501
 
 
-| Model | # Param (10^6) | GFLOPs | Loss | Input | Transforms | Distance  | Rank-1 | Rank-5 | Rank-10 | Rank-20 | mAP | Download |
-| :--- | :---: | :---: | :---: | :---: |  :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| osnet_ibn_x1_0 | 2.2 | 0.98  | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 57.7 | 73.7 | 80.0 | 84.8 | 26.1 | [model](https://mega.nz/#!FD4WEKJS!ZGgI-2IwVuX6re09xylChR03o6Dkjpi6KSebrbS0fAA) |
+| Model | # Param (10^6) | GFLOPs | Loss | Input | Transforms | Distance  | Rank-1 | Rank-5 | Rank-10 | mAP | Download |
+| :--- | :---: | :---: | :---: | :---: |  :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| osnet_ibn_x1_0 | 2.2 | 0.98  | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 57.7 | 73.7 | 80.0 | 26.1 | [model](https://mega.nz/#!FD4WEKJS!ZGgI-2IwVuX6re09xylChR03o6Dkjpi6KSebrbS0fAA) |
+| osnet_ain_x1_0 | 2.2 | 0.98  | softmax | (256, 128) | `random_flip`, `color_jitter` | `cosine` | 61.0 | 77.0 | 82.5 | 30.6 | [model](https://mega.nz/#!4PBQlCCL!9yMHu1WyyBVxqssubLAEyoEfHUiNP4Ggg5On0nCX2S4) |
 
 
-#### MSMT17 -> Market1501, DukeMTMC-reID & CUHK03
+#### MSMT17 (`combineall=True`) -> Market1501 & DukeMTMC-reID
 
 
-| Model | # Param (10^6) | GFLOPs | Loss | Input | Transforms | Distance | msmt17 -> market1501 | msmt17 -> dukemtmcreid | msmt17 -> cuhk03 | Download |
-| :--- | :---: | :---: | :---: | :---: |  :---: | :---: | :---: | :---: | :---: | :---: |
-| osnet_ibn_x1_0 | 2.2 | 0.98  | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 60.2 (29.9) | 59.9 (37.4) | 15.1 (14.1) | [model](https://mega.nz/#!0HgmGSwY!RoUlNAOA92epmFetZYPeyl2xOrEkUkEgcKRyluOXchM) |
-
-
-#### MSMT17 (`combineall=True`) -> Market1501, DukeMTMC-reID & CUHK03
-
-
-| Model | # Param (10^6) | GFLOPs | Loss | Input | Transforms | Distance | msmt17 -> market1501 | msmt17 -> dukemtmcreid | msmt17 -> cuhk03 | Download |
-| :--- | :---: | :---: | :---: | :---: |  :---: | :---: | :---: | :---: | :---: | :---: |
-| resnet50 | 23.5 | 2.7 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 46.3 (22.8) | 52.3 (32.1) | 11.7 (13.1) | [model](https://mega.nz/#!VTpkWSbS!Y8gDnmg7u-sPwnZDhWXrtZNYOj7UYL4QzZkhDf1qWW4) |
-| osnet_x1_0 | 2.2 | 0.98 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 66.6 (37.5) | 66.0 (45.3) | 21.0 (19.9) | [model](https://mega.nz/#!MepG3QRC!Lb-C9d7rdS_YJjGSoJ5cRlzjYcP28P_1Cm5S5WSslW0) |
-| osnet_x0_75 | 1.3 | 0.57 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 63.6 (35.5) | 65.3 (44.5) | 20.0 (19.4) | [model](https://mega.nz/#!tO4WDagL!8Tl6kdJWRXRHQb16GeUHR008tJqW3N7_3fyVMu-LcKM) |
-| osnet_x0_5 | 0.6 | 0.27 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 64.3 (34.9) | 65.2 (43.3) | 19.6 (19.2) | [model](https://mega.nz/#!papSWQhY!IId-QfcHj7nXQ_muUubgv9_n0SsnZzarmb5mQgcMv74) |
-| osnet_x0_25 | 0.2 | 0.08 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 59.9 (31.0) | 61.5 (39.6) | 14.5 (14.5) | [model](https://mega.nz/#!QCoE0Kpa!BITLANumgjiR68TUFteL__N_RIoDKkL0M5Bl3Q8LC3U) |
-| osnet_ibn_x1_0 | 2.2 | 0.98 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 66.5 (37.2) | 67.4 (45.6) | 22.0 (20.8) | [model](https://mega.nz/#!dL4Q2K5B!ZdHQ_X_rs2T-xmggigM5YvzJhmT1orkr6aQ1_fHgunM) |
+| Model | # Param (10^6) | GFLOPs | Loss | Input | Transforms | Distance | msmt17 -> market1501 | msmt17 -> dukemtmcreid | Download |
+| :--- | :---: | :---: | :---: | :---: |  :---: | :---: | :---: | :---: | :---: |
+| resnet50 | 23.5 | 2.7 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 46.3 (22.8) | 52.3 (32.1) | [model](https://mega.nz/#!VTpkWSbS!Y8gDnmg7u-sPwnZDhWXrtZNYOj7UYL4QzZkhDf1qWW4) |
+| osnet_x1_0 | 2.2 | 0.98 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 66.6 (37.5) | 66.0 (45.3) | [model](https://mega.nz/#!MepG3QRC!Lb-C9d7rdS_YJjGSoJ5cRlzjYcP28P_1Cm5S5WSslW0) |
+| osnet_x0_75 | 1.3 | 0.57 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 63.6 (35.5) | 65.3 (44.5) | [model](https://mega.nz/#!tO4WDagL!8Tl6kdJWRXRHQb16GeUHR008tJqW3N7_3fyVMu-LcKM) |
+| osnet_x0_5 | 0.6 | 0.27 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 64.3 (34.9) | 65.2 (43.3) | [model](https://mega.nz/#!papSWQhY!IId-QfcHj7nXQ_muUubgv9_n0SsnZzarmb5mQgcMv74) |
+| osnet_x0_25 | 0.2 | 0.08 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 59.9 (31.0) | 61.5 (39.6) | [model](https://mega.nz/#!QCoE0Kpa!BITLANumgjiR68TUFteL__N_RIoDKkL0M5Bl3Q8LC3U) |
+| osnet_ibn_x1_0 | 2.2 | 0.98 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 66.5 (37.2) | 67.4 (45.6) | [model](https://mega.nz/#!dL4Q2K5B!ZdHQ_X_rs2T-xmggigM5YvzJhmT1orkr6aQ1_fHgunM) |
+| osnet_ain_x1_0 | 2.2 | 0.98 | softmax | (256, 128) | `random_flip`, `color_jitter` | `cosine` | 71.1 (52.7) | 70.1 (43.3) | [model](https://mega.nz/#!YTZFnSJY!wlbo_5oa2TpDAGyWCTKTX1hh4d6DvJhh_RUA2z6i_so) |
