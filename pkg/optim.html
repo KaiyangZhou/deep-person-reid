@@ -178,33 +178,38 @@
 <span id="optimizer"></span><h2>Optimizer<a class="headerlink" href="#module-torchreid.optim.optimizer" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="torchreid.optim.optimizer.build_optimizer">
-<code class="sig-prename descclassname">torchreid.optim.optimizer.</code><code class="sig-name descname">build_optimizer</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">optim='adam'</em>, <em class="sig-param">lr=0.0003</em>, <em class="sig-param">weight_decay=0.0005</em>, <em class="sig-param">momentum=0.9</em>, <em class="sig-param">sgd_dampening=0</em>, <em class="sig-param">sgd_nesterov=False</em>, <em class="sig-param">rmsprop_alpha=0.99</em>, <em class="sig-param">adam_beta1=0.9</em>, <em class="sig-param">adam_beta2=0.99</em>, <em class="sig-param">staged_lr=False</em>, <em class="sig-param">new_layers=''</em>, <em class="sig-param">base_lr_mult=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/optim/optimizer.html#build_optimizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.optim.optimizer.build_optimizer" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">torchreid.optim.optimizer.</code><code class="descname">build_optimizer</code><span class="sig-paren">(</span><em>model</em>, <em>optim='adam'</em>, <em>lr=0.0003</em>, <em>weight_decay=0.0005</em>, <em>momentum=0.9</em>, <em>sgd_dampening=0</em>, <em>sgd_nesterov=False</em>, <em>rmsprop_alpha=0.99</em>, <em>adam_beta1=0.9</em>, <em>adam_beta2=0.99</em>, <em>staged_lr=False</em>, <em>new_layers=''</em>, <em>base_lr_mult=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/optim/optimizer.html#build_optimizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.optim.optimizer.build_optimizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function wrapper for building an optimizer.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> (<em>nn.Module</em>) – model.</p></li>
-<li><p><strong>optim</strong> (<em>str</em><em>, </em><em>optional</em>) – optimizer. Default is “adam”.</p></li>
-<li><p><strong>lr</strong> (<em>float</em><em>, </em><em>optional</em>) – learning rate. Default is 0.0003.</p></li>
-<li><p><strong>weight_decay</strong> (<em>float</em><em>, </em><em>optional</em>) – weight decay (L2 penalty). Default is 5e-04.</p></li>
-<li><p><strong>momentum</strong> (<em>float</em><em>, </em><em>optional</em>) – momentum factor in sgd. Default is 0.9,</p></li>
-<li><p><strong>sgd_dampening</strong> (<em>float</em><em>, </em><em>optional</em>) – dampening for momentum. Default is 0.</p></li>
-<li><p><strong>sgd_nesterov</strong> (<em>bool</em><em>, </em><em>optional</em>) – enables Nesterov momentum. Default is False.</p></li>
-<li><p><strong>rmsprop_alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – smoothing constant for rmsprop. Default is 0.99.</p></li>
-<li><p><strong>adam_beta1</strong> (<em>float</em><em>, </em><em>optional</em>) – beta-1 value in adam. Default is 0.9.</p></li>
-<li><p><strong>adam_beta2</strong> (<em>float</em><em>, </em><em>optional</em>) – beta-2 value in adam. Default is 0.99,</p></li>
-<li><p><strong>staged_lr</strong> (<em>bool</em><em>, </em><em>optional</em>) – uses different learning rates for base and new layers. Base
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>model</strong> (<em>nn.Module</em>) – model.</li>
+<li><strong>optim</strong> (<em>str</em><em>, </em><em>optional</em>) – optimizer. Default is “adam”.</li>
+<li><strong>lr</strong> (<em>float</em><em>, </em><em>optional</em>) – learning rate. Default is 0.0003.</li>
+<li><strong>weight_decay</strong> (<em>float</em><em>, </em><em>optional</em>) – weight decay (L2 penalty). Default is 5e-04.</li>
+<li><strong>momentum</strong> (<em>float</em><em>, </em><em>optional</em>) – momentum factor in sgd. Default is 0.9,</li>
+<li><strong>sgd_dampening</strong> (<em>float</em><em>, </em><em>optional</em>) – dampening for momentum. Default is 0.</li>
+<li><strong>sgd_nesterov</strong> (<em>bool</em><em>, </em><em>optional</em>) – enables Nesterov momentum. Default is False.</li>
+<li><strong>rmsprop_alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – smoothing constant for rmsprop. Default is 0.99.</li>
+<li><strong>adam_beta1</strong> (<em>float</em><em>, </em><em>optional</em>) – beta-1 value in adam. Default is 0.9.</li>
+<li><strong>adam_beta2</strong> (<em>float</em><em>, </em><em>optional</em>) – beta-2 value in adam. Default is 0.99,</li>
+<li><strong>staged_lr</strong> (<em>bool</em><em>, </em><em>optional</em>) – uses different learning rates for base and new layers. Base
 layers are pretrained layers while new layers are randomly initialized, e.g. the
 identity classification layer. Enabling <code class="docutils literal notranslate"><span class="pre">staged_lr</span></code> can allow the base layers to
 be trained with a smaller learning rate determined by <code class="docutils literal notranslate"><span class="pre">base_lr_mult</span></code>, while the new
-layers will take the <code class="docutils literal notranslate"><span class="pre">lr</span></code>. Default is False.</p></li>
-<li><p><strong>new_layers</strong> (<em>str</em><em> or </em><em>list</em>) – attribute names in <code class="docutils literal notranslate"><span class="pre">model</span></code>. Default is empty.</p></li>
-<li><p><strong>base_lr_mult</strong> (<em>float</em><em>, </em><em>optional</em>) – learning rate multiplier for base layers. Default is 0.1.</p></li>
+layers will take the <code class="docutils literal notranslate"><span class="pre">lr</span></code>. Default is False.</li>
+<li><strong>new_layers</strong> (<em>str</em><em> or </em><em>list</em>) – attribute names in <code class="docutils literal notranslate"><span class="pre">model</span></code>. Default is empty.</li>
+<li><strong>base_lr_mult</strong> (<em>float</em><em>, </em><em>optional</em>) – learning rate multiplier for base layers. Default is 0.1.</li>
 </ul>
-</dd>
-</dl>
-<dl>
-<dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># A normal optimizer can be built by</span>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Examples::</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># A normal optimizer can be built by</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">build_optimizer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">optim</span><span class="o">=</span><span class="s1">&#39;sgd&#39;</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># If you want to use a smaller learning rate for pretrained layers</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># and the attribute name for the randomly initialized layer is &#39;classifier&#39;,</span>
@@ -232,23 +237,28 @@ layers will take the <code class="docutils literal notranslate"><span class="pre
 <span id="lr-scheduler"></span><h2>LR Scheduler<a class="headerlink" href="#module-torchreid.optim.lr_scheduler" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="torchreid.optim.lr_scheduler.build_lr_scheduler">
-<code class="sig-prename descclassname">torchreid.optim.lr_scheduler.</code><code class="sig-name descname">build_lr_scheduler</code><span class="sig-paren">(</span><em class="sig-param">optimizer</em>, <em class="sig-param">lr_scheduler='single_step'</em>, <em class="sig-param">stepsize=1</em>, <em class="sig-param">gamma=0.1</em>, <em class="sig-param">max_epoch=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/optim/lr_scheduler.html#build_lr_scheduler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.optim.lr_scheduler.build_lr_scheduler" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">torchreid.optim.lr_scheduler.</code><code class="descname">build_lr_scheduler</code><span class="sig-paren">(</span><em>optimizer</em>, <em>lr_scheduler='single_step'</em>, <em>stepsize=1</em>, <em>gamma=0.1</em>, <em>max_epoch=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/optim/lr_scheduler.html#build_lr_scheduler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.optim.lr_scheduler.build_lr_scheduler" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function wrapper for building a learning rate scheduler.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>optimizer</strong> (<em>Optimizer</em>) – an Optimizer.</p></li>
-<li><p><strong>lr_scheduler</strong> (<em>str</em><em>, </em><em>optional</em>) – learning rate scheduler method. Default is single_step.</p></li>
-<li><p><strong>stepsize</strong> (<em>int</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – step size to decay learning rate. When <code class="docutils literal notranslate"><span class="pre">lr_scheduler</span></code>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>optimizer</strong> (<em>Optimizer</em>) – an Optimizer.</li>
+<li><strong>lr_scheduler</strong> (<em>str</em><em>, </em><em>optional</em>) – learning rate scheduler method. Default is single_step.</li>
+<li><strong>stepsize</strong> (<em>int</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – step size to decay learning rate. When <code class="docutils literal notranslate"><span class="pre">lr_scheduler</span></code>
 is “single_step”, <code class="docutils literal notranslate"><span class="pre">stepsize</span></code> should be an integer. When <code class="docutils literal notranslate"><span class="pre">lr_scheduler</span></code> is
-“multi_step”, <code class="docutils literal notranslate"><span class="pre">stepsize</span></code> is a list. Default is 1.</p></li>
-<li><p><strong>gamma</strong> (<em>float</em><em>, </em><em>optional</em>) – decay rate. Default is 0.1.</p></li>
-<li><p><strong>max_epoch</strong> (<em>int</em><em>, </em><em>optional</em>) – maximum epoch (for cosine annealing). Default is 1.</p></li>
+“multi_step”, <code class="docutils literal notranslate"><span class="pre">stepsize</span></code> is a list. Default is 1.</li>
+<li><strong>gamma</strong> (<em>float</em><em>, </em><em>optional</em>) – decay rate. Default is 0.1.</li>
+<li><strong>max_epoch</strong> (<em>int</em><em>, </em><em>optional</em>) – maximum epoch (for cosine annealing). Default is 1.</li>
 </ul>
-</dd>
-</dl>
-<dl>
-<dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Decay learning rate by every 20 epochs.</span>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Examples::</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Decay learning rate by every 20 epochs.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">scheduler</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">build_lr_scheduler</span><span class="p">(</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">optimizer</span><span class="p">,</span> <span class="n">lr_scheduler</span><span class="o">=</span><span class="s1">&#39;single_step&#39;</span><span class="p">,</span> <span class="n">stepsize</span><span class="o">=</span><span class="mi">20</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
