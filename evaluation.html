@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Evaluation &mdash; torchreid 1.0.5 documentation</title>
+  <title>Evaluation &mdash; torchreid 1.0.6 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.0.5
+                1.0.6
               </div>
             
           
@@ -177,23 +177,23 @@
 <div class="section" id="image-reid">
 <h2>Image ReID<a class="headerlink" href="#image-reid" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><strong>Market1501</strong>, <strong>DukeMTMC-reID</strong>, <strong>CUHK03 (767/700 split)</strong> and <strong>MSMT17</strong> have fixed split so keeping <code class="docutils literal notranslate"><span class="pre">split_id=0</span></code> is fine.</li>
-<li><strong>CUHK03 (classic split)</strong> has 20 fixed splits, so do <code class="docutils literal notranslate"><span class="pre">split_id=0~19</span></code>.</li>
-<li><strong>VIPeR</strong> contains 632 identities each with 2 images under two camera views. Evaluation should be done for 10 random splits. Each split randomly divides 632 identities to 316 train ids (632 images) and the other 316 test ids (632 images). Note that, in each random split, there are two sub-splits, one using camera-A as query and camera-B as gallery while the other one using camera-B as query and camera-A as gallery. Thus, there are totally 20 splits generated with <code class="docutils literal notranslate"><span class="pre">split_id</span></code> starting from 0 to 19. Models can be trained on <code class="docutils literal notranslate"><span class="pre">split_id=[0,</span> <span class="pre">2,</span> <span class="pre">4,</span> <span class="pre">6,</span> <span class="pre">8,</span> <span class="pre">10,</span> <span class="pre">12,</span> <span class="pre">14,</span> <span class="pre">16,</span> <span class="pre">18]</span></code> (because <code class="docutils literal notranslate"><span class="pre">split_id=0</span></code> and <code class="docutils literal notranslate"><span class="pre">split_id=1</span></code> share the same train set, and so on and so forth.). At test time, models trained on <code class="docutils literal notranslate"><span class="pre">split_id=0</span></code> can be directly evaluated on <code class="docutils literal notranslate"><span class="pre">split_id=1</span></code>, models trained on <code class="docutils literal notranslate"><span class="pre">split_id=2</span></code> can be directly evaluated on <code class="docutils literal notranslate"><span class="pre">split_id=3</span></code>, and so on and so forth.</li>
-<li><strong>CUHK01</strong> is similar to VIPeR in the split generation.</li>
-<li><strong>GRID</strong> , <strong>iLIDS</strong> and <strong>PRID</strong> have 10 random splits, so evaluation should be done by varying <code class="docutils literal notranslate"><span class="pre">split_id</span></code> from 0 to 9.</li>
-<li><strong>SenseReID</strong> has no training images and is used for evaluation only.</li>
+<li><p><strong>Market1501</strong>, <strong>DukeMTMC-reID</strong>, <strong>CUHK03 (767/700 split)</strong> and <strong>MSMT17</strong> have fixed split so keeping <code class="docutils literal notranslate"><span class="pre">split_id=0</span></code> is fine.</p></li>
+<li><p><strong>CUHK03 (classic split)</strong> has 20 fixed splits, so do <code class="docutils literal notranslate"><span class="pre">split_id=0~19</span></code>.</p></li>
+<li><p><strong>VIPeR</strong> contains 632 identities each with 2 images under two camera views. Evaluation should be done for 10 random splits. Each split randomly divides 632 identities to 316 train ids (632 images) and the other 316 test ids (632 images). Note that, in each random split, there are two sub-splits, one using camera-A as query and camera-B as gallery while the other one using camera-B as query and camera-A as gallery. Thus, there are totally 20 splits generated with <code class="docutils literal notranslate"><span class="pre">split_id</span></code> starting from 0 to 19. Models can be trained on <code class="docutils literal notranslate"><span class="pre">split_id=[0,</span> <span class="pre">2,</span> <span class="pre">4,</span> <span class="pre">6,</span> <span class="pre">8,</span> <span class="pre">10,</span> <span class="pre">12,</span> <span class="pre">14,</span> <span class="pre">16,</span> <span class="pre">18]</span></code> (because <code class="docutils literal notranslate"><span class="pre">split_id=0</span></code> and <code class="docutils literal notranslate"><span class="pre">split_id=1</span></code> share the same train set, and so on and so forth.). At test time, models trained on <code class="docutils literal notranslate"><span class="pre">split_id=0</span></code> can be directly evaluated on <code class="docutils literal notranslate"><span class="pre">split_id=1</span></code>, models trained on <code class="docutils literal notranslate"><span class="pre">split_id=2</span></code> can be directly evaluated on <code class="docutils literal notranslate"><span class="pre">split_id=3</span></code>, and so on and so forth.</p></li>
+<li><p><strong>CUHK01</strong> is similar to VIPeR in the split generation.</p></li>
+<li><p><strong>GRID</strong> , <strong>iLIDS</strong> and <strong>PRID</strong> have 10 random splits, so evaluation should be done by varying <code class="docutils literal notranslate"><span class="pre">split_id</span></code> from 0 to 9.</p></li>
+<li><p><strong>SenseReID</strong> has no training images and is used for evaluation only.</p></li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The <code class="docutils literal notranslate"><span class="pre">split_id</span></code> argument is defined in <code class="docutils literal notranslate"><span class="pre">ImageDataManager</span></code> and <code class="docutils literal notranslate"><span class="pre">VideoDataManager</span></code>. Please refer to <a class="reference internal" href="pkg/data.html#torchreid-data"><span class="std std-ref">torchreid.data</span></a>.</p>
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">split_id</span></code> argument is defined in <code class="docutils literal notranslate"><span class="pre">ImageDataManager</span></code> and <code class="docutils literal notranslate"><span class="pre">VideoDataManager</span></code>. Please refer to <a class="reference internal" href="pkg/data.html#torchreid-data"><span class="std std-ref">torchreid.data</span></a>.</p>
 </div>
 </div>
 <div class="section" id="video-reid">
 <h2>Video ReID<a class="headerlink" href="#video-reid" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><strong>MARS</strong> and <strong>DukeMTMC-VideoReID</strong> have fixed single split so using <code class="docutils literal notranslate"><span class="pre">split_id=0</span></code> is ok.</li>
-<li><strong>iLIDS-VID</strong> and <strong>PRID2011</strong> have 10 predefined splits so evaluation should be done by varying <code class="docutils literal notranslate"><span class="pre">split_id</span></code> from 0 to 9.</li>
+<li><p><strong>MARS</strong> and <strong>DukeMTMC-VideoReID</strong> have fixed single split so using <code class="docutils literal notranslate"><span class="pre">split_id=0</span></code> is ok.</p></li>
+<li><p><strong>iLIDS-VID</strong> and <strong>PRID2011</strong> have 10 predefined splits so evaluation should be done by varying <code class="docutils literal notranslate"><span class="pre">split_id</span></code> from 0 to 9.</p></li>
 </ul>
 </div>
 </div>
