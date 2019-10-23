@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Torchreid &mdash; torchreid 1.0.3 documentation</title>
+  <title>Torchreid &mdash; torchreid 1.0.5 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                1.0.3
+                1.0.5
               </div>
             
           
@@ -169,6 +169,10 @@
             
   <div class="section" id="torchreid">
 <h1>Torchreid<a class="headerlink" href="#torchreid" title="Permalink to this headline">¶</a></h1>
+<a class="reference external image-reference" href="https://github.com/KaiyangZhou/deep-person-reid/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/KaiyangZhou/deep-person-reid" /></a>
+<img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/KaiyangZhou/deep-person-reid" />
+<a class="reference external image-reference" href="https://github.com/KaiyangZhou/deep-person-reid/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/KaiyangZhou/deep-person-reid" /></a>
+<a class="reference external image-reference" href="https://github.com/KaiyangZhou/deep-person-reid/network"><img alt="GitHub forks" src="https://img.shields.io/github/forks/KaiyangZhou/deep-person-reid" /></a>
 <p>Torchreid is a library built on <a class="reference external" href="https://pytorch.org/">PyTorch</a> for deep-learning person re-identification.</p>
 <p>It features:</p>
 <ul class="simple">
@@ -189,6 +193,7 @@
 <p>Documentation: <a class="reference external" href="https://kaiyangzhou.github.io/deep-person-reid/">https://kaiyangzhou.github.io/deep-person-reid/</a>.</p>
 <p>How-to instructions: <a class="reference external" href="https://kaiyangzhou.github.io/deep-person-reid/user_guide">https://kaiyangzhou.github.io/deep-person-reid/user_guide</a>.</p>
 <p>Model zoo: <a class="reference external" href="https://kaiyangzhou.github.io/deep-person-reid/MODEL_ZOO">https://kaiyangzhou.github.io/deep-person-reid/MODEL_ZOO</a>.</p>
+<p>Tech report: <a class="reference external" href="https://arxiv.org/abs/1910.10093">https://arxiv.org/abs/1910.10093</a>.</p>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <p>Make sure your <a class="reference external" href="https://www.anaconda.com/distribution/">conda</a> is installed.</p>
@@ -396,6 +401,7 @@ test.evaluate True
 <li><p><a class="reference external" href="https://arxiv.org/abs/1711.09349">PCB</a></p></li>
 <li><p><a class="reference external" href="https://arxiv.org/abs/1803.09132">MLFN</a></p></li>
 <li><p><a class="reference external" href="https://arxiv.org/abs/1905.00953">OSNet</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1910.06827">OSNet-AIN</a></p></li>
 </ul>
 </div>
 </div>
@@ -408,11 +414,25 @@ test.evaluate True
 </div>
 <div class="section" id="citation">
 <h2>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">¶</a></h2>
-<p>If you find this code useful to your research, please cite the following publication.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>@article<span class="o">{</span>zhou2019osnet,
+<p>If you find this code useful to your research, please cite the following publications.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>@article<span class="o">{</span>torchreid,
+  <span class="nv">title</span><span class="o">={</span>Torchreid: A Library <span class="k">for</span> Deep Learning Person Re-Identification in Pytorch<span class="o">}</span>,
+  <span class="nv">author</span><span class="o">={</span>Zhou, Kaiyang and Xiang, Tao<span class="o">}</span>,
+  <span class="nv">journal</span><span class="o">={</span>arXiv preprint arXiv:1910.10093<span class="o">}</span>,
+  <span class="nv">year</span><span class="o">={</span><span class="m">2019</span><span class="o">}</span>
+<span class="o">}</span>
+
+@inproceedings<span class="o">{</span>zhou2019osnet,
   <span class="nv">title</span><span class="o">={</span>Omni-Scale Feature Learning <span class="k">for</span> Person Re-Identification<span class="o">}</span>,
   <span class="nv">author</span><span class="o">={</span>Zhou, Kaiyang and Yang, Yongxin and Cavallaro, Andrea and Xiang, Tao<span class="o">}</span>,
-  <span class="nv">journal</span><span class="o">={</span>arXiv preprint arXiv:1905.00953<span class="o">}</span>,
+  <span class="nv">booktitle</span><span class="o">={</span>ICCV<span class="o">}</span>,
+  <span class="nv">year</span><span class="o">={</span><span class="m">2019</span><span class="o">}</span>
+<span class="o">}</span>
+
+@article<span class="o">{</span>zhou2019learning,
+  <span class="nv">title</span><span class="o">={</span>Learning Generalisable Omni-Scale Representations <span class="k">for</span> Person Re-Identification<span class="o">}</span>,
+  <span class="nv">author</span><span class="o">={</span>Zhou, Kaiyang and Yang, Yongxin and Cavallaro, Andrea and Xiang, Tao<span class="o">}</span>,
+  <span class="nv">journal</span><span class="o">={</span>arXiv preprint arXiv:1910.06827<span class="o">}</span>,
   <span class="nv">year</span><span class="o">={</span><span class="m">2019</span><span class="o">}</span>
 <span class="o">}</span>
 </pre></div>

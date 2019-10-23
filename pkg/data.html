@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.data &mdash; torchreid 1.0.3 documentation</title>
+  <title>torchreid.data &mdash; torchreid 1.0.5 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.0.3
+                1.0.5
               </div>
             
           
@@ -443,14 +443,16 @@ Default is 0.5.</p></li>
 <dd><p>Random patch data augmentation.</p>
 <p>There is a patch pool that stores randomly extracted pathces from person images.</p>
 <dl class="simple">
-<dt>For each input image,</dt><dd><ol class="arabic simple">
-<li><p>we extract a random patch and store the patch in the patch pool;</p></li>
-<li><p>randomly select a patch from the patch pool and paste it on the
-input to simulate occlusion.</p></li>
+<dt>For each input image, RandomPatch</dt><dd><ol class="arabic simple">
+<li><p>extracts a random patch and stores the patch in the patch pool;</p></li>
+<li><p>randomly selects a patch from the patch pool and pastes it on the
+input (at random position) to simulate occlusion.</p></li>
 </ol>
 </dd>
 <dt>Reference:</dt><dd><ul class="simple">
 <li><p>Zhou et al. Omni-Scale Feature Learning for Person Re-Identification. ICCV, 2019.</p></li>
+<li><p>Zhou et al. Learning Generalisable Omni-Scale Representations
+for Person Re-Identification. arXiv preprint, 2019.</p></li>
 </ul>
 </dd>
 </dl>

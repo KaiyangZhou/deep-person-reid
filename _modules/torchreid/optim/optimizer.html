@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.optim.optimizer &mdash; torchreid 1.0.3 documentation</title>
+  <title>torchreid.optim.optimizer &mdash; torchreid 1.0.5 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.0.3
+                1.0.5
               </div>
             
           
@@ -173,8 +173,10 @@
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 
+<span class="kn">from</span> <span class="nn">.radam</span> <span class="k">import</span> <span class="n">RAdam</span>
 
-<span class="n">AVAI_OPTIMS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span> <span class="s1">&#39;amsgrad&#39;</span><span class="p">,</span> <span class="s1">&#39;sgd&#39;</span><span class="p">,</span> <span class="s1">&#39;rmsprop&#39;</span><span class="p">]</span>
+
+<span class="n">AVAI_OPTIMS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span> <span class="s1">&#39;amsgrad&#39;</span><span class="p">,</span> <span class="s1">&#39;sgd&#39;</span><span class="p">,</span> <span class="s1">&#39;rmsprop&#39;</span><span class="p">,</span> <span class="s1">&#39;radam&#39;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="build_optimizer"><a class="viewcode-back" href="../../../pkg/optim.html#torchreid.optim.optimizer.build_optimizer">[docs]</a><span class="k">def</span> <span class="nf">build_optimizer</span><span class="p">(</span>
@@ -300,6 +302,14 @@
             <span class="n">momentum</span><span class="o">=</span><span class="n">momentum</span><span class="p">,</span>
             <span class="n">weight_decay</span><span class="o">=</span><span class="n">weight_decay</span><span class="p">,</span>
             <span class="n">alpha</span><span class="o">=</span><span class="n">rmsprop_alpha</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">optim</span> <span class="o">==</span> <span class="s1">&#39;radam&#39;</span><span class="p">:</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">RAdam</span><span class="p">(</span>
+            <span class="n">param_groups</span><span class="p">,</span>
+            <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">,</span>
+            <span class="n">weight_decay</span><span class="o">=</span><span class="n">weight_decay</span><span class="p">,</span>
+            <span class="n">betas</span><span class="o">=</span><span class="p">(</span><span class="n">adam_beta1</span><span class="p">,</span> <span class="n">adam_beta2</span><span class="p">)</span>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">optimizer</span></div>

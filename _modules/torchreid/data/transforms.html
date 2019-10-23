@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.data.transforms &mdash; torchreid 1.0.3 documentation</title>
+  <title>torchreid.data.transforms &mdash; torchreid 1.0.5 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.0.3
+                1.0.5
               </div>
             
           
@@ -304,13 +304,15 @@
 
 <span class="sd">    There is a patch pool that stores randomly extracted pathces from person images.</span>
 <span class="sd">    </span>
-<span class="sd">    For each input image,</span>
-<span class="sd">        1) we extract a random patch and store the patch in the patch pool;</span>
-<span class="sd">        2) randomly select a patch from the patch pool and paste it on the</span>
-<span class="sd">           input to simulate occlusion.</span>
+<span class="sd">    For each input image, RandomPatch</span>
+<span class="sd">        1) extracts a random patch and stores the patch in the patch pool;</span>
+<span class="sd">        2) randomly selects a patch from the patch pool and pastes it on the</span>
+<span class="sd">           input (at random position) to simulate occlusion.</span>
 
 <span class="sd">    Reference:</span>
 <span class="sd">        - Zhou et al. Omni-Scale Feature Learning for Person Re-Identification. ICCV, 2019.</span>
+<span class="sd">        - Zhou et al. Learning Generalisable Omni-Scale Representations</span>
+<span class="sd">          for Person Re-Identification. arXiv preprint, 2019.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prob_happen</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">pool_capacity</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span> <span class="n">min_sample_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
