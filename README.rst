@@ -4,16 +4,6 @@ Torchreid
    :alt: GitHub license
    :target: https://github.com/KaiyangZhou/deep-person-reid/blob/master/LICENSE
 
-.. image:: https://img.shields.io/github/v/release/KaiyangZhou/deep-person-reid
-   :alt: GitHub release (latest by date)
-
-.. image:: https://img.shields.io/github/stars/KaiyangZhou/deep-person-reid
-   :alt: GitHub stars
-   :target: https://github.com/KaiyangZhou/deep-person-reid/stargazers
-
-.. image:: https://img.shields.io/github/forks/KaiyangZhou/deep-person-reid
-   :alt: GitHub forks
-   :target: https://github.com/KaiyangZhou/deep-person-reid/network
 
 Torchreid is a library built on `PyTorch <https://pytorch.org/>`_ for deep-learning person re-identification.
 
