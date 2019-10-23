@@ -8,8 +8,6 @@ __all__ = ['shufflenet_v2_x0_5', 'shufflenet_v2_x1_0', 'shufflenet_v2_x1_5', 'sh
 
 import torch
 from torch import nn
-from torch.nn import functional as F
-import torchvision
 import torch.utils.model_zoo as model_zoo
 
 

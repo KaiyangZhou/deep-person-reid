@@ -3,7 +3,6 @@ from __future__ import division
 
 __all__ = ['mobilenetv2_x1_0', 'mobilenetv2_x1_4']
 
-import torch
 from torch import nn
 from torch.nn import functional as F
 import torch.utils.model_zoo as model_zoo

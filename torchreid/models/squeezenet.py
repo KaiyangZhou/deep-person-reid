@@ -10,15 +10,9 @@ __all__ = [
     'squeezenet1_0_fc512'
 ]
 
-from collections import OrderedDict
-import math
-
 import torch
 import torch.nn as nn
 from torch.utils import model_zoo
-from torch.nn import functional as F
-import torch.nn.init as init
-import torchvision
 import torch.utils.model_zoo as model_zoo
 
 

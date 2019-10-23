@@ -7,10 +7,7 @@ from __future__ import division
 __all__ = ['resnet18', 'resnet34', 'resnet50', 'resnet101', 'resnet152', 'resnext50_32x4d',
            'resnext101_32x8d', 'resnet50_fc512']
 
-import torch
 from torch import nn
-from torch.nn import functional as F
-import torchvision
 import torch.utils.model_zoo as model_zoo
 
 

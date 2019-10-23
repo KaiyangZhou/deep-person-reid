@@ -7,14 +7,12 @@ from __future__ import division
 __all__ = ['densenet121', 'densenet169', 'densenet201', 'densenet161', 'densenet121_fc512']
 
 from collections import OrderedDict
-import math
 import re
 
 import torch
 import torch.nn as nn
 from torch.utils import model_zoo
 from torch.nn import functional as F
-import torchvision
 
 
 model_urls = {

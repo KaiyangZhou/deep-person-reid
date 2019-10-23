@@ -2,22 +2,17 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import division
 
-import sys
-import os
 import os.path as osp
 import time
 import datetime
 import numpy as np
 import cv2
-from matplotlib import pyplot as plt
 
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
-import torchvision
 from torch.utils.tensorboard import SummaryWriter
 
-import torchreid
 from torchreid.utils import AverageMeter, visualize_ranked_results, save_checkpoint, re_ranking, mkdir_if_missing
 from torchreid.losses import DeepSupervision
 from torchreid import metrics
@@ -236,7 +231,6 @@ class Engine(object):
 
         print('Extracting features from gallery set ...')
         gf, g_pids, g_camids = [], [], [] # gallery features, gallery person IDs and gallery camera IDs
-        end = time.time()
         for batch_idx, data in enumerate(galleryloader):
             imgs, pids, camids = self._parse_data_for_eval(data)
             if self.use_gpu:

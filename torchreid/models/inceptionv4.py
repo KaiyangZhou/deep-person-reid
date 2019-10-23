@@ -1,13 +1,11 @@
 from __future__ import absolute_import
 from __future__ import division
+
 __all__ = ['inceptionv4']
 
 import torch
 import torch.nn as nn
-from torch.nn import functional as F
 import torch.utils.model_zoo as model_zoo
-import os
-import sys
 
 
 """

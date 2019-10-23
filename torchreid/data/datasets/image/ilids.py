@@ -2,11 +2,8 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import division
 
-import sys
-import os
 import os.path as osp
 import glob
-import numpy as np
 import copy
 import random
 from collections import defaultdict
@@ -78,11 +75,10 @@ class iLIDS(ImageDataset):
                                     'but got {}, please check the data'.format(num_pids)
 
             num_train_pids = int(num_pids * 0.5)
-            num_test_pids = num_pids - num_train_pids # supposed to be 60
 
             splits = []
             for _ in range(10):
-                # randomly choose num_train_pids train IDs and num_test_pids test IDs
+                # randomly choose num_train_pids train IDs and the rest for test IDs
                 pids_copy = copy.deepcopy(pids)
                 random.shuffle(pids_copy)
                 train_pids = pids_copy[:num_train_pids]
@@ -134,7 +130,6 @@ class iLIDS(ImageDataset):
         return data
 
     def process_split(self, split):
-        train, query, gallery = [], [], []
         train_pid2label = self.get_pid2label(split['train'])
         train = self.parse_img_names(split['train'], train_pid2label)
         query = self.parse_img_names(split['query'])

@@ -6,7 +6,6 @@ __all__ = ['mlfn']
 import torch
 from torch import nn
 from torch.nn import functional as F
-import torchvision
 import torch.utils.model_zoo as model_zoo
 
 

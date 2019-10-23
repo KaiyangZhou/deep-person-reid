@@ -14,11 +14,8 @@ __all__ = [
 from collections import OrderedDict
 import math
 
-import torch
 import torch.nn as nn
 from torch.utils import model_zoo
-from torch.nn import functional as F
-import torchvision
 
 
 """

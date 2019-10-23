@@ -6,7 +6,6 @@ __all__ = ['MuDeep']
 import torch
 from torch import nn
 from torch.nn import functional as F
-import torchvision
 
 
 class ConvBlock(nn.Module):

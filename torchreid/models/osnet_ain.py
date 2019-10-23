@@ -6,7 +6,6 @@ __all__ = ['osnet_ain_x1_0']
 import torch
 from torch import nn
 from torch.nn import functional as F
-import torchvision
 
 
 pretrained_urls = {

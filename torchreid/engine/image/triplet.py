@@ -5,16 +5,13 @@ from __future__ import division
 import time
 import datetime
 
-import torch
-
-import torchreid
-from torchreid.engine import engine
+from torchreid.engine import Engine
 from torchreid.losses import CrossEntropyLoss, TripletLoss
 from torchreid.utils import AverageMeter, open_specified_layers, open_all_layers
 from torchreid import metrics
 
 
-class ImageTripletEngine(engine.Engine):
+class ImageTripletEngine(Engine):
     r"""Triplet-loss engine for image-reid.
 
     Args:
@@ -31,7 +28,6 @@ class ImageTripletEngine(engine.Engine):
 
     Examples::
         
-        import torch
         import torchreid
         datamanager = torchreid.data.ImageDataManager(
             root='path/to/reid-data',

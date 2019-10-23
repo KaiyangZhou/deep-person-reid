@@ -1,7 +1,6 @@
 import sys
 import os
 import os.path as osp
-import warnings
 import time
 import argparse
 

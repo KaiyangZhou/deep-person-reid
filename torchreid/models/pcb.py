@@ -3,10 +3,8 @@ from __future__ import division
 
 __all__ = ['pcb_p6', 'pcb_p4']
 
-import torch
 from torch import nn
 from torch.nn import functional as F
-import torchvision
 import torch.utils.model_zoo as model_zoo
 
 

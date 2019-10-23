@@ -2,8 +2,6 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import division
 
-import sys
-import os
 import os.path as osp
 from scipy.io import loadmat
 import warnings
@@ -76,9 +74,9 @@ class Mars(VideoDataset):
         assert home_dir in ['bbox_train', 'bbox_test']
         num_tracklets = meta_data.shape[0]
         pid_list = list(set(meta_data[:,2].tolist()))
-        num_pids = len(pid_list)
 
-        if relabel: pid2label = {pid:label for label, pid in enumerate(pid_list)}
+        if relabel:
+            pid2label = {pid:label for label, pid in enumerate(pid_list)}
         tracklets = []
 
         for tracklet_idx in range(num_tracklets):

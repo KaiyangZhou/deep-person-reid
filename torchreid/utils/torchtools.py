@@ -9,7 +9,6 @@ __all__ = ['save_checkpoint', 'load_checkpoint', 'resume_from_checkpoint',
 from collections import OrderedDict
 import shutil
 import warnings
-import os
 import os.path as osp
 from functools import partial
 import pickle

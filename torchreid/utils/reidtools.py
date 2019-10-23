@@ -4,11 +4,9 @@ from __future__ import print_function
 __all__ = ['visualize_ranked_results']
 
 import numpy as np
-import os
 import os.path as osp
 import shutil
 import cv2
-from matplotlib import pyplot as plt
 
 from .tools import mkdir_if_missing
 

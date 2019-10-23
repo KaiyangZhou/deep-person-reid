@@ -5,16 +5,13 @@ from __future__ import division
 import time
 import datetime
 
-import torch
-
-import torchreid
-from torchreid.engine import engine
+from torchreid.engine import Engine
 from torchreid.losses import CrossEntropyLoss
 from torchreid.utils import AverageMeter, open_specified_layers, open_all_layers
 from torchreid import metrics
 
 
-class ImageSoftmaxEngine(engine.Engine):
+class ImageSoftmaxEngine(Engine):
     r"""Softmax-loss engine for image-reid.
 
     Args:
@@ -28,7 +25,6 @@ class ImageSoftmaxEngine(engine.Engine):
 
     Examples::
         
-        import torch
         import torchreid
         datamanager = torchreid.data.ImageDataManager(
             root='path/to/reid-data',
