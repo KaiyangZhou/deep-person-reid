@@ -80,8 +80,8 @@ class CUHK02(ImageDataset):
                     train.append((impath, pid, camid))
                 camid += 1
                 
-                # add images to train from cam1
-                for impath in impaths1:
+                # add images to train from cam2
+                for impath in impaths2:
                     pid = osp.basename(impath).split('_')[0]
                     pid = pid2label[pid]
                     train.append((impath, pid, camid))
