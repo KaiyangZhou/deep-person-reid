@@ -12,9 +12,14 @@ Here is a collection of ReID-related research with links to papers and code. You
 
 
 ### ICCV 2019
+- Unsupervised Graph Association for Person Re-identification. [[paper](https://github.com/yichuan9527/Unsupervised-Graph-Association-for-Person-Re-identification)] [[code](https://github.com/yichuan9527/Unsupervised-Graph-Association-for-Person-Re-identification)]
+- Self-similarity Grouping: A Simple Unsupervised Cross Domain Adaptation Approach for Person Re-identification. [[paper](http://openaccess.thecvf.com/content_ICCV_2019/papers/Fu_Self-Similarity_Grouping_A_Simple_Unsupervised_Cross_Domain_Adaptation_Approach_for_ICCV_2019_paper.pdf)] [[code](https://github.com/OasisYang/SSG)]
+- Spectral Feature Transformation for Person Re-Identification. [[paper](http://openaccess.thecvf.com/content_ICCV_2019/papers/Luo_Spectral_Feature_Transformation_for_Person_Re-Identification_ICCV_2019_paper.pdf)] [[code](https://github.com/LuckyDC/SFT_REID)]
+- Beyond Human Parts: Dual Part-Aligned Representations for Person Re-Identification. [[paper](http://openaccess.thecvf.com/content_ICCV_2019/papers/Guo_Beyond_Human_Parts_Dual_Part-Aligned_Representations_for_Person_Re-Identification_ICCV_2019_paper.pdf)] [[code](https://github.com/ggjy/P2Net.pytorch)]
+- Co-segmentation Inspired Attention Networks for Video-based Person Re-identification. [[paper](http://openaccess.thecvf.com/content_ICCV_2019/papers/Subramaniam_Co-Segmentation_Inspired_Attention_Networks_for_Video-Based_Person_Re-Identification_ICCV_2019_paper.pdf)][[code](https://github.com/InnovArul/vidreid_cosegmentation)]
+- Mixed High-Order Attention Network for Person Re-Identification. [[paper](https://arxiv.org/abs/1908.05819)][[code](https://github.com/chenbinghui1/MHN)]
 - ABD-Net: Attentive but Diverse Person Re-Identification. [[paper](https://arxiv.org/abs/1908.01114)] [[code](https://github.com/TAMU-VITA/ABD-Net)]
-- Omni-Scale Feature Learning for Person Re-Identification
-. [[paper](https://arxiv.org/abs/1905.00953)] [[code](https://github.com/KaiyangZhou/deep-person-reid)]
+- Omni-Scale Feature Learning for Person Re-Identification. [[paper](https://arxiv.org/abs/1905.00953)] [[code](https://github.com/KaiyangZhou/deep-person-reid)]
 
 
 ### CVPR 2019
