@@ -12,6 +12,7 @@ Here is a collection of ReID-related research with links to papers and code. You
 
 
 ### ICCV 2019
+- RGB-Infrared Cross-Modality Person Re-Identification via Joint Pixel and Feature Alignment. [[paper](http://openaccess.thecvf.com/content_ICCV_2019/papers/Wang_RGB-Infrared_Cross-Modality_Person_Re-Identification_via_Joint_Pixel_and_Feature_Alignment_ICCV_2019_paper.pdf)] [[code](https://github.com/wangguanan/AlignGAN)]
 - Unsupervised Graph Association for Person Re-identification. [[paper](https://github.com/yichuan9527/Unsupervised-Graph-Association-for-Person-Re-identification)] [[code](https://github.com/yichuan9527/Unsupervised-Graph-Association-for-Person-Re-identification)]
 - Self-similarity Grouping: A Simple Unsupervised Cross Domain Adaptation Approach for Person Re-identification. [[paper](http://openaccess.thecvf.com/content_ICCV_2019/papers/Fu_Self-Similarity_Grouping_A_Simple_Unsupervised_Cross_Domain_Adaptation_Approach_for_ICCV_2019_paper.pdf)] [[code](https://github.com/OasisYang/SSG)]
 - Spectral Feature Transformation for Person Re-Identification. [[paper](http://openaccess.thecvf.com/content_ICCV_2019/papers/Luo_Spectral_Feature_Transformation_for_Person_Re-Identification_ICCV_2019_paper.pdf)] [[code](https://github.com/LuckyDC/SFT_REID)]
