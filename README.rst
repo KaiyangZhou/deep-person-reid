@@ -39,7 +39,7 @@ You can find some research projects that are built on top of Torchreid `here <ht
 Installation
 ---------------
 
-Make sure your `conda <https://www.anaconda.com/distribution/>`_ is installed.
+Make sure `conda <https://www.anaconda.com/distribution/>`_ is installed.
 
 
 .. code-block:: bash
@@ -140,7 +140,7 @@ A unified interface
 -----------------------
 In "deep-person-reid/scripts/", we provide a unified interface to train and test a model. See "scripts/main.py" and "scripts/default_config.py" for more details. "configs/" contains some predefined configs which you can use as a starting point.
 
-Below we provide examples to train and test `OSNet (Zhou et al. ICCV'19) <https://arxiv.org/abs/1905.00953>`_. Assume :code:`PATH_TO_DATA` is the directory containing reid datasets.
+Below we provide an example to train and test `OSNet (Zhou et al. ICCV'19) <https://arxiv.org/abs/1905.00953>`_. Assume :code:`PATH_TO_DATA` is the directory containing reid datasets.
 
 Conventional setting
 ^^^^^^^^^^^^^^^^^^^^^
@@ -267,7 +267,7 @@ Losses
 
 Citation
 ---------
-If you find this code useful to your research, please cite the following publications.
+If you find this code useful to your research, please cite the following papers.
 
 .. code-block:: bash
 
