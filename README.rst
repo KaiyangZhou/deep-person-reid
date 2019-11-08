@@ -33,6 +33,8 @@ Model zoo: https://kaiyangzhou.github.io/deep-person-reid/MODEL_ZOO.
 
 Tech report: https://arxiv.org/abs/1910.10093.
 
+You can find some research projects that are built on top of Torchreid `here <https://github.com/KaiyangZhou/deep-person-reid/tree/master/projects>`_.
+
 
 Installation
 ---------------
