@@ -4,7 +4,7 @@
 This repository contains the neural architecture search (NAS) code (based on [Torchreid](https://arxiv.org/abs/1910.10093)) for [OSNet-AIN](https://arxiv.org/abs/1910.06827), an extension of [OSNet](https://arxiv.org/abs/1905.00953) that achieves strong performance on cross-domain person re-identification (re-ID) benchmarks *without using any target data*. OSNet-AIN builds on the idea of using using [instance normalisation](https://arxiv.org/abs/1607.08022) (IN) layers to eliminate instance-specific contrast for learning domain-generalisable representations. This is inspired by the [style transfer](https://arxiv.org/abs/1703.06868) works that use IN to remove image styles. However, it remains unclear that for a particular computer vision task (i.e. person re-ID in our case), where to insert IN to a CNN can maximise the performance gain. To overcome this problem, OSNet-AIN learns to search for the optimal OSNet+IN design from data using a differentiable NAS algorithm. For technical details, please refer to our paper at https://arxiv.org/abs/1910.06827.
 
 <div align="center">
-  <img src="https://drive.google.com/uc?export=view&id=1EyO1cD8wikh86YLOR3CFdaGKmoM0-3iX" width="500px" />
+  <img src="https://drive.google.com/uc?export=view&id=1yvVIi2Ml7WBe85Uhaa54qyG4g8z-MGEB" width="500px" />
 </div>
 
 ## Training
