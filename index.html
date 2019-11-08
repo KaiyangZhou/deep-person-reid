@@ -194,7 +194,7 @@
 <p>You can find some research projects that are built on top of Torchreid <a class="reference external" href="https://github.com/KaiyangZhou/deep-person-reid/tree/master/projects">here</a>.</p>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>Make sure your <a class="reference external" href="https://www.anaconda.com/distribution/">conda</a> is installed.</p>
+<p>Make sure <a class="reference external" href="https://www.anaconda.com/distribution/">conda</a> is installed.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># cd to your preferred directory and clone this repo</span>
 git clone https://github.com/KaiyangZhou/deep-person-reid.git
 
@@ -289,7 +289,7 @@ python setup.py develop
 <div class="section" id="a-unified-interface">
 <h2>A unified interface<a class="headerlink" href="#a-unified-interface" title="Permalink to this headline">¶</a></h2>
 <p>In “deep-person-reid/scripts/”, we provide a unified interface to train and test a model. See “scripts/main.py” and “scripts/default_config.py” for more details. “configs/” contains some predefined configs which you can use as a starting point.</p>
-<p>Below we provide examples to train and test <a class="reference external" href="https://arxiv.org/abs/1905.00953">OSNet (Zhou et al. ICCV’19)</a>. Assume <code class="code docutils literal notranslate"><span class="pre">PATH_TO_DATA</span></code> is the directory containing reid datasets.</p>
+<p>Below we provide an example to train and test <a class="reference external" href="https://arxiv.org/abs/1905.00953">OSNet (Zhou et al. ICCV’19)</a>. Assume <code class="code docutils literal notranslate"><span class="pre">PATH_TO_DATA</span></code> is the directory containing reid datasets.</p>
 <div class="section" id="conventional-setting">
 <h3>Conventional setting<a class="headerlink" href="#conventional-setting" title="Permalink to this headline">¶</a></h3>
 <p>To train OSNet on Market1501, do</p>
@@ -412,7 +412,7 @@ test.evaluate True
 </div>
 <div class="section" id="citation">
 <h2>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">¶</a></h2>
-<p>If you find this code useful to your research, please cite the following publications.</p>
+<p>If you find this code useful to your research, please cite the following papers.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>@article<span class="o">{</span>torchreid,
   <span class="nv">title</span><span class="o">={</span>Torchreid: A Library <span class="k">for</span> Deep Learning Person Re-Identification in Pytorch<span class="o">}</span>,
   <span class="nv">author</span><span class="o">={</span>Zhou, Kaiyang and Xiang, Tao<span class="o">}</span>,
