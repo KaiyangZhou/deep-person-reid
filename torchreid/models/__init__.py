@@ -4,6 +4,8 @@ import torch
 
 from .resnet import *
 from .resnetmid import *
+from .resnet_ibn_a import *
+from .resnet_ibn_b import *
 from .senet import *
 from .densenet import *
 from .inceptionresnetv2 import *
@@ -47,6 +49,8 @@ __model_factory = {
     'inceptionresnetv2': inceptionresnetv2,
     'inceptionv4': inceptionv4,
     'xception': xception,
+    'resnet50_ibn_a': resnet50_ibn_a,
+    'resnet50_ibn_b': resnet50_ibn_b,
     # lightweight models
     'nasnsetmobile': nasnetamobile,
     'mobilenetv2_x1_0': mobilenetv2_x1_0,
