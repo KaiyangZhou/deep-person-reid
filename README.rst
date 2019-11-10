@@ -5,7 +5,7 @@ Torchreid
    :target: https://github.com/KaiyangZhou/deep-person-reid/blob/master/LICENSE
 
 
-Torchreid is a library built on `PyTorch <https://pytorch.org/>`_ for deep-learning person re-identification.
+Torchreid is a library for deep-learning person re-identification in `PyTorch <https://pytorch.org/>`_.
 
 It features:
 
@@ -240,6 +240,7 @@ ImageNet classification models
 - `Inception-ResNet-V2 <https://arxiv.org/abs/1602.07261>`_
 - `Inception-V4 <https://arxiv.org/abs/1602.07261>`_
 - `Xception <https://arxiv.org/abs/1610.02357>`_
+- `IBN-Net <https://arxiv.org/abs/1807.09441>`_
 
 Lightweight models
 ^^^^^^^^^^^^^^^^^^^
