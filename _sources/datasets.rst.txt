@@ -221,7 +221,7 @@ PRID2011 (``prid2011``)
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 - Create a directory named "prid2011" under ``$REID``.
 - Download the dataset from https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/ and extract it under "prid2011".
-- Download the split created by *iLIDS-VID* from `here <http://www.eecs.qmul.ac.uk/~kz303/deep-person-reid/datasets/prid2011/splits_prid2011.json>` and put it under "prid2011/". Following the standard protocol, only 178 persons whose sequences are more than a threshold are used.
+- Download the split created by *iLIDS-VID* from `this google drive <https://drive.google.com/open?id=1qw7SI7YdIgfHetIQO7LLW4SHpL_qkieT>`_ and put it under "prid2011/". Following the standard protocol, only 178 persons whose sequences are more than a threshold are used.
 - The data structure should end up with
 
 .. code-block:: none
