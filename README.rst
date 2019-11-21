@@ -228,6 +228,7 @@ Video-reid datasets
 - `PRID2011 <https://pdfs.semanticscholar.org/4c1b/f0592be3e535faf256c95e27982db9b3d3d3.pdf>`_
 - `DukeMTMC-VideoReID <http://openaccess.thecvf.com/content_cvpr_2018/papers/Wu_Exploit_the_Unknown_CVPR_2018_paper.pdf>`_
 
+
 Models
 -------
 
@@ -260,10 +261,16 @@ ReID-specific models
 - `OSNet <https://arxiv.org/abs/1905.00953>`_
 - `OSNet-AIN <https://arxiv.org/abs/1910.06827>`_
 
+
 Losses
 ------
 - `Softmax (cross entropy loss with label smoothing) <https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Szegedy_Rethinking_the_Inception_CVPR_2016_paper.pdf>`_
 - `Triplet (hard example mining triplet loss) <https://arxiv.org/abs/1703.07737>`_
+
+
+Useful links
+-------------
+- `OSNet-IBN1-Lite (test-only code with lite docker container) <https://github.com/RodMech/OSNet-IBN1-Lite>`_
 
 
 Citation
