@@ -42,8 +42,8 @@ class Engine(object):
         self.writer = None
 
         # check attributes
-        if not isinstance(self.model, nn.Module):
-            raise TypeError('model must be an instance of nn.Module')
+        #if not isinstance(self.model, nn.Module):
+        #    raise TypeError('model must be an instance of nn.Module')
 
     def run(self, save_dir='log', max_epoch=0, start_epoch=0, fixbase_epoch=0, open_layers=None,
             start_eval=0, eval_freq=-1, test_only=False, print_freq=10,
