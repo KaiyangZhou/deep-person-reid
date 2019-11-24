@@ -6,7 +6,10 @@ import numpy as np
 import copy
 import random
 
-from torch.utils.data.sampler import Sampler, RandomSampler
+from torch.utils.data.sampler import Sampler, RandomSampler, SequentialSampler
+
+
+AVAI_SAMPLERS = ['RandomIdentitySampler', 'SequentialSampler', 'RandomSampler']
 
 
 class RandomIdentitySampler(Sampler):
@@ -81,10 +84,16 @@ def build_train_sampler(data_source, train_sampler, batch_size=32, num_instances
         train_sampler (str): sampler name (default: ``RandomSampler``).
         batch_size (int, optional): batch size. Default is 32.
         num_instances (int, optional): number of instances per identity in a
-            batch (for ``RandomIdentitySampler``). Default is 4.
+            batch (when using ``RandomIdentitySampler``). Default is 4.
     """
+    assert train_sampler in AVAI_SAMPLERS, \
+        'train_sampler must be one of {}, but got {}'.format(AVAI_SAMPLERS, train_sampler)
+
     if train_sampler == 'RandomIdentitySampler':
         sampler = RandomIdentitySampler(data_source, batch_size, num_instances)
+
+    elif train_sampler == 'SequentialSampler':
+        sampler = SequentialSampler(data_source)
     
     else:
         sampler = RandomSampler(data_source)
