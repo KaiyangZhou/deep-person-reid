@@ -79,7 +79,7 @@ class ImageTripletEngine(Engine):
             label_smooth=label_smooth
         )
 
-    def train(self, epoch, max_epoch, trainloader, fixbase_epoch=0, open_layers=None, print_freq=10):
+    def train(self, epoch, max_epoch, trainloader, print_freq=10, fixbase_epoch=0, open_layers=None):
         losses_t = AverageMeter()
         losses_x = AverageMeter()
         accs = AverageMeter()

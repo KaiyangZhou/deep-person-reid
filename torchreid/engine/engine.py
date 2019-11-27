@@ -41,10 +41,6 @@ class Engine(object):
         self.use_gpu = (torch.cuda.is_available() and use_gpu)
         self.writer = None
 
-        # check attributes
-        #if not isinstance(self.model, nn.Module):
-        #    raise TypeError('model must be an instance of nn.Module')
-
     def run(self, save_dir='log', max_epoch=0, start_epoch=0, fixbase_epoch=0, open_layers=None,
             start_eval=0, eval_freq=-1, test_only=False, print_freq=10,
             dist_metric='euclidean', normalize_feature=False, visrank=False, visrank_topk=10,
@@ -111,7 +107,12 @@ class Engine(object):
         print('=> Start training')
 
         for epoch in range(start_epoch, max_epoch):
-            self.train(epoch, max_epoch, trainloader, fixbase_epoch, open_layers, print_freq)
+            self.train(
+                epoch, max_epoch, trainloader,
+                print_freq=print_freq,
+                fixbase_epoch=fixbase_epoch,
+                open_layers=open_layers
+            )
             
             if (epoch+1)>=start_eval and eval_freq>0 and (epoch+1)%eval_freq==0 and (epoch+1)!=max_epoch:
                 rank1 = self.test(
@@ -145,7 +146,7 @@ class Engine(object):
         elapsed = round(time.time() - time_start)
         elapsed = str(datetime.timedelta(seconds=elapsed))
         print('Elapsed {}'.format(elapsed))
-        if self.writer is None:
+        if self.writer is not None:
             self.writer.close()
 
     def train(self):
