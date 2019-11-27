@@ -95,7 +95,7 @@ def build_train_sampler(data_source, train_sampler, batch_size=32, num_instances
     elif train_sampler == 'SequentialSampler':
         sampler = SequentialSampler(data_source)
     
-    else:
+    elif train_sampler == 'RandomSampler':
         sampler = RandomSampler(data_source)
 
     return sampler

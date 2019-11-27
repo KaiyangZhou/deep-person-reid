@@ -100,7 +100,7 @@ class ImageDataManager(DataManager):
         workers (int, optional): number of workers. Default is 4.
         num_instances (int, optional): number of instances per identity in a batch.
             Default is 4.
-        train_sampler (str, optional): sampler. Default is empty (``RandomSampler``).
+        train_sampler (str, optional): sampler. Default is RandomSampler.
         cuhk03_labeled (bool, optional): use cuhk03 labeled images.
             Default is False (defaul is to use detected images).
         cuhk03_classic_split (bool, optional): use the classic split in cuhk03.
@@ -148,7 +148,7 @@ class ImageDataManager(DataManager):
         batch_size_test=32,
         workers=4,
         num_instances=4,
-        train_sampler='',
+        train_sampler='RandomSampler',
         cuhk03_labeled=False,
         cuhk03_classic_split=False,
         market1501_500k=False
@@ -321,7 +321,7 @@ class VideoDataManager(DataManager):
         workers (int, optional): number of workers. Default is 4.
         num_instances (int, optional): number of instances per identity in a batch.
             Default is 4.
-        train_sampler (str, optional): sampler. Default is empty (``RandomSampler``).
+        train_sampler (str, optional): sampler. Default is RandomSampler.
         seq_len (int, optional): how many images to sample in a tracklet. Default is 15.
         sample_method (str, optional): how to sample images in a tracklet. Default is "evenly".
             Choices are ["evenly", "random", "all"]. "evenly" and "random" will sample ``seq_len``
@@ -372,7 +372,7 @@ class VideoDataManager(DataManager):
         batch_size_test=3,
         workers=4,
         num_instances=4,
-        train_sampler=None,
+        train_sampler='RandomSampler',
         seq_len=15,
         sample_method='evenly'
     ):
