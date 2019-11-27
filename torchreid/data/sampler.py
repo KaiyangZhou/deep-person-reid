@@ -76,7 +76,7 @@ class RandomIdentitySampler(Sampler):
         return self.length
 
 
-def build_train_sampler(data_source, train_sampler, batch_size=32, num_instances=4, **kwargs):
+def build_train_sampler(data_source, train_sampler='RandomSampler', batch_size=32, num_instances=4, **kwargs):
     """Builds a training sampler.
 
     Args:
