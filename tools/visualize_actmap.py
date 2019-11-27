@@ -23,7 +23,7 @@ GRID_SPACING = 10
 
 
 @torch.no_grad()
-def visactmap(model, test_loader, save_dir, width, height, print_freq, use_gpu, img_mean=None, img_std=None):
+def visactmap(model, test_loader, save_dir, width, height, use_gpu, img_mean=None, img_std=None):
     if img_mean is None or img_std is None:
         # use imagenet mean and std
         img_mean = IMAGENET_MEAN
