@@ -33,7 +33,7 @@ class ImageSoftmaxNASEngine(Engine):
             label_smooth=label_smooth
         )
 
-    def train(self, epoch, max_epoch, trainloader, fixbase_epoch=0, open_layers=None, print_freq=10):
+    def train(self, epoch, max_epoch, writer, fixbase_epoch=0, open_layers=None, print_freq=10):
         losses = AverageMeter()
         accs = AverageMeter()
         batch_time = AverageMeter()
@@ -46,9 +46,9 @@ class ImageSoftmaxNASEngine(Engine):
         else:
             open_all_layers(self.model)
 
-        num_batches = len(trainloader)
+        num_batches = len(self.train_loader)
         end = time.time()
-        for batch_idx, data in enumerate(trainloader):
+        for batch_idx, data in enumerate(self.train_loader):
             data_time.update(time.time() - end)
 
             imgs, pids = self._parse_data_for_train(data)
@@ -87,7 +87,7 @@ class ImageSoftmaxNASEngine(Engine):
                       'Acc {acc.val:.2f} ({acc.avg:.2f})\t'
                       'Lr {lr:.6f}\t'
                       'eta {eta}'.format(
-                      epoch+1, max_epoch, batch_idx+1, len(trainloader),
+                      epoch+1, max_epoch, batch_idx+1, num_batches,
                       batch_time=batch_time,
                       data_time=data_time,
                       loss=losses,
@@ -97,13 +97,13 @@ class ImageSoftmaxNASEngine(Engine):
                     )
                 )
 
-            if self.writer is not None:
+            if writer is not None:
                 n_iter = epoch * num_batches + batch_idx
-                self.writer.add_scalar('Train/Time', batch_time.avg, n_iter)
-                self.writer.add_scalar('Train/Data', data_time.avg, n_iter)
-                self.writer.add_scalar('Train/Loss', losses.avg, n_iter)
-                self.writer.add_scalar('Train/Acc', accs.avg, n_iter)
-                self.writer.add_scalar('Train/Lr', self.optimizer.param_groups[0]['lr'], n_iter)
+                writer.add_scalar('Train/Time', batch_time.avg, n_iter)
+                writer.add_scalar('Train/Data', data_time.avg, n_iter)
+                writer.add_scalar('Train/Loss', losses.avg, n_iter)
+                writer.add_scalar('Train/Acc', accs.avg, n_iter)
+                writer.add_scalar('Train/Lr', self.optimizer.param_groups[0]['lr'], n_iter)
             
             end = time.time()
 
