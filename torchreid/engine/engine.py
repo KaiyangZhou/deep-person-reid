@@ -116,7 +116,7 @@ class Engine(object):
             self.train(
                 epoch,
                 max_epoch,
-                writer,
+                self.writer,
                 print_freq=print_freq,
                 fixbase_epoch=fixbase_epoch,
                 open_layers=open_layers
