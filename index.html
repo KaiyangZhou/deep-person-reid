@@ -192,6 +192,12 @@
 <p>Model zoo: <a class="reference external" href="https://kaiyangzhou.github.io/deep-person-reid/MODEL_ZOO">https://kaiyangzhou.github.io/deep-person-reid/MODEL_ZOO</a>.</p>
 <p>Tech report: <a class="reference external" href="https://arxiv.org/abs/1910.10093">https://arxiv.org/abs/1910.10093</a>.</p>
 <p>You can find some research projects that are built on top of Torchreid <a class="reference external" href="https://github.com/KaiyangZhou/deep-person-reid/tree/master/projects">here</a>.</p>
+<div class="section" id="what-s-new">
+<h2>What’s new<a class="headerlink" href="#what-s-new" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>[Nov 19] <code class="docutils literal notranslate"><span class="pre">ImageDataManager</span></code> can load training data from target datasets by setting <code class="docutils literal notranslate"><span class="pre">load_unlabeled_targets=True</span></code>, and the train-loader can be accessed with <code class="docutils literal notranslate"><span class="pre">train_loader_u</span> <span class="pre">=</span> <span class="pre">datamanager.train_loader_u</span></code>. This feature is useful for domain adaptation research.</p></li>
+</ul>
+</div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <p>Make sure <a class="reference external" href="https://www.anaconda.com/distribution/">conda</a> is installed.</p>
@@ -403,13 +409,6 @@ test.evaluate True
 <li><p><a class="reference external" href="https://arxiv.org/abs/1910.06827">OSNet-AIN</a></p></li>
 </ul>
 </div>
-</div>
-<div class="section" id="losses">
-<h2>Losses<a class="headerlink" href="#losses" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p><a class="reference external" href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Szegedy_Rethinking_the_Inception_CVPR_2016_paper.pdf">Softmax (cross entropy loss with label smoothing)</a></p></li>
-<li><p><a class="reference external" href="https://arxiv.org/abs/1703.07737">Triplet (hard example mining triplet loss)</a></p></li>
-</ul>
 </div>
 <div class="section" id="useful-links">
 <h2>Useful links<a class="headerlink" href="#useful-links" title="Permalink to this headline">¶</a></h2>

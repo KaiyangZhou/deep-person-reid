@@ -260,7 +260,7 @@
 <span class="sd">        split_id (int, optional): split id (*0-based*). Default is 0.</span>
 <span class="sd">        combineall (bool, optional): combine train, query and gallery in a dataset for</span>
 <span class="sd">            training. Default is False.</span>
-<span class="sd">        use_unlabeled_targets (bool, optional): construct train loader for unlabeled target</span>
+<span class="sd">        load_unlabeled_targets (bool, optional): construct train loader for unlabeled target</span>
 <span class="sd">            datasets. Default is False.</span>
 <span class="sd">        batch_size_train (int, optional): number of images in a training batch. Default is 32.</span>
 <span class="sd">        batch_size_test (int, optional): number of images in a test batch. Default is 32.</span>
@@ -310,7 +310,7 @@
         <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">split_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">combineall</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">use_unlabeled_targets</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">load_unlabeled_targets</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">batch_size_train</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
         <span class="n">batch_size_test</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
         <span class="n">workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
@@ -347,15 +347,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_train_pids</span> <span class="o">=</span> <span class="n">trainset</span><span class="o">.</span><span class="n">num_train_pids</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_train_cams</span> <span class="o">=</span> <span class="n">trainset</span><span class="o">.</span><span class="n">num_train_cams</span>
 
-        <span class="n">train_sampler</span> <span class="o">=</span> <span class="n">build_train_sampler</span><span class="p">(</span>
-            <span class="n">trainset</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">train_sampler</span><span class="p">,</span>
-            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size_train</span><span class="p">,</span>
-            <span class="n">num_instances</span><span class="o">=</span><span class="n">num_instances</span>
-        <span class="p">)</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">train_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
             <span class="n">trainset</span><span class="p">,</span>
-            <span class="n">sampler</span><span class="o">=</span><span class="n">train_sampler</span><span class="p">,</span>
+            <span class="n">sampler</span><span class="o">=</span><span class="n">build_train_sampler</span><span class="p">(</span>
+                <span class="n">trainset</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">train_sampler</span><span class="p">,</span>
+                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size_train</span><span class="p">,</span>
+                <span class="n">num_instances</span><span class="o">=</span><span class="n">num_instances</span>
+            <span class="p">),</span>
             <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size_train</span><span class="p">,</span>
             <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">num_workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span>
@@ -364,15 +362,15 @@
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">train_loader_u</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="n">use_unlabeled_targets</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">load_unlabeled_targets</span><span class="p">:</span>
             <span class="c1"># check if sources and targets are identical</span>
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> \
-                <span class="s1">&#39;sources=</span><span class="si">{}</span><span class="s1"> and targets=</span><span class="si">{}</span><span class="s1"> have overlap&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span>
+                <span class="s1">&#39;sources=</span><span class="si">{}</span><span class="s1"> and targets=</span><span class="si">{}</span><span class="s1"> must not have overlap&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span>
 
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&gt; Loading train (target) dataset&#39;</span><span class="p">)</span>
-            <span class="n">trainset</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">trainset_u</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">:</span>
-                <span class="n">trainset_</span> <span class="o">=</span> <span class="n">init_image_dataset</span><span class="p">(</span>
+                <span class="n">trainset_u_</span> <span class="o">=</span> <span class="n">init_image_dataset</span><span class="p">(</span>
                     <span class="n">name</span><span class="p">,</span>
                     <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transform_tr</span><span class="p">,</span>
                     <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;train&#39;</span><span class="p">,</span>
@@ -383,18 +381,16 @@
                     <span class="n">cuhk03_classic_split</span><span class="o">=</span><span class="n">cuhk03_classic_split</span><span class="p">,</span>
                     <span class="n">market1501_500k</span><span class="o">=</span><span class="n">market1501_500k</span>
                 <span class="p">)</span>
-                <span class="n">trainset</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trainset_</span><span class="p">)</span>
-            <span class="n">trainset</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">trainset</span><span class="p">)</span>
-
-            <span class="n">train_sampler</span> <span class="o">=</span> <span class="n">build_train_sampler</span><span class="p">(</span>
-                <span class="n">trainset</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">train_sampler</span><span class="p">,</span>
-                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size_train</span><span class="p">,</span>
-                <span class="n">num_instances</span><span class="o">=</span><span class="n">num_instances</span>
-            <span class="p">)</span>
+                <span class="n">trainset_u</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trainset_u_</span><span class="p">)</span>
+            <span class="n">trainset_u</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">trainset_u</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">train_loader_u</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
-                <span class="n">trainset</span><span class="p">,</span>
-                <span class="n">sampler</span><span class="o">=</span><span class="n">train_sampler</span><span class="p">,</span>
+                <span class="n">trainset_u</span><span class="p">,</span>
+                <span class="n">sampler</span><span class="o">=</span><span class="n">build_train_sampler</span><span class="p">(</span>
+                    <span class="n">trainset_u</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">train_sampler</span><span class="p">,</span>
+                    <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size_train</span><span class="p">,</span>
+                    <span class="n">num_instances</span><span class="o">=</span><span class="n">num_instances</span>
+                <span class="p">),</span>
                 <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size_train</span><span class="p">,</span>
                 <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">num_workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span>
@@ -455,12 +451,14 @@
 
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  **************** Summary ****************&#39;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  train            : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">))</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # train datasets : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">)))</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # train ids      : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_train_pids</span><span class="p">))</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # train images   : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">trainset</span><span class="p">)))</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # train cameras  : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_train_cams</span><span class="p">))</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  test             : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  source            : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # source datasets : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">)))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # source ids      : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_train_pids</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # source images   : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">trainset</span><span class="p">)))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # source cameras  : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_train_cams</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  target            : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">load_unlabeled_targets</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # target images   : </span><span class="si">{}</span><span class="s1"> (unlabeled)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">trainset_u</span><span class="p">)))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  *****************************************&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
@@ -636,12 +634,12 @@
 
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  **************** Summary ****************&#39;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  train             : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">))</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # train datasets  : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">)))</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # train ids       : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_train_pids</span><span class="p">))</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # train tracklets : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">trainset</span><span class="p">)))</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # train cameras   : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_train_cams</span><span class="p">))</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  test              : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  source             : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # source datasets  : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">)))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # source ids       : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_train_pids</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # source tracklets : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">trainset</span><span class="p">)))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # source cameras   : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_train_cams</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  target             : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  *****************************************&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
 </pre></div>
