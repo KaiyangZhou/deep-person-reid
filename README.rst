@@ -38,7 +38,7 @@ You can find some research projects that are built on top of Torchreid `here <ht
 
 What's new
 ---------------
-- [Nov 19] ``ImageDataManager`` can load training data from target datasets by setting ``load_unlabeled_targets=True``. This is useful for domain adaptation research.
+- [Nov 19] ``ImageDataManager`` can load training data from target datasets by setting ``load_unlabeled_targets=True``, and the train-loader can be accessed with ``train_loader_u = datamanager.train_loader_u``. This feature is useful for domain adaptation research.
 
 
 Installation
