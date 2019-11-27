@@ -262,7 +262,7 @@ def build_transforms(height, width, transforms='random_flip', norm_mean=[0.485, 
     transform_tr += [normalize]
     if 'random_erase' in transforms:
         print('+ random erase')
-        transform_tr += [RandomErasing()]
+        transform_tr += [RandomErasing(mean=norm_mean)]
     transform_tr = Compose(transform_tr)
 
     print('Building test transforms ...')

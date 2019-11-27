@@ -31,16 +31,17 @@ def build_engine(cfg, datamanager, model, optimizer, scheduler):
             engine = torchreid.engine.ImageSoftmaxEngine(
                 datamanager,
                 model,
-                optimizer,
+                optimizer=optimizer,
                 scheduler=scheduler,
                 use_gpu=cfg.use_gpu,
                 label_smooth=cfg.loss.softmax.label_smooth
             )
+        
         else:
             engine = torchreid.engine.ImageTripletEngine(
                 datamanager,
                 model,
-                optimizer,
+                optimizer=optimizer,
                 margin=cfg.loss.triplet.margin,
                 weight_t=cfg.loss.triplet.weight_t,
                 weight_x=cfg.loss.triplet.weight_x,
@@ -54,17 +55,18 @@ def build_engine(cfg, datamanager, model, optimizer, scheduler):
             engine = torchreid.engine.VideoSoftmaxEngine(
                 datamanager,
                 model,
-                optimizer,
+                optimizer=optimizer,
                 scheduler=scheduler,
                 use_gpu=cfg.use_gpu,
                 label_smooth=cfg.loss.softmax.label_smooth,
                 pooling_method=cfg.video.pooling_method
             )
+        
         else:
             engine = torchreid.engine.VideoTripletEngine(
                 datamanager,
                 model,
-                optimizer,
+                optimizer=optimizer,
                 margin=cfg.loss.triplet.margin,
                 weight_t=cfg.loss.triplet.weight_t,
                 weight_x=cfg.loss.triplet.weight_x,

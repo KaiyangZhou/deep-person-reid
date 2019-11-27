@@ -26,6 +26,7 @@ def get_default_config():
     cfg.data.norm_mean = [0.485, 0.456, 0.406] # default is imagenet mean
     cfg.data.norm_std = [0.229, 0.224, 0.225] # default is imagenet std
     cfg.data.save_dir = 'log' # path to save log
+    cfg.data.use_unlabeled_targets = False
     
     # specific datasets
     cfg.market1501 = CN()
@@ -116,6 +117,7 @@ def imagedata_kwargs(cfg):
         'use_gpu': cfg.use_gpu,
         'split_id': cfg.data.split_id,
         'combineall': cfg.data.combineall,
+        'use_unlabeled_targets': cfg.data.use_unlabeled_targets,
         'batch_size_train': cfg.train.batch_size,
         'batch_size_test': cfg.test.batch_size,
         'workers': cfg.data.workers,
