@@ -222,7 +222,18 @@ This can be achieved by setting ``visrank`` to true in ``engine.run()``. ``visra
 
 Visualize activation maps
 --------------------------
-To understand where the CNN focuses on to extract features for ReID, you can visualize the activation maps as in `OSNet <https://arxiv.org/abs/1905.00953>`_. This can be achieved by setting ``visactmap=True`` in ``engine.run()`` (``test_only`` does not have to be True as ``visactmap`` is independent of ``test_only``. See the code for details). Images will be saved in ``save_dir/actmap_DATASETNAME``. An example is shown below (from left to right: image, activation map, overlapped image)
+To understand where the CNN focuses on to extract features for ReID, you can visualize the activation maps as in `OSNet <https://arxiv.org/abs/1905.00953>`_. This is implemented in ``tools/visualize_actmap.py`` (check the code for more details). An example running command is
+
+.. code-block:: shell
+    
+    python tools/visualize_actmap.py \
+    --root $DATA/reid \
+    -d market1501 \
+    -m osnet_x1_0 \
+    --weights PATH_TO_PRETRAINED_WEIGHTS \
+    --save-dir log/visactmap_osnet_x1_0_market1501
+
+The output will look like (from left to right: image, activation map, overlapped image)
 
 .. image:: figures/actmap.jpg
     :width: 300px

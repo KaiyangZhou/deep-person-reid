@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>How-to &mdash; torchreid 1.0.6 documentation</title>
+  <title>How-to &mdash; torchreid 1.0.7 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.0.6
+                1.0.7
               </div>
             
           
@@ -393,7 +393,16 @@
 </div>
 <div class="section" id="visualize-activation-maps">
 <h2><a class="toc-backref" href="#id17">Visualize activation maps</a><a class="headerlink" href="#visualize-activation-maps" title="Permalink to this headline">¶</a></h2>
-<p>To understand where the CNN focuses on to extract features for ReID, you can visualize the activation maps as in <a class="reference external" href="https://arxiv.org/abs/1905.00953">OSNet</a>. This can be achieved by setting <code class="docutils literal notranslate"><span class="pre">visactmap=True</span></code> in <code class="docutils literal notranslate"><span class="pre">engine.run()</span></code> (<code class="docutils literal notranslate"><span class="pre">test_only</span></code> does not have to be True as <code class="docutils literal notranslate"><span class="pre">visactmap</span></code> is independent of <code class="docutils literal notranslate"><span class="pre">test_only</span></code>. See the code for details). Images will be saved in <code class="docutils literal notranslate"><span class="pre">save_dir/actmap_DATASETNAME</span></code>. An example is shown below (from left to right: image, activation map, overlapped image)</p>
+<p>To understand where the CNN focuses on to extract features for ReID, you can visualize the activation maps as in <a class="reference external" href="https://arxiv.org/abs/1905.00953">OSNet</a>. This is implemented in <code class="docutils literal notranslate"><span class="pre">tools/visualize_actmap.py</span></code> (check the code for more details). An example running command is</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python tools/visualize_actmap.py <span class="se">\</span>
+--root <span class="nv">$DATA</span>/reid <span class="se">\</span>
+-d market1501 <span class="se">\</span>
+-m osnet_x1_0 <span class="se">\</span>
+--weights PATH_TO_PRETRAINED_WEIGHTS <span class="se">\</span>
+--save-dir log/visactmap_osnet_x1_0_market1501
+</pre></div>
+</div>
+<p>The output will look like (from left to right: image, activation map, overlapped image)</p>
 <a class="reference internal image-reference" href="_images/actmap.jpg"><img alt="_images/actmap.jpg" class="align-center" src="_images/actmap.jpg" style="width: 300px;" /></a>
 <div class="admonition note">
 <p class="admonition-title">Note</p>

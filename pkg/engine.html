@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.engine &mdash; torchreid 1.0.6 documentation</title>
+  <title>torchreid.engine &mdash; torchreid 1.0.7 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.0.6
+                1.0.7
               </div>
             
           
@@ -195,7 +195,7 @@ or <code class="docutils literal notranslate"><span class="pre">torchreid.data.V
 </dl>
 <dl class="method">
 <dt id="torchreid.engine.engine.Engine.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">save_dir='log', max_epoch=0, start_epoch=0, fixbase_epoch=0, open_layers=None, start_eval=0, eval_freq=-1, test_only=False, print_freq=10, dist_metric='euclidean', normalize_feature=False, visrank=False, visrank_topk=10, use_metric_cuhk03=False, ranks=[1, 5, 10, 20], rerank=False, visactmap=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">save_dir='log', max_epoch=0, start_epoch=0, print_freq=10, fixbase_epoch=0, open_layers=None, start_eval=0, eval_freq=-1, test_only=False, dist_metric='euclidean', normalize_feature=False, visrank=False, visrank_topk=10, use_metric_cuhk03=False, ranks=[1, 5, 10, 20], rerank=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>A unified pipeline for training and evaluating a model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -203,6 +203,7 @@ or <code class="docutils literal notranslate"><span class="pre">torchreid.data.V
 <li><p><strong>save_dir</strong> (<em>str</em>) – directory to save model.</p></li>
 <li><p><strong>max_epoch</strong> (<em>int</em>) – maximum epoch.</p></li>
 <li><p><strong>start_epoch</strong> (<em>int</em><em>, </em><em>optional</em>) – starting epoch. Default is 0.</p></li>
+<li><p><strong>print_freq</strong> (<em>int</em><em>, </em><em>optional</em>) – print_frequency. Default is 10.</p></li>
 <li><p><strong>fixbase_epoch</strong> (<em>int</em><em>, </em><em>optional</em>) – number of epochs to train <code class="docutils literal notranslate"><span class="pre">open_layers</span></code> (new layers)
 while keeping base layers frozen. Default is 0. <code class="docutils literal notranslate"><span class="pre">fixbase_epoch</span></code> is counted
 in <code class="docutils literal notranslate"><span class="pre">max_epoch</span></code>.</p></li>
@@ -212,7 +213,6 @@ in <code class="docutils literal notranslate"><span class="pre">max_epoch</span>
 is only performed at the end of training).</p></li>
 <li><p><strong>test_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, only runs evaluation on test datasets.
 Default is False.</p></li>
-<li><p><strong>print_freq</strong> (<em>int</em><em>, </em><em>optional</em>) – print_frequency. Default is 10.</p></li>
 <li><p><strong>dist_metric</strong> (<em>str</em><em>, </em><em>optional</em>) – distance metric used to compute distance matrix
 between query and gallery. Default is “euclidean”.</p></li>
 <li><p><strong>normalize_feature</strong> (<em>bool</em><em>, </em><em>optional</em>) – performs L2 normalization on feature vectors before
@@ -226,7 +226,6 @@ Default is False. This should be enabled when using cuhk03 classic split.</p></l
 <li><p><strong>ranks</strong> (<em>list</em><em>, </em><em>optional</em>) – cmc ranks to be computed. Default is [1, 5, 10, 20].</p></li>
 <li><p><strong>rerank</strong> (<em>bool</em><em>, </em><em>optional</em>) – uses person re-ranking (by Zhong et al. CVPR’17).
 Default is False. This is only enabled when test_only=True.</p></li>
-<li><p><strong>visactmap</strong> (<em>bool</em><em>, </em><em>optional</em>) – visualizes activation maps. Default is False.</p></li>
 </ul>
 </dd>
 </dl>
@@ -234,7 +233,7 @@ Default is False. This is only enabled when test_only=True.</p></li>
 
 <dl class="method">
 <dt id="torchreid.engine.engine.Engine.test">
-<code class="sig-name descname">test</code><span class="sig-paren">(</span><em class="sig-param">epoch, testloader, dist_metric='euclidean', normalize_feature=False, visrank=False, visrank_topk=10, save_dir='', use_metric_cuhk03=False, ranks=[1, 5, 10, 20], rerank=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.test" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">test</code><span class="sig-paren">(</span><em class="sig-param">epoch, dist_metric='euclidean', normalize_feature=False, visrank=False, visrank_topk=10, save_dir='', use_metric_cuhk03=False, ranks=[1, 5, 10, 20], rerank=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tests model on target datasets.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -262,21 +261,6 @@ but not a must. Please refer to the source code for more details.</p>
 <p class="admonition-title">Note</p>
 <p>This must be implemented in subclasses.</p>
 </div>
-</dd></dl>
-
-<dl class="method">
-<dt id="torchreid.engine.engine.Engine.visactmap">
-<code class="sig-name descname">visactmap</code><span class="sig-paren">(</span><em class="sig-param">testloader</em>, <em class="sig-param">save_dir</em>, <em class="sig-param">width</em>, <em class="sig-param">height</em>, <em class="sig-param">print_freq</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.visactmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.visactmap" title="Permalink to this definition">¶</a></dt>
-<dd><p>Visualizes CNN activation maps to see where the CNN focuses on to extract features.</p>
-<p>This function takes as input the query images of target datasets</p>
-<dl class="simple">
-<dt>Reference:</dt><dd><ul class="simple">
-<li><p>Zagoruyko and Komodakis. Paying more attention to attention: Improving the
-performance of convolutional neural networks via attention transfer. ICLR, 2017</p></li>
-<li><p>Zhou et al. Omni-Scale Feature Learning for Person Re-Identification. ICCV, 2019.</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>
@@ -337,7 +321,7 @@ or <code class="docutils literal notranslate"><span class="pre">torchreid.data.V
 </div>
 <dl class="method">
 <dt id="torchreid.engine.image.softmax.ImageSoftmaxEngine.train">
-<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">epoch</em>, <em class="sig-param">max_epoch</em>, <em class="sig-param">trainloader</em>, <em class="sig-param">print_freq=10</em>, <em class="sig-param">fixbase_epoch=0</em>, <em class="sig-param">open_layers=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/image/softmax.html#ImageSoftmaxEngine.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.image.softmax.ImageSoftmaxEngine.train" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">epoch</em>, <em class="sig-param">max_epoch</em>, <em class="sig-param">writer</em>, <em class="sig-param">print_freq=10</em>, <em class="sig-param">fixbase_epoch=0</em>, <em class="sig-param">open_layers=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/image/softmax.html#ImageSoftmaxEngine.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.image.softmax.ImageSoftmaxEngine.train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs training on source datasets for one epoch.</p>
 <p>This will be called every epoch in <code class="docutils literal notranslate"><span class="pre">run()</span></code>, e.g.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_epoch</span><span class="p">,</span> <span class="n">max_epoch</span><span class="p">):</span>
@@ -411,7 +395,7 @@ or <code class="docutils literal notranslate"><span class="pre">torchreid.data.V
 </div>
 <dl class="method">
 <dt id="torchreid.engine.image.triplet.ImageTripletEngine.train">
-<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">epoch</em>, <em class="sig-param">max_epoch</em>, <em class="sig-param">trainloader</em>, <em class="sig-param">print_freq=10</em>, <em class="sig-param">fixbase_epoch=0</em>, <em class="sig-param">open_layers=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/image/triplet.html#ImageTripletEngine.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.image.triplet.ImageTripletEngine.train" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">epoch</em>, <em class="sig-param">max_epoch</em>, <em class="sig-param">writer</em>, <em class="sig-param">print_freq=10</em>, <em class="sig-param">fixbase_epoch=0</em>, <em class="sig-param">open_layers=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/image/triplet.html#ImageTripletEngine.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.image.triplet.ImageTripletEngine.train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs training on source datasets for one epoch.</p>
 <p>This will be called every epoch in <code class="docutils literal notranslate"><span class="pre">run()</span></code>, e.g.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_epoch</span><span class="p">,</span> <span class="n">max_epoch</span><span class="p">):</span>

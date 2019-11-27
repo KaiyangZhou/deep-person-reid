@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.data &mdash; torchreid 1.0.6 documentation</title>
+  <title>torchreid.data &mdash; torchreid 1.0.7 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.0.6
+                1.0.7
               </div>
             
           
@@ -213,14 +213,14 @@ Default is ‘random_flip’.</p></li>
 </dd></dl>
 
 <dl class="method">
-<dt id="torchreid.data.datamanager.DataManager.return_dataloaders">
-<code class="sig-name descname">return_dataloaders</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#DataManager.return_dataloaders"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.DataManager.return_dataloaders" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns trainloader and testloader.</p>
+<dt id="torchreid.data.datamanager.DataManager.preprocess_pil_img">
+<code class="sig-name descname">preprocess_pil_img</code><span class="sig-paren">(</span><em class="sig-param">img</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#DataManager.preprocess_pil_img"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.DataManager.preprocess_pil_img" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms a PIL image to torch tensor for testing.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="torchreid.data.datamanager.DataManager.return_testdataset_by_name">
-<code class="sig-name descname">return_testdataset_by_name</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#DataManager.return_testdataset_by_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.DataManager.return_testdataset_by_name" title="Permalink to this definition">¶</a></dt>
+<dt id="torchreid.data.datamanager.DataManager.return_query_and_gallery_by_name">
+<code class="sig-name descname">return_query_and_gallery_by_name</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#DataManager.return_query_and_gallery_by_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.DataManager.return_query_and_gallery_by_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns query and gallery of a test dataset, each containing
 tuples of (img_path(s), pid, camid).</p>
 <dl class="field-list simple">
@@ -234,7 +234,7 @@ tuples of (img_path(s), pid, camid).</p>
 
 <dl class="class">
 <dt id="torchreid.data.datamanager.ImageDataManager">
-<em class="property">class </em><code class="sig-prename descclassname">torchreid.data.datamanager.</code><code class="sig-name descname">ImageDataManager</code><span class="sig-paren">(</span><em class="sig-param">root=''</em>, <em class="sig-param">sources=None</em>, <em class="sig-param">targets=None</em>, <em class="sig-param">height=256</em>, <em class="sig-param">width=128</em>, <em class="sig-param">transforms='random_flip'</em>, <em class="sig-param">norm_mean=None</em>, <em class="sig-param">norm_std=None</em>, <em class="sig-param">use_gpu=True</em>, <em class="sig-param">split_id=0</em>, <em class="sig-param">combineall=False</em>, <em class="sig-param">batch_size_train=32</em>, <em class="sig-param">batch_size_test=32</em>, <em class="sig-param">workers=4</em>, <em class="sig-param">num_instances=4</em>, <em class="sig-param">train_sampler=''</em>, <em class="sig-param">cuhk03_labeled=False</em>, <em class="sig-param">cuhk03_classic_split=False</em>, <em class="sig-param">market1501_500k=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#ImageDataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.ImageDataManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">torchreid.data.datamanager.</code><code class="sig-name descname">ImageDataManager</code><span class="sig-paren">(</span><em class="sig-param">root=''</em>, <em class="sig-param">sources=None</em>, <em class="sig-param">targets=None</em>, <em class="sig-param">height=256</em>, <em class="sig-param">width=128</em>, <em class="sig-param">transforms='random_flip'</em>, <em class="sig-param">norm_mean=None</em>, <em class="sig-param">norm_std=None</em>, <em class="sig-param">use_gpu=True</em>, <em class="sig-param">split_id=0</em>, <em class="sig-param">combineall=False</em>, <em class="sig-param">use_unlabeled_targets=False</em>, <em class="sig-param">batch_size_train=32</em>, <em class="sig-param">batch_size_test=32</em>, <em class="sig-param">workers=4</em>, <em class="sig-param">num_instances=4</em>, <em class="sig-param">train_sampler='RandomSampler'</em>, <em class="sig-param">cuhk03_labeled=False</em>, <em class="sig-param">cuhk03_classic_split=False</em>, <em class="sig-param">market1501_500k=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#ImageDataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.ImageDataManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Image data manager.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -253,12 +253,14 @@ Default is ‘random_flip’.</p></li>
 <li><p><strong>split_id</strong> (<em>int</em><em>, </em><em>optional</em>) – split id (<em>0-based</em>). Default is 0.</p></li>
 <li><p><strong>combineall</strong> (<em>bool</em><em>, </em><em>optional</em>) – combine train, query and gallery in a dataset for
 training. Default is False.</p></li>
+<li><p><strong>use_unlabeled_targets</strong> (<em>bool</em><em>, </em><em>optional</em>) – construct train loader for unlabeled target
+datasets. Default is False.</p></li>
 <li><p><strong>batch_size_train</strong> (<em>int</em><em>, </em><em>optional</em>) – number of images in a training batch. Default is 32.</p></li>
 <li><p><strong>batch_size_test</strong> (<em>int</em><em>, </em><em>optional</em>) – number of images in a test batch. Default is 32.</p></li>
 <li><p><strong>workers</strong> (<em>int</em><em>, </em><em>optional</em>) – number of workers. Default is 4.</p></li>
 <li><p><strong>num_instances</strong> (<em>int</em><em>, </em><em>optional</em>) – number of instances per identity in a batch.
 Default is 4.</p></li>
-<li><p><strong>train_sampler</strong> (<em>str</em><em>, </em><em>optional</em>) – sampler. Default is empty (<code class="docutils literal notranslate"><span class="pre">RandomSampler</span></code>).</p></li>
+<li><p><strong>train_sampler</strong> (<em>str</em><em>, </em><em>optional</em>) – sampler. Default is RandomSampler.</p></li>
 <li><p><strong>cuhk03_labeled</strong> (<em>bool</em><em>, </em><em>optional</em>) – use cuhk03 labeled images.
 Default is False (defaul is to use detected images).</p></li>
 <li><p><strong>cuhk03_classic_split</strong> (<em>bool</em><em>, </em><em>optional</em>) – use the classic split in cuhk03.
@@ -277,13 +279,22 @@ set in market1501. Default is False.</p></li>
     <span class="n">batch_size_train</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
     <span class="n">batch_size_test</span><span class="o">=</span><span class="mi">100</span>
 <span class="p">)</span>
+
+<span class="c1"># return train loader of source data</span>
+<span class="n">train_loader</span> <span class="o">=</span> <span class="n">datamanager</span><span class="o">.</span><span class="n">train_loader</span>
+
+<span class="c1"># return test loader of target data</span>
+<span class="n">test_loader</span> <span class="o">=</span> <span class="n">datamanager</span><span class="o">.</span><span class="n">test_loader</span>
+
+<span class="c1"># return train loader of target data</span>
+<span class="n">train_loader_u</span> <span class="o">=</span> <span class="n">datamanager</span><span class="o">.</span><span class="n">train_loader_u</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="class">
 <dt id="torchreid.data.datamanager.VideoDataManager">
-<em class="property">class </em><code class="sig-prename descclassname">torchreid.data.datamanager.</code><code class="sig-name descname">VideoDataManager</code><span class="sig-paren">(</span><em class="sig-param">root=''</em>, <em class="sig-param">sources=None</em>, <em class="sig-param">targets=None</em>, <em class="sig-param">height=256</em>, <em class="sig-param">width=128</em>, <em class="sig-param">transforms='random_flip'</em>, <em class="sig-param">norm_mean=None</em>, <em class="sig-param">norm_std=None</em>, <em class="sig-param">use_gpu=True</em>, <em class="sig-param">split_id=0</em>, <em class="sig-param">combineall=False</em>, <em class="sig-param">batch_size_train=3</em>, <em class="sig-param">batch_size_test=3</em>, <em class="sig-param">workers=4</em>, <em class="sig-param">num_instances=4</em>, <em class="sig-param">train_sampler=None</em>, <em class="sig-param">seq_len=15</em>, <em class="sig-param">sample_method='evenly'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#VideoDataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.VideoDataManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">torchreid.data.datamanager.</code><code class="sig-name descname">VideoDataManager</code><span class="sig-paren">(</span><em class="sig-param">root=''</em>, <em class="sig-param">sources=None</em>, <em class="sig-param">targets=None</em>, <em class="sig-param">height=256</em>, <em class="sig-param">width=128</em>, <em class="sig-param">transforms='random_flip'</em>, <em class="sig-param">norm_mean=None</em>, <em class="sig-param">norm_std=None</em>, <em class="sig-param">use_gpu=True</em>, <em class="sig-param">split_id=0</em>, <em class="sig-param">combineall=False</em>, <em class="sig-param">batch_size_train=3</em>, <em class="sig-param">batch_size_test=3</em>, <em class="sig-param">workers=4</em>, <em class="sig-param">num_instances=4</em>, <em class="sig-param">train_sampler='RandomSampler'</em>, <em class="sig-param">seq_len=15</em>, <em class="sig-param">sample_method='evenly'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#VideoDataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.VideoDataManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Video data manager.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -307,7 +318,7 @@ training. Default is False.</p></li>
 <li><p><strong>workers</strong> (<em>int</em><em>, </em><em>optional</em>) – number of workers. Default is 4.</p></li>
 <li><p><strong>num_instances</strong> (<em>int</em><em>, </em><em>optional</em>) – number of instances per identity in a batch.
 Default is 4.</p></li>
-<li><p><strong>train_sampler</strong> (<em>str</em><em>, </em><em>optional</em>) – sampler. Default is empty (<code class="docutils literal notranslate"><span class="pre">RandomSampler</span></code>).</p></li>
+<li><p><strong>train_sampler</strong> (<em>str</em><em>, </em><em>optional</em>) – sampler. Default is RandomSampler.</p></li>
 <li><p><strong>seq_len</strong> (<em>int</em><em>, </em><em>optional</em>) – how many images to sample in a tracklet. Default is 15.</p></li>
 <li><p><strong>sample_method</strong> (<em>str</em><em>, </em><em>optional</em>) – how to sample images in a tracklet. Default is “evenly”.
 Choices are [“evenly”, “random”, “all”]. “evenly” and “random” will sample <code class="docutils literal notranslate"><span class="pre">seq_len</span></code>
@@ -327,6 +338,12 @@ needs to be set to 1.</p></li>
     <span class="n">seq_len</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
     <span class="n">sample_method</span><span class="o">=</span><span class="s1">&#39;evenly&#39;</span>
 <span class="p">)</span>
+
+<span class="c1"># return train loader of source data</span>
+<span class="n">train_loader</span> <span class="o">=</span> <span class="n">datamanager</span><span class="o">.</span><span class="n">train_loader</span>
+
+<span class="c1"># return test loader of target data</span>
+<span class="n">test_loader</span> <span class="o">=</span> <span class="n">datamanager</span><span class="o">.</span><span class="n">test_loader</span>
 </pre></div>
 </div>
 <div class="admonition note">
