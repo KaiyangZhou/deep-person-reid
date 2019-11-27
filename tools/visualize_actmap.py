@@ -14,7 +14,7 @@ import torch
 from torch.nn import functional as F
 
 import torchreid
-from torchreid.utils import mkdir_if_missing, check_isfile
+from torchreid.utils import mkdir_if_missing, check_isfile, load_pretrained_weights
 
 
 IMAGENET_MEAN = [0.485, 0.456, 0.406]
