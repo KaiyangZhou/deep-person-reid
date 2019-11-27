@@ -197,6 +197,5 @@ def engine_run_kwargs(cfg):
         'visrank_topk': cfg.test.visrank_topk,
         'use_metric_cuhk03': cfg.cuhk03.use_metric_cuhk03,
         'ranks': cfg.test.ranks,
-        'rerank': cfg.test.rerank,
-        'visactmap': cfg.test.visactmap
+        'rerank': cfg.test.rerank
     }
