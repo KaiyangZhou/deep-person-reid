@@ -173,7 +173,10 @@
 <span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">random</span>
 
-<span class="kn">from</span> <span class="nn">torch.utils.data.sampler</span> <span class="k">import</span> <span class="n">Sampler</span><span class="p">,</span> <span class="n">RandomSampler</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data.sampler</span> <span class="k">import</span> <span class="n">Sampler</span><span class="p">,</span> <span class="n">RandomSampler</span><span class="p">,</span> <span class="n">SequentialSampler</span>
+
+
+<span class="n">AVAI_SAMPLERS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;RandomIdentitySampler&#39;</span><span class="p">,</span> <span class="s1">&#39;SequentialSampler&#39;</span><span class="p">,</span> <span class="s1">&#39;RandomSampler&#39;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="RandomIdentitySampler"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.sampler.RandomIdentitySampler">[docs]</a><span class="k">class</span> <span class="nc">RandomIdentitySampler</span><span class="p">(</span><span class="n">Sampler</span><span class="p">):</span>
@@ -248,10 +251,16 @@
 <span class="sd">        train_sampler (str): sampler name (default: ``RandomSampler``).</span>
 <span class="sd">        batch_size (int, optional): batch size. Default is 32.</span>
 <span class="sd">        num_instances (int, optional): number of instances per identity in a</span>
-<span class="sd">            batch (for ``RandomIdentitySampler``). Default is 4.</span>
+<span class="sd">            batch (when using ``RandomIdentitySampler``). Default is 4.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">train_sampler</span> <span class="ow">in</span> <span class="n">AVAI_SAMPLERS</span><span class="p">,</span> \
+        <span class="s1">&#39;train_sampler must be one of </span><span class="si">{}</span><span class="s1">, but got </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">AVAI_SAMPLERS</span><span class="p">,</span> <span class="n">train_sampler</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">train_sampler</span> <span class="o">==</span> <span class="s1">&#39;RandomIdentitySampler&#39;</span><span class="p">:</span>
         <span class="n">sampler</span> <span class="o">=</span> <span class="n">RandomIdentitySampler</span><span class="p">(</span><span class="n">data_source</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">num_instances</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">train_sampler</span> <span class="o">==</span> <span class="s1">&#39;SequentialSampler&#39;</span><span class="p">:</span>
+        <span class="n">sampler</span> <span class="o">=</span> <span class="n">SequentialSampler</span><span class="p">(</span><span class="n">data_source</span><span class="p">)</span>
     
     <span class="k">else</span><span class="p">:</span>
         <span class="n">sampler</span> <span class="o">=</span> <span class="n">RandomSampler</span><span class="p">(</span><span class="n">data_source</span><span class="p">)</span>

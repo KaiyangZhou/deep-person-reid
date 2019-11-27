@@ -5,6 +5,11 @@ How-to
    :local:
 
 
+Prepare datasets
+-----------------
+See :ref:`datasets`.
+
+
 Find model keys
 -----------------
 Keys are listed under the *Public keys* section within each model class in :ref:`torchreid_models`.
@@ -194,6 +199,11 @@ Note that ``fixbase_epoch`` is counted into ``max_epoch``. In the above example,
 Test a trained model
 ----------------------
 You can load a trained model using :code:`torchreid.utils.load_pretrained_weights(model, weight_path)` and set ``test_only=True`` in ``engine.run()``.
+
+
+Fine-tune a model pre-trained on reid datasets
+-----------------------------------------------
+Use :code:`torchreid.utils.load_pretrained_weights(model, weight_path)` to load the pre-trained weights and then fine-tune on the dataset you want.
 
 
 Visualize learning curves with tensorboard
