@@ -36,6 +36,11 @@ Tech report: https://arxiv.org/abs/1910.10093.
 You can find some research projects that are built on top of Torchreid `here <https://github.com/KaiyangZhou/deep-person-reid/tree/master/projects>`_.
 
 
+What's new
+---------------
+- [Nov 19] ``ImageDataManager`` can load training data from target datasets by setting ``load_unlabeled_targets=True``. This is useful for domain adaptation research.
+
+
 Installation
 ---------------
 
@@ -260,12 +265,6 @@ ReID-specific models
 - `MLFN <https://arxiv.org/abs/1803.09132>`_
 - `OSNet <https://arxiv.org/abs/1905.00953>`_
 - `OSNet-AIN <https://arxiv.org/abs/1910.06827>`_
-
-
-Losses
-------
-- `Softmax (cross entropy loss with label smoothing) <https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Szegedy_Rethinking_the_Inception_CVPR_2016_paper.pdf>`_
-- `Triplet (hard example mining triplet loss) <https://arxiv.org/abs/1703.07737>`_
 
 
 Useful links
