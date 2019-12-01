@@ -1,17 +1,17 @@
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import division
-
+from __future__ import division, print_function, absolute_import
 import time
 import datetime
 
-from torchreid.engine import Engine
-from torchreid.losses import CrossEntropyLoss, TripletLoss
-from torchreid.utils import AverageMeter, open_specified_layers, open_all_layers
 from torchreid import metrics
+from torchreid.utils import (
+    AverageMeter, open_all_layers, open_specified_layers
+)
+from torchreid.engine import Engine
+from torchreid.losses import TripletLoss, CrossEntropyLoss
 
 
 class ImageTripletEngine(Engine):
+
     r"""Triplet-loss engine for image-reid.
 
     Args:
@@ -62,16 +62,26 @@ class ImageTripletEngine(Engine):
             save_dir='log/resnet50-triplet-market1501',
             print_freq=10
         )
-    """   
+    """
 
-    def __init__(self, datamanager, model, optimizer, margin=0.3,
-                 weight_t=1, weight_x=1, scheduler=None, use_gpu=True,
-                 label_smooth=True):
-        super(ImageTripletEngine, self).__init__(datamanager, model, optimizer, scheduler, use_gpu)
+    def __init__(
+        self,
+        datamanager,
+        model,
+        optimizer,
+        margin=0.3,
+        weight_t=1,
+        weight_x=1,
+        scheduler=None,
+        use_gpu=True,
+        label_smooth=True
+    ):
+        super(ImageTripletEngine, self
+              ).__init__(datamanager, model, optimizer, scheduler, use_gpu)
 
         self.weight_t = weight_t
         self.weight_x = weight_x
-        
+
         self.criterion_t = TripletLoss(margin=margin)
         self.criterion_x = CrossEntropyLoss(
             num_classes=self.datamanager.num_train_pids,
@@ -79,7 +89,15 @@ class ImageTripletEngine(Engine):
             label_smooth=label_smooth
         )
 
-    def train(self, epoch, max_epoch, writer, print_freq=10, fixbase_epoch=0, open_layers=None):
+    def train(
+        self,
+        epoch,
+        max_epoch,
+        writer,
+        print_freq=10,
+        fixbase_epoch=0,
+        open_layers=None
+    ):
         losses_t = AverageMeter()
         losses_x = AverageMeter()
         accs = AverageMeter()
@@ -87,8 +105,12 @@ class ImageTripletEngine(Engine):
         data_time = AverageMeter()
 
         self.model.train()
-        if (epoch+1)<=fixbase_epoch and open_layers is not None:
-            print('* Only train {} (epoch: {}/{})'.format(open_layers, epoch+1, fixbase_epoch))
+        if (epoch + 1) <= fixbase_epoch and open_layers is not None:
+            print(
+                '* Only train {} (epoch: {}/{})'.format(
+                    open_layers, epoch + 1, fixbase_epoch
+                )
+            )
             open_specified_layers(self.model, open_layers)
         else:
             open_all_layers(self.model)
@@ -102,7 +124,7 @@ class ImageTripletEngine(Engine):
             if self.use_gpu:
                 imgs = imgs.cuda()
                 pids = pids.cuda()
-            
+
             self.optimizer.zero_grad()
             outputs, features = self.model(imgs)
             loss_t = self._compute_loss(self.criterion_t, features, pids)
@@ -119,36 +141,45 @@ class ImageTripletEngine(Engine):
 
             if (batch_idx+1) % print_freq == 0:
                 # estimate remaining time
-                eta_seconds = batch_time.avg * (num_batches-(batch_idx+1) + (max_epoch-(epoch+1))*num_batches)
+                eta_seconds = batch_time.avg * (
+                    num_batches - (batch_idx+1) + (max_epoch -
+                                                   (epoch+1)) * num_batches
+                )
                 eta_str = str(datetime.timedelta(seconds=int(eta_seconds)))
-                print('Epoch: [{0}/{1}][{2}/{3}]\t'
-                      'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
-                      'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
-                      'Loss_t {loss_t.val:.4f} ({loss_t.avg:.4f})\t'
-                      'Loss_x {loss_x.val:.4f} ({loss_x.avg:.4f})\t'
-                      'Acc {acc.val:.2f} ({acc.avg:.2f})\t'
-                      'Lr {lr:.6f}\t'
-                      'eta {eta}'.format(
-                      epoch+1, max_epoch, batch_idx+1, num_batches,
-                      batch_time=batch_time,
-                      data_time=data_time,
-                      loss_t=losses_t,
-                      loss_x=losses_x,
-                      acc=accs,
-                      lr=self.optimizer.param_groups[0]['lr'],
-                      eta=eta_str
+                print(
+                    'Epoch: [{0}/{1}][{2}/{3}]\t'
+                    'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
+                    'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
+                    'Loss_t {loss_t.val:.4f} ({loss_t.avg:.4f})\t'
+                    'Loss_x {loss_x.val:.4f} ({loss_x.avg:.4f})\t'
+                    'Acc {acc.val:.2f} ({acc.avg:.2f})\t'
+                    'Lr {lr:.6f}\t'
+                    'eta {eta}'.format(
+                        epoch + 1,
+                        max_epoch,
+                        batch_idx + 1,
+                        num_batches,
+                        batch_time=batch_time,
+                        data_time=data_time,
+                        loss_t=losses_t,
+                        loss_x=losses_x,
+                        acc=accs,
+                        lr=self.optimizer.param_groups[0]['lr'],
+                        eta=eta_str
                     )
                 )
 
             if writer is not None:
-                n_iter = epoch * num_batches + batch_idx
+                n_iter = epoch*num_batches + batch_idx
                 writer.add_scalar('Train/Time', batch_time.avg, n_iter)
                 writer.add_scalar('Train/Data', data_time.avg, n_iter)
                 writer.add_scalar('Train/Loss_t', losses_t.avg, n_iter)
                 writer.add_scalar('Train/Loss_x', losses_x.avg, n_iter)
                 writer.add_scalar('Train/Acc', accs.avg, n_iter)
-                writer.add_scalar('Train/Lr', self.optimizer.param_groups[0]['lr'], n_iter)
-            
+                writer.add_scalar(
+                    'Train/Lr', self.optimizer.param_groups[0]['lr'], n_iter
+                )
+
             end = time.time()
 
         if self.scheduler is not None:

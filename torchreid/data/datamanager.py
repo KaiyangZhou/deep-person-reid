@@ -1,15 +1,13 @@
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import division
-
+from __future__ import division, print_function, absolute_import
 import torch
 
 from torchreid.data.sampler import build_train_sampler
-from torchreid.data.transforms import build_transforms
 from torchreid.data.datasets import init_image_dataset, init_video_dataset
+from torchreid.data.transforms import build_transforms
 
 
 class DataManager(object):
+
     r"""Base data manager.
 
     Args:
@@ -25,8 +23,17 @@ class DataManager(object):
         use_gpu (bool, optional): use gpu. Default is True.
     """
 
-    def __init__(self, sources=None, targets=None, height=256, width=128, transforms='random_flip',
-                 norm_mean=None, norm_std=None, use_gpu=False):
+    def __init__(
+        self,
+        sources=None,
+        targets=None,
+        height=256,
+        width=128,
+        transforms='random_flip',
+        norm_mean=None,
+        norm_std=None,
+        use_gpu=False
+    ):
         self.sources = sources
         self.targets = targets
         self.height = height
@@ -45,8 +52,11 @@ class DataManager(object):
             self.targets = [self.targets]
 
         self.transform_tr, self.transform_te = build_transforms(
-            self.height, self.width, transforms=transforms,
-            norm_mean=norm_mean, norm_std=norm_std
+            self.height,
+            self.width,
+            transforms=transforms,
+            norm_mean=norm_mean,
+            norm_std=norm_std
         )
 
         self.use_gpu = (torch.cuda.is_available() and use_gpu)
@@ -68,7 +78,8 @@ class DataManager(object):
         Args:
             name (str): dataset name.
         """
-        return self.test_dataset[name]['query'], self.test_dataset[name]['gallery']
+        return self.test_dataset[name]['query'], self.test_dataset[name][
+            'gallery']
 
     def preprocess_pil_img(self, img):
         """Transforms a PIL image to torch tensor for testing."""
@@ -76,6 +87,7 @@ class DataManager(object):
 
 
 class ImageDataManager(DataManager):
+
     r"""Image data manager.
 
     Args:
@@ -153,13 +165,18 @@ class ImageDataManager(DataManager):
         cuhk03_classic_split=False,
         market1501_500k=False
     ):
-        
+
         super(ImageDataManager, self).__init__(
-            sources=sources, targets=targets, height=height, width=width,
-            transforms=transforms, norm_mean=norm_mean, norm_std=norm_std,
+            sources=sources,
+            targets=targets,
+            height=height,
+            width=width,
+            transforms=transforms,
+            norm_mean=norm_mean,
+            norm_std=norm_std,
             use_gpu=use_gpu
         )
-        
+
         print('=> Loading train (source) dataset')
         trainset = []
         for name in self.sources:
@@ -183,7 +200,8 @@ class ImageDataManager(DataManager):
         self.train_loader = torch.utils.data.DataLoader(
             trainset,
             sampler=build_train_sampler(
-                trainset.train, train_sampler,
+                trainset.train,
+                train_sampler,
                 batch_size=batch_size_train,
                 num_instances=num_instances
             ),
@@ -220,7 +238,8 @@ class ImageDataManager(DataManager):
             self.train_loader_t = torch.utils.data.DataLoader(
                 trainset_t,
                 sampler=build_train_sampler(
-                    trainset_t.train, train_sampler,
+                    trainset_t.train,
+                    train_sampler,
                     batch_size=batch_size_train,
                     num_instances=num_instances
                 ),
@@ -232,8 +251,20 @@ class ImageDataManager(DataManager):
             )
 
         print('=> Loading test (target) dataset')
-        self.test_loader = {name: {'query': None, 'gallery': None} for name in self.targets}
-        self.test_dataset = {name: {'query': None, 'gallery': None} for name in self.targets}
+        self.test_loader = {
+            name: {
+                'query': None,
+                'gallery': None
+            }
+            for name in self.targets
+        }
+        self.test_dataset = {
+            name: {
+                'query': None,
+                'gallery': None
+            }
+            for name in self.targets
+        }
 
         for name in self.targets:
             # build query loader
@@ -290,13 +321,16 @@ class ImageDataManager(DataManager):
         print('  # source images   : {}'.format(len(trainset)))
         print('  # source cameras  : {}'.format(self.num_train_cams))
         if load_train_targets:
-            print('  # target images   : {} (unlabeled)'.format(len(trainset_t)))
+            print(
+                '  # target images   : {} (unlabeled)'.format(len(trainset_t))
+            )
         print('  target            : {}'.format(self.targets))
         print('  *****************************************')
         print('\n')
 
 
 class VideoDataManager(DataManager):
+
     r"""Video data manager.
 
     Args:
@@ -374,10 +408,15 @@ class VideoDataManager(DataManager):
         seq_len=15,
         sample_method='evenly'
     ):
-        
+
         super(VideoDataManager, self).__init__(
-            sources=sources, targets=targets, height=height, width=width,
-            transforms=transforms, norm_mean=norm_mean, norm_std=norm_std,
+            sources=sources,
+            targets=targets,
+            height=height,
+            width=width,
+            transforms=transforms,
+            norm_mean=norm_mean,
+            norm_std=norm_std,
             use_gpu=use_gpu
         )
 
@@ -401,7 +440,8 @@ class VideoDataManager(DataManager):
         self._num_train_cams = trainset.num_train_cams
 
         train_sampler = build_train_sampler(
-            trainset.train, train_sampler,
+            trainset.train,
+            train_sampler,
             batch_size=batch_size_train,
             num_instances=num_instances
         )
@@ -417,8 +457,20 @@ class VideoDataManager(DataManager):
         )
 
         print('=> Loading test (target) dataset')
-        self.test_loader = {name: {'query': None, 'gallery': None} for name in self.targets}
-        self.test_dataset = {name: {'query': None, 'gallery': None} for name in self.targets}
+        self.test_loader = {
+            name: {
+                'query': None,
+                'gallery': None
+            }
+            for name in self.targets
+        }
+        self.test_dataset = {
+            name: {
+                'query': None,
+                'gallery': None
+            }
+            for name in self.targets
+        }
 
         for name in self.targets:
             # build query loader

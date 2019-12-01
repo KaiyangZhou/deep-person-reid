@@ -1,11 +1,10 @@
-from __future__ import absolute_import
-from __future__ import division
-
+from __future__ import division, absolute_import
 import torch
 import torch.nn as nn
 
 
 class TripletLoss(nn.Module):
+
     """Triplet loss with hard positive/negative mining.
     
     Reference:
@@ -16,7 +15,7 @@ class TripletLoss(nn.Module):
     Args:
         margin (float, optional): margin for triplet. Default is 0.3.
     """
-    
+
     def __init__(self, margin=0.3):
         super(TripletLoss, self).__init__()
         self.margin = margin
@@ -29,13 +28,13 @@ class TripletLoss(nn.Module):
             targets (torch.LongTensor): ground truth labels with shape (num_classes).
         """
         n = inputs.size(0)
-        
+
         # Compute pairwise distance, replace by the official when merged
         dist = torch.pow(inputs, 2).sum(dim=1, keepdim=True).expand(n, n)
         dist = dist + dist.t()
         dist.addmm_(1, -2, inputs, inputs.t())
-        dist = dist.clamp(min=1e-12).sqrt()  # for numerical stability
-        
+        dist = dist.clamp(min=1e-12).sqrt() # for numerical stability
+
         # For each anchor, find the hardest positive and negative
         mask = targets.expand(n, n).eq(targets.expand(n, n).t())
         dist_ap, dist_an = [], []
@@ -44,7 +43,7 @@ class TripletLoss(nn.Module):
             dist_an.append(dist[i][mask[i] == 0].min().unsqueeze(0))
         dist_ap = torch.cat(dist_ap)
         dist_an = torch.cat(dist_an)
-        
+
         # Compute ranking hinge loss
         y = torch.ones_like(dist_an)
         return self.ranking_loss(dist_an, dist_ap, y)

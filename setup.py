@@ -1,8 +1,8 @@
-from setuptools import find_packages, setup
-from distutils.extension import Extension
-from Cython.Build import cythonize
 import numpy as np
 import os.path as osp
+from setuptools import setup, find_packages
+from distutils.extension import Extension
+from Cython.Build import cythonize
 
 
 def readme():
@@ -45,17 +45,14 @@ def get_requirements(filename='requirements.txt'):
 setup(
     name='torchreid',
     version=find_version(),
-    description='A library for deep learning person re-identification in PyTorch',
+    description=
+    'A library for deep learning person re-identification in PyTorch',
     author='Kaiyang Zhou',
     license='MIT',
     long_description=readme(),
     url='https://github.com/KaiyangZhou/deep-person-reid',
     packages=find_packages(),
     install_requires=get_requirements(),
-    keywords=[
-        'Person Re-Identification',
-        'Deep Learning',
-        'Computer Vision'
-    ],
+    keywords=['Person Re-Identification', 'Deep Learning', 'Computer Vision'],
     ext_modules=cythonize(ext_modules)
 )

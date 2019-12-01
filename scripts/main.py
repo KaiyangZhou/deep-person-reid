@@ -1,20 +1,20 @@
-import sys
 import os
-import os.path as osp
+import sys
 import time
+import os.path as osp
 import argparse
-
 import torch
 import torch.nn as nn
 
-from default_config import (
-    get_default_config, imagedata_kwargs, videodata_kwargs,
-    optimizer_kwargs, lr_scheduler_kwargs, engine_run_kwargs
-)
 import torchreid
 from torchreid.utils import (
-    Logger, set_random_seed, check_isfile, resume_from_checkpoint,
-    load_pretrained_weights, compute_model_complexity, collect_env_info
+    Logger, check_isfile, set_random_seed, collect_env_info,
+    resume_from_checkpoint, load_pretrained_weights, compute_model_complexity
+)
+
+from default_config import (
+    imagedata_kwargs, optimizer_kwargs, videodata_kwargs, engine_run_kwargs,
+    get_default_config, lr_scheduler_kwargs
 )
 
 
@@ -36,7 +36,7 @@ def build_engine(cfg, datamanager, model, optimizer, scheduler):
                 use_gpu=cfg.use_gpu,
                 label_smooth=cfg.loss.softmax.label_smooth
             )
-        
+
         else:
             engine = torchreid.engine.ImageTripletEngine(
                 datamanager,
@@ -49,7 +49,7 @@ def build_engine(cfg, datamanager, model, optimizer, scheduler):
                 use_gpu=cfg.use_gpu,
                 label_smooth=cfg.loss.softmax.label_smooth
             )
-    
+
     else:
         if cfg.loss.name == 'softmax':
             engine = torchreid.engine.VideoSoftmaxEngine(
@@ -61,7 +61,7 @@ def build_engine(cfg, datamanager, model, optimizer, scheduler):
                 label_smooth=cfg.loss.softmax.label_smooth,
                 pooling_method=cfg.video.pooling_method
             )
-        
+
         else:
             engine = torchreid.engine.VideoTripletEngine(
                 datamanager,
@@ -90,14 +90,43 @@ def reset_config(cfg, args):
 
 
 def main():
-    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--config-file', type=str, default='', help='path to config file')
-    parser.add_argument('-s', '--sources', type=str, nargs='+', help='source datasets (delimited by space)')
-    parser.add_argument('-t', '--targets', type=str, nargs='+', help='target datasets (delimited by space)')
-    parser.add_argument('--transforms', type=str, nargs='+', help='data augmentation')
-    parser.add_argument('--root', type=str, default='', help='path to data root')
-    parser.add_argument('--gpu-devices', type=str, default='',)
-    parser.add_argument('opts', default=None, nargs=argparse.REMAINDER, help='Modify config options using the command-line')
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument(
+        '--config-file', type=str, default='', help='path to config file'
+    )
+    parser.add_argument(
+        '-s',
+        '--sources',
+        type=str,
+        nargs='+',
+        help='source datasets (delimited by space)'
+    )
+    parser.add_argument(
+        '-t',
+        '--targets',
+        type=str,
+        nargs='+',
+        help='target datasets (delimited by space)'
+    )
+    parser.add_argument(
+        '--transforms', type=str, nargs='+', help='data augmentation'
+    )
+    parser.add_argument(
+        '--root', type=str, default='', help='path to data root'
+    )
+    parser.add_argument(
+        '--gpu-devices',
+        type=str,
+        default='',
+    )
+    parser.add_argument(
+        'opts',
+        default=None,
+        nargs=argparse.REMAINDER,
+        help='Modify config options using the command-line'
+    )
     args = parser.parse_args()
 
     cfg = get_default_config()
@@ -114,16 +143,16 @@ def main():
     log_name = 'test.log' if cfg.test.evaluate else 'train.log'
     log_name += time.strftime('-%Y-%m-%d-%H-%M-%S')
     sys.stdout = Logger(osp.join(cfg.data.save_dir, log_name))
-    
+
     print('Show configuration\n{}\n'.format(cfg))
     print('Collecting env info ...')
     print('** System info **\n{}\n'.format(collect_env_info()))
-    
+
     if cfg.use_gpu:
         torch.backends.cudnn.benchmark = True
-    
+
     datamanager = build_datamanager(cfg)
-    
+
     print('Building model: {}'.format(cfg.model.name))
     model = torchreid.models.build_model(
         name=cfg.model.name,
@@ -132,22 +161,30 @@ def main():
         pretrained=cfg.model.pretrained,
         use_gpu=cfg.use_gpu
     )
-    num_params, flops = compute_model_complexity(model, (1, 3, cfg.data.height, cfg.data.width))
+    num_params, flops = compute_model_complexity(
+        model, (1, 3, cfg.data.height, cfg.data.width)
+    )
     print('Model complexity: params={:,} flops={:,}'.format(num_params, flops))
 
     if cfg.model.load_weights and check_isfile(cfg.model.load_weights):
         load_pretrained_weights(model, cfg.model.load_weights)
-    
+
     if cfg.use_gpu:
         model = nn.DataParallel(model).cuda()
 
     optimizer = torchreid.optim.build_optimizer(model, **optimizer_kwargs(cfg))
-    scheduler = torchreid.optim.build_lr_scheduler(optimizer, **lr_scheduler_kwargs(cfg))
+    scheduler = torchreid.optim.build_lr_scheduler(
+        optimizer, **lr_scheduler_kwargs(cfg)
+    )
 
     if cfg.model.resume and check_isfile(cfg.model.resume):
-        cfg.train.start_epoch = resume_from_checkpoint(cfg.model.resume, model, optimizer=optimizer)
+        cfg.train.start_epoch = resume_from_checkpoint(
+            cfg.model.resume, model, optimizer=optimizer
+        )
 
-    print('Building {}-engine for {}-reid'.format(cfg.loss.name, cfg.data.type))
+    print(
+        'Building {}-engine for {}-reid'.format(cfg.loss.name, cfg.data.type)
+    )
     engine = build_engine(cfg, datamanager, model, optimizer, scheduler)
     engine.run(**engine_run_kwargs(cfg))
 

@@ -1,6 +1,4 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from __future__ import division, print_function, absolute_import
 
 from .cross_entropy_loss import CrossEntropyLoss
 from .hard_mine_triplet_loss import TripletLoss

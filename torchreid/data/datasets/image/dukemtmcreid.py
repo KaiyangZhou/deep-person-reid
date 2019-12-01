@@ -1,15 +1,13 @@
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import division
-
-import os.path as osp
-import glob
+from __future__ import division, print_function, absolute_import
 import re
+import glob
+import os.path as osp
 
 from torchreid.data.datasets import ImageDataset
 
 
 class DukeMTMCreID(ImageDataset):
+
     """DukeMTMC-reID.
 
     Reference:
@@ -30,15 +28,16 @@ class DukeMTMCreID(ImageDataset):
         self.root = osp.abspath(osp.expanduser(root))
         self.dataset_dir = osp.join(self.root, self.dataset_dir)
         self.download_dataset(self.dataset_dir, self.dataset_url)
-        self.train_dir = osp.join(self.dataset_dir, 'DukeMTMC-reID/bounding_box_train')
+        self.train_dir = osp.join(
+            self.dataset_dir, 'DukeMTMC-reID/bounding_box_train'
+        )
         self.query_dir = osp.join(self.dataset_dir, 'DukeMTMC-reID/query')
-        self.gallery_dir = osp.join(self.dataset_dir, 'DukeMTMC-reID/bounding_box_test')
-        
+        self.gallery_dir = osp.join(
+            self.dataset_dir, 'DukeMTMC-reID/bounding_box_test'
+        )
+
         required_files = [
-            self.dataset_dir,
-            self.train_dir,
-            self.query_dir,
-            self.gallery_dir
+            self.dataset_dir, self.train_dir, self.query_dir, self.gallery_dir
         ]
         self.check_before_run(required_files)
 
@@ -56,7 +55,7 @@ class DukeMTMCreID(ImageDataset):
         for img_path in img_paths:
             pid, _ = map(int, pattern.search(img_path).groups())
             pid_container.add(pid)
-        pid2label = {pid:label for label, pid in enumerate(pid_container)}
+        pid2label = {pid: label for label, pid in enumerate(pid_container)}
 
         data = []
         for img_path in img_paths:

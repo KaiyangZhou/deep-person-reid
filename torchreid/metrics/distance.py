@@ -1,9 +1,4 @@
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import division
-
-import numpy as np
-
+from __future__ import division, print_function, absolute_import
 import torch
 from torch.nn import functional as F
 
@@ -30,8 +25,12 @@ def compute_distance_matrix(input1, input2, metric='euclidean'):
     # check input
     assert isinstance(input1, torch.Tensor)
     assert isinstance(input2, torch.Tensor)
-    assert input1.dim() == 2, 'Expected 2-D tensor, but got {}-D'.format(input1.dim())
-    assert input2.dim() == 2, 'Expected 2-D tensor, but got {}-D'.format(input2.dim())
+    assert input1.dim() == 2, 'Expected 2-D tensor, but got {}-D'.format(
+        input1.dim()
+    )
+    assert input2.dim() == 2, 'Expected 2-D tensor, but got {}-D'.format(
+        input2.dim()
+    )
     assert input1.size(1) == input2.size(1)
 
     if metric == 'euclidean':
@@ -43,7 +42,7 @@ def compute_distance_matrix(input1, input2, metric='euclidean'):
             'Unknown distance metric: {}. '
             'Please choose either "euclidean" or "cosine"'.format(metric)
         )
-    
+
     return distmat
 
 

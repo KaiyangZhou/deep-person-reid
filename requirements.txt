@@ -10,3 +10,6 @@ tb-nightly
 future
 yacs
 gdown
+flake8
+yapf
+isort

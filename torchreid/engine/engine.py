@@ -1,23 +1,21 @@
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import division
-
-import os.path as osp
+from __future__ import division, print_function, absolute_import
 import time
-import datetime
 import numpy as np
-
+import os.path as osp
+import datetime
 import torch
-import torch.nn as nn
 from torch.nn import functional as F
 from torch.utils.tensorboard import SummaryWriter
 
-from torchreid.utils import AverageMeter, visualize_ranked_results, save_checkpoint, re_ranking
-from torchreid.losses import DeepSupervision
 from torchreid import metrics
+from torchreid.utils import (
+    AverageMeter, re_ranking, save_checkpoint, visualize_ranked_results
+)
+from torchreid.losses import DeepSupervision
 
 
 class Engine(object):
+
     r"""A generic base Engine class for both image- and video-reid.
 
     Args:
@@ -29,7 +27,14 @@ class Engine(object):
         use_gpu (bool, optional): use gpu. Default is True.
     """
 
-    def __init__(self, datamanager, model, optimizer=None, scheduler=None, use_gpu=True):
+    def __init__(
+        self,
+        datamanager,
+        model,
+        optimizer=None,
+        scheduler=None,
+        use_gpu=True
+    ):
         self.datamanager = datamanager
         self.model = model
         self.optimizer = optimizer
@@ -90,7 +95,9 @@ class Engine(object):
         """
 
         if visrank and not test_only:
-            raise ValueError('visrank can be set to True only if test_only=True')
+            raise ValueError(
+                'visrank can be set to True only if test_only=True'
+            )
 
         if test_only:
             self.test(
@@ -121,8 +128,10 @@ class Engine(object):
                 fixbase_epoch=fixbase_epoch,
                 open_layers=open_layers
             )
-            
-            if (epoch+1)>=start_eval and eval_freq>0 and (epoch+1)%eval_freq==0 and (epoch+1)!=max_epoch:
+
+            if (epoch + 1) >= start_eval and eval_freq > 0 and (
+                epoch+1
+            ) % eval_freq == 0 and (epoch + 1) != max_epoch:
                 rank1 = self.test(
                     epoch,
                     dist_metric=dist_metric,
@@ -197,7 +206,7 @@ class Engine(object):
             but not a must. Please refer to the source code for more details.
         """
         targets = list(self.test_loader.keys())
-        
+
         for name in targets:
             domain = 'source' if name in self.datamanager.sources else 'target'
             print('##### Evaluating {} ({}) #####'.format(name, domain))
@@ -217,7 +226,7 @@ class Engine(object):
                 ranks=ranks,
                 rerank=rerank
             )
-        
+
         return rank1
 
     @torch.no_grad()
@@ -271,7 +280,9 @@ class Engine(object):
             qf = F.normalize(qf, p=2, dim=1)
             gf = F.normalize(gf, p=2, dim=1)
 
-        print('Computing distance matrix with metric={} ...'.format(dist_metric))
+        print(
+            'Computing distance matrix with metric={} ...'.format(dist_metric)
+        )
         distmat = metrics.compute_distance_matrix(qf, gf, dist_metric)
         distmat = distmat.numpy()
 
@@ -295,16 +306,17 @@ class Engine(object):
         print('mAP: {:.1%}'.format(mAP))
         print('CMC curve')
         for r in ranks:
-            print('Rank-{:<3}: {:.1%}'.format(r, cmc[r-1]))
+            print('Rank-{:<3}: {:.1%}'.format(r, cmc[r - 1]))
 
         if visrank:
             visualize_ranked_results(
                 distmat,
-                self.datamanager.return_query_and_gallery_by_name(dataset_name),
+                self.datamanager.
+                return_query_and_gallery_by_name(dataset_name),
                 self.datamanager.data_type,
                 width=self.datamanager.width,
                 height=self.datamanager.height,
-                save_dir=osp.join(save_dir, 'visrank_'+dataset_name),
+                save_dir=osp.join(save_dir, 'visrank_' + dataset_name),
                 topk=visrank_topk
             )
 
@@ -333,9 +345,13 @@ class Engine(object):
         return imgs, pids, camids
 
     def _save_checkpoint(self, epoch, rank1, save_dir, is_best=False):
-        save_checkpoint({
-            'state_dict': self.model.state_dict(),
-            'epoch': epoch + 1,
-            'rank1': rank1,
-            'optimizer': self.optimizer.state_dict(),
-        }, save_dir, is_best=is_best)
+        save_checkpoint(
+            {
+                'state_dict': self.model.state_dict(),
+                'epoch': epoch + 1,
+                'rank1': rank1,
+                'optimizer': self.optimizer.state_dict(),
+            },
+            save_dir,
+            is_best=is_best
+        )

@@ -1,12 +1,11 @@
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import division
+from __future__ import division, print_function, absolute_import
 
 from torchreid.engine.image import ImageTripletEngine
 from torchreid.engine.video import VideoSoftmaxEngine
 
 
 class VideoTripletEngine(ImageTripletEngine, VideoSoftmaxEngine):
+
     """Triplet-loss engine for video-reid.
 
     Args:
@@ -66,11 +65,28 @@ class VideoTripletEngine(ImageTripletEngine, VideoSoftmaxEngine):
         )
     """
 
-    def __init__(self, datamanager, model, optimizer, margin=0.3,
-                 weight_t=1, weight_x=1, scheduler=None, use_gpu=True,
-                 label_smooth=True, pooling_method='avg'):
-        super(VideoTripletEngine, self).__init__(datamanager, model, optimizer, margin=margin,
-                                                 weight_t=weight_t, weight_x=weight_x,
-                                                 scheduler=scheduler, use_gpu=use_gpu,
-                                                 label_smooth=label_smooth)
+    def __init__(
+        self,
+        datamanager,
+        model,
+        optimizer,
+        margin=0.3,
+        weight_t=1,
+        weight_x=1,
+        scheduler=None,
+        use_gpu=True,
+        label_smooth=True,
+        pooling_method='avg'
+    ):
+        super(VideoTripletEngine, self).__init__(
+            datamanager,
+            model,
+            optimizer,
+            margin=margin,
+            weight_t=weight_t,
+            weight_x=weight_x,
+            scheduler=scheduler,
+            use_gpu=use_gpu,
+            label_smooth=label_smooth
+        )
         self.pooling_method = pooling_method
