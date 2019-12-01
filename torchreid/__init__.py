@@ -1,6 +1,6 @@
 from __future__ import print_function, absolute_import
 
-from . import data, engine, losses, metrics, models, optim, utils
+from . import data, optim, utils, engine, losses, models, metrics
 
 __version__ = '1.0.8'
 __author__ = 'Kaiyang Zhou'

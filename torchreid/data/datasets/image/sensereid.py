@@ -3,7 +3,7 @@ import copy
 import glob
 import os.path as osp
 
-from torchreid.data.datasets import ImageDataset
+from ..dataset import ImageDataset
 
 
 class SenseReID(ImageDataset):

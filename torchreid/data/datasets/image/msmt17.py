@@ -1,7 +1,7 @@
 from __future__ import division, print_function, absolute_import
 import os.path as osp
 
-from torchreid.data.datasets import ImageDataset
+from ..dataset import ImageDataset
 
 ##### Log #####
 # 22.01.2019

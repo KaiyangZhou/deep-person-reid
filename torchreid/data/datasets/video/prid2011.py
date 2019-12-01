@@ -3,7 +3,8 @@ import glob
 import os.path as osp
 
 from torchreid.utils import read_json
-from torchreid.data.datasets import VideoDataset
+
+from ..dataset import VideoDataset
 
 
 class PRID2011(VideoDataset):

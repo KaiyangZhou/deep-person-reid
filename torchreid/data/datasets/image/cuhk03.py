@@ -2,7 +2,8 @@ from __future__ import division, print_function, absolute_import
 import os.path as osp
 
 from torchreid.utils import read_json, write_json, mkdir_if_missing
-from torchreid.data.datasets import ImageDataset
+
+from ..dataset import ImageDataset
 
 
 class CUHK03(ImageDataset):

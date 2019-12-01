@@ -2,7 +2,7 @@ from __future__ import division, print_function, absolute_import
 import glob
 import os.path as osp
 
-from torchreid.data.datasets import ImageDataset
+from ..dataset import ImageDataset
 
 
 class CUHK02(ImageDataset):

@@ -6,8 +6,9 @@ from torchreid import metrics
 from torchreid.utils import (
     AverageMeter, open_all_layers, open_specified_layers
 )
-from torchreid.engine import Engine
 from torchreid.losses import TripletLoss, CrossEntropyLoss
+
+from ..engine import Engine
 
 
 class ImageTripletEngine(Engine):

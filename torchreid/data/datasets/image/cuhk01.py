@@ -5,7 +5,8 @@ import os.path as osp
 import zipfile
 
 from torchreid.utils import read_json, write_json
-from torchreid.data.datasets import ImageDataset
+
+from ..dataset import ImageDataset
 
 
 class CUHK01(ImageDataset):
