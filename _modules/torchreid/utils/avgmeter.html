@@ -165,13 +165,13 @@
            <div itemprop="articleBody">
             
   <h1>Source code for torchreid.utils.avgmeter</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AverageMeter&#39;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="AverageMeter"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.avgmeter.AverageMeter">[docs]</a><span class="k">class</span> <span class="nc">AverageMeter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;Computes and stores the average and current value.</span>
 
 <span class="sd">    Examples::</span>
@@ -180,6 +180,7 @@
 <span class="sd">        &gt;&gt;&gt; # Update meter after every minibatch update</span>
 <span class="sd">        &gt;&gt;&gt; losses.update(loss_value, batch_size)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 

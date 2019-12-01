@@ -165,16 +165,14 @@
            <div itemprop="articleBody">
             
   <h1>Source code for torchreid.engine.video.softmax</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
-
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 
 <span class="kn">from</span> <span class="nn">torchreid.engine.image</span> <span class="k">import</span> <span class="n">ImageSoftmaxEngine</span>
 
 
 <div class="viewcode-block" id="VideoSoftmaxEngine"><a class="viewcode-back" href="../../../../pkg/engine.html#torchreid.engine.video.softmax.VideoSoftmaxEngine">[docs]</a><span class="k">class</span> <span class="nc">VideoSoftmaxEngine</span><span class="p">(</span><span class="n">ImageSoftmaxEngine</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;Softmax-loss engine for video-reid.</span>
 
 <span class="sd">    Args:</span>
@@ -227,10 +225,24 @@
 <span class="sd">        )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamanager</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label_smooth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pooling_method</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">VideoSoftmaxEngine</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">datamanager</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="n">scheduler</span><span class="p">,</span>
-                                                 <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">,</span> <span class="n">label_smooth</span><span class="o">=</span><span class="n">label_smooth</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">datamanager</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">,</span>
+        <span class="n">optimizer</span><span class="p">,</span>
+        <span class="n">scheduler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">label_smooth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">pooling_method</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">VideoSoftmaxEngine</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">datamanager</span><span class="p">,</span>
+            <span class="n">model</span><span class="p">,</span>
+            <span class="n">optimizer</span><span class="p">,</span>
+            <span class="n">scheduler</span><span class="o">=</span><span class="n">scheduler</span><span class="p">,</span>
+            <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">,</span>
+            <span class="n">label_smooth</span><span class="o">=</span><span class="n">label_smooth</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pooling_method</span> <span class="o">=</span> <span class="n">pooling_method</span>
 
     <span class="k">def</span> <span class="nf">_parse_data_for_train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
@@ -243,9 +255,9 @@
             <span class="c1"># h: height</span>
             <span class="c1"># w: width</span>
             <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">imgs</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
-            <span class="n">imgs</span> <span class="o">=</span> <span class="n">imgs</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+            <span class="n">imgs</span> <span class="o">=</span> <span class="n">imgs</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span> <span class="o">*</span> <span class="n">s</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
             <span class="n">pids</span> <span class="o">=</span> <span class="n">pids</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
-            <span class="n">pids</span> <span class="o">=</span> <span class="n">pids</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="o">*</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">pids</span> <span class="o">=</span> <span class="n">pids</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span> <span class="o">*</span> <span class="n">s</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">imgs</span><span class="p">,</span> <span class="n">pids</span>
 
     <span class="k">def</span> <span class="nf">_extract_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
@@ -256,7 +268,7 @@
         <span class="c1"># h: height</span>
         <span class="c1"># w: width</span>
         <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
-        <span class="nb">input</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+        <span class="nb">input</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span> <span class="o">*</span> <span class="n">s</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
         <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
         <span class="n">features</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pooling_method</span> <span class="o">==</span> <span class="s1">&#39;avg&#39;</span><span class="p">:</span>

@@ -165,21 +165,18 @@
            <div itemprop="articleBody">
             
   <h1>Source code for torchreid.data.sampler</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
-
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
 <span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">random</span>
-
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
 <span class="kn">from</span> <span class="nn">torch.utils.data.sampler</span> <span class="k">import</span> <span class="n">Sampler</span><span class="p">,</span> <span class="n">RandomSampler</span><span class="p">,</span> <span class="n">SequentialSampler</span>
-
 
 <span class="n">AVAI_SAMPLERS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;RandomIdentitySampler&#39;</span><span class="p">,</span> <span class="s1">&#39;SequentialSampler&#39;</span><span class="p">,</span> <span class="s1">&#39;RandomSampler&#39;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="RandomIdentitySampler"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.sampler.RandomIdentitySampler">[docs]</a><span class="k">class</span> <span class="nc">RandomIdentitySampler</span><span class="p">(</span><span class="n">Sampler</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;Randomly samples N identities each with K instances.</span>
 
 <span class="sd">    Args:</span>
@@ -187,10 +184,13 @@
 <span class="sd">        batch_size (int): batch size.</span>
 <span class="sd">        num_instances (int): number of instances per identity in a batch.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_source</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">num_instances</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">batch_size</span> <span class="o">&lt;</span> <span class="n">num_instances</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;batch_size=</span><span class="si">{}</span><span class="s1"> must be no less &#39;</span>
-                             <span class="s1">&#39;than num_instances=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">num_instances</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;batch_size=</span><span class="si">{}</span><span class="s1"> must be no less &#39;</span>
+                <span class="s1">&#39;than num_instances=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">num_instances</span><span class="p">)</span>
+            <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">data_source</span> <span class="o">=</span> <span class="n">data_source</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
@@ -217,7 +217,9 @@
         <span class="k">for</span> <span class="n">pid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pids</span><span class="p">:</span>
             <span class="n">idxs</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index_dic</span><span class="p">[</span><span class="n">pid</span><span class="p">])</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_instances</span><span class="p">:</span>
-                <span class="n">idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">idxs</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_instances</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span>
+                    <span class="n">idxs</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_instances</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
             <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span>
             <span class="n">batch_idxs</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">idxs</span><span class="p">:</span>
@@ -243,7 +245,9 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span></div>
 
 
-<div class="viewcode-block" id="build_train_sampler"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.sampler.build_train_sampler">[docs]</a><span class="k">def</span> <span class="nf">build_train_sampler</span><span class="p">(</span><span class="n">data_source</span><span class="p">,</span> <span class="n">train_sampler</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">num_instances</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="build_train_sampler"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.sampler.build_train_sampler">[docs]</a><span class="k">def</span> <span class="nf">build_train_sampler</span><span class="p">(</span>
+    <span class="n">data_source</span><span class="p">,</span> <span class="n">train_sampler</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">num_instances</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Builds a training sampler.</span>
 
 <span class="sd">    Args:</span>
@@ -261,7 +265,7 @@
 
     <span class="k">elif</span> <span class="n">train_sampler</span> <span class="o">==</span> <span class="s1">&#39;SequentialSampler&#39;</span><span class="p">:</span>
         <span class="n">sampler</span> <span class="o">=</span> <span class="n">SequentialSampler</span><span class="p">(</span><span class="n">data_source</span><span class="p">)</span>
-    
+
     <span class="k">elif</span> <span class="n">train_sampler</span> <span class="o">==</span> <span class="s1">&#39;RandomSampler&#39;</span><span class="p">:</span>
         <span class="n">sampler</span> <span class="o">=</span> <span class="n">RandomSampler</span><span class="p">(</span><span class="n">data_source</span><span class="p">)</span>
 

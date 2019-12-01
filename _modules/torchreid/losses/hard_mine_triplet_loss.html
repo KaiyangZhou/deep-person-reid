@@ -165,14 +165,13 @@
            <div itemprop="articleBody">
             
   <h1>Source code for torchreid.losses.hard_mine_triplet_loss</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
-
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 
 
 <div class="viewcode-block" id="TripletLoss"><a class="viewcode-back" href="../../../pkg/losses.html#torchreid.losses.hard_mine_triplet_loss.TripletLoss">[docs]</a><span class="k">class</span> <span class="nc">TripletLoss</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;Triplet loss with hard positive/negative mining.</span>
 <span class="sd">    </span>
 <span class="sd">    Reference:</span>
@@ -183,7 +182,7 @@
 <span class="sd">    Args:</span>
 <span class="sd">        margin (float, optional): margin for triplet. Default is 0.3.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">TripletLoss</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">margin</span> <span class="o">=</span> <span class="n">margin</span>
@@ -196,13 +195,13 @@
 <span class="sd">            targets (torch.LongTensor): ground truth labels with shape (num_classes).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        
+
         <span class="c1"># Compute pairwise distance, replace by the official when merged</span>
         <span class="n">dist</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
         <span class="n">dist</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">+</span> <span class="n">dist</span><span class="o">.</span><span class="n">t</span><span class="p">()</span>
         <span class="n">dist</span><span class="o">.</span><span class="n">addmm_</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">inputs</span><span class="o">.</span><span class="n">t</span><span class="p">())</span>
-        <span class="n">dist</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>  <span class="c1"># for numerical stability</span>
-        
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span> <span class="c1"># for numerical stability</span>
+
         <span class="c1"># For each anchor, find the hardest positive and negative</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">targets</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">targets</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">t</span><span class="p">())</span>
         <span class="n">dist_ap</span><span class="p">,</span> <span class="n">dist_an</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
@@ -211,7 +210,7 @@
             <span class="n">dist_an</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
         <span class="n">dist_ap</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">dist_ap</span><span class="p">)</span>
         <span class="n">dist_an</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">dist_an</span><span class="p">)</span>
-        
+
         <span class="c1"># Compute ranking hinge loss</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">dist_an</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranking_loss</span><span class="p">(</span><span class="n">dist_an</span><span class="p">,</span> <span class="n">dist_ap</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div></div>

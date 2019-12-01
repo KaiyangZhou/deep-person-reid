@@ -165,18 +165,16 @@
            <div itemprop="articleBody">
             
   <h1>Source code for torchreid.data.datamanager</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
-
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 
 <span class="kn">from</span> <span class="nn">torchreid.data.sampler</span> <span class="k">import</span> <span class="n">build_train_sampler</span>
-<span class="kn">from</span> <span class="nn">torchreid.data.transforms</span> <span class="k">import</span> <span class="n">build_transforms</span>
 <span class="kn">from</span> <span class="nn">torchreid.data.datasets</span> <span class="k">import</span> <span class="n">init_image_dataset</span><span class="p">,</span> <span class="n">init_video_dataset</span>
+<span class="kn">from</span> <span class="nn">torchreid.data.transforms</span> <span class="k">import</span> <span class="n">build_transforms</span>
 
 
 <div class="viewcode-block" id="DataManager"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.datamanager.DataManager">[docs]</a><span class="k">class</span> <span class="nc">DataManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Base data manager.</span>
 
 <span class="sd">    Args:</span>
@@ -192,8 +190,17 @@
 <span class="sd">        use_gpu (bool, optional): use gpu. Default is True.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="s1">&#39;random_flip&#39;</span><span class="p">,</span>
-                 <span class="n">norm_mean</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
+        <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+        <span class="n">transforms</span><span class="o">=</span><span class="s1">&#39;random_flip&#39;</span><span class="p">,</span>
+        <span class="n">norm_mean</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">norm_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="n">sources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="n">targets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
@@ -212,8 +219,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">transform_tr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform_te</span> <span class="o">=</span> <span class="n">build_transforms</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="n">transforms</span><span class="p">,</span>
-            <span class="n">norm_mean</span><span class="o">=</span><span class="n">norm_mean</span><span class="p">,</span> <span class="n">norm_std</span><span class="o">=</span><span class="n">norm_std</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
+            <span class="n">transforms</span><span class="o">=</span><span class="n">transforms</span><span class="p">,</span>
+            <span class="n">norm_mean</span><span class="o">=</span><span class="n">norm_mean</span><span class="p">,</span>
+            <span class="n">norm_std</span><span class="o">=</span><span class="n">norm_std</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="ow">and</span> <span class="n">use_gpu</span><span class="p">)</span>
@@ -235,7 +245,8 @@
 <span class="sd">        Args:</span>
 <span class="sd">            name (str): dataset name.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;query&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;gallery&#39;</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;query&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span><span class="p">[</span><span class="n">name</span><span class="p">][</span>
+            <span class="s1">&#39;gallery&#39;</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="DataManager.preprocess_pil_img"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.datamanager.DataManager.preprocess_pil_img">[docs]</a>    <span class="k">def</span> <span class="nf">preprocess_pil_img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Transforms a PIL image to torch tensor for testing.&quot;&quot;&quot;</span>
@@ -243,6 +254,7 @@
 
 
 <div class="viewcode-block" id="ImageDataManager"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.datamanager.ImageDataManager">[docs]</a><span class="k">class</span> <span class="nc">ImageDataManager</span><span class="p">(</span><span class="n">DataManager</span><span class="p">):</span>
+
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Image data manager.</span>
 
 <span class="sd">    Args:</span>
@@ -320,13 +332,18 @@
         <span class="n">cuhk03_classic_split</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">market1501_500k</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">):</span>
-        
+
         <span class="nb">super</span><span class="p">(</span><span class="n">ImageDataManager</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="n">sources</span><span class="o">=</span><span class="n">sources</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span>
-            <span class="n">transforms</span><span class="o">=</span><span class="n">transforms</span><span class="p">,</span> <span class="n">norm_mean</span><span class="o">=</span><span class="n">norm_mean</span><span class="p">,</span> <span class="n">norm_std</span><span class="o">=</span><span class="n">norm_std</span><span class="p">,</span>
+            <span class="n">sources</span><span class="o">=</span><span class="n">sources</span><span class="p">,</span>
+            <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span>
+            <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span>
+            <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span>
+            <span class="n">transforms</span><span class="o">=</span><span class="n">transforms</span><span class="p">,</span>
+            <span class="n">norm_mean</span><span class="o">=</span><span class="n">norm_mean</span><span class="p">,</span>
+            <span class="n">norm_std</span><span class="o">=</span><span class="n">norm_std</span><span class="p">,</span>
             <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span>
         <span class="p">)</span>
-        
+
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&gt; Loading train (source) dataset&#39;</span><span class="p">)</span>
         <span class="n">trainset</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">:</span>
@@ -350,7 +367,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">train_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
             <span class="n">trainset</span><span class="p">,</span>
             <span class="n">sampler</span><span class="o">=</span><span class="n">build_train_sampler</span><span class="p">(</span>
-                <span class="n">trainset</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">train_sampler</span><span class="p">,</span>
+                <span class="n">trainset</span><span class="o">.</span><span class="n">train</span><span class="p">,</span>
+                <span class="n">train_sampler</span><span class="p">,</span>
                 <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size_train</span><span class="p">,</span>
                 <span class="n">num_instances</span><span class="o">=</span><span class="n">num_instances</span>
             <span class="p">),</span>
@@ -387,7 +405,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">train_loader_t</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
                 <span class="n">trainset_t</span><span class="p">,</span>
                 <span class="n">sampler</span><span class="o">=</span><span class="n">build_train_sampler</span><span class="p">(</span>
-                    <span class="n">trainset_t</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">train_sampler</span><span class="p">,</span>
+                    <span class="n">trainset_t</span><span class="o">.</span><span class="n">train</span><span class="p">,</span>
+                    <span class="n">train_sampler</span><span class="p">,</span>
                     <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size_train</span><span class="p">,</span>
                     <span class="n">num_instances</span><span class="o">=</span><span class="n">num_instances</span>
                 <span class="p">),</span>
@@ -399,8 +418,20 @@
             <span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&gt; Loading test (target) dataset&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_loader</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;gallery&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;gallery&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_loader</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">name</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s1">&#39;gallery&#39;</span><span class="p">:</span> <span class="kc">None</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">name</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s1">&#39;gallery&#39;</span><span class="p">:</span> <span class="kc">None</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span>
+        <span class="p">}</span>
 
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">:</span>
             <span class="c1"># build query loader</span>
@@ -457,13 +488,16 @@
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # source images   : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">trainset</span><span class="p">)))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # source cameras  : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_train_cams</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">load_train_targets</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  # target images   : </span><span class="si">{}</span><span class="s1"> (unlabeled)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">trainset_t</span><span class="p">)))</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s1">&#39;  # target images   : </span><span class="si">{}</span><span class="s1"> (unlabeled)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">trainset_t</span><span class="p">))</span>
+            <span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  target            : </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  *****************************************&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="VideoDataManager"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.datamanager.VideoDataManager">[docs]</a><span class="k">class</span> <span class="nc">VideoDataManager</span><span class="p">(</span><span class="n">DataManager</span><span class="p">):</span>
+
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Video data manager.</span>
 
 <span class="sd">    Args:</span>
@@ -541,10 +575,15 @@
         <span class="n">seq_len</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
         <span class="n">sample_method</span><span class="o">=</span><span class="s1">&#39;evenly&#39;</span>
     <span class="p">):</span>
-        
+
         <span class="nb">super</span><span class="p">(</span><span class="n">VideoDataManager</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="n">sources</span><span class="o">=</span><span class="n">sources</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span>
-            <span class="n">transforms</span><span class="o">=</span><span class="n">transforms</span><span class="p">,</span> <span class="n">norm_mean</span><span class="o">=</span><span class="n">norm_mean</span><span class="p">,</span> <span class="n">norm_std</span><span class="o">=</span><span class="n">norm_std</span><span class="p">,</span>
+            <span class="n">sources</span><span class="o">=</span><span class="n">sources</span><span class="p">,</span>
+            <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span>
+            <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span>
+            <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span>
+            <span class="n">transforms</span><span class="o">=</span><span class="n">transforms</span><span class="p">,</span>
+            <span class="n">norm_mean</span><span class="o">=</span><span class="n">norm_mean</span><span class="p">,</span>
+            <span class="n">norm_std</span><span class="o">=</span><span class="n">norm_std</span><span class="p">,</span>
             <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span>
         <span class="p">)</span>
 
@@ -568,7 +607,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_train_cams</span> <span class="o">=</span> <span class="n">trainset</span><span class="o">.</span><span class="n">num_train_cams</span>
 
         <span class="n">train_sampler</span> <span class="o">=</span> <span class="n">build_train_sampler</span><span class="p">(</span>
-            <span class="n">trainset</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">train_sampler</span><span class="p">,</span>
+            <span class="n">trainset</span><span class="o">.</span><span class="n">train</span><span class="p">,</span>
+            <span class="n">train_sampler</span><span class="p">,</span>
             <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size_train</span><span class="p">,</span>
             <span class="n">num_instances</span><span class="o">=</span><span class="n">num_instances</span>
         <span class="p">)</span>
@@ -584,8 +624,20 @@
         <span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&gt; Loading test (target) dataset&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_loader</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;gallery&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;gallery&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_loader</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">name</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s1">&#39;gallery&#39;</span><span class="p">:</span> <span class="kc">None</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">name</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s1">&#39;gallery&#39;</span><span class="p">:</span> <span class="kc">None</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span>
+        <span class="p">}</span>
 
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">:</span>
             <span class="c1"># build query loader</span>

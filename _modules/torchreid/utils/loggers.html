@@ -166,17 +166,17 @@
             
   <h1>Source code for torchreid.utils.loggers</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Logger&#39;</span><span class="p">,</span> <span class="s1">&#39;RankLogger&#39;</span><span class="p">]</span>
-
-<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
 
 <span class="kn">from</span> <span class="nn">.tools</span> <span class="k">import</span> <span class="n">mkdir_if_missing</span>
 
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Logger&#39;</span><span class="p">,</span> <span class="s1">&#39;RankLogger&#39;</span><span class="p">]</span>
+
 
 <div class="viewcode-block" id="Logger"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.loggers.Logger">[docs]</a><span class="k">class</span> <span class="nc">Logger</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;Writes console output to external text file.</span>
 
 <span class="sd">    Imported from `&lt;https://github.com/Cysu/open-reid/blob/master/reid/utils/logging.py&gt;`_</span>
@@ -192,7 +192,8 @@
 <span class="sd">       &gt;&gt;&gt; save_dir = &#39;log/resnet50-softmax-market1501&#39;</span>
 <span class="sd">       &gt;&gt;&gt; log_name = &#39;train.log&#39;</span>
 <span class="sd">       &gt;&gt;&gt; sys.stdout = Logger(osp.join(args.save_dir, log_name))</span>
-<span class="sd">    &quot;&quot;&quot;</span>  
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fpath</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">console</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="kc">None</span>
@@ -227,6 +228,7 @@
 
 
 <div class="viewcode-block" id="RankLogger"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.loggers.RankLogger">[docs]</a><span class="k">class</span> <span class="nc">RankLogger</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;Records the rank1 matching accuracy obtained for each</span>
 <span class="sd">    test dataset at specified evaluation steps and provides a function</span>
 <span class="sd">    to show the summarized results, which are convenient for analysis.</span>
@@ -271,6 +273,7 @@
 <span class="sd">        &gt;&gt;&gt; # - epoch 20   rank1 20.0%</span>
 <span class="sd">        &gt;&gt;&gt; # - epoch 30   rank1 30.0%</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sources</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="n">sources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="n">targets</span>
@@ -281,7 +284,13 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;epoch&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;rank1&#39;</span><span class="p">:</span> <span class="p">[]}</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">name</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;epoch&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;rank1&#39;</span><span class="p">:</span> <span class="p">[]</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span>
+        <span class="p">}</span>
 
 <div class="viewcode-block" id="RankLogger.write"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.loggers.RankLogger.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">rank1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Writes result.</span>
@@ -300,7 +309,9 @@
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">:</span>
             <span class="n">from_where</span> <span class="o">=</span> <span class="s1">&#39;source&#39;</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="k">else</span> <span class="s1">&#39;target&#39;</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">from_where</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">rank1</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;epoch&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;rank1&#39;</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">rank1</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;epoch&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;rank1&#39;</span><span class="p">]</span>
+            <span class="p">):</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;- epoch </span><span class="si">{}</span><span class="se">\t</span><span class="s1"> rank1 </span><span class="si">{:.1%}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">rank1</span><span class="p">))</span></div></div>
 </pre></div>
 

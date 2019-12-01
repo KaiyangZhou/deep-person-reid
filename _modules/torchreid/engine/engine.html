@@ -165,26 +165,24 @@
            <div itemprop="articleBody">
             
   <h1>Source code for torchreid.engine.engine</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
-
-<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span>
 <span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 <span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
 <span class="kn">from</span> <span class="nn">torch.utils.tensorboard</span> <span class="k">import</span> <span class="n">SummaryWriter</span>
 
-<span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">AverageMeter</span><span class="p">,</span> <span class="n">visualize_ranked_results</span><span class="p">,</span> <span class="n">save_checkpoint</span><span class="p">,</span> <span class="n">re_ranking</span>
-<span class="kn">from</span> <span class="nn">torchreid.losses</span> <span class="k">import</span> <span class="n">DeepSupervision</span>
 <span class="kn">from</span> <span class="nn">torchreid</span> <span class="k">import</span> <span class="n">metrics</span>
+<span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">AverageMeter</span><span class="p">,</span> <span class="n">re_ranking</span><span class="p">,</span> <span class="n">save_checkpoint</span><span class="p">,</span> <span class="n">visualize_ranked_results</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">torchreid.losses</span> <span class="k">import</span> <span class="n">DeepSupervision</span>
 
 
 <div class="viewcode-block" id="Engine"><a class="viewcode-back" href="../../../pkg/engine.html#torchreid.engine.engine.Engine">[docs]</a><span class="k">class</span> <span class="nc">Engine</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;A generic base Engine class for both image- and video-reid.</span>
 
 <span class="sd">    Args:</span>
@@ -196,7 +194,14 @@
 <span class="sd">        use_gpu (bool, optional): use gpu. Default is True.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamanager</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">datamanager</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">,</span>
+        <span class="n">optimizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">scheduler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span> <span class="o">=</span> <span class="n">datamanager</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizer</span>
@@ -257,7 +262,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">visrank</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">test_only</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;visrank can be set to True only if test_only=True&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;visrank can be set to True only if test_only=True&#39;</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">test_only</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="p">(</span>
@@ -288,8 +295,10 @@
                 <span class="n">fixbase_epoch</span><span class="o">=</span><span class="n">fixbase_epoch</span><span class="p">,</span>
                 <span class="n">open_layers</span><span class="o">=</span><span class="n">open_layers</span>
             <span class="p">)</span>
-            
-            <span class="k">if</span> <span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;=</span><span class="n">start_eval</span> <span class="ow">and</span> <span class="n">eval_freq</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">eval_freq</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">!=</span><span class="n">max_epoch</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">start_eval</span> <span class="ow">and</span> <span class="n">eval_freq</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span>
+                <span class="n">epoch</span><span class="o">+</span><span class="mi">1</span>
+            <span class="p">)</span> <span class="o">%</span> <span class="n">eval_freq</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="n">max_epoch</span><span class="p">:</span>
                 <span class="n">rank1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="p">(</span>
                     <span class="n">epoch</span><span class="p">,</span>
                     <span class="n">dist_metric</span><span class="o">=</span><span class="n">dist_metric</span><span class="p">,</span>
@@ -364,7 +373,7 @@
 <span class="sd">            but not a must. Please refer to the source code for more details.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">targets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_loader</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        
+
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
             <span class="n">domain</span> <span class="o">=</span> <span class="s1">&#39;source&#39;</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span><span class="n">sources</span> <span class="k">else</span> <span class="s1">&#39;target&#39;</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;##### Evaluating </span><span class="si">{}</span><span class="s1"> (</span><span class="si">{}</span><span class="s1">) #####&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">domain</span><span class="p">))</span>
@@ -384,7 +393,7 @@
                 <span class="n">ranks</span><span class="o">=</span><span class="n">ranks</span><span class="p">,</span>
                 <span class="n">rerank</span><span class="o">=</span><span class="n">rerank</span>
             <span class="p">)</span>
-        
+
         <span class="k">return</span> <span class="n">rank1</span></div>
 
     <span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
@@ -438,7 +447,9 @@
             <span class="n">qf</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">qf</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">gf</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">gf</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Computing distance matrix with metric=</span><span class="si">{}</span><span class="s1"> ...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dist_metric</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s1">&#39;Computing distance matrix with metric=</span><span class="si">{}</span><span class="s1"> ...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dist_metric</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="n">distmat</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">compute_distance_matrix</span><span class="p">(</span><span class="n">qf</span><span class="p">,</span> <span class="n">gf</span><span class="p">,</span> <span class="n">dist_metric</span><span class="p">)</span>
         <span class="n">distmat</span> <span class="o">=</span> <span class="n">distmat</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
 
@@ -462,16 +473,17 @@
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mAP: </span><span class="si">{:.1%}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mAP</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;CMC curve&#39;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranks</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Rank-</span><span class="si">{:&lt;3}</span><span class="s1">: </span><span class="si">{:.1%}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">cmc</span><span class="p">[</span><span class="n">r</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Rank-</span><span class="si">{:&lt;3}</span><span class="s1">: </span><span class="si">{:.1%}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">cmc</span><span class="p">[</span><span class="n">r</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]))</span>
 
         <span class="k">if</span> <span class="n">visrank</span><span class="p">:</span>
             <span class="n">visualize_ranked_results</span><span class="p">(</span>
                 <span class="n">distmat</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span><span class="n">return_query_and_gallery_by_name</span><span class="p">(</span><span class="n">dataset_name</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span>
+                <span class="n">return_query_and_gallery_by_name</span><span class="p">(</span><span class="n">dataset_name</span><span class="p">),</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span><span class="n">data_type</span><span class="p">,</span>
                 <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
                 <span class="n">height</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
-                <span class="n">save_dir</span><span class="o">=</span><span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="s1">&#39;visrank_&#39;</span><span class="o">+</span><span class="n">dataset_name</span><span class="p">),</span>
+                <span class="n">save_dir</span><span class="o">=</span><span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="s1">&#39;visrank_&#39;</span> <span class="o">+</span> <span class="n">dataset_name</span><span class="p">),</span>
                 <span class="n">topk</span><span class="o">=</span><span class="n">visrank_topk</span>
             <span class="p">)</span>
 
@@ -500,12 +512,16 @@
         <span class="k">return</span> <span class="n">imgs</span><span class="p">,</span> <span class="n">pids</span><span class="p">,</span> <span class="n">camids</span>
 
     <span class="k">def</span> <span class="nf">_save_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">rank1</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">,</span> <span class="n">is_best</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="n">save_checkpoint</span><span class="p">({</span>
-            <span class="s1">&#39;state_dict&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
-            <span class="s1">&#39;epoch&#39;</span><span class="p">:</span> <span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="s1">&#39;rank1&#39;</span><span class="p">:</span> <span class="n">rank1</span><span class="p">,</span>
-            <span class="s1">&#39;optimizer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
-        <span class="p">},</span> <span class="n">save_dir</span><span class="p">,</span> <span class="n">is_best</span><span class="o">=</span><span class="n">is_best</span><span class="p">)</span></div>
+        <span class="n">save_checkpoint</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;state_dict&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+                <span class="s1">&#39;epoch&#39;</span><span class="p">:</span> <span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="s1">&#39;rank1&#39;</span><span class="p">:</span> <span class="n">rank1</span><span class="p">,</span>
+                <span class="s1">&#39;optimizer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+            <span class="p">},</span>
+            <span class="n">save_dir</span><span class="p">,</span>
+            <span class="n">is_best</span><span class="o">=</span><span class="n">is_best</span>
+        <span class="p">)</span></div>
 </pre></div>
 
            </div>

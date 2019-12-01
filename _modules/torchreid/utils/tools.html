@@ -165,26 +165,24 @@
            <div itemprop="articleBody">
             
   <h1>Source code for torchreid.utils.tools</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
-
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mkdir_if_missing&#39;</span><span class="p">,</span> <span class="s1">&#39;check_isfile&#39;</span><span class="p">,</span> <span class="s1">&#39;read_json&#39;</span><span class="p">,</span> <span class="s1">&#39;write_json&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;set_random_seed&#39;</span><span class="p">,</span> <span class="s1">&#39;download_url&#39;</span><span class="p">,</span> <span class="s1">&#39;read_image&#39;</span><span class="p">,</span> <span class="s1">&#39;collect_env_info&#39;</span><span class="p">]</span>
-
-<span class="kn">import</span> <span class="nn">sys</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">errno</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">PIL</span>
+<span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="k">import</span> <span class="n">Image</span>
 
-<span class="kn">import</span> <span class="nn">torch</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;mkdir_if_missing&#39;</span><span class="p">,</span> <span class="s1">&#39;check_isfile&#39;</span><span class="p">,</span> <span class="s1">&#39;read_json&#39;</span><span class="p">,</span> <span class="s1">&#39;write_json&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;set_random_seed&#39;</span><span class="p">,</span> <span class="s1">&#39;download_url&#39;</span><span class="p">,</span> <span class="s1">&#39;read_image&#39;</span><span class="p">,</span> <span class="s1">&#39;collect_env_info&#39;</span>
+<span class="p">]</span>
 
 
 <div class="viewcode-block" id="mkdir_if_missing"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.tools.mkdir_if_missing">[docs]</a><span class="k">def</span> <span class="nf">mkdir_if_missing</span><span class="p">(</span><span class="n">dirname</span><span class="p">):</span>
@@ -251,10 +249,12 @@
             <span class="k">return</span>
         <span class="n">duration</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
         <span class="n">progress_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">count</span> <span class="o">*</span> <span class="n">block_size</span><span class="p">)</span>
-        <span class="n">speed</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">progress_size</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span> <span class="o">*</span> <span class="n">duration</span><span class="p">))</span>
+        <span class="n">speed</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">progress_size</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span><span class="o">*</span><span class="n">duration</span><span class="p">))</span>
         <span class="n">percent</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">count</span> <span class="o">*</span> <span class="n">block_size</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">/</span> <span class="n">total_size</span><span class="p">)</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">...</span><span class="si">%d%%</span><span class="s1">, </span><span class="si">%d</span><span class="s1"> MB, </span><span class="si">%d</span><span class="s1"> KB/s, </span><span class="si">%d</span><span class="s1"> seconds passed&#39;</span> <span class="o">%</span>
-                        <span class="p">(</span><span class="n">percent</span><span class="p">,</span> <span class="n">progress_size</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">),</span> <span class="n">speed</span><span class="p">,</span> <span class="n">duration</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="s1">&#39;</span><span class="se">\r</span><span class="s1">...</span><span class="si">%d%%</span><span class="s1">, </span><span class="si">%d</span><span class="s1"> MB, </span><span class="si">%d</span><span class="s1"> KB/s, </span><span class="si">%d</span><span class="s1"> seconds passed&#39;</span> <span class="o">%</span>
+            <span class="p">(</span><span class="n">percent</span><span class="p">,</span> <span class="n">progress_size</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">),</span> <span class="n">speed</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 
     <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">_reporthook</span><span class="p">)</span>
@@ -278,7 +278,10 @@
             <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
             <span class="n">got_img</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;IOError incurred when reading &quot;</span><span class="si">{}</span><span class="s1">&quot;. Will redo. Don</span><span class="se">\&#39;</span><span class="s1">t worry. Just chill.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s1">&#39;IOError incurred when reading &quot;</span><span class="si">{}</span><span class="s1">&quot;. Will redo. Don</span><span class="se">\&#39;</span><span class="s1">t worry. Just chill.&#39;</span>
+                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="p">)</span>
     <span class="k">return</span> <span class="n">img</span></div>
 
 

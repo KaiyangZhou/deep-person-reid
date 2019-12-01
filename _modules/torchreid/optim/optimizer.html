@@ -165,35 +165,31 @@
            <div itemprop="articleBody">
             
   <h1>Source code for torchreid.optim.optimizer</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
-
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 
 <span class="kn">from</span> <span class="nn">.radam</span> <span class="k">import</span> <span class="n">RAdam</span>
 
-
 <span class="n">AVAI_OPTIMS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span> <span class="s1">&#39;amsgrad&#39;</span><span class="p">,</span> <span class="s1">&#39;sgd&#39;</span><span class="p">,</span> <span class="s1">&#39;rmsprop&#39;</span><span class="p">,</span> <span class="s1">&#39;radam&#39;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="build_optimizer"><a class="viewcode-back" href="../../../pkg/optim.html#torchreid.optim.optimizer.build_optimizer">[docs]</a><span class="k">def</span> <span class="nf">build_optimizer</span><span class="p">(</span>
-        <span class="n">model</span><span class="p">,</span>
-        <span class="n">optim</span><span class="o">=</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span>
-        <span class="n">lr</span><span class="o">=</span><span class="mf">0.0003</span><span class="p">,</span>
-        <span class="n">weight_decay</span><span class="o">=</span><span class="mf">5e-04</span><span class="p">,</span>
-        <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
-        <span class="n">sgd_dampening</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-        <span class="n">sgd_nesterov</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">rmsprop_alpha</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span>
-        <span class="n">adam_beta1</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
-        <span class="n">adam_beta2</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span>
-        <span class="n">staged_lr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">new_layers</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
-        <span class="n">base_lr_mult</span><span class="o">=</span><span class="mf">0.1</span>
-    <span class="p">):</span>
+    <span class="n">model</span><span class="p">,</span>
+    <span class="n">optim</span><span class="o">=</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span>
+    <span class="n">lr</span><span class="o">=</span><span class="mf">0.0003</span><span class="p">,</span>
+    <span class="n">weight_decay</span><span class="o">=</span><span class="mf">5e-04</span><span class="p">,</span>
+    <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+    <span class="n">sgd_dampening</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">sgd_nesterov</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">rmsprop_alpha</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span>
+    <span class="n">adam_beta1</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+    <span class="n">adam_beta2</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span>
+    <span class="n">staged_lr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">new_layers</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">base_lr_mult</span><span class="o">=</span><span class="mf">0.1</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A function wrapper for building an optimizer.</span>
 
 <span class="sd">    Args:</span>
@@ -235,34 +231,47 @@
 <span class="sd">        &gt;&gt;&gt; )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">optim</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">AVAI_OPTIMS</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unsupported optim: </span><span class="si">{}</span><span class="s1">. Must be one of </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">optim</span><span class="p">,</span> <span class="n">AVAI_OPTIMS</span><span class="p">))</span>
-    
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Unsupported optim: </span><span class="si">{}</span><span class="s1">. Must be one of </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">optim</span><span class="p">,</span> <span class="n">AVAI_OPTIMS</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;model given to build_optimizer must be an instance of nn.Module&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s1">&#39;model given to build_optimizer must be an instance of nn.Module&#39;</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">staged_lr</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_layers</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">new_layers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;new_layers is empty, therefore, staged_lr is useless&#39;</span><span class="p">)</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s1">&#39;new_layers is empty, therefore, staged_lr is useless&#39;</span>
+                <span class="p">)</span>
             <span class="n">new_layers</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_layers</span><span class="p">]</span>
-        
+
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">DataParallel</span><span class="p">):</span>
             <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">module</span>
 
         <span class="n">base_params</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">base_layers</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">new_params</span> <span class="o">=</span> <span class="p">[]</span>
-        
+
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">named_children</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">new_layers</span><span class="p">:</span>
                 <span class="n">new_params</span> <span class="o">+=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">parameters</span><span class="p">()]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">base_params</span> <span class="o">+=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">parameters</span><span class="p">()]</span>
                 <span class="n">base_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        
+
         <span class="n">param_groups</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">base_params</span><span class="p">,</span> <span class="s1">&#39;lr&#39;</span><span class="p">:</span> <span class="n">lr</span> <span class="o">*</span> <span class="n">base_lr_mult</span><span class="p">},</span>
-            <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">new_params</span><span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">base_params</span><span class="p">,</span>
+                <span class="s1">&#39;lr&#39;</span><span class="p">:</span> <span class="n">lr</span> <span class="o">*</span> <span class="n">base_lr_mult</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">new_params</span>
+            <span class="p">},</span>
         <span class="p">]</span>
 
     <span class="k">else</span><span class="p">:</span>

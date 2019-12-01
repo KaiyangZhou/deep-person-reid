@@ -165,13 +165,10 @@
            <div itemprop="articleBody">
             
   <h1>Source code for torchreid.metrics.rank</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
-
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">torchreid.metrics.rank_cylib.rank_cy</span> <span class="k">import</span> <span class="n">evaluate_cy</span>
@@ -191,11 +188,14 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">num_repeats</span> <span class="o">=</span> <span class="mi">10</span>
     <span class="n">num_q</span><span class="p">,</span> <span class="n">num_g</span> <span class="o">=</span> <span class="n">distmat</span><span class="o">.</span><span class="n">shape</span>
-    
+
     <span class="k">if</span> <span class="n">num_g</span> <span class="o">&lt;</span> <span class="n">max_rank</span><span class="p">:</span>
         <span class="n">max_rank</span> <span class="o">=</span> <span class="n">num_g</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Note: number of gallery samples is quite small, got </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_g</span><span class="p">))</span>
-    
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s1">&#39;Note: number of gallery samples is quite small, got </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span>
+            <span class="nb">format</span><span class="p">(</span><span class="n">num_g</span><span class="p">)</span>
+        <span class="p">)</span>
+
     <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">distmat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">matches</span> <span class="o">=</span> <span class="p">(</span><span class="n">g_pids</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="o">==</span> <span class="n">q_pids</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
 
@@ -203,7 +203,7 @@
     <span class="n">all_cmc</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">all_AP</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">num_valid_q</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c1"># number of valid query</span>
-    
+
     <span class="k">for</span> <span class="n">q_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_q</span><span class="p">):</span>
         <span class="c1"># get query pid and camid</span>
         <span class="n">q_pid</span> <span class="o">=</span> <span class="n">q_pids</span><span class="p">[</span><span class="n">q_idx</span><span class="p">]</span>
@@ -215,7 +215,8 @@
         <span class="n">keep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">invert</span><span class="p">(</span><span class="n">remove</span><span class="p">)</span>
 
         <span class="c1"># compute cmc curve</span>
-        <span class="n">raw_cmc</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="n">q_idx</span><span class="p">][</span><span class="n">keep</span><span class="p">]</span> <span class="c1"># binary vector, positions with value 1 are correct matches</span>
+        <span class="n">raw_cmc</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="n">q_idx</span><span class="p">][</span>
+            <span class="n">keep</span><span class="p">]</span> <span class="c1"># binary vector, positions with value 1 are correct matches</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">raw_cmc</span><span class="p">):</span>
             <span class="c1"># this condition is true when query identity does not appear in gallery</span>
             <span class="k">continue</span>
@@ -236,7 +237,7 @@
             <span class="n">_cmc</span> <span class="o">=</span> <span class="n">masked_raw_cmc</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
             <span class="n">_cmc</span><span class="p">[</span><span class="n">_cmc</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="n">cmc</span> <span class="o">+=</span> <span class="n">_cmc</span><span class="p">[:</span><span class="n">max_rank</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-        
+
         <span class="n">cmc</span> <span class="o">/=</span> <span class="n">num_repeats</span>
         <span class="n">all_cmc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmc</span><span class="p">)</span>
         <span class="c1"># compute AP</span>
@@ -262,11 +263,14 @@
 <span class="sd">    Key: for each query identity, its gallery images from the same camera view are discarded.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">num_q</span><span class="p">,</span> <span class="n">num_g</span> <span class="o">=</span> <span class="n">distmat</span><span class="o">.</span><span class="n">shape</span>
-    
+
     <span class="k">if</span> <span class="n">num_g</span> <span class="o">&lt;</span> <span class="n">max_rank</span><span class="p">:</span>
         <span class="n">max_rank</span> <span class="o">=</span> <span class="n">num_g</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Note: number of gallery samples is quite small, got </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_g</span><span class="p">))</span>
-    
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s1">&#39;Note: number of gallery samples is quite small, got </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span>
+            <span class="nb">format</span><span class="p">(</span><span class="n">num_g</span><span class="p">)</span>
+        <span class="p">)</span>
+
     <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">distmat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">matches</span> <span class="o">=</span> <span class="p">(</span><span class="n">g_pids</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="o">==</span> <span class="n">q_pids</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
 
@@ -274,7 +278,7 @@
     <span class="n">all_cmc</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">all_AP</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">num_valid_q</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c1"># number of valid query</span>
-    
+
     <span class="k">for</span> <span class="n">q_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_q</span><span class="p">):</span>
         <span class="c1"># get query pid and camid</span>
         <span class="n">q_pid</span> <span class="o">=</span> <span class="n">q_pids</span><span class="p">[</span><span class="n">q_idx</span><span class="p">]</span>
@@ -286,7 +290,8 @@
         <span class="n">keep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">invert</span><span class="p">(</span><span class="n">remove</span><span class="p">)</span>
 
         <span class="c1"># compute cmc curve</span>
-        <span class="n">raw_cmc</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="n">q_idx</span><span class="p">][</span><span class="n">keep</span><span class="p">]</span> <span class="c1"># binary vector, positions with value 1 are correct matches</span>
+        <span class="n">raw_cmc</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="n">q_idx</span><span class="p">][</span>
+            <span class="n">keep</span><span class="p">]</span> <span class="c1"># binary vector, positions with value 1 are correct matches</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">raw_cmc</span><span class="p">):</span>
             <span class="c1"># this condition is true when query identity does not appear in gallery</span>
             <span class="k">continue</span>
@@ -315,15 +320,29 @@
     <span class="k">return</span> <span class="n">all_cmc</span><span class="p">,</span> <span class="n">mAP</span>
 
 
-<span class="k">def</span> <span class="nf">evaluate_py</span><span class="p">(</span><span class="n">distmat</span><span class="p">,</span> <span class="n">q_pids</span><span class="p">,</span> <span class="n">g_pids</span><span class="p">,</span> <span class="n">q_camids</span><span class="p">,</span> <span class="n">g_camids</span><span class="p">,</span> <span class="n">max_rank</span><span class="p">,</span> <span class="n">use_metric_cuhk03</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">evaluate_py</span><span class="p">(</span>
+    <span class="n">distmat</span><span class="p">,</span> <span class="n">q_pids</span><span class="p">,</span> <span class="n">g_pids</span><span class="p">,</span> <span class="n">q_camids</span><span class="p">,</span> <span class="n">g_camids</span><span class="p">,</span> <span class="n">max_rank</span><span class="p">,</span> <span class="n">use_metric_cuhk03</span>
+<span class="p">):</span>
     <span class="k">if</span> <span class="n">use_metric_cuhk03</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">eval_cuhk03</span><span class="p">(</span><span class="n">distmat</span><span class="p">,</span> <span class="n">q_pids</span><span class="p">,</span> <span class="n">g_pids</span><span class="p">,</span> <span class="n">q_camids</span><span class="p">,</span> <span class="n">g_camids</span><span class="p">,</span> <span class="n">max_rank</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">eval_cuhk03</span><span class="p">(</span>
+            <span class="n">distmat</span><span class="p">,</span> <span class="n">q_pids</span><span class="p">,</span> <span class="n">g_pids</span><span class="p">,</span> <span class="n">q_camids</span><span class="p">,</span> <span class="n">g_camids</span><span class="p">,</span> <span class="n">max_rank</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">eval_market1501</span><span class="p">(</span><span class="n">distmat</span><span class="p">,</span> <span class="n">q_pids</span><span class="p">,</span> <span class="n">g_pids</span><span class="p">,</span> <span class="n">q_camids</span><span class="p">,</span> <span class="n">g_camids</span><span class="p">,</span> <span class="n">max_rank</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">eval_market1501</span><span class="p">(</span>
+            <span class="n">distmat</span><span class="p">,</span> <span class="n">q_pids</span><span class="p">,</span> <span class="n">g_pids</span><span class="p">,</span> <span class="n">q_camids</span><span class="p">,</span> <span class="n">g_camids</span><span class="p">,</span> <span class="n">max_rank</span>
+        <span class="p">)</span>
 
 
-<div class="viewcode-block" id="evaluate_rank"><a class="viewcode-back" href="../../../pkg/metrics.html#torchreid.metrics.rank.evaluate_rank">[docs]</a><span class="k">def</span> <span class="nf">evaluate_rank</span><span class="p">(</span><span class="n">distmat</span><span class="p">,</span> <span class="n">q_pids</span><span class="p">,</span> <span class="n">g_pids</span><span class="p">,</span> <span class="n">q_camids</span><span class="p">,</span> <span class="n">g_camids</span><span class="p">,</span> <span class="n">max_rank</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
-                  <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_cython</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="evaluate_rank"><a class="viewcode-back" href="../../../pkg/metrics.html#torchreid.metrics.rank.evaluate_rank">[docs]</a><span class="k">def</span> <span class="nf">evaluate_rank</span><span class="p">(</span>
+    <span class="n">distmat</span><span class="p">,</span>
+    <span class="n">q_pids</span><span class="p">,</span>
+    <span class="n">g_pids</span><span class="p">,</span>
+    <span class="n">q_camids</span><span class="p">,</span>
+    <span class="n">g_camids</span><span class="p">,</span>
+    <span class="n">max_rank</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">use_cython</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Evaluates CMC rank.</span>
 
 <span class="sd">    Args:</span>
@@ -344,9 +363,15 @@
 <span class="sd">            by more than 10x. This requires Cython to be installed.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">use_cython</span> <span class="ow">and</span> <span class="n">IS_CYTHON_AVAI</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">evaluate_cy</span><span class="p">(</span><span class="n">distmat</span><span class="p">,</span> <span class="n">q_pids</span><span class="p">,</span> <span class="n">g_pids</span><span class="p">,</span> <span class="n">q_camids</span><span class="p">,</span> <span class="n">g_camids</span><span class="p">,</span> <span class="n">max_rank</span><span class="p">,</span> <span class="n">use_metric_cuhk03</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">evaluate_cy</span><span class="p">(</span>
+            <span class="n">distmat</span><span class="p">,</span> <span class="n">q_pids</span><span class="p">,</span> <span class="n">g_pids</span><span class="p">,</span> <span class="n">q_camids</span><span class="p">,</span> <span class="n">g_camids</span><span class="p">,</span> <span class="n">max_rank</span><span class="p">,</span>
+            <span class="n">use_metric_cuhk03</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">evaluate_py</span><span class="p">(</span><span class="n">distmat</span><span class="p">,</span> <span class="n">q_pids</span><span class="p">,</span> <span class="n">g_pids</span><span class="p">,</span> <span class="n">q_camids</span><span class="p">,</span> <span class="n">g_camids</span><span class="p">,</span> <span class="n">max_rank</span><span class="p">,</span> <span class="n">use_metric_cuhk03</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">evaluate_py</span><span class="p">(</span>
+            <span class="n">distmat</span><span class="p">,</span> <span class="n">q_pids</span><span class="p">,</span> <span class="n">g_pids</span><span class="p">,</span> <span class="n">q_camids</span><span class="p">,</span> <span class="n">g_camids</span><span class="p">,</span> <span class="n">max_rank</span><span class="p">,</span>
+            <span class="n">use_metric_cuhk03</span>
+        <span class="p">)</span></div>
 </pre></div>
 
            </div>

@@ -165,20 +165,17 @@
            <div itemprop="articleBody">
             
   <h1>Source code for torchreid.data.transforms</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
-
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="k">import</span> <span class="n">Image</span>
-<span class="kn">import</span> <span class="nn">random</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span>
 <span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">deque</span>
-
 <span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="k">import</span> <span class="n">Image</span>
 <span class="kn">from</span> <span class="nn">torchvision.transforms</span> <span class="k">import</span> <span class="o">*</span>
 
 
 <div class="viewcode-block" id="Random2DTranslation"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.transforms.Random2DTranslation">[docs]</a><span class="k">class</span> <span class="nc">Random2DTranslation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;Randomly translates the input image with a probability.</span>
 
 <span class="sd">    Specifically, given a predefined shape (height, width), the input is first</span>
@@ -193,7 +190,7 @@
 <span class="sd">        interpolation (int, optional): desired interpolation. Default is</span>
 <span class="sd">            ``PIL.Image.BILINEAR``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">BILINEAR</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
@@ -203,18 +200,22 @@
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">img</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span><span class="p">)</span>
-        
-        <span class="n">new_width</span><span class="p">,</span> <span class="n">new_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="mf">1.125</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="mf">1.125</span><span class="p">))</span>
+
+        <span class="n">new_width</span><span class="p">,</span> <span class="n">new_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="mf">1.125</span><span class="p">)</span>
+                                    <span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="mf">1.125</span><span class="p">))</span>
         <span class="n">resized_img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="n">new_width</span><span class="p">,</span> <span class="n">new_height</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span><span class="p">)</span>
         <span class="n">x_maxrange</span> <span class="o">=</span> <span class="n">new_width</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
         <span class="n">y_maxrange</span> <span class="o">=</span> <span class="n">new_height</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
         <span class="n">x1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x_maxrange</span><span class="p">)))</span>
         <span class="n">y1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y_maxrange</span><span class="p">)))</span>
-        <span class="n">croped_img</span> <span class="o">=</span> <span class="n">resized_img</span><span class="o">.</span><span class="n">crop</span><span class="p">((</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">y1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">))</span>
+        <span class="n">croped_img</span> <span class="o">=</span> <span class="n">resized_img</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">y1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">croped_img</span></div>
 
 
 <div class="viewcode-block" id="RandomErasing"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.transforms.RandomErasing">[docs]</a><span class="k">class</span> <span class="nc">RandomErasing</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;Randomly erases an image patch.</span>
 
 <span class="sd">    Origin: `&lt;https://github.com/zhunzhong07/Random-Erasing&gt;`_</span>
@@ -230,23 +231,30 @@
 <span class="sd">        r1 (float, optional): min aspect ratio.</span>
 <span class="sd">        mean (list, optional): erasing value.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probability</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">sl</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">sh</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">r1</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="p">[</span><span class="mf">0.4914</span><span class="p">,</span> <span class="mf">0.4822</span><span class="p">,</span> <span class="mf">0.4465</span><span class="p">]):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">probability</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">sl</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>
+        <span class="n">sh</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+        <span class="n">r1</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+        <span class="n">mean</span><span class="o">=</span><span class="p">[</span><span class="mf">0.4914</span><span class="p">,</span> <span class="mf">0.4822</span><span class="p">,</span> <span class="mf">0.4465</span><span class="p">]</span>
+    <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">probability</span> <span class="o">=</span> <span class="n">probability</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mean</span> <span class="o">=</span> <span class="n">mean</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sl</span> <span class="o">=</span> <span class="n">sl</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sh</span> <span class="o">=</span> <span class="n">sh</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">r1</span> <span class="o">=</span> <span class="n">r1</span>
-       
+
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">img</span>
 
         <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
             <span class="n">area</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">2</span><span class="p">]</span>
-       
+
             <span class="n">target_area</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sh</span><span class="p">)</span> <span class="o">*</span> <span class="n">area</span>
-            <span class="n">aspect_ratio</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r1</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">r1</span><span class="p">)</span>
+            <span class="n">aspect_ratio</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r1</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">r1</span><span class="p">)</span>
 
             <span class="n">h</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">target_area</span> <span class="o">*</span> <span class="n">aspect_ratio</span><span class="p">)))</span>
             <span class="n">w</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">target_area</span> <span class="o">/</span> <span class="n">aspect_ratio</span><span class="p">)))</span>
@@ -255,17 +263,18 @@
                 <span class="n">x1</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">h</span><span class="p">)</span>
                 <span class="n">y1</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">w</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                    <span class="n">img</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span><span class="n">x1</span><span class="o">+</span><span class="n">h</span><span class="p">,</span> <span class="n">y1</span><span class="p">:</span><span class="n">y1</span><span class="o">+</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="n">img</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span><span class="n">x1</span><span class="o">+</span><span class="n">h</span><span class="p">,</span> <span class="n">y1</span><span class="p">:</span><span class="n">y1</span><span class="o">+</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                    <span class="n">img</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span><span class="n">x1</span><span class="o">+</span><span class="n">h</span><span class="p">,</span> <span class="n">y1</span><span class="p">:</span><span class="n">y1</span><span class="o">+</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="n">img</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span><span class="n">x1</span> <span class="o">+</span> <span class="n">h</span><span class="p">,</span> <span class="n">y1</span><span class="p">:</span><span class="n">y1</span> <span class="o">+</span> <span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">img</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span><span class="n">x1</span> <span class="o">+</span> <span class="n">h</span><span class="p">,</span> <span class="n">y1</span><span class="p">:</span><span class="n">y1</span> <span class="o">+</span> <span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">img</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span><span class="n">x1</span> <span class="o">+</span> <span class="n">h</span><span class="p">,</span> <span class="n">y1</span><span class="p">:</span><span class="n">y1</span> <span class="o">+</span> <span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">img</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span><span class="n">x1</span><span class="o">+</span><span class="n">h</span><span class="p">,</span> <span class="n">y1</span><span class="p">:</span><span class="n">y1</span><span class="o">+</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">img</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span><span class="n">x1</span> <span class="o">+</span> <span class="n">h</span><span class="p">,</span> <span class="n">y1</span><span class="p">:</span><span class="n">y1</span> <span class="o">+</span> <span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="k">return</span> <span class="n">img</span>
 
         <span class="k">return</span> <span class="n">img</span></div>
 
 
 <div class="viewcode-block" id="ColorAugmentation"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.transforms.ColorAugmentation">[docs]</a><span class="k">class</span> <span class="nc">ColorAugmentation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;Randomly alters the intensities of RGB channels.</span>
 
 <span class="sd">    Reference:</span>
@@ -276,14 +285,16 @@
 <span class="sd">        p (float, optional): probability that this operation takes place.</span>
 <span class="sd">            Default is 0.5.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eig_vec</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([</span>
-            <span class="p">[</span><span class="mf">0.4009</span><span class="p">,</span> <span class="mf">0.7192</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5675</span><span class="p">],</span>
-            <span class="p">[</span><span class="o">-</span><span class="mf">0.8140</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0045</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5808</span><span class="p">],</span>
-            <span class="p">[</span><span class="mf">0.4203</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.6948</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5836</span><span class="p">],</span>
-        <span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eig_vec</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">[</span><span class="mf">0.4009</span><span class="p">,</span> <span class="mf">0.7192</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5675</span><span class="p">],</span>
+                <span class="p">[</span><span class="o">-</span><span class="mf">0.8140</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0045</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5808</span><span class="p">],</span>
+                <span class="p">[</span><span class="mf">0.4203</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.6948</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5836</span><span class="p">],</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">eig_val</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([[</span><span class="mf">0.2175</span><span class="p">,</span> <span class="mf">0.0188</span><span class="p">,</span> <span class="mf">0.0045</span><span class="p">]])</span>
 
     <span class="k">def</span> <span class="nf">_check_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensor</span><span class="p">):</span>
@@ -299,6 +310,7 @@
 
 
 <div class="viewcode-block" id="RandomPatch"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.transforms.RandomPatch">[docs]</a><span class="k">class</span> <span class="nc">RandomPatch</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;Random patch data augmentation.</span>
 
 <span class="sd">    There is a patch pool that stores randomly extracted pathces from person images.</span>
@@ -313,28 +325,39 @@
 <span class="sd">        - Zhou et al. Learning Generalisable Omni-Scale Representations</span>
 <span class="sd">          for Person Re-Identification. arXiv preprint, 2019.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prob_happen</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">pool_capacity</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span> <span class="n">min_sample_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-                 <span class="n">patch_min_area</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">patch_max_area</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">patch_min_ratio</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-                 <span class="n">prob_rotate</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">prob_flip_leftright</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-                 <span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">prob_happen</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">pool_capacity</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span>
+        <span class="n">min_sample_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">patch_min_area</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+        <span class="n">patch_max_area</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">patch_min_ratio</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">prob_rotate</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">prob_flip_leftright</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">prob_happen</span> <span class="o">=</span> <span class="n">prob_happen</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">patch_min_area</span> <span class="o">=</span> <span class="n">patch_min_area</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">patch_max_area</span> <span class="o">=</span> <span class="n">patch_max_area</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">patch_min_ratio</span> <span class="o">=</span> <span class="n">patch_min_ratio</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">prob_rotate</span> <span class="o">=</span> <span class="n">prob_rotate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">prob_flip_leftright</span> <span class="o">=</span> <span class="n">prob_flip_leftright</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">patchpool</span> <span class="o">=</span> <span class="n">deque</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="n">pool_capacity</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">min_sample_size</span> <span class="o">=</span> <span class="n">min_sample_size</span>
 
     <span class="k">def</span> <span class="nf">generate_wh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">):</span>
         <span class="n">area</span> <span class="o">=</span> <span class="n">W</span> <span class="o">*</span> <span class="n">H</span>
         <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
-            <span class="n">target_area</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch_min_area</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch_max_area</span><span class="p">)</span> <span class="o">*</span> <span class="n">area</span>
-            <span class="n">aspect_ratio</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch_min_ratio</span><span class="p">,</span> <span class="mf">1.</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">patch_min_ratio</span><span class="p">)</span>
+            <span class="n">target_area</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patch_min_area</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch_max_area</span>
+            <span class="p">)</span> <span class="o">*</span> <span class="n">area</span>
+            <span class="n">aspect_ratio</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patch_min_ratio</span><span class="p">,</span> <span class="mf">1.</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch_min_ratio</span>
+            <span class="p">)</span>
             <span class="n">h</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">target_area</span> <span class="o">*</span> <span class="n">aspect_ratio</span><span class="p">)))</span>
             <span class="n">w</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">target_area</span> <span class="o">/</span> <span class="n">aspect_ratio</span><span class="p">)))</span>
             <span class="k">if</span> <span class="n">w</span> <span class="o">&lt;</span> <span class="n">W</span> <span class="ow">and</span> <span class="n">h</span> <span class="o">&lt;</span> <span class="n">H</span><span class="p">:</span>
@@ -376,8 +399,14 @@
         <span class="k">return</span> <span class="n">img</span></div>
 
 
-<div class="viewcode-block" id="build_transforms"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.transforms.build_transforms">[docs]</a><span class="k">def</span> <span class="nf">build_transforms</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="s1">&#39;random_flip&#39;</span><span class="p">,</span> <span class="n">norm_mean</span><span class="o">=</span><span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">],</span>
-                     <span class="n">norm_std</span><span class="o">=</span><span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="build_transforms"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.transforms.build_transforms">[docs]</a><span class="k">def</span> <span class="nf">build_transforms</span><span class="p">(</span>
+    <span class="n">height</span><span class="p">,</span>
+    <span class="n">width</span><span class="p">,</span>
+    <span class="n">transforms</span><span class="o">=</span><span class="s1">&#39;random_flip&#39;</span><span class="p">,</span>
+    <span class="n">norm_mean</span><span class="o">=</span><span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">],</span>
+    <span class="n">norm_std</span><span class="o">=</span><span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">],</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Builds train and test transform functions.</span>
 
 <span class="sd">    Args:</span>
@@ -391,16 +420,20 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">transforms</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">transforms</span> <span class="o">=</span> <span class="p">[]</span>
-    
+
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transforms</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">transforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">transforms</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transforms</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;transforms must be a list of strings, but found to be </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">transforms</span><span class="p">)))</span>
-    
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;transforms must be a list of strings, but found to be </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="nb">type</span><span class="p">(</span><span class="n">transforms</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">transforms</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">transforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">]</span>
-    
+
     <span class="k">if</span> <span class="n">norm_mean</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">norm_std</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">norm_mean</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">]</span> <span class="c1"># imagenet mean</span>
         <span class="n">norm_std</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">]</span> <span class="c1"># imagenet std</span>
@@ -422,7 +455,9 @@
         <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">RandomPatch</span><span class="p">()]</span>
     <span class="k">if</span> <span class="s1">&#39;color_jitter&#39;</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ color jitter&#39;</span><span class="p">)</span>
-        <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">ColorJitter</span><span class="p">(</span><span class="n">brightness</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">contrast</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">saturation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="mi">0</span><span class="p">)]</span>
+        <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span>
+            <span class="n">ColorJitter</span><span class="p">(</span><span class="n">brightness</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">contrast</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">saturation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">]</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ to torch tensor of range [0, 1]&#39;</span><span class="p">)</span>
     <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">ToTensor</span><span class="p">()]</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ normalization (mean=</span><span class="si">{}</span><span class="s1">, std=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">norm_mean</span><span class="p">,</span> <span class="n">norm_std</span><span class="p">))</span>

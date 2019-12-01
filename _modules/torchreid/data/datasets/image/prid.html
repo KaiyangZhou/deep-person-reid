@@ -165,18 +165,17 @@
            <div itemprop="articleBody">
             
   <h1>Source code for torchreid.data.datasets.image.prid</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
-
-<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span>
 <span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
 
-<span class="kn">from</span> <span class="nn">torchreid.data.datasets</span> <span class="k">import</span> <span class="n">ImageDataset</span>
 <span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">read_json</span><span class="p">,</span> <span class="n">write_json</span>
+
+<span class="kn">from</span> <span class="nn">..dataset</span> <span class="k">import</span> <span class="n">ImageDataset</span>
 
 
 <div class="viewcode-block" id="PRID"><a class="viewcode-back" href="../../../../../pkg/data.html#torchreid.data.datasets.image.prid.PRID">[docs]</a><span class="k">class</span> <span class="nc">PRID</span><span class="p">(</span><span class="n">ImageDataset</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;PRID (single-shot version of prid-2011)</span>
 
 <span class="sd">    Reference:</span>
@@ -199,21 +198,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">download_dataset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset_url</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">cam_a_dir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;prid_2011&#39;</span><span class="p">,</span> <span class="s1">&#39;single_shot&#39;</span><span class="p">,</span> <span class="s1">&#39;cam_a&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cam_b_dir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;prid_2011&#39;</span><span class="p">,</span> <span class="s1">&#39;single_shot&#39;</span><span class="p">,</span> <span class="s1">&#39;cam_b&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cam_a_dir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;prid_2011&#39;</span><span class="p">,</span> <span class="s1">&#39;single_shot&#39;</span><span class="p">,</span> <span class="s1">&#39;cam_a&#39;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cam_b_dir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;prid_2011&#39;</span><span class="p">,</span> <span class="s1">&#39;single_shot&#39;</span><span class="p">,</span> <span class="s1">&#39;cam_b&#39;</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">split_path</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;splits_single_shot.json&#39;</span><span class="p">)</span>
 
-        <span class="n">required_files</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cam_a_dir</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cam_b_dir</span>
-        <span class="p">]</span>
+        <span class="n">required_files</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cam_a_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cam_b_dir</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check_before_run</span><span class="p">(</span><span class="n">required_files</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">prepare_split</span><span class="p">()</span>
         <span class="n">splits</span> <span class="o">=</span> <span class="n">read_json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split_path</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">split_id</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">splits</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;split_id exceeds range, received </span><span class="si">{}</span><span class="s1">, but expected between 0 and </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">split_id</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">splits</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;split_id exceeds range, received </span><span class="si">{}</span><span class="s1">, but expected between 0 and </span><span class="si">{}</span><span class="s1">&#39;</span>
+                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">split_id</span><span class="p">,</span>
+                        <span class="nb">len</span><span class="p">(</span><span class="n">splits</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">)</span>
         <span class="n">split</span> <span class="o">=</span> <span class="n">splits</span><span class="p">[</span><span class="n">split_id</span><span class="p">]</span>
 
         <span class="n">train</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">gallery</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_split</span><span class="p">(</span><span class="n">split</span><span class="p">)</span>
@@ -267,7 +270,7 @@
             <span class="n">img_name</span> <span class="o">=</span> <span class="s1">&#39;person_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.png&#39;</span>
             <span class="n">img_b_path</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_b_dir</span><span class="p">,</span> <span class="n">img_name</span><span class="p">)</span>
             <span class="n">gallery</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">img_b_path</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-        
+
         <span class="k">return</span> <span class="n">train</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">gallery</span></div>
 </pre></div>
 

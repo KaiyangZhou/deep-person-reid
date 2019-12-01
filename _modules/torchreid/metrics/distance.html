@@ -165,12 +165,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for torchreid.metrics.distance</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
 
@@ -197,8 +192,12 @@
     <span class="c1"># check input</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input1</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input2</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">input1</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Expected 2-D tensor, but got </span><span class="si">{}</span><span class="s1">-D&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">input1</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
-    <span class="k">assert</span> <span class="n">input2</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Expected 2-D tensor, but got </span><span class="si">{}</span><span class="s1">-D&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">input2</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
+    <span class="k">assert</span> <span class="n">input1</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Expected 2-D tensor, but got </span><span class="si">{}</span><span class="s1">-D&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">input1</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="k">assert</span> <span class="n">input2</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Expected 2-D tensor, but got </span><span class="si">{}</span><span class="s1">-D&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">input2</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span>
+    <span class="p">)</span>
     <span class="k">assert</span> <span class="n">input1</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">input2</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">metric</span> <span class="o">==</span> <span class="s1">&#39;euclidean&#39;</span><span class="p">:</span>
@@ -210,7 +209,7 @@
             <span class="s1">&#39;Unknown distance metric: </span><span class="si">{}</span><span class="s1">. &#39;</span>
             <span class="s1">&#39;Please choose either &quot;euclidean&quot; or &quot;cosine&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
         <span class="p">)</span>
-    
+
     <span class="k">return</span> <span class="n">distmat</span></div>
 
 

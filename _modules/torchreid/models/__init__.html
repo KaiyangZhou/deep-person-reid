@@ -166,32 +166,28 @@
             
   <h1>Source code for torchreid.models.__init__</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-
 <span class="kn">import</span> <span class="nn">torch</span>
 
-<span class="kn">from</span> <span class="nn">.resnet</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">.resnetmid</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">.resnet_ibn_a</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">.resnet_ibn_b</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">.senet</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">.densenet</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">.inceptionresnetv2</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">.inceptionv4</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">.xception</span> <span class="k">import</span> <span class="o">*</span>
-
-<span class="kn">from</span> <span class="nn">.nasnet</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">.mobilenetv2</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">.shufflenet</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">.squeezenet</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">.shufflenetv2</span> <span class="k">import</span> <span class="o">*</span>
-
-<span class="kn">from</span> <span class="nn">.mudeep</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">.hacnn</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.pcb</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.mlfn</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.hacnn</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.osnet</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.senet</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.mudeep</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.nasnet</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.resnet</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.densenet</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.xception</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.osnet_ain</span> <span class="k">import</span> <span class="o">*</span>
-
+<span class="kn">from</span> <span class="nn">.resnetmid</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.shufflenet</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.squeezenet</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.inceptionv4</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.mobilenetv2</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.resnet_ibn_a</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.resnet_ibn_b</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.shufflenetv2</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.inceptionresnetv2</span> <span class="k">import</span> <span class="o">*</span>
 
 <span class="n">__model_factory</span> <span class="o">=</span> <span class="p">{</span>
     <span class="c1"># image classification models</span>
@@ -256,7 +252,9 @@
     <span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">__model_factory</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
 
 
-<div class="viewcode-block" id="build_model"><a class="viewcode-back" href="../../../pkg/models.html#torchreid.models.__init__.build_model">[docs]</a><span class="k">def</span> <span class="nf">build_model</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="build_model"><a class="viewcode-back" href="../../../pkg/models.html#torchreid.models.__init__.build_model">[docs]</a><span class="k">def</span> <span class="nf">build_model</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A function wrapper for building a model.</span>
 
 <span class="sd">    Args:</span>
@@ -277,7 +275,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">avai_models</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">__model_factory</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
     <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">avai_models</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;Unknown model: </span><span class="si">{}</span><span class="s1">. Must be one of </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">avai_models</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+            <span class="s1">&#39;Unknown model: </span><span class="si">{}</span><span class="s1">. Must be one of </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">avai_models</span><span class="p">)</span>
+        <span class="p">)</span>
     <span class="k">return</span> <span class="n">__model_factory</span><span class="p">[</span><span class="n">name</span><span class="p">](</span>
         <span class="n">num_classes</span><span class="o">=</span><span class="n">num_classes</span><span class="p">,</span>
         <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>

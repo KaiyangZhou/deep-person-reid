@@ -165,21 +165,20 @@
            <div itemprop="articleBody">
             
   <h1>Source code for torchreid.data.datasets.image.ilids</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
-
-<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
-<span class="kn">import</span> <span class="nn">glob</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span>
 <span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
 
-<span class="kn">from</span> <span class="nn">torchreid.data.datasets</span> <span class="k">import</span> <span class="n">ImageDataset</span>
 <span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">read_json</span><span class="p">,</span> <span class="n">write_json</span>
+
+<span class="kn">from</span> <span class="nn">..dataset</span> <span class="k">import</span> <span class="n">ImageDataset</span>
 
 
 <div class="viewcode-block" id="iLIDS"><a class="viewcode-back" href="../../../../../pkg/data.html#torchreid.data.datasets.image.ilids.iLIDS">[docs]</a><span class="k">class</span> <span class="nc">iLIDS</span><span class="p">(</span><span class="n">ImageDataset</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;QMUL-iLIDS.</span>
 
 <span class="sd">    Reference:</span>
@@ -200,18 +199,18 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;i-LIDS_Pedestrian/Persons&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">split_path</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;splits.json&#39;</span><span class="p">)</span>
-        
-        <span class="n">required_files</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span>
-        <span class="p">]</span>
+
+        <span class="n">required_files</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check_before_run</span><span class="p">(</span><span class="n">required_files</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">prepare_split</span><span class="p">()</span>
         <span class="n">splits</span> <span class="o">=</span> <span class="n">read_json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split_path</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">split_id</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">splits</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;split_id exceeds range, received </span><span class="si">{}</span><span class="s1">, but &#39;</span>
-                             <span class="s1">&#39;expected between 0 and </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">split_id</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">splits</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;split_id exceeds range, received </span><span class="si">{}</span><span class="s1">, but &#39;</span>
+                <span class="s1">&#39;expected between 0 and </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">split_id</span><span class="p">,</span>
+                                                   <span class="nb">len</span><span class="p">(</span><span class="n">splits</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">)</span>
         <span class="n">split</span> <span class="o">=</span> <span class="n">splits</span><span class="p">[</span><span class="n">split_id</span><span class="p">]</span>
 
         <span class="n">train</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">gallery</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_split</span><span class="p">(</span><span class="n">split</span><span class="p">)</span>
@@ -221,7 +220,7 @@
     <span class="k">def</span> <span class="nf">prepare_split</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">osp</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split_path</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Creating splits ...&#39;</span><span class="p">)</span>
-            
+
             <span class="n">paths</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="s1">&#39;*.jpg&#39;</span><span class="p">))</span>
             <span class="n">img_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">osp</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">]</span>
             <span class="n">num_imgs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">img_names</span><span class="p">)</span>
@@ -285,7 +284,7 @@
 
     <span class="k">def</span> <span class="nf">parse_img_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img_names</span><span class="p">,</span> <span class="n">pid2label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
-        
+
         <span class="k">for</span> <span class="n">img_name</span> <span class="ow">in</span> <span class="n">img_names</span><span class="p">:</span>
             <span class="n">pid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">img_name</span><span class="p">[:</span><span class="mi">4</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">pid2label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -293,7 +292,7 @@
             <span class="n">camid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">img_name</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">7</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span> <span class="c1"># 0-based</span>
             <span class="n">img_path</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">img_name</span><span class="p">)</span>
             <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">img_path</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">camid</span><span class="p">))</span>
-        
+
         <span class="k">return</span> <span class="n">data</span>
 
     <span class="k">def</span> <span class="nf">process_split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">split</span><span class="p">):</span>

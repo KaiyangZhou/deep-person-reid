@@ -165,28 +165,28 @@
            <div itemprop="articleBody">
             
   <h1>Source code for torchreid.utils.torchtools</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
-
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;save_checkpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;load_checkpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;resume_from_checkpoint&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;open_all_layers&#39;</span><span class="p">,</span> <span class="s1">&#39;open_specified_layers&#39;</span><span class="p">,</span> <span class="s1">&#39;count_num_param&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;load_pretrained_weights&#39;</span><span class="p">]</span>
-
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
-
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 
 <span class="kn">from</span> <span class="nn">.tools</span> <span class="k">import</span> <span class="n">mkdir_if_missing</span>
 
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;save_checkpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;load_checkpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;resume_from_checkpoint&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;open_all_layers&#39;</span><span class="p">,</span> <span class="s1">&#39;open_specified_layers&#39;</span><span class="p">,</span> <span class="s1">&#39;count_num_param&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;load_pretrained_weights&#39;</span>
+<span class="p">]</span>
 
-<div class="viewcode-block" id="save_checkpoint"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.torchtools.save_checkpoint">[docs]</a><span class="k">def</span> <span class="nf">save_checkpoint</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">,</span> <span class="n">is_best</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">remove_module_from_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+<div class="viewcode-block" id="save_checkpoint"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.torchtools.save_checkpoint">[docs]</a><span class="k">def</span> <span class="nf">save_checkpoint</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">,</span> <span class="n">is_best</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">remove_module_from_keys</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Saves checkpoint.</span>
 
 <span class="sd">    Args:</span>
@@ -252,7 +252,9 @@
     <span class="k">except</span> <span class="ne">UnicodeDecodeError</span><span class="p">:</span>
         <span class="n">pickle</span><span class="o">.</span><span class="n">load</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;latin1&quot;</span><span class="p">)</span>
         <span class="n">pickle</span><span class="o">.</span><span class="n">Unpickler</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">Unpickler</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;latin1&quot;</span><span class="p">)</span>
-        <span class="n">checkpoint</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">pickle_module</span><span class="o">=</span><span class="n">pickle</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="n">map_location</span><span class="p">)</span>
+        <span class="n">checkpoint</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+            <span class="n">fpath</span><span class="p">,</span> <span class="n">pickle_module</span><span class="o">=</span><span class="n">pickle</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="n">map_location</span>
+        <span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Unable to load checkpoint from &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fpath</span><span class="p">))</span>
         <span class="k">raise</span>
@@ -292,8 +294,16 @@
     <span class="k">return</span> <span class="n">start_epoch</span></div>
 
 
-<span class="k">def</span> <span class="nf">adjust_learning_rate</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">base_lr</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">stepsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-                         <span class="n">linear_decay</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">final_lr</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_epoch</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">adjust_learning_rate</span><span class="p">(</span>
+    <span class="n">optimizer</span><span class="p">,</span>
+    <span class="n">base_lr</span><span class="p">,</span>
+    <span class="n">epoch</span><span class="p">,</span>
+    <span class="n">stepsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">gamma</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">linear_decay</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">final_lr</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">max_epoch</span><span class="o">=</span><span class="mi">100</span>
+<span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Adjusts learning rate.</span>
 
 <span class="sd">    Deprecated.</span>
@@ -301,11 +311,11 @@
     <span class="k">if</span> <span class="n">linear_decay</span><span class="p">:</span>
         <span class="c1"># linearly decay learning rate from base_lr to final_lr</span>
         <span class="n">frac_done</span> <span class="o">=</span> <span class="n">epoch</span> <span class="o">/</span> <span class="n">max_epoch</span>
-        <span class="n">lr</span> <span class="o">=</span> <span class="n">frac_done</span> <span class="o">*</span> <span class="n">final_lr</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">frac_done</span><span class="p">)</span> <span class="o">*</span> <span class="n">base_lr</span>
+        <span class="n">lr</span> <span class="o">=</span> <span class="n">frac_done</span><span class="o">*</span><span class="n">final_lr</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">frac_done</span><span class="p">)</span> <span class="o">*</span> <span class="n">base_lr</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># decay learning rate by gamma for every stepsize</span>
-        <span class="n">lr</span> <span class="o">=</span> <span class="n">base_lr</span> <span class="o">*</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">**</span> <span class="p">(</span><span class="n">epoch</span> <span class="o">//</span> <span class="n">stepsize</span><span class="p">))</span>
-    
+        <span class="n">lr</span> <span class="o">=</span> <span class="n">base_lr</span> <span class="o">*</span> <span class="p">(</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="n">epoch</span> <span class="o">//</span> <span class="n">stepsize</span><span class="p">))</span>
+
     <span class="k">for</span> <span class="n">param_group</span> <span class="ow">in</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">param_groups</span><span class="p">:</span>
         <span class="n">param_group</span><span class="p">[</span><span class="s1">&#39;lr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lr</span>
 
@@ -355,7 +365,11 @@
         <span class="n">open_layers</span> <span class="o">=</span> <span class="p">[</span><span class="n">open_layers</span><span class="p">]</span>
 
     <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">open_layers</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">layer</span><span class="p">),</span> <span class="s1">&#39;&quot;</span><span class="si">{}</span><span class="s1">&quot; is not an attribute of the model, please provide the correct name&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span>
+            <span class="n">model</span><span class="p">,</span> <span class="n">layer</span>
+        <span class="p">),</span> <span class="s1">&#39;&quot;</span><span class="si">{}</span><span class="s1">&quot; is not an attribute of the model, please provide the correct name&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">layer</span>
+        <span class="p">)</span>
 
     <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">named_children</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">open_layers</span><span class="p">:</span>
@@ -383,17 +397,20 @@
 <span class="sd">        This method is deprecated in favor of</span>
 <span class="sd">        ``torchreid.utils.compute_model_complexity``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;This method is deprecated and will be removed in the future.&#39;</span><span class="p">)</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="s1">&#39;This method is deprecated and will be removed in the future.&#39;</span>
+    <span class="p">)</span>
 
     <span class="n">num_param</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">DataParallel</span><span class="p">):</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">module</span>
 
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;classifier&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">classifier</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span>
+               <span class="s1">&#39;classifier&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">classifier</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
         <span class="c1"># we ignore the classifier because it is unused at test time</span>
         <span class="n">num_param</span> <span class="o">-=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
-    
+
     <span class="k">return</span> <span class="n">num_param</span></div>
 
 
@@ -418,34 +435,41 @@
         <span class="n">state_dict</span> <span class="o">=</span> <span class="n">checkpoint</span><span class="p">[</span><span class="s1">&#39;state_dict&#39;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">state_dict</span> <span class="o">=</span> <span class="n">checkpoint</span>
-    
+
     <span class="n">model_dict</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()</span>
     <span class="n">new_state_dict</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
     <span class="n">matched_layers</span><span class="p">,</span> <span class="n">discarded_layers</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
-    
+
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;module.&#39;</span><span class="p">):</span>
             <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="p">[</span><span class="mi">7</span><span class="p">:]</span> <span class="c1"># discard module.</span>
-        
+
         <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">model_dict</span> <span class="ow">and</span> <span class="n">model_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="n">v</span><span class="o">.</span><span class="n">size</span><span class="p">():</span>
             <span class="n">new_state_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
             <span class="n">matched_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">discarded_layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-    
+
     <span class="n">model_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_state_dict</span><span class="p">)</span>
     <span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">model_dict</span><span class="p">)</span>
-    
+
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matched_layers</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
             <span class="s1">&#39;The pretrained weights &quot;</span><span class="si">{}</span><span class="s1">&quot; cannot be loaded, &#39;</span>
             <span class="s1">&#39;please check the key names manually &#39;</span>
-            <span class="s1">&#39;(** ignored and continue **)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">weight_path</span><span class="p">))</span>
+            <span class="s1">&#39;(** ignored and continue **)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">weight_path</span><span class="p">)</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Successfully loaded pretrained weights from &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">weight_path</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s1">&#39;Successfully loaded pretrained weights from &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span>
+            <span class="nb">format</span><span class="p">(</span><span class="n">weight_path</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">discarded_layers</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;** The following layers are discarded &#39;</span>
-                  <span class="s1">&#39;due to unmatched keys or layer size: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">discarded_layers</span><span class="p">))</span></div>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s1">&#39;** The following layers are discarded &#39;</span>
+                <span class="s1">&#39;due to unmatched keys or layer size: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span>
+                <span class="nb">format</span><span class="p">(</span><span class="n">discarded_layers</span><span class="p">)</span>
+            <span class="p">)</span></div>
 </pre></div>
 
            </div>

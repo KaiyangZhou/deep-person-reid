@@ -165,17 +165,16 @@
            <div itemprop="articleBody">
             
   <h1>Source code for torchreid.models.hacnn</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
-
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;HACNN&#39;</span><span class="p">]</span>
-
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">nn</span>
 <span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
 
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;HACNN&#39;</span><span class="p">]</span>
+
 
 <span class="k">class</span> <span class="nc">ConvBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;Basic convolutional block.</span>
 <span class="sd">    </span>
 <span class="sd">    convolution + batch normalization + relu.</span>
@@ -187,6 +186,7 @@
 <span class="sd">        s (int or tuple): stride.</span>
 <span class="sd">        p (int or tuple): padding.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_c</span><span class="p">,</span> <span class="n">out_c</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ConvBlock</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conv</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_c</span><span class="p">,</span> <span class="n">out_c</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
@@ -245,7 +245,7 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stream3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
             <span class="n">nn</span><span class="o">.</span><span class="n">MaxPool2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
-            <span class="n">ConvBlock</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">mid_channels</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">ConvBlock</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">mid_channels</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
@@ -257,8 +257,9 @@
 
 
 <span class="k">class</span> <span class="nc">SpatialAttn</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;Spatial Attention (Sec. 3.1.I.1)&quot;&quot;&quot;</span>
-    
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SpatialAttn</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">ConvBlock</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -270,18 +271,23 @@
         <span class="c1"># 3-by-3 conv</span>
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="c1"># bilinear resizing</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">upsample</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bilinear&#39;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">upsample</span><span class="p">(</span>
+            <span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bilinear&#39;</span><span class="p">,</span>
+            <span class="n">align_corners</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
         <span class="c1"># scaling conv</span>
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">x</span>
 
 
 <span class="k">class</span> <span class="nc">ChannelAttn</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;Channel Attention (Sec. 3.1.I.2)&quot;&quot;&quot;</span>
-    
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">reduction_rate</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ChannelAttn</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="k">assert</span> <span class="n">in_channels</span><span class="o">%</span><span class="n">reduction_rate</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="n">in_channels</span> <span class="o">%</span> <span class="n">reduction_rate</span> <span class="o">==</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">ConvBlock</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">in_channels</span> <span class="o">//</span> <span class="n">reduction_rate</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">ConvBlock</span><span class="p">(</span><span class="n">in_channels</span> <span class="o">//</span> <span class="n">reduction_rate</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
@@ -295,13 +301,14 @@
 
 
 <span class="k">class</span> <span class="nc">SoftAttn</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;Soft Attention (Sec. 3.1.I)</span>
 <span class="sd">    </span>
 <span class="sd">    Aim: Spatial Attention + Channel Attention</span>
 <span class="sd">    </span>
 <span class="sd">    Output: attention maps with shape identical to input.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SoftAttn</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spatial_attn</span> <span class="o">=</span> <span class="n">SpatialAttn</span><span class="p">()</span>
@@ -317,16 +324,21 @@
 
 
 <span class="k">class</span> <span class="nc">HardAttn</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;Hard Attention (Sec. 3.1.II)&quot;&quot;&quot;</span>
-    
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">HardAttn</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fc</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="mi">4</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_params</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">init_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy_</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.75</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy_</span><span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.75</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="c1"># squeeze operation (global average pooling)</span>
@@ -338,8 +350,9 @@
 
 
 <span class="k">class</span> <span class="nc">HarmAttn</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;Harmonious Attention (Sec. 3.1)&quot;&quot;&quot;</span>
-    
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">HarmAttn</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">soft_attn</span> <span class="o">=</span> <span class="n">SoftAttn</span><span class="p">(</span><span class="n">in_channels</span><span class="p">)</span>
@@ -352,6 +365,7 @@
 
 
 <div class="viewcode-block" id="HACNN"><a class="viewcode-back" href="../../../pkg/models.html#torchreid.models.hacnn.HACNN">[docs]</a><span class="k">class</span> <span class="nc">HACNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+
     <span class="sd">&quot;&quot;&quot;Harmonious Attention Convolutional Neural Network.</span>
 
 <span class="sd">    Reference:</span>
@@ -366,8 +380,17 @@
     <span class="c1">#    nchannels (list): number of channels AFTER concatenation</span>
     <span class="c1">#    feat_dim (int): feature dimension for a single stream</span>
     <span class="c1">#    learn_region (bool): whether to learn region features (i.e. local branch)</span>
-    
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span> <span class="n">nchannels</span><span class="o">=</span><span class="p">[</span><span class="mi">128</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">384</span><span class="p">],</span> <span class="n">feat_dim</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">learn_region</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">num_classes</span><span class="p">,</span>
+        <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span>
+        <span class="n">nchannels</span><span class="o">=</span><span class="p">[</span><span class="mi">128</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">384</span><span class="p">],</span>
+        <span class="n">feat_dim</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
+        <span class="n">learn_region</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">HACNN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">learn_region</span> <span class="o">=</span> <span class="n">learn_region</span>
@@ -410,7 +433,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">local_conv2</span> <span class="o">=</span> <span class="n">InceptionB</span><span class="p">(</span><span class="n">nchannels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nchannels</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">local_conv3</span> <span class="o">=</span> <span class="n">InceptionB</span><span class="p">(</span><span class="n">nchannels</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">nchannels</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fc_local</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
-                <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">nchannels</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="n">feat_dim</span><span class="p">),</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">nchannels</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="n">feat_dim</span><span class="p">),</span>
                 <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm1d</span><span class="p">(</span><span class="n">feat_dim</span><span class="p">),</span>
                 <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
             <span class="p">)</span>
@@ -422,10 +445,18 @@
     <span class="k">def</span> <span class="nf">init_scale_factors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># initialize scale factors (s_w, s_h) for four regions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scale_factors</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scale_factors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scale_factors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scale_factors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scale_factors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_factors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_factors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_factors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_factors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">stn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">theta</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Performs spatial transform</span>
@@ -441,8 +472,8 @@
         <span class="sd">&quot;&quot;&quot;Transforms theta to include (s_w, s_h), resulting in (batch, 2, 3)&quot;&quot;&quot;</span>
         <span class="n">scale_factors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_factors</span><span class="p">[</span><span class="n">region_idx</span><span class="p">]</span>
         <span class="n">theta</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">theta_i</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-        <span class="n">theta</span><span class="p">[:,:,:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">scale_factors</span>
-        <span class="n">theta</span><span class="p">[:,:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">theta_i</span>
+        <span class="n">theta</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">scale_factors</span>
+        <span class="n">theta</span><span class="p">[:,</span> <span class="p">:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">theta_i</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">:</span> <span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">theta</span>
 
@@ -460,10 +491,12 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">learn_region</span><span class="p">:</span>
             <span class="n">x1_local_list</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">region_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
-                <span class="n">x1_theta_i</span> <span class="o">=</span> <span class="n">x1_theta</span><span class="p">[:,</span><span class="n">region_idx</span><span class="p">,:]</span>
+                <span class="n">x1_theta_i</span> <span class="o">=</span> <span class="n">x1_theta</span><span class="p">[:,</span> <span class="n">region_idx</span><span class="p">,</span> <span class="p">:]</span>
                 <span class="n">x1_theta_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform_theta</span><span class="p">(</span><span class="n">x1_theta_i</span><span class="p">,</span> <span class="n">region_idx</span><span class="p">)</span>
                 <span class="n">x1_trans_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x1_theta_i</span><span class="p">)</span>
-                <span class="n">x1_trans_i</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">upsample</span><span class="p">(</span><span class="n">x1_trans_i</span><span class="p">,</span> <span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="mi">28</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bilinear&#39;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">x1_trans_i</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">upsample</span><span class="p">(</span>
+                    <span class="n">x1_trans_i</span><span class="p">,</span> <span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="mi">28</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bilinear&#39;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
                 <span class="n">x1_local_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_conv1</span><span class="p">(</span><span class="n">x1_trans_i</span><span class="p">)</span>
                 <span class="n">x1_local_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x1_local_i</span><span class="p">)</span>
 
@@ -477,10 +510,12 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">learn_region</span><span class="p">:</span>
             <span class="n">x2_local_list</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">region_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
-                <span class="n">x2_theta_i</span> <span class="o">=</span> <span class="n">x2_theta</span><span class="p">[:,</span><span class="n">region_idx</span><span class="p">,:]</span>
+                <span class="n">x2_theta_i</span> <span class="o">=</span> <span class="n">x2_theta</span><span class="p">[:,</span> <span class="n">region_idx</span><span class="p">,</span> <span class="p">:]</span>
                 <span class="n">x2_theta_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform_theta</span><span class="p">(</span><span class="n">x2_theta_i</span><span class="p">,</span> <span class="n">region_idx</span><span class="p">)</span>
                 <span class="n">x2_trans_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stn</span><span class="p">(</span><span class="n">x1_out</span><span class="p">,</span> <span class="n">x2_theta_i</span><span class="p">)</span>
-                <span class="n">x2_trans_i</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">upsample</span><span class="p">(</span><span class="n">x2_trans_i</span><span class="p">,</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">14</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bilinear&#39;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">x2_trans_i</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">upsample</span><span class="p">(</span>
+                    <span class="n">x2_trans_i</span><span class="p">,</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">14</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bilinear&#39;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
                 <span class="n">x2_local_i</span> <span class="o">=</span> <span class="n">x2_trans_i</span> <span class="o">+</span> <span class="n">x1_local_list</span><span class="p">[</span><span class="n">region_idx</span><span class="p">]</span>
                 <span class="n">x2_local_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_conv2</span><span class="p">(</span><span class="n">x2_local_i</span><span class="p">)</span>
                 <span class="n">x2_local_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x2_local_i</span><span class="p">)</span>
@@ -495,24 +530,30 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">learn_region</span><span class="p">:</span>
             <span class="n">x3_local_list</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">region_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
-                <span class="n">x3_theta_i</span> <span class="o">=</span> <span class="n">x3_theta</span><span class="p">[:,</span><span class="n">region_idx</span><span class="p">,:]</span>
+                <span class="n">x3_theta_i</span> <span class="o">=</span> <span class="n">x3_theta</span><span class="p">[:,</span> <span class="n">region_idx</span><span class="p">,</span> <span class="p">:]</span>
                 <span class="n">x3_theta_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform_theta</span><span class="p">(</span><span class="n">x3_theta_i</span><span class="p">,</span> <span class="n">region_idx</span><span class="p">)</span>
                 <span class="n">x3_trans_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stn</span><span class="p">(</span><span class="n">x2_out</span><span class="p">,</span> <span class="n">x3_theta_i</span><span class="p">)</span>
-                <span class="n">x3_trans_i</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">upsample</span><span class="p">(</span><span class="n">x3_trans_i</span><span class="p">,</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bilinear&#39;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">x3_trans_i</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">upsample</span><span class="p">(</span>
+                    <span class="n">x3_trans_i</span><span class="p">,</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bilinear&#39;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
                 <span class="n">x3_local_i</span> <span class="o">=</span> <span class="n">x3_trans_i</span> <span class="o">+</span> <span class="n">x2_local_list</span><span class="p">[</span><span class="n">region_idx</span><span class="p">]</span>
                 <span class="n">x3_local_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_conv3</span><span class="p">(</span><span class="n">x3_local_i</span><span class="p">)</span>
                 <span class="n">x3_local_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x3_local_i</span><span class="p">)</span>
 
         <span class="c1"># ============== Feature generation ==============</span>
         <span class="c1"># global branch</span>
-        <span class="n">x_global</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">avg_pool2d</span><span class="p">(</span><span class="n">x3_out</span><span class="p">,</span> <span class="n">x3_out</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">2</span><span class="p">:])</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">x3_out</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">x3_out</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">x_global</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">avg_pool2d</span><span class="p">(</span><span class="n">x3_out</span><span class="p">,</span>
+                                <span class="n">x3_out</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">2</span><span class="p">:]</span>
+                                <span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">x3_out</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">x3_out</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
         <span class="n">x_global</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc_global</span><span class="p">(</span><span class="n">x_global</span><span class="p">)</span>
         <span class="c1"># local branch</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">learn_region</span><span class="p">:</span>
             <span class="n">x_local_list</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">region_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
                 <span class="n">x_local_i</span> <span class="o">=</span> <span class="n">x3_local_list</span><span class="p">[</span><span class="n">region_idx</span><span class="p">]</span>
-                <span class="n">x_local_i</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">avg_pool2d</span><span class="p">(</span><span class="n">x_local_i</span><span class="p">,</span> <span class="n">x_local_i</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">2</span><span class="p">:])</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">x_local_i</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">x_local_i</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">avg_pool2d</span><span class="p">(</span><span class="n">x_local_i</span><span class="p">,</span>
+                                         <span class="n">x_local_i</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">2</span><span class="p">:]</span>
+                                         <span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">x_local_i</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">x_local_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x_local_i</span><span class="p">)</span>
             <span class="n">x_local</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">x_local_list</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">x_local</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc_local</span><span class="p">(</span><span class="n">x_local</span><span class="p">)</span>
@@ -529,19 +570,19 @@
         <span class="n">prelogits_global</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier_global</span><span class="p">(</span><span class="n">x_global</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">learn_region</span><span class="p">:</span>
             <span class="n">prelogits_local</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier_local</span><span class="p">(</span><span class="n">x_local</span><span class="p">)</span>
-        
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">==</span> <span class="s1">&#39;softmax&#39;</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">learn_region</span><span class="p">:</span>
                 <span class="k">return</span> <span class="p">(</span><span class="n">prelogits_global</span><span class="p">,</span> <span class="n">prelogits_local</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">prelogits_global</span>
-        
+
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">==</span> <span class="s1">&#39;triplet&#39;</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">learn_region</span><span class="p">:</span>
                 <span class="k">return</span> <span class="p">(</span><span class="n">prelogits_global</span><span class="p">,</span> <span class="n">prelogits_local</span><span class="p">),</span> <span class="p">(</span><span class="n">x_global</span><span class="p">,</span> <span class="n">x_local</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">prelogits_global</span><span class="p">,</span> <span class="n">x_global</span>
-        
+
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Unsupported loss: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">))</span></div>
 </pre></div>
