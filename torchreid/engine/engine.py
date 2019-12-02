@@ -129,9 +129,10 @@ class Engine(object):
                 open_layers=open_layers
             )
 
-            if (epoch + 1) >= start_eval and eval_freq > 0 and (
-                epoch+1
-            ) % eval_freq == 0 and (epoch + 1) != max_epoch:
+            if (epoch + 1) >= start_eval \
+               and eval_freq > 0 \
+               and (epoch+1) % eval_freq == 0 \
+               and (epoch + 1) != max_epoch:
                 rank1 = self.test(
                     epoch,
                     dist_metric=dist_metric,

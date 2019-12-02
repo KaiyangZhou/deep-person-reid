@@ -47,7 +47,8 @@ class CrossEntropyLoss(nn.Module):
         log_probs = self.logsoftmax(inputs)
         zeros = torch.zeros(log_probs.size())
         targets = zeros.scatter_(1, targets.unsqueeze(1).data.cpu(), 1)
-        if self.use_gpu: targets = targets.cuda()
+        if self.use_gpu:
+            targets = targets.cuda()
         targets = (
             1 - self.epsilon
         ) * targets + self.epsilon / self.num_classes
