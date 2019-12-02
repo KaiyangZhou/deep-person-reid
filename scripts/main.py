@@ -129,6 +129,9 @@ def main():
     )
     args = parser.parse_args()
 
+    if args.gpu_devices:
+        os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_devices
+
     cfg = get_default_config()
     cfg.use_gpu = torch.cuda.is_available()
     if args.config_file:
@@ -137,9 +140,6 @@ def main():
     cfg.merge_from_list(args.opts)
     set_random_seed(cfg.train.seed)
 
-    if cfg.use_gpu and args.gpu_devices:
-        # if gpu_devices is not specified, all available gpus will be used
-        os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_devices
     log_name = 'test.log' if cfg.test.evaluate else 'train.log'
     log_name += time.strftime('-%Y-%m-%d-%H-%M-%S')
     sys.stdout = Logger(osp.join(cfg.data.save_dir, log_name))
