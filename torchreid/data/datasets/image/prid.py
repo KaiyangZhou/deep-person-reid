@@ -8,7 +8,6 @@ from ..dataset import ImageDataset
 
 
 class PRID(ImageDataset):
-
     """PRID (single-shot version of prid-2011)
 
     Reference:

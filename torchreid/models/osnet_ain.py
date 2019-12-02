@@ -15,7 +15,6 @@ pretrained_urls = {
 # Basic layers
 ##########
 class ConvLayer(nn.Module):
-
     """Convolution layer (conv + bn + relu)."""
 
     def __init__(
@@ -51,7 +50,6 @@ class ConvLayer(nn.Module):
 
 
 class Conv1x1(nn.Module):
-
     """1x1 convolution + bn + relu."""
 
     def __init__(self, in_channels, out_channels, stride=1, groups=1):
@@ -75,7 +73,6 @@ class Conv1x1(nn.Module):
 
 
 class Conv1x1Linear(nn.Module):
-
     """1x1 convolution + bn (w/o non-linearity)."""
 
     def __init__(self, in_channels, out_channels, stride=1, bn=True):
@@ -95,7 +92,6 @@ class Conv1x1Linear(nn.Module):
 
 
 class Conv3x3(nn.Module):
-
     """3x3 convolution + bn + relu."""
 
     def __init__(self, in_channels, out_channels, stride=1, groups=1):
@@ -119,7 +115,6 @@ class Conv3x3(nn.Module):
 
 
 class LightConv3x3(nn.Module):
-
     """Lightweight 3x3 convolution.
 
     1x1 (linear) + dw 3x3 (nonlinear).
@@ -150,7 +145,6 @@ class LightConv3x3(nn.Module):
 
 
 class LightConvStream(nn.Module):
-
     """Lightweight convolution stream."""
 
     def __init__(self, in_channels, out_channels, depth):
@@ -172,7 +166,6 @@ class LightConvStream(nn.Module):
 # Building blocks for omni-scale feature learning
 ##########
 class ChannelGate(nn.Module):
-
     """A mini-network that generates channel-wise gates conditioned on input tensor."""
 
     def __init__(
@@ -234,7 +227,6 @@ class ChannelGate(nn.Module):
 
 
 class OSBlock(nn.Module):
-
     """Omni-scale feature learning block."""
 
     def __init__(self, in_channels, out_channels, reduction=4, T=4, **kwargs):
@@ -268,7 +260,6 @@ class OSBlock(nn.Module):
 
 
 class OSBlockINin(nn.Module):
-
     """Omni-scale feature learning block with instance normalization."""
 
     def __init__(self, in_channels, out_channels, reduction=4, T=4, **kwargs):
@@ -307,7 +298,6 @@ class OSBlockINin(nn.Module):
 # Network architecture
 ##########
 class OSNet(nn.Module):
-
     """Omni-Scale Network.
     
     Reference:

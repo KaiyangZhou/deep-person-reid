@@ -7,7 +7,6 @@ __all__ = ['MuDeep']
 
 
 class ConvBlock(nn.Module):
-
     """Basic convolutional block.
     
     convolution + batch normalization + relu.
@@ -30,7 +29,6 @@ class ConvBlock(nn.Module):
 
 
 class ConvLayers(nn.Module):
-
     """Preprocessing layers."""
 
     def __init__(self):
@@ -47,7 +45,6 @@ class ConvLayers(nn.Module):
 
 
 class MultiScaleA(nn.Module):
-
     """Multi-scale stream layer A (Sec.3.1)"""
 
     def __init__(self):
@@ -77,7 +74,6 @@ class MultiScaleA(nn.Module):
 
 
 class Reduction(nn.Module):
-
     """Reduction layer (Sec.3.1)"""
 
     def __init__(self):
@@ -99,7 +95,6 @@ class Reduction(nn.Module):
 
 
 class MultiScaleB(nn.Module):
-
     """Multi-scale stream layer B (Sec.3.1)"""
 
     def __init__(self):
@@ -131,7 +126,6 @@ class MultiScaleB(nn.Module):
 
 
 class Fusion(nn.Module):
-
     """Saliency-based learning fusion layer (Sec.3.2)"""
 
     def __init__(self):
@@ -155,7 +149,6 @@ class Fusion(nn.Module):
 
 
 class MuDeep(nn.Module):
-
     """Multiscale deep neural network.
 
     Reference:

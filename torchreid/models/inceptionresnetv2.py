@@ -253,7 +253,6 @@ class Block8(nn.Module):
 
 
 class InceptionResNetV2(nn.Module):
-
     """Inception-ResNet-V2.
 
     Reference:

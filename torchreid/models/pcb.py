@@ -129,7 +129,6 @@ class DimReduceLayer(nn.Module):
 
 
 class PCB(nn.Module):
-
     """Part-based Convolutional Baseline.
 
     Reference:

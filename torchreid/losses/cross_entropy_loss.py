@@ -4,7 +4,6 @@ import torch.nn as nn
 
 
 class CrossEntropyLoss(nn.Module):
-
     r"""Cross entropy loss with label smoothing regularizer.
     
     Reference:

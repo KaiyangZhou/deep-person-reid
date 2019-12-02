@@ -16,7 +16,6 @@ model_urls = {
 
 
 class ConvBlock(nn.Module):
-
     """Basic convolutional block.
     
     convolution (bias discarded) + batch normalization + relu6.
@@ -68,7 +67,6 @@ class Bottleneck(nn.Module):
 
 
 class MobileNetV2(nn.Module):
-
     """MobileNetV2.
 
     Reference:

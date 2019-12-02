@@ -298,7 +298,6 @@ class Inception_C(nn.Module):
 
 
 class InceptionV4(nn.Module):
-
     """Inception-v4.
 
     Reference:

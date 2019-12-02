@@ -5,7 +5,6 @@ from torchreid.engine.video import VideoSoftmaxEngine
 
 
 class VideoTripletEngine(ImageTripletEngine, VideoSoftmaxEngine):
-
     """Triplet-loss engine for video-reid.
 
     Args:

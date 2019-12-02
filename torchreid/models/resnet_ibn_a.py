@@ -129,7 +129,6 @@ class Bottleneck(nn.Module):
 
 
 class ResNet(nn.Module):
-
     """Residual network + IBN layer.
     
     Reference:

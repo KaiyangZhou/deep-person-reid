@@ -9,7 +9,6 @@ from ..dataset import ImageDataset
 
 
 class GRID(ImageDataset):
-
     """GRID.
 
     Reference:

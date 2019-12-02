@@ -23,7 +23,6 @@ VERSION_DICT = {
 
 
 class MSMT17(ImageDataset):
-
     """MSMT17.
 
     Reference:

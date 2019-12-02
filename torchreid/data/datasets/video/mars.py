@@ -7,7 +7,6 @@ from ..dataset import VideoDataset
 
 
 class Mars(VideoDataset):
-
     """MARS.
 
     Reference:

@@ -116,7 +116,6 @@ class InvertedResidual(nn.Module):
 
 
 class ShuffleNetV2(nn.Module):
-
     """ShuffleNetV2.
     
     Reference:

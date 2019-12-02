@@ -8,7 +8,6 @@ from torchvision.transforms import *
 
 
 class Random2DTranslation(object):
-
     """Randomly translates the input image with a probability.
 
     Specifically, given a predefined shape (height, width), the input is first
@@ -48,7 +47,6 @@ class Random2DTranslation(object):
 
 
 class RandomErasing(object):
-
     """Randomly erases an image patch.
 
     Origin: `<https://github.com/zhunzhong07/Random-Erasing>`_
@@ -107,7 +105,6 @@ class RandomErasing(object):
 
 
 class ColorAugmentation(object):
-
     """Randomly alters the intensities of RGB channels.
 
     Reference:
@@ -143,7 +140,6 @@ class ColorAugmentation(object):
 
 
 class RandomPatch(object):
-
     """Random patch data augmentation.
 
     There is a patch pool that stores randomly extracted pathces from person images.

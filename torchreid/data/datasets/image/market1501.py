@@ -8,7 +8,6 @@ from ..dataset import ImageDataset
 
 
 class Market1501(ImageDataset):
-
     """Market1501.
 
     Reference:

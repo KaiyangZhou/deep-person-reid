@@ -9,7 +9,6 @@ from ..dataset import ImageDataset
 
 
 class VIPeR(ImageDataset):
-
     """VIPeR.
 
     Reference:

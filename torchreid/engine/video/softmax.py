@@ -5,7 +5,6 @@ from torchreid.engine.image import ImageSoftmaxEngine
 
 
 class VideoSoftmaxEngine(ImageSoftmaxEngine):
-
     """Softmax-loss engine for video-reid.
 
     Args:

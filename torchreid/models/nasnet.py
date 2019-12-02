@@ -889,7 +889,6 @@ class ReductionCell1(nn.Module):
 
 
 class NASNetAMobile(nn.Module):
-
     """Neural Architecture Search (NAS).
 
     Reference:

@@ -4,7 +4,6 @@ import torch.nn as nn
 
 
 class TripletLoss(nn.Module):
-
     """Triplet loss with hard positive/negative mining.
     
     Reference:

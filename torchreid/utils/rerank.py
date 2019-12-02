@@ -1,6 +1,5 @@
 #!/usr/bin/env python2/python3
 # -*- coding: utf-8 -*-
-
 """
 Source: https://github.com/zhunzhong07/person-re-ranking
 

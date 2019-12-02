@@ -12,7 +12,6 @@ from ..engine import Engine
 
 
 class ImageTripletEngine(Engine):
-
     r"""Triplet-loss engine for image-reid.
 
     Args:

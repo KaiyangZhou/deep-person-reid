@@ -97,7 +97,6 @@ cfg = {
 
 
 class ShuffleNet(nn.Module):
-
     """ShuffleNet.
 
     Reference:

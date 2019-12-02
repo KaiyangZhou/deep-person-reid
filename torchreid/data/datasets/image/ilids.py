@@ -11,7 +11,6 @@ from ..dataset import ImageDataset
 
 
 class iLIDS(ImageDataset):
-
     """QMUL-iLIDS.
 
     Reference:

@@ -7,7 +7,6 @@ from torchreid.data.transforms import build_transforms
 
 
 class DataManager(object):
-
     r"""Base data manager.
 
     Args:
@@ -87,7 +86,6 @@ class DataManager(object):
 
 
 class ImageDataManager(DataManager):
-
     r"""Image data manager.
 
     Args:
@@ -330,7 +328,6 @@ class ImageDataManager(DataManager):
 
 
 class VideoDataManager(DataManager):
-
     r"""Video data manager.
 
     Args:

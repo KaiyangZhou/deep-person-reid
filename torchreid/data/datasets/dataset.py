@@ -10,7 +10,6 @@ from torchreid.utils import read_image, download_url, mkdir_if_missing
 
 
 class Dataset(object):
-
     """An abstract class representing a Dataset.
 
     This is the base class for ``ImageDataset`` and ``VideoDataset``.
@@ -248,7 +247,6 @@ class Dataset(object):
 
 
 class ImageDataset(Dataset):
-
     """A base class representing ImageDataset.
 
     All other image datasets should subclass it.
@@ -297,7 +295,6 @@ class ImageDataset(Dataset):
 
 
 class VideoDataset(Dataset):
-
     """A base class representing VideoDataset.
 
     All other video datasets should subclass it.

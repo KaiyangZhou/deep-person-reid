@@ -100,7 +100,6 @@ class _Transition(nn.Sequential):
 
 
 class DenseNet(nn.Module):
-
     """Densely connected network.
     
     Reference:

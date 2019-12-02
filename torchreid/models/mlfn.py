@@ -96,7 +96,6 @@ class MLFNBlock(nn.Module):
 
 
 class MLFN(nn.Module):
-
     """Multi-Level Factorisation Net.
 
     Reference:

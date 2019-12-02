@@ -8,7 +8,6 @@ from ..dataset import VideoDataset
 
 
 class PRID2011(VideoDataset):
-
     """PRID2011.
 
     Reference:

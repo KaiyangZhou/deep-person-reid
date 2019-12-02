@@ -46,7 +46,6 @@ class Fire(nn.Module):
 
 
 class SqueezeNet(nn.Module):
-
     """SqueezeNet.
 
     Reference:

@@ -12,7 +12,6 @@ from ..engine import Engine
 
 
 class ImageSoftmaxEngine(Engine):
-
     r"""Softmax-loss engine for image-reid.
 
     Args:

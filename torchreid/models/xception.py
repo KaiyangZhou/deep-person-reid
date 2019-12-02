@@ -143,7 +143,6 @@ class Block(nn.Module):
 
 
 class Xception(nn.Module):
-
     """Xception.
     
     Reference:

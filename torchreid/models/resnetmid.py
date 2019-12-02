@@ -106,7 +106,6 @@ class Bottleneck(nn.Module):
 
 
 class ResNetMid(nn.Module):
-
     """Residual network + mid-level features.
     
     Reference:

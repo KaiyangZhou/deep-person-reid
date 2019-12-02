@@ -7,7 +7,6 @@ from ..dataset import ImageDataset
 
 
 class DukeMTMCreID(ImageDataset):
-
     """DukeMTMC-reID.
 
     Reference:

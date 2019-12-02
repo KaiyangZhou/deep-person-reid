@@ -9,7 +9,6 @@ from ..dataset import VideoDataset
 
 
 class DukeMTMCVidReID(VideoDataset):
-
     """DukeMTMCVidReID.
 
     Reference:

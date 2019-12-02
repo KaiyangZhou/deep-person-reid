@@ -7,7 +7,6 @@ from ..dataset import ImageDataset
 
 
 class SenseReID(ImageDataset):
-
     """SenseReID.
 
     This dataset is used for test purpose only.

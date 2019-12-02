@@ -113,7 +113,6 @@ class SEModule(nn.Module):
 
 
 class Bottleneck(nn.Module):
-
     """
     Base class for bottlenecks that implements `forward()` method.
     """
@@ -142,7 +141,6 @@ class Bottleneck(nn.Module):
 
 
 class SEBottleneck(Bottleneck):
-
     """
     Bottleneck for SENet154.
     """
@@ -175,7 +173,6 @@ class SEBottleneck(Bottleneck):
 
 
 class SEResNetBottleneck(Bottleneck):
-
     """
     ResNet bottleneck with a Squeeze-and-Excitation module. It follows Caffe
     implementation and uses `stride=stride` in `conv1` and not in `conv2`
@@ -209,7 +206,6 @@ class SEResNetBottleneck(Bottleneck):
 
 
 class SEResNeXtBottleneck(Bottleneck):
-
     """ResNeXt bottleneck type C with a Squeeze-and-Excitation module"""
     expansion = 4
 
@@ -248,7 +244,6 @@ class SEResNeXtBottleneck(Bottleneck):
 
 
 class SENet(nn.Module):
-
     """Squeeze-and-excitation network.
     
     Reference:

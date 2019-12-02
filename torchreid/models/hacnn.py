@@ -7,7 +7,6 @@ __all__ = ['HACNN']
 
 
 class ConvBlock(nn.Module):
-
     """Basic convolutional block.
     
     convolution + batch normalization + relu.
@@ -90,7 +89,6 @@ class InceptionB(nn.Module):
 
 
 class SpatialAttn(nn.Module):
-
     """Spatial Attention (Sec. 3.1.I.1)"""
 
     def __init__(self):
@@ -115,7 +113,6 @@ class SpatialAttn(nn.Module):
 
 
 class ChannelAttn(nn.Module):
-
     """Channel Attention (Sec. 3.1.I.2)"""
 
     def __init__(self, in_channels, reduction_rate=16):
@@ -134,7 +131,6 @@ class ChannelAttn(nn.Module):
 
 
 class SoftAttn(nn.Module):
-
     """Soft Attention (Sec. 3.1.I)
     
     Aim: Spatial Attention + Channel Attention
@@ -157,7 +153,6 @@ class SoftAttn(nn.Module):
 
 
 class HardAttn(nn.Module):
-
     """Hard Attention (Sec. 3.1.II)"""
 
     def __init__(self, in_channels):
@@ -183,7 +178,6 @@ class HardAttn(nn.Module):
 
 
 class HarmAttn(nn.Module):
-
     """Harmonious Attention (Sec. 3.1)"""
 
     def __init__(self, in_channels):
@@ -198,7 +192,6 @@ class HarmAttn(nn.Module):
 
 
 class HACNN(nn.Module):
-
     """Harmonious Attention Convolutional Neural Network.
 
     Reference:

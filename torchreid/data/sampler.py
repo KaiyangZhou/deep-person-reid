@@ -9,7 +9,6 @@ AVAI_SAMPLERS = ['RandomIdentitySampler', 'SequentialSampler', 'RandomSampler']
 
 
 class RandomIdentitySampler(Sampler):
-
     """Randomly samples N identities each with K instances.
 
     Args:

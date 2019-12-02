@@ -9,7 +9,6 @@ __all__ = ['Logger', 'RankLogger']
 
 
 class Logger(object):
-
     """Writes console output to external text file.
 
     Imported from `<https://github.com/Cysu/open-reid/blob/master/reid/utils/logging.py>`_
@@ -61,7 +60,6 @@ class Logger(object):
 
 
 class RankLogger(object):
-
     """Records the rank1 matching accuracy obtained for each
     test dataset at specified evaluation steps and provides a function
     to show the summarized results, which are convenient for analysis.

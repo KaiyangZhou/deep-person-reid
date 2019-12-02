@@ -9,7 +9,6 @@ from ..dataset import VideoDataset
 
 
 class iLIDSVID(VideoDataset):
-
     """iLIDS-VID.
 
     Reference:

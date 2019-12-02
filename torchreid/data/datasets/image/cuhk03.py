@@ -7,7 +7,6 @@ from ..dataset import ImageDataset
 
 
 class CUHK03(ImageDataset):
-
     """CUHK03.
 
     Reference:
