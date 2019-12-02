@@ -437,36 +437,46 @@
 
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Building train transforms ...&#39;</span><span class="p">)</span>
     <span class="n">transform_tr</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Resize</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))]</span>
+
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ resize to </span><span class="si">{}</span><span class="s1">x</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))</span>
+    <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Resize</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))]</span>
+
     <span class="k">if</span> <span class="s1">&#39;random_flip&#39;</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ random flip&#39;</span><span class="p">)</span>
         <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">RandomHorizontalFlip</span><span class="p">()]</span>
+
     <span class="k">if</span> <span class="s1">&#39;random_crop&#39;</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ random crop (enlarge to </span><span class="si">{}</span><span class="s1">x</span><span class="si">{}</span><span class="s1"> and &#39;</span> \
               <span class="s1">&#39;crop </span><span class="si">{}</span><span class="s1">x</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">height</span><span class="o">*</span><span class="mf">1.125</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">width</span><span class="o">*</span><span class="mf">1.125</span><span class="p">)),</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))</span>
         <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Random2DTranslation</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)]</span>
+
     <span class="k">if</span> <span class="s1">&#39;random_patch&#39;</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ random patch&#39;</span><span class="p">)</span>
         <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">RandomPatch</span><span class="p">()]</span>
+
     <span class="k">if</span> <span class="s1">&#39;color_jitter&#39;</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ color jitter&#39;</span><span class="p">)</span>
         <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span>
             <span class="n">ColorJitter</span><span class="p">(</span><span class="n">brightness</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">contrast</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">saturation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="p">]</span>
+
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ to torch tensor of range [0, 1]&#39;</span><span class="p">)</span>
     <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">ToTensor</span><span class="p">()]</span>
+
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ normalization (mean=</span><span class="si">{}</span><span class="s1">, std=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">norm_mean</span><span class="p">,</span> <span class="n">norm_std</span><span class="p">))</span>
     <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">normalize</span><span class="p">]</span>
+
     <span class="k">if</span> <span class="s1">&#39;random_erase&#39;</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ random erase&#39;</span><span class="p">)</span>
         <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">RandomErasing</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="n">norm_mean</span><span class="p">)]</span>
+
     <span class="n">transform_tr</span> <span class="o">=</span> <span class="n">Compose</span><span class="p">(</span><span class="n">transform_tr</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Building test transforms ...&#39;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ resize to </span><span class="si">{}</span><span class="s1">x</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ to torch tensor of range [0, 1]&#39;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ normalization (mean=</span><span class="si">{}</span><span class="s1">, std=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">norm_mean</span><span class="p">,</span> <span class="n">norm_std</span><span class="p">))</span>
+
     <span class="n">transform_te</span> <span class="o">=</span> <span class="n">Compose</span><span class="p">([</span>
         <span class="n">Resize</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)),</span>
         <span class="n">ToTensor</span><span class="p">(),</span>
