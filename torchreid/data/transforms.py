@@ -270,36 +270,46 @@ def build_transforms(
 
     print('Building train transforms ...')
     transform_tr = []
-    transform_tr += [Resize((height, width))]
+
     print('+ resize to {}x{}'.format(height, width))
+    transform_tr += [Resize((height, width))]
+
     if 'random_flip' in transforms:
         print('+ random flip')
         transform_tr += [RandomHorizontalFlip()]
+
     if 'random_crop' in transforms:
         print('+ random crop (enlarge to {}x{} and ' \
               'crop {}x{})'.format(int(round(height*1.125)), int(round(width*1.125)), height, width))
         transform_tr += [Random2DTranslation(height, width)]
+
     if 'random_patch' in transforms:
         print('+ random patch')
         transform_tr += [RandomPatch()]
+
     if 'color_jitter' in transforms:
         print('+ color jitter')
         transform_tr += [
             ColorJitter(brightness=0.2, contrast=0.15, saturation=0, hue=0)
         ]
+
     print('+ to torch tensor of range [0, 1]')
     transform_tr += [ToTensor()]
+
     print('+ normalization (mean={}, std={})'.format(norm_mean, norm_std))
     transform_tr += [normalize]
+
     if 'random_erase' in transforms:
         print('+ random erase')
         transform_tr += [RandomErasing(mean=norm_mean)]
+
     transform_tr = Compose(transform_tr)
 
     print('Building test transforms ...')
     print('+ resize to {}x{}'.format(height, width))
     print('+ to torch tensor of range [0, 1]')
     print('+ normalization (mean={}, std={})'.format(norm_mean, norm_std))
+
     transform_te = Compose([
         Resize((height, width)),
         ToTensor(),
