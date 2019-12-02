@@ -174,7 +174,6 @@
 
 
 <span class="k">class</span> <span class="nc">ConvBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;Basic convolutional block.</span>
 <span class="sd">    </span>
 <span class="sd">    convolution + batch normalization + relu.</span>
@@ -257,7 +256,6 @@
 
 
 <span class="k">class</span> <span class="nc">SpatialAttn</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;Spatial Attention (Sec. 3.1.I.1)&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -282,7 +280,6 @@
 
 
 <span class="k">class</span> <span class="nc">ChannelAttn</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;Channel Attention (Sec. 3.1.I.2)&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">reduction_rate</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
@@ -301,7 +298,6 @@
 
 
 <span class="k">class</span> <span class="nc">SoftAttn</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;Soft Attention (Sec. 3.1.I)</span>
 <span class="sd">    </span>
 <span class="sd">    Aim: Spatial Attention + Channel Attention</span>
@@ -324,7 +320,6 @@
 
 
 <span class="k">class</span> <span class="nc">HardAttn</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;Hard Attention (Sec. 3.1.II)&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">):</span>
@@ -350,7 +345,6 @@
 
 
 <span class="k">class</span> <span class="nc">HarmAttn</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;Harmonious Attention (Sec. 3.1)&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">):</span>
@@ -365,7 +359,6 @@
 
 
 <div class="viewcode-block" id="HACNN"><a class="viewcode-back" href="../../../pkg/models.html#torchreid.models.hacnn.HACNN">[docs]</a><span class="k">class</span> <span class="nc">HACNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;Harmonious Attention Convolutional Neural Network.</span>
 
 <span class="sd">    Reference:</span>

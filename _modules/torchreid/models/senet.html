@@ -280,7 +280,6 @@
 
 
 <span class="k">class</span> <span class="nc">Bottleneck</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class for bottlenecks that implements `forward()` method.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -309,7 +308,6 @@
 
 
 <span class="k">class</span> <span class="nc">SEBottleneck</span><span class="p">(</span><span class="n">Bottleneck</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Bottleneck for SENet154.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -342,7 +340,6 @@
 
 
 <span class="k">class</span> <span class="nc">SEResNetBottleneck</span><span class="p">(</span><span class="n">Bottleneck</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ResNet bottleneck with a Squeeze-and-Excitation module. It follows Caffe</span>
 <span class="sd">    implementation and uses `stride=stride` in `conv1` and not in `conv2`</span>
@@ -376,7 +373,6 @@
 
 
 <span class="k">class</span> <span class="nc">SEResNeXtBottleneck</span><span class="p">(</span><span class="n">Bottleneck</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;ResNeXt bottleneck type C with a Squeeze-and-Excitation module&quot;&quot;&quot;</span>
     <span class="n">expansion</span> <span class="o">=</span> <span class="mi">4</span>
 
@@ -415,7 +411,6 @@
 
 
 <div class="viewcode-block" id="SENet"><a class="viewcode-back" href="../../../pkg/models.html#torchreid.models.senet.SENet">[docs]</a><span class="k">class</span> <span class="nc">SENet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;Squeeze-and-excitation network.</span>
 <span class="sd">    </span>
 <span class="sd">    Reference:</span>

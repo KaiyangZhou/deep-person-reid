@@ -182,7 +182,6 @@
 <span class="c1"># Basic layers</span>
 <span class="c1">##########</span>
 <span class="k">class</span> <span class="nc">ConvLayer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;Convolution layer (conv + bn + relu).&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
@@ -218,7 +217,6 @@
 
 
 <span class="k">class</span> <span class="nc">Conv1x1</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;1x1 convolution + bn + relu.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
@@ -242,7 +240,6 @@
 
 
 <span class="k">class</span> <span class="nc">Conv1x1Linear</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;1x1 convolution + bn (w/o non-linearity).&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">bn</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -262,7 +259,6 @@
 
 
 <span class="k">class</span> <span class="nc">Conv3x3</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;3x3 convolution + bn + relu.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
@@ -286,7 +282,6 @@
 
 
 <span class="k">class</span> <span class="nc">LightConv3x3</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;Lightweight 3x3 convolution.</span>
 
 <span class="sd">    1x1 (linear) + dw 3x3 (nonlinear).</span>
@@ -317,7 +312,6 @@
 
 
 <span class="k">class</span> <span class="nc">LightConvStream</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;Lightweight convolution stream.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">depth</span><span class="p">):</span>
@@ -339,7 +333,6 @@
 <span class="c1"># Building blocks for omni-scale feature learning</span>
 <span class="c1">##########</span>
 <span class="k">class</span> <span class="nc">ChannelGate</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;A mini-network that generates channel-wise gates conditioned on input tensor.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
@@ -401,7 +394,6 @@
 
 
 <span class="k">class</span> <span class="nc">OSBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;Omni-scale feature learning block.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -435,7 +427,6 @@
 
 
 <span class="k">class</span> <span class="nc">OSBlockINin</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;Omni-scale feature learning block with instance normalization.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -474,7 +465,6 @@
 <span class="c1"># Network architecture</span>
 <span class="c1">##########</span>
 <div class="viewcode-block" id="OSNet"><a class="viewcode-back" href="../../../pkg/models.html#torchreid.models.osnet_ain.OSNet">[docs]</a><span class="k">class</span> <span class="nc">OSNet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-
     <span class="sd">&quot;&quot;&quot;Omni-Scale Network.</span>
 <span class="sd">    </span>
 <span class="sd">    Reference:</span>
