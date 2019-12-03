@@ -294,16 +294,15 @@ python setup.py develop
 </div>
 <div class="section" id="a-unified-interface">
 <h2>A unified interface<a class="headerlink" href="#a-unified-interface" title="Permalink to this headline">¶</a></h2>
-<p>In “deep-person-reid/scripts/”, we provide a unified interface to train and test a model. See “scripts/main.py” and “scripts/default_config.py” for more details. “configs/” contains some predefined configs which you can use as a starting point.</p>
-<p>Below we provide an example to train and test <a class="reference external" href="https://arxiv.org/abs/1905.00953">OSNet (Zhou et al. ICCV’19)</a>. Assume <code class="code docutils literal notranslate"><span class="pre">PATH_TO_DATA</span></code> is the directory containing reid datasets.</p>
+<p>In “deep-person-reid/scripts/”, we provide a unified interface to train and test a model. See “scripts/main.py” and “scripts/default_config.py” for more details. The folder “configs/” contains some predefined configs which you can use as a starting point.</p>
+<p>Below we provide an example to train and test <a class="reference external" href="https://arxiv.org/abs/1905.00953">OSNet (Zhou et al. ICCV’19)</a>. Assume <code class="code docutils literal notranslate"><span class="pre">PATH_TO_DATA</span></code> is the directory containing reid datasets. The environmental variable <code class="code docutils literal notranslate"><span class="pre">CUDA_VISIBLE_DEVICES</span></code> is omitted, which you need to specify if you have a pool of gpus and want to use a specific set of them.</p>
 <div class="section" id="conventional-setting">
 <h3>Conventional setting<a class="headerlink" href="#conventional-setting" title="Permalink to this headline">¶</a></h3>
 <p>To train OSNet on Market1501, do</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python scripts/main.py <span class="se">\</span>
 --config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad_cosine.yaml <span class="se">\</span>
 --transforms random_flip random_erase <span class="se">\</span>
---root <span class="nv">$PATH_TO_DATA</span> <span class="se">\</span>
---gpu-devices <span class="m">0</span>
+--root <span class="nv">$PATH_TO_DATA</span>
 </pre></div>
 </div>
 <p>The config file sets Market1501 as the default dataset. If you wanna use DukeMTMC-reID, do</p>
@@ -313,7 +312,6 @@ python setup.py develop
 -t dukemtmcreid <span class="se">\</span>
 --transforms random_flip random_erase <span class="se">\</span>
 --root <span class="nv">$PATH_TO_DATA</span> <span class="se">\</span>
---gpu-devices <span class="m">0</span> <span class="se">\</span>
 data.save_dir log/osnet_x1_0_dukemtmcreid_softmax_cosinelr
 </pre></div>
 </div>
@@ -322,7 +320,6 @@ data.save_dir log/osnet_x1_0_dukemtmcreid_softmax_cosinelr
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python scripts/main.py <span class="se">\</span>
 --config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad_cosine.yaml <span class="se">\</span>
 --root <span class="nv">$PATH_TO_DATA</span> <span class="se">\</span>
---gpu-devices <span class="m">0</span> <span class="se">\</span>
 model.load_weights log/osnet_x1_0_market1501_softmax_cosinelr/model.pth.tar-250 <span class="se">\</span>
 test.evaluate True
 </pre></div>
@@ -336,8 +333,7 @@ test.evaluate True
 -s dukemtmcreid <span class="se">\</span>
 -t market1501 <span class="se">\</span>
 --transforms random_flip color_jitter <span class="se">\</span>
---root <span class="nv">$PATH_TO_DATA</span> <span class="se">\</span>
---gpu-devices <span class="m">0</span>
+--root <span class="nv">$PATH_TO_DATA</span>
 </pre></div>
 </div>
 <p>Here we only test the cross-domain performance. However, if you also want to test the performance on the source dataset, i.e. DukeMTMC-reID, you can set <code class="code docutils literal notranslate"><span class="pre">-t</span> <span class="pre">dukemtmcreid</span> <span class="pre">market1501</span></code>, which will evaluate the model on the two datasets separately.</p>
