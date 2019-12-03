@@ -117,20 +117,12 @@ def main():
         '--root', type=str, default='', help='path to data root'
     )
     parser.add_argument(
-        '--gpu-devices',
-        type=str,
-        default='',
-    )
-    parser.add_argument(
         'opts',
         default=None,
         nargs=argparse.REMAINDER,
         help='Modify config options using the command-line'
     )
     args = parser.parse_args()
-
-    if args.gpu_devices:
-        os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_devices
 
     cfg = get_default_config()
     cfg.use_gpu = torch.cuda.is_available()
