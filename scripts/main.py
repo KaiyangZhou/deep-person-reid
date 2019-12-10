@@ -171,7 +171,7 @@ def main():
 
     if cfg.model.resume and check_isfile(cfg.model.resume):
         cfg.train.start_epoch = resume_from_checkpoint(
-            cfg.model.resume, model, optimizer=optimizer
+            cfg.model.resume, model, optimizer=optimizer, scheduler=scheduler
         )
 
     print(
