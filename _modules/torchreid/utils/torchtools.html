@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.utils.torchtools &mdash; torchreid 1.0.8 documentation</title>
+  <title>torchreid.utils.torchtools &mdash; torchreid 1.0.9 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.0.8
+                1.0.9
               </div>
             
           
@@ -261,7 +261,7 @@
     <span class="k">return</span> <span class="n">checkpoint</span></div>
 
 
-<div class="viewcode-block" id="resume_from_checkpoint"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.torchtools.resume_from_checkpoint">[docs]</a><span class="k">def</span> <span class="nf">resume_from_checkpoint</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="resume_from_checkpoint"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.torchtools.resume_from_checkpoint">[docs]</a><span class="k">def</span> <span class="nf">resume_from_checkpoint</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Resumes training from a checkpoint.</span>
 
 <span class="sd">    This will load (1) model weights and (2) ``state_dict``</span>
@@ -271,6 +271,7 @@
 <span class="sd">        fpath (str): path to checkpoint.</span>
 <span class="sd">        model (nn.Module): model.</span>
 <span class="sd">        optimizer (Optimizer, optional): an Optimizer.</span>
+<span class="sd">        scheduler (LRScheduler, optional): an LRScheduler.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        int: start_epoch.</span>
@@ -278,7 +279,9 @@
 <span class="sd">    Examples::</span>
 <span class="sd">        &gt;&gt;&gt; from torchreid.utils import resume_from_checkpoint</span>
 <span class="sd">        &gt;&gt;&gt; fpath = &#39;log/my_model/model.pth.tar-10&#39;</span>
-<span class="sd">        &gt;&gt;&gt; start_epoch = resume_from_checkpoint(fpath, model, optimizer)</span>
+<span class="sd">        &gt;&gt;&gt; start_epoch = resume_from_checkpoint(</span>
+<span class="sd">        &gt;&gt;&gt;     fpath, model, optimizer, scheduler</span>
+<span class="sd">        &gt;&gt;&gt; )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Loading checkpoint from &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fpath</span><span class="p">))</span>
     <span class="n">checkpoint</span> <span class="o">=</span> <span class="n">load_checkpoint</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
@@ -287,6 +290,9 @@
     <span class="k">if</span> <span class="n">optimizer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;optimizer&#39;</span> <span class="ow">in</span> <span class="n">checkpoint</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="n">optimizer</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="s1">&#39;optimizer&#39;</span><span class="p">])</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Loaded optimizer&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">scheduler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;scheduler&#39;</span> <span class="ow">in</span> <span class="n">checkpoint</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">scheduler</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="s1">&#39;scheduler&#39;</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Loaded scheduler&#39;</span><span class="p">)</span>
     <span class="n">start_epoch</span> <span class="o">=</span> <span class="n">checkpoint</span><span class="p">[</span><span class="s1">&#39;epoch&#39;</span><span class="p">]</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Last epoch = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">start_epoch</span><span class="p">))</span>
     <span class="k">if</span> <span class="s1">&#39;rank1&#39;</span> <span class="ow">in</span> <span class="n">checkpoint</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>

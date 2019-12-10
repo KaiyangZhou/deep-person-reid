@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.utils &mdash; torchreid 1.0.8 documentation</title>
+  <title>torchreid.utils &mdash; torchreid 1.0.9 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.0.8
+                1.0.9
               </div>
             
           
@@ -453,7 +453,7 @@ python2-saved files can be read from python3.</p>
 
 <dl class="function">
 <dt id="torchreid.utils.torchtools.resume_from_checkpoint">
-<code class="sig-prename descclassname">torchreid.utils.torchtools.</code><code class="sig-name descname">resume_from_checkpoint</code><span class="sig-paren">(</span><em class="sig-param">fpath</em>, <em class="sig-param">model</em>, <em class="sig-param">optimizer=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/torchtools.html#resume_from_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.torchtools.resume_from_checkpoint" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">torchreid.utils.torchtools.</code><code class="sig-name descname">resume_from_checkpoint</code><span class="sig-paren">(</span><em class="sig-param">fpath</em>, <em class="sig-param">model</em>, <em class="sig-param">optimizer=None</em>, <em class="sig-param">scheduler=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/torchtools.html#resume_from_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.torchtools.resume_from_checkpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resumes training from a checkpoint.</p>
 <p>This will load (1) model weights and (2) <code class="docutils literal notranslate"><span class="pre">state_dict</span></code>
 of optimizer if <code class="docutils literal notranslate"><span class="pre">optimizer</span></code> is not None.</p>
@@ -463,6 +463,7 @@ of optimizer if <code class="docutils literal notranslate"><span class="pre">opt
 <li><p><strong>fpath</strong> (<em>str</em>) – path to checkpoint.</p></li>
 <li><p><strong>model</strong> (<em>nn.Module</em>) – model.</p></li>
 <li><p><strong>optimizer</strong> (<em>Optimizer</em><em>, </em><em>optional</em>) – an Optimizer.</p></li>
+<li><p><strong>scheduler</strong> (<em>LRScheduler</em><em>, </em><em>optional</em>) – an LRScheduler.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -475,7 +476,9 @@ of optimizer if <code class="docutils literal notranslate"><span class="pre">opt
 <dl>
 <dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">resume_from_checkpoint</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fpath</span> <span class="o">=</span> <span class="s1">&#39;log/my_model/model.pth.tar-10&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">start_epoch</span> <span class="o">=</span> <span class="n">resume_from_checkpoint</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">start_epoch</span> <span class="o">=</span> <span class="n">resume_from_checkpoint</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">fpath</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">scheduler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
 </pre></div>
 </div>
 </dd>
