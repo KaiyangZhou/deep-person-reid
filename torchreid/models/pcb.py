@@ -3,7 +3,7 @@ import torch.utils.model_zoo as model_zoo
 from torch import nn
 from torch.nn import functional as F
 
-__all__ = ['pcb_p6', 'pcb_p4']
+__all__ = ['pcb_p6', 'pcb_p4', 'pcb_rpp_p6']
 
 model_urls = {
     'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
@@ -126,6 +126,59 @@ class DimReduceLayer(nn.Module):
 
     def forward(self, x):
         return self.layers(x)
+
+
+class RPP(nn.Module):
+    """Refined Part Pooling.
+    
+    Reference:
+        Sun et al. Beyond Part Models: Person Retrieval with Refined
+        Part Pooling (and A Strong Convolutional Baseline). ECCV 2018.
+    """
+    def __init__(self):
+        super(RPP, self).__init__()
+        self.part = 6
+        add_block = []
+        add_block += [nn.Conv2d(2048, 6, kernel_size=1, bias=False)]
+        add_block = nn.Sequential(*add_block)
+
+        norm_block = []
+        norm_block += [nn.BatchNorm2d(2048)]
+        norm_block += [nn.ReLU(inplace=True)]
+        # norm_block += [nn.LeakyReLU(0.1, inplace=True)]
+        norm_block = nn.Sequential(*norm_block)
+
+        self.add_block = add_block
+        self.norm_block = norm_block
+        self.softmax = nn.Softmax(dim=1)
+        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
+        self._init_params()
+
+    def _init_params(self):
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                nn.init.kaiming_normal_(m.weight, mode='fan_out')
+                if m.bias is not None:
+                    nn.init.constant_(m.bias, 0)
+            elif isinstance(m, nn.BatchNorm2d):
+                nn.init.constant_(m.weight, 1)
+                nn.init.constant_(m.bias, 0)
+
+
+    def forward(self, x):
+        w = self.add_block(x)
+        p = self.softmax(w)
+        y = []
+        for i in range(self.part):
+            p_i = p[:, i, :, :]
+            p_i = torch.unsqueeze(p_i, 1)
+            y_i = torch.mul(x, p_i)
+            y_i = self.norm_block(y_i)
+            y_i = self.avgpool(y_i)
+            y.append(y_i)
+
+        f = torch.cat(y, 2)
+        return f
 
 
 class PCB(nn.Module):
@@ -263,6 +316,10 @@ class PCB(nn.Module):
         else:
             raise KeyError('Unsupported loss: {}'.format(self.loss))
 
+    def convert_to_rpp(self):
+        self.parts_avgpool = RPP()
+        return self
+
 
 def init_pretrained_weights(model, model_url):
     """Initializes model with pretrained weights.
@@ -309,6 +366,24 @@ def pcb_p4(num_classes, loss='softmax', pretrained=True, **kwargs):
         nonlinear='relu',
         **kwargs
     )
+    if pretrained:
+        init_pretrained_weights(model, model_urls['resnet50'])
+    return model
+
+
+def pcb_rpp_p6(num_classes, loss='softmax', pretrained=True, **kwargs):
+    model = PCB(
+        num_classes=num_classes,
+        loss=loss,
+        block=Bottleneck,
+        layers=[3, 4, 6, 3],
+        last_stride=1,
+        parts=6,
+        reduced_dim=256,
+        nonlinear='relu',
+        **kwargs
+    )
+    model = model.convert_to_rpp()
     if pretrained:
         init_pretrained_weights(model, model_urls['resnet50'])
     return model
