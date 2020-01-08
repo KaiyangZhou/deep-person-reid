@@ -97,7 +97,7 @@ def visactmap(
                 # activation map
                 am = outputs[j, ...].numpy()
                 am = cv2.resize(am, (width, height))
-                am = 255 * (am - np.max(am)) / (
+                am = 255 * (am - np.min(am)) / (
                     np.max(am) - np.min(am) + 1e-12
                 )
                 am = np.uint8(np.floor(am))
