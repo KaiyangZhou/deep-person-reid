@@ -293,6 +293,24 @@ class ImageDataset(Dataset):
         )
         print('  ----------------------------------------')
 
+    def save_relabel_file(self, data_dir, relabel_map):
+        """
+        Save the mapping <pid_old, pid_new> after relabelling to csv.
+        :param data_dir: path to dataset that contains training set
+        :param relabel_map: a dict in the form of {pid_old:pid_new}
+        :return: None
+        """
+        import csv
+        from datetime import datetime
+        now = datetime.now()
+        relabel_record_path = osp.join(data_dir, "train_relabel"+now.strftime("_%H-%M-%S")+".csv")
+        with open(relabel_record_path, 'w+') as f:
+            csv_writer = csv.writer(f)
+            csv_writer.writerow(['train_set_pid', 'new_label'])
+            for pid_old in relabel_map.keys():
+                csv_writer.writerow([pid_old, relabel_map[pid_old]])
+        print("Record of relabel mapping saved to ", relabel_record_path)
+
 
 class VideoDataset(Dataset):
     """A base class representing VideoDataset.

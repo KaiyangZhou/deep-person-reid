@@ -85,4 +85,7 @@ class Market1501(ImageDataset):
                 pid = pid2label[pid]
             data.append((img_path, pid, camid))
 
+        if relabel:
+            self.save_relabel_file(self.data_dir, relabel_map=pid2label)
+
         return data
