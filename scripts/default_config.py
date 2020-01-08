@@ -67,6 +67,7 @@ def get_default_config():
     cfg.train.gamma = 0.1 # learning rate decay multiplier
     cfg.train.print_freq = 20 # print frequency
     cfg.train.seed = 1 # random seed
+    cfg.train.save_best_only = True
 
     # optimizer
     cfg.sgd = CN()
@@ -193,6 +194,7 @@ def engine_run_kwargs(cfg):
         'eval_freq': cfg.test.eval_freq,
         'test_only': cfg.test.evaluate,
         'print_freq': cfg.train.print_freq,
+        'save_best_only': cfg.train.save_best_only,
         'dist_metric': cfg.test.dist_metric,
         'normalize_feature': cfg.test.normalize_feature,
         'visrank': cfg.test.visrank,

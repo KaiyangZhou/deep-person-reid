@@ -60,7 +60,8 @@ class Engine(object):
         visrank_topk=10,
         use_metric_cuhk03=False,
         ranks=[1, 5, 10, 20],
-        rerank=False
+        rerank=False,
+        save_best_only=True
     ):
         r"""A unified pipeline for training and evaluating a model.
 
@@ -91,6 +92,8 @@ class Engine(object):
             ranks (list, optional): cmc ranks to be computed. Default is [1, 5, 10, 20].
             rerank (bool, optional): uses person re-ranking (by Zhong et al. CVPR'17).
                 Default is False. This is only enabled when test_only=True.
+            save_best_only (bool, optional): during training, save the best model on test set and last epoch.
+                Default is True to save storage.
         """
 
         if visrank and not test_only:
@@ -118,6 +121,8 @@ class Engine(object):
         time_start = time.time()
         print('=> Start training')
 
+        rank1_best = 0
+
         for epoch in range(start_epoch, max_epoch):
             self.train(
                 epoch,
@@ -142,7 +147,13 @@ class Engine(object):
                     use_metric_cuhk03=use_metric_cuhk03,
                     ranks=ranks
                 )
-                self._save_checkpoint(epoch, rank1, save_dir)
+                if not save_best_only:
+                    self._save_checkpoint(epoch, rank1, save_dir)
+                # save best epoch on test set
+                elif rank1 >= rank1_best:
+                    rank1_best = rank1
+                    self._save_checkpoint(epoch, rank1, save_dir, is_best=True)
+
 
         if max_epoch > 0:
             print('=> Final test')
@@ -156,7 +167,8 @@ class Engine(object):
                 use_metric_cuhk03=use_metric_cuhk03,
                 ranks=ranks
             )
-            self._save_checkpoint(epoch, rank1, save_dir)
+            # save last epoch anyway
+            self._save_checkpoint(epoch, rank1, save_dir, is_best=False)
 
         elapsed = round(time.time() - time_start)
         elapsed = str(datetime.timedelta(seconds=elapsed))
