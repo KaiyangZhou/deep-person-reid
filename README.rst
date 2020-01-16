@@ -267,6 +267,7 @@ ReID-specific models
 Useful links
 -------------
 - `OSNet-IBN1-Lite (test-only code with lite docker container) <https://github.com/RodMech/OSNet-IBN1-Lite>`_
+- `Deep Learning for Person Re-identification: A Survey and Outlook <https://github.com/mangye16/ReID-Survey>`_
 
 
 Citation
