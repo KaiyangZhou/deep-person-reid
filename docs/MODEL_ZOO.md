@@ -71,4 +71,4 @@
 | osnet_x0_5 | 0.6 | 0.27 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 64.3 (34.9) | 65.2 (43.3) | [model](https://mega.nz/#!papSWQhY!IId-QfcHj7nXQ_muUubgv9_n0SsnZzarmb5mQgcMv74) |
 | osnet_x0_25 | 0.2 | 0.08 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 59.9 (31.0) | 61.5 (39.6) | [model](https://mega.nz/#!QCoE0Kpa!BITLANumgjiR68TUFteL__N_RIoDKkL0M5Bl3Q8LC3U) |
 | osnet_ibn_x1_0 | 2.2 | 0.98 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 66.5 (37.2) | 67.4 (45.6) | [model](https://mega.nz/#!dL4Q2K5B!ZdHQ_X_rs2T-xmggigM5YvzJhmT1orkr6aQ1_fHgunM) |
-| osnet_ain_x1_0 | 2.2 | 0.98 | softmax | (256, 128) | `random_flip`, `color_jitter` | `cosine` | 71.1 (52.7) | 70.1 (43.3) | [model](https://mega.nz/#!YTZFnSJY!wlbo_5oa2TpDAGyWCTKTX1hh4d6DvJhh_RUA2z6i_so) |
+| osnet_ain_x1_0 | 2.2 | 0.98 | softmax | (256, 128) | `random_flip`, `color_jitter` | `cosine` | 70.1 (43.3) | 71.1 (52.7) | [model](https://mega.nz/#!YTZFnSJY!wlbo_5oa2TpDAGyWCTKTX1hh4d6DvJhh_RUA2z6i_so) |
