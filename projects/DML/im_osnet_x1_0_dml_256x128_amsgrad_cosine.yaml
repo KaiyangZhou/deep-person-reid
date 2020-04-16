@@ -1,6 +1,7 @@
 model:
   name: 'osnet_x1_0'
   pretrained: True
+  deploy: 'model1'
 
 data:
   type: 'image'
