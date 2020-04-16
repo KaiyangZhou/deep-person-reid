@@ -257,12 +257,12 @@
         <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 
-        <span class="n">loss_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">loss_summary</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;loss&#39;</span><span class="p">:</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span>
             <span class="s1">&#39;acc&#39;</span><span class="p">:</span> <span class="n">metrics</span><span class="o">.</span><span class="n">accuracy</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">pids</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
         <span class="p">}</span>
 
-        <span class="k">return</span> <span class="n">loss_dict</span></div>
+        <span class="k">return</span> <span class="n">loss_summary</span></div>
 </pre></div>
 
            </div>
