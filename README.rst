@@ -1,10 +1,5 @@
 Torchreid
 ===========
-.. image:: https://img.shields.io/github/license/KaiyangZhou/deep-person-reid
-   :alt: GitHub license
-   :target: https://github.com/KaiyangZhou/deep-person-reid/blob/master/LICENSE
-
-
 Torchreid is a library for deep-learning person re-identification in `PyTorch <https://pytorch.org/>`_.
 
 It features:
@@ -38,7 +33,7 @@ You can find some research projects that are built on top of Torchreid `here <ht
 
 What's new
 ------------
-- [Apr 2020] Code for reproducing the experiments of `deep mutual learning <https://zpascal.net/cvpr2018/Zhang_Deep_Mutual_Learning_CVPR_2018_paper.pdf>`_ in `OSNet <https://arxiv.org/pdf/1905.00953v6.pdf>`_ (Supp. B) has been released at ``projects/DML``.
+- [Apr 2020] Code for reproducing the experiments of `deep mutual learning <https://zpascal.net/cvpr2018/Zhang_Deep_Mutual_Learning_CVPR_2018_paper.pdf>`_ in the `OSNet paper <https://arxiv.org/pdf/1905.00953v6.pdf>`__ (Supp. B) has been released at ``projects/DML``.
 - [Apr 2020] Upgraded to ``1.2.0``. The engine class has been made more model-agnostic to improve extensibility. See `Engine <torchreid/engine/engine.py>`_ and `ImageSoftmaxEngine <torchreid/engine/image/softmax.py>`_ for more details. Credit to `Dassl.pytorch <https://github.com/KaiyangZhou/Dassl.pytorch>`_.
 - [Dec 2019] Our `OSNet paper <https://arxiv.org/pdf/1905.00953v6.pdf>`_ has been updated, with additional experiments (in section B of the supplementary) showing some useful techniques for improving OSNet's performance in practice.
 - [Nov 2019] ``ImageDataManager`` can load training data from target datasets by setting ``load_train_targets=True``, and the train-loader can be accessed with ``train_loader_t = datamanager.train_loader_t``. This feature is useful for domain adaptation research.
