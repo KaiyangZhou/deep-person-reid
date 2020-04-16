@@ -185,24 +185,23 @@ class Engine(object):
             self.writer = SummaryWriter(log_dir=save_dir)
 
         time_start = time.time()
+        self.start_epoch = start_epoch
+        self.max_epoch = max_epoch
         print('=> Start training')
 
-        for epoch in range(start_epoch, max_epoch):
+        for self.epoch in range(self.start_epoch, self.max_epoch):
             self.train(
-                epoch,
-                max_epoch,
-                self.writer,
                 print_freq=print_freq,
                 fixbase_epoch=fixbase_epoch,
                 open_layers=open_layers
             )
 
-            if (epoch + 1) >= start_eval \
+            if (self.epoch + 1) >= start_eval \
                and eval_freq > 0 \
-               and (epoch+1) % eval_freq == 0 \
-               and (epoch + 1) != max_epoch:
+               and (self.epoch+1) % eval_freq == 0 \
+               and (self.epoch + 1) != self.max_epoch:
                 rank1 = self.test(
-                    epoch,
+                    self.epoch,
                     dist_metric=dist_metric,
                     normalize_feature=normalize_feature,
                     visrank=visrank,
@@ -211,12 +210,13 @@ class Engine(object):
                     use_metric_cuhk03=use_metric_cuhk03,
                     ranks=ranks
                 )
-                self.save_model(epoch, rank1, save_dir)
+                self.save_model(self.epoch, rank1, save_dir)
+                self.writer.add_scalar('Test/rank1', rank1, self.epoch)
 
-        if max_epoch > 0:
+        if self.max_epoch > 0:
             print('=> Final test')
             rank1 = self.test(
-                epoch,
+                self.epoch,
                 dist_metric=dist_metric,
                 normalize_feature=normalize_feature,
                 visrank=visrank,
@@ -225,7 +225,8 @@ class Engine(object):
                 use_metric_cuhk03=use_metric_cuhk03,
                 ranks=ranks
             )
-            self.save_model(epoch, rank1, save_dir)
+            self.save_model(self.epoch, rank1, save_dir)
+            self.writer.add_scalar('Test/rank1', rank1, self.epoch)
 
         elapsed = round(time.time() - time_start)
         elapsed = str(datetime.timedelta(seconds=elapsed))
@@ -233,34 +234,30 @@ class Engine(object):
         if self.writer is not None:
             self.writer.close()
 
-    def train(
-        self,
-        epoch,
-        max_epoch,
-        writer,
-        print_freq=10,
-        fixbase_epoch=0,
-        open_layers=None
-    ):
+    def train(self, print_freq=10, fixbase_epoch=0, open_layers=None):
         losses = MetricMeter()
         batch_time = AverageMeter()
         data_time = AverageMeter()
 
         self.set_model_mode('train')
 
-        self._two_stepped_transfer_learning(epoch, fixbase_epoch, open_layers)
+        self._two_stepped_transfer_learning(
+            self.epoch, fixbase_epoch, open_layers
+        )
 
-        num_batches = len(self.train_loader)
+        self.num_batches = len(self.train_loader)
         end = time.time()
-        for batch_idx, data in enumerate(self.train_loader):
+        for self.batch_idx, data in enumerate(self.train_loader):
             data_time.update(time.time() - end)
             loss_dict = self.forward_backward(data)
             batch_time.update(time.time() - end)
             losses.update(loss_dict)
 
-            if (batch_idx+1) % print_freq == 0:
-                nb_this_epoch = num_batches - (batch_idx+1)
-                nb_future_epochs = (max_epoch - (epoch+1)) * num_batches
+            if (self.batch_idx + 1) % print_freq == 0:
+                nb_this_epoch = self.num_batches - (self.batch_idx + 1)
+                nb_future_epochs = (
+                    self.max_epoch - (self.epoch + 1)
+                ) * self.num_batches
                 eta_seconds = batch_time.avg * (nb_this_epoch+nb_future_epochs)
                 eta_str = str(datetime.timedelta(seconds=int(eta_seconds)))
                 print(
@@ -270,10 +267,10 @@ class Engine(object):
                     'eta {eta}\t'
                     '{losses}\t'
                     'lr {lr:.6f}'.format(
-                        epoch + 1,
-                        max_epoch,
-                        batch_idx + 1,
-                        num_batches,
+                        self.epoch + 1,
+                        self.max_epoch,
+                        self.batch_idx + 1,
+                        self.num_batches,
                         batch_time=batch_time,
                         data_time=data_time,
                         eta=eta_str,
@@ -282,13 +279,15 @@ class Engine(object):
                     )
                 )
 
-            if writer is not None:
-                n_iter = epoch*num_batches + batch_idx
-                writer.add_scalar('Train/time', batch_time.avg, n_iter)
-                writer.add_scalar('Train/data', data_time.avg, n_iter)
+            if self.writer is not None:
+                n_iter = self.epoch * self.num_batches + self.batch_idx
+                self.writer.add_scalar('Train/time', batch_time.avg, n_iter)
+                self.writer.add_scalar('Train/data', data_time.avg, n_iter)
                 for name, meter in losses.meters.items():
-                    writer.add_scalar('Train/' + name, meter.avg, n_iter)
-                writer.add_scalar('Train/lr', self.get_current_lr(), n_iter)
+                    self.writer.add_scalar('Train/' + name, meter.avg, n_iter)
+                self.writer.add_scalar(
+                    'Train/lr', self.get_current_lr(), n_iter
+                )
 
             end = time.time()
 
@@ -464,7 +463,7 @@ class Engine(object):
     def _two_stepped_transfer_learning(
         self, epoch, fixbase_epoch, open_layers, model=None
     ):
-        """Two stepped transfer learning.
+        """Two-stepped transfer learning.
 
         The idea is to freeze base layers for a certain number of epochs
         and then open all layers for training.
