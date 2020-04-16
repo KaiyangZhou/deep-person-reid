@@ -90,9 +90,9 @@ class ImageSoftmaxEngine(Engine):
         loss.backward()
         self.optimizer.step()
 
-        loss_dict = {
+        loss_summary = {
             'loss': loss.item(),
             'acc': metrics.accuracy(outputs, pids)[0].item()
         }
 
-        return loss_dict
+        return loss_summary

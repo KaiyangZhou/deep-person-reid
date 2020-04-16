@@ -105,10 +105,10 @@ class ImageTripletEngine(Engine):
         loss.backward()
         self.optimizer.step()
 
-        loss_dict = {
+        loss_summary = {
             'loss_t': loss_t.item(),
             'loss_x': loss_x.item(),
             'acc': metrics.accuracy(outputs, pids)[0].item()
         }
 
-        return loss_dict
+        return loss_summary

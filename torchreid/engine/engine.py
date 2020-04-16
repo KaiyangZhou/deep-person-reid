@@ -249,9 +249,9 @@ class Engine(object):
         end = time.time()
         for self.batch_idx, data in enumerate(self.train_loader):
             data_time.update(time.time() - end)
-            loss_dict = self.forward_backward(data)
+            loss_summary = self.forward_backward(data)
             batch_time.update(time.time() - end)
-            losses.update(loss_dict)
+            losses.update(loss_summary)
 
             if (self.batch_idx + 1) % print_freq == 0:
                 nb_this_epoch = self.num_batches - (self.batch_idx + 1)

@@ -93,7 +93,6 @@ class VideoSoftmaxEngine(ImageSoftmaxEngine):
         return imgs, pids
 
     def _extract_features(self, input):
-        self.model.eval()
         # b: batch size
         # s: sqeuence length
         # c: channel depth
