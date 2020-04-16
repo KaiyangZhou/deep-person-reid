@@ -352,24 +352,23 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="n">SummaryWriter</span><span class="p">(</span><span class="n">log_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">)</span>
 
         <span class="n">time_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_epoch</span> <span class="o">=</span> <span class="n">start_epoch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_epoch</span> <span class="o">=</span> <span class="n">max_epoch</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&gt; Start training&#39;</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_epoch</span><span class="p">,</span> <span class="n">max_epoch</span><span class="p">):</span>
+        <span class="k">for</span> <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_epoch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_epoch</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
-                <span class="n">epoch</span><span class="p">,</span>
-                <span class="n">max_epoch</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="p">,</span>
                 <span class="n">print_freq</span><span class="o">=</span><span class="n">print_freq</span><span class="p">,</span>
                 <span class="n">fixbase_epoch</span><span class="o">=</span><span class="n">fixbase_epoch</span><span class="p">,</span>
                 <span class="n">open_layers</span><span class="o">=</span><span class="n">open_layers</span>
             <span class="p">)</span>
 
-            <span class="k">if</span> <span class="p">(</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">start_eval</span> \
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">start_eval</span> \
                <span class="ow">and</span> <span class="n">eval_freq</span> <span class="o">&gt;</span> <span class="mi">0</span> \
-               <span class="ow">and</span> <span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">eval_freq</span> <span class="o">==</span> <span class="mi">0</span> \
-               <span class="ow">and</span> <span class="p">(</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="n">max_epoch</span><span class="p">:</span>
+               <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">eval_freq</span> <span class="o">==</span> <span class="mi">0</span> \
+               <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_epoch</span><span class="p">:</span>
                 <span class="n">rank1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="p">(</span>
-                    <span class="n">epoch</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span><span class="p">,</span>
                     <span class="n">dist_metric</span><span class="o">=</span><span class="n">dist_metric</span><span class="p">,</span>
                     <span class="n">normalize_feature</span><span class="o">=</span><span class="n">normalize_feature</span><span class="p">,</span>
                     <span class="n">visrank</span><span class="o">=</span><span class="n">visrank</span><span class="p">,</span>
@@ -378,12 +377,13 @@
                     <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="n">use_metric_cuhk03</span><span class="p">,</span>
                     <span class="n">ranks</span><span class="o">=</span><span class="n">ranks</span>
                 <span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">rank1</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epoch</span><span class="p">,</span> <span class="n">rank1</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Test/rank1&#39;</span><span class="p">,</span> <span class="n">rank1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">max_epoch</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_epoch</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&gt; Final test&#39;</span><span class="p">)</span>
             <span class="n">rank1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="p">(</span>
-                <span class="n">epoch</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span><span class="p">,</span>
                 <span class="n">dist_metric</span><span class="o">=</span><span class="n">dist_metric</span><span class="p">,</span>
                 <span class="n">normalize_feature</span><span class="o">=</span><span class="n">normalize_feature</span><span class="p">,</span>
                 <span class="n">visrank</span><span class="o">=</span><span class="n">visrank</span><span class="p">,</span>
@@ -392,7 +392,8 @@
                 <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="n">use_metric_cuhk03</span><span class="p">,</span>
                 <span class="n">ranks</span><span class="o">=</span><span class="n">ranks</span>
             <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">rank1</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epoch</span><span class="p">,</span> <span class="n">rank1</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Test/rank1&#39;</span><span class="p">,</span> <span class="n">rank1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span><span class="p">)</span>
 
         <span class="n">elapsed</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">time_start</span><span class="p">)</span>
         <span class="n">elapsed</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">elapsed</span><span class="p">))</span>
@@ -400,34 +401,30 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">epoch</span><span class="p">,</span>
-        <span class="n">max_epoch</span><span class="p">,</span>
-        <span class="n">writer</span><span class="p">,</span>
-        <span class="n">print_freq</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">fixbase_epoch</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-        <span class="n">open_layers</span><span class="o">=</span><span class="kc">None</span>
-    <span class="p">):</span>
+    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">print_freq</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">fixbase_epoch</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">open_layers</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">losses</span> <span class="o">=</span> <span class="n">MetricMeter</span><span class="p">()</span>
         <span class="n">batch_time</span> <span class="o">=</span> <span class="n">AverageMeter</span><span class="p">()</span>
         <span class="n">data_time</span> <span class="o">=</span> <span class="n">AverageMeter</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_model_mode</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_two_stepped_transfer_learning</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">fixbase_epoch</span><span class="p">,</span> <span class="n">open_layers</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_two_stepped_transfer_learning</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span><span class="p">,</span> <span class="n">fixbase_epoch</span><span class="p">,</span> <span class="n">open_layers</span>
+        <span class="p">)</span>
 
-        <span class="n">num_batches</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_loader</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_batches</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_loader</span><span class="p">)</span>
         <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_loader</span><span class="p">):</span>
+        <span class="k">for</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_idx</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_loader</span><span class="p">):</span>
             <span class="n">data_time</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">end</span><span class="p">)</span>
             <span class="n">loss_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward_backward</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             <span class="n">batch_time</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">end</span><span class="p">)</span>
             <span class="n">losses</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">loss_dict</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="p">(</span><span class="n">batch_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">print_freq</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">nb_this_epoch</span> <span class="o">=</span> <span class="n">num_batches</span> <span class="o">-</span> <span class="p">(</span><span class="n">batch_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-                <span class="n">nb_future_epochs</span> <span class="o">=</span> <span class="p">(</span><span class="n">max_epoch</span> <span class="o">-</span> <span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">num_batches</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">print_freq</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">nb_this_epoch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_batches</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">nb_future_epochs</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">max_epoch</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_batches</span>
                 <span class="n">eta_seconds</span> <span class="o">=</span> <span class="n">batch_time</span><span class="o">.</span><span class="n">avg</span> <span class="o">*</span> <span class="p">(</span><span class="n">nb_this_epoch</span><span class="o">+</span><span class="n">nb_future_epochs</span><span class="p">)</span>
                 <span class="n">eta_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">eta_seconds</span><span class="p">)))</span>
                 <span class="nb">print</span><span class="p">(</span>
@@ -437,10 +434,10 @@
                     <span class="s1">&#39;eta </span><span class="si">{eta}</span><span class="se">\t</span><span class="s1">&#39;</span>
                     <span class="s1">&#39;</span><span class="si">{losses}</span><span class="se">\t</span><span class="s1">&#39;</span>
                     <span class="s1">&#39;lr </span><span class="si">{lr:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-                        <span class="n">max_epoch</span><span class="p">,</span>
-                        <span class="n">batch_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-                        <span class="n">num_batches</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">max_epoch</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">batch_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">num_batches</span><span class="p">,</span>
                         <span class="n">batch_time</span><span class="o">=</span><span class="n">batch_time</span><span class="p">,</span>
                         <span class="n">data_time</span><span class="o">=</span><span class="n">data_time</span><span class="p">,</span>
                         <span class="n">eta</span><span class="o">=</span><span class="n">eta_str</span><span class="p">,</span>
@@ -449,13 +446,15 @@
                     <span class="p">)</span>
                 <span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">writer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">n_iter</span> <span class="o">=</span> <span class="n">epoch</span><span class="o">*</span><span class="n">num_batches</span> <span class="o">+</span> <span class="n">batch_idx</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Train/time&#39;</span><span class="p">,</span> <span class="n">batch_time</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">)</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Train/data&#39;</span><span class="p">,</span> <span class="n">data_time</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">n_iter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_batches</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_idx</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Train/time&#39;</span><span class="p">,</span> <span class="n">batch_time</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Train/data&#39;</span><span class="p">,</span> <span class="n">data_time</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">meter</span> <span class="ow">in</span> <span class="n">losses</span><span class="o">.</span><span class="n">meters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                    <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Train/&#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="n">meter</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">)</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Train/lr&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_current_lr</span><span class="p">(),</span> <span class="n">n_iter</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Train/&#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="n">meter</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span>
+                    <span class="s1">&#39;Train/lr&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_current_lr</span><span class="p">(),</span> <span class="n">n_iter</span>
+                <span class="p">)</span>
 
             <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
@@ -631,7 +630,7 @@
     <span class="k">def</span> <span class="nf">_two_stepped_transfer_learning</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">fixbase_epoch</span><span class="p">,</span> <span class="n">open_layers</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Two stepped transfer learning.</span>
+        <span class="sd">&quot;&quot;&quot;Two-stepped transfer learning.</span>
 
 <span class="sd">        The idea is to freeze base layers for a certain number of epochs</span>
 <span class="sd">        and then open all layers for training.</span>
