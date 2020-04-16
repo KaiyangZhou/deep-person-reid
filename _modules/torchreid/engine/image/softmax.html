@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.engine.image.softmax &mdash; torchreid 1.0.9 documentation</title>
+  <title>torchreid.engine.image.softmax &mdash; torchreid 1.2.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.0.9
+                1.2.0
               </div>
             
           
@@ -170,9 +170,6 @@
 <span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="kn">from</span> <span class="nn">torchreid</span> <span class="k">import</span> <span class="n">metrics</span>
-<span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="p">(</span>
-    <span class="n">AverageMeter</span><span class="p">,</span> <span class="n">open_all_layers</span><span class="p">,</span> <span class="n">open_specified_layers</span>
-<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">torchreid.losses</span> <span class="k">import</span> <span class="n">CrossEntropyLoss</span>
 
 <span class="kn">from</span> <span class="nn">..engine</span> <span class="k">import</span> <span class="n">Engine</span>
@@ -234,8 +231,12 @@
         <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">label_smooth</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">ImageSoftmaxEngine</span><span class="p">,</span> <span class="bp">self</span>
-              <span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">datamanager</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">scheduler</span><span class="p">,</span> <span class="n">use_gpu</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ImageSoftmaxEngine</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">datamanager</span><span class="p">,</span> <span class="n">use_gpu</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scheduler</span> <span class="o">=</span> <span class="n">scheduler</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_model</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">scheduler</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">criterion</span> <span class="o">=</span> <span class="n">CrossEntropyLoss</span><span class="p">(</span>
             <span class="n">num_classes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span><span class="n">num_train_pids</span><span class="p">,</span>
@@ -243,94 +244,25 @@
             <span class="n">label_smooth</span><span class="o">=</span><span class="n">label_smooth</span>
         <span class="p">)</span>
 
-<div class="viewcode-block" id="ImageSoftmaxEngine.train"><a class="viewcode-back" href="../../../../pkg/engine.html#torchreid.engine.image.softmax.ImageSoftmaxEngine.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">epoch</span><span class="p">,</span>
-        <span class="n">max_epoch</span><span class="p">,</span>
-        <span class="n">writer</span><span class="p">,</span>
-        <span class="n">print_freq</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">fixbase_epoch</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-        <span class="n">open_layers</span><span class="o">=</span><span class="kc">None</span>
-    <span class="p">):</span>
-        <span class="n">losses</span> <span class="o">=</span> <span class="n">AverageMeter</span><span class="p">()</span>
-        <span class="n">accs</span> <span class="o">=</span> <span class="n">AverageMeter</span><span class="p">()</span>
-        <span class="n">batch_time</span> <span class="o">=</span> <span class="n">AverageMeter</span><span class="p">()</span>
-        <span class="n">data_time</span> <span class="o">=</span> <span class="n">AverageMeter</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">forward_backward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">imgs</span><span class="p">,</span> <span class="n">pids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_data_for_train</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">fixbase_epoch</span> <span class="ow">and</span> <span class="n">open_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span>
-                <span class="s1">&#39;* Only train </span><span class="si">{}</span><span class="s1"> (epoch: </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">open_layers</span><span class="p">,</span> <span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">fixbase_epoch</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-            <span class="n">open_specified_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">open_layers</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">open_all_layers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">:</span>
+            <span class="n">imgs</span> <span class="o">=</span> <span class="n">imgs</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+            <span class="n">pids</span> <span class="o">=</span> <span class="n">pids</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
 
-        <span class="n">num_batches</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_loader</span><span class="p">)</span>
-        <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_loader</span><span class="p">):</span>
-            <span class="n">data_time</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">end</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_loss</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">criterion</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">pids</span><span class="p">)</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 
-            <span class="n">imgs</span><span class="p">,</span> <span class="n">pids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_data_for_train</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">:</span>
-                <span class="n">imgs</span> <span class="o">=</span> <span class="n">imgs</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-                <span class="n">pids</span> <span class="o">=</span> <span class="n">pids</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+        <span class="n">loss_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;loss&#39;</span><span class="p">:</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span>
+            <span class="s1">&#39;acc&#39;</span><span class="p">:</span> <span class="n">metrics</span><span class="o">.</span><span class="n">accuracy</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">pids</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="p">}</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
-            <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span>
-            <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_loss</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">criterion</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">pids</span><span class="p">)</span>
-            <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
-
-            <span class="n">batch_time</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">end</span><span class="p">)</span>
-
-            <span class="n">losses</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">pids</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-            <span class="n">accs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">metrics</span><span class="o">.</span><span class="n">accuracy</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">pids</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="n">batch_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">print_freq</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="c1"># estimate remaining time</span>
-                <span class="n">eta_seconds</span> <span class="o">=</span> <span class="n">batch_time</span><span class="o">.</span><span class="n">avg</span> <span class="o">*</span> <span class="p">(</span>
-                    <span class="n">num_batches</span> <span class="o">-</span> <span class="p">(</span><span class="n">batch_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">max_epoch</span> <span class="o">-</span>
-                                                   <span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">num_batches</span>
-                <span class="p">)</span>
-                <span class="n">eta_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">eta_seconds</span><span class="p">)))</span>
-                <span class="nb">print</span><span class="p">(</span>
-                    <span class="s1">&#39;Epoch: [</span><span class="si">{0}</span><span class="s1">/</span><span class="si">{1}</span><span class="s1">][</span><span class="si">{2}</span><span class="s1">/</span><span class="si">{3}</span><span class="s1">]</span><span class="se">\t</span><span class="s1">&#39;</span>
-                    <span class="s1">&#39;Time </span><span class="si">{batch_time.val:.3f}</span><span class="s1"> (</span><span class="si">{batch_time.avg:.3f}</span><span class="s1">)</span><span class="se">\t</span><span class="s1">&#39;</span>
-                    <span class="s1">&#39;Data </span><span class="si">{data_time.val:.3f}</span><span class="s1"> (</span><span class="si">{data_time.avg:.3f}</span><span class="s1">)</span><span class="se">\t</span><span class="s1">&#39;</span>
-                    <span class="s1">&#39;Loss </span><span class="si">{loss.val:.4f}</span><span class="s1"> (</span><span class="si">{loss.avg:.4f}</span><span class="s1">)</span><span class="se">\t</span><span class="s1">&#39;</span>
-                    <span class="s1">&#39;Acc </span><span class="si">{acc.val:.2f}</span><span class="s1"> (</span><span class="si">{acc.avg:.2f}</span><span class="s1">)</span><span class="se">\t</span><span class="s1">&#39;</span>
-                    <span class="s1">&#39;Lr </span><span class="si">{lr:.6f}</span><span class="se">\t</span><span class="s1">&#39;</span>
-                    <span class="s1">&#39;eta </span><span class="si">{eta}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-                        <span class="n">max_epoch</span><span class="p">,</span>
-                        <span class="n">batch_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-                        <span class="n">num_batches</span><span class="p">,</span>
-                        <span class="n">batch_time</span><span class="o">=</span><span class="n">batch_time</span><span class="p">,</span>
-                        <span class="n">data_time</span><span class="o">=</span><span class="n">data_time</span><span class="p">,</span>
-                        <span class="n">loss</span><span class="o">=</span><span class="n">losses</span><span class="p">,</span>
-                        <span class="n">acc</span><span class="o">=</span><span class="n">accs</span><span class="p">,</span>
-                        <span class="n">lr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">param_groups</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;lr&#39;</span><span class="p">],</span>
-                        <span class="n">eta</span><span class="o">=</span><span class="n">eta_str</span>
-                    <span class="p">)</span>
-                <span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">writer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">n_iter</span> <span class="o">=</span> <span class="n">epoch</span><span class="o">*</span><span class="n">num_batches</span> <span class="o">+</span> <span class="n">batch_idx</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Train/Time&#39;</span><span class="p">,</span> <span class="n">batch_time</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">)</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Train/Data&#39;</span><span class="p">,</span> <span class="n">data_time</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">)</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Train/Loss&#39;</span><span class="p">,</span> <span class="n">losses</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">)</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Train/Acc&#39;</span><span class="p">,</span> <span class="n">accs</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">)</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span>
-                    <span class="s1">&#39;Train/Lr&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">param_groups</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;lr&#39;</span><span class="p">],</span> <span class="n">n_iter</span>
-                <span class="p">)</span>
-
-            <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scheduler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">scheduler</span><span class="o">.</span><span class="n">step</span><span class="p">()</span></div></div>
+        <span class="k">return</span> <span class="n">loss_dict</span></div>
 </pre></div>
 
            </div>

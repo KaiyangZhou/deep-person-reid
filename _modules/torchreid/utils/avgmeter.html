@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.utils.avgmeter &mdash; torchreid 1.0.9 documentation</title>
+  <title>torchreid.utils.avgmeter &mdash; torchreid 1.2.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.0.9
+                1.2.0
               </div>
             
           
@@ -166,8 +166,10 @@
             
   <h1>Source code for torchreid.utils.avgmeter</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
+<span class="kn">import</span> <span class="nn">torch</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AverageMeter&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AverageMeter&#39;</span><span class="p">,</span> <span class="s1">&#39;MetricMeter&#39;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="AverageMeter"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.avgmeter.AverageMeter">[docs]</a><span class="k">class</span> <span class="nc">AverageMeter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -194,6 +196,48 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sum</span> <span class="o">+=</span> <span class="n">val</span> <span class="o">*</span> <span class="n">n</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="n">n</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">avg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span></div>
+
+
+<div class="viewcode-block" id="MetricMeter"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.avgmeter.MetricMeter">[docs]</a><span class="k">class</span> <span class="nc">MetricMeter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A collection of metrics.</span>
+
+<span class="sd">    Source: https://github.com/KaiyangZhou/Dassl.pytorch</span>
+
+<span class="sd">    Examples::</span>
+<span class="sd">        &gt;&gt;&gt; # 1. Create an instance of MetricMeter</span>
+<span class="sd">        &gt;&gt;&gt; metric = MetricMeter()</span>
+<span class="sd">        &gt;&gt;&gt; # 2. Update using a dictionary as input</span>
+<span class="sd">        &gt;&gt;&gt; input_dict = {&#39;loss_1&#39;: value_1, &#39;loss_2&#39;: value_2}</span>
+<span class="sd">        &gt;&gt;&gt; metric.update(input_dict)</span>
+<span class="sd">        &gt;&gt;&gt; # 3. Convert to string and print</span>
+<span class="sd">        &gt;&gt;&gt; print(str(metric))</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meters</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="n">AverageMeter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delimiter</span> <span class="o">=</span> <span class="n">delimiter</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_dict</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">input_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s1">&#39;Input to MetricMeter.update() must be a dictionary&#39;</span>
+            <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">input_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">meters</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">output_str</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">meter</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">meters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">output_str</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{:.4f}</span><span class="s1"> (</span><span class="si">{:.4f}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">meter</span><span class="o">.</span><span class="n">val</span><span class="p">,</span> <span class="n">meter</span><span class="o">.</span><span class="n">avg</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">delimiter</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_str</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

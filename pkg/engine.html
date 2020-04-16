@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.engine &mdash; torchreid 1.0.9 documentation</title>
+  <title>torchreid.engine &mdash; torchreid 1.2.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.0.9
+                1.2.0
               </div>
             
           
@@ -179,7 +179,7 @@
 <h2>Base Engine<a class="headerlink" href="#base-engine" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="torchreid.engine.engine.Engine">
-<em class="property">class </em><code class="sig-prename descclassname">torchreid.engine.engine.</code><code class="sig-name descname">Engine</code><span class="sig-paren">(</span><em class="sig-param">datamanager</em>, <em class="sig-param">model</em>, <em class="sig-param">optimizer=None</em>, <em class="sig-param">scheduler=None</em>, <em class="sig-param">use_gpu=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">torchreid.engine.engine.</code><code class="sig-name descname">Engine</code><span class="sig-paren">(</span><em class="sig-param">datamanager</em>, <em class="sig-param">use_gpu=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine" title="Permalink to this definition">¶</a></dt>
 <dd><p>A generic base Engine class for both image- and video-reid.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -248,21 +248,6 @@ but not a must. Please refer to the source code for more details.</p>
 </div>
 </dd></dl>
 
-<dl class="method">
-<dt id="torchreid.engine.engine.Engine.train">
-<code class="sig-name descname">train</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/engine.html#Engine.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.engine.Engine.train" title="Permalink to this definition">¶</a></dt>
-<dd><p>Performs training on source datasets for one epoch.</p>
-<p>This will be called every epoch in <code class="docutils literal notranslate"><span class="pre">run()</span></code>, e.g.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_epoch</span><span class="p">,</span> <span class="n">max_epoch</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">some_arguments</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This must be implemented in subclasses.</p>
-</div>
-</dd></dl>
-
 </dd></dl>
 
 </div>
@@ -319,21 +304,6 @@ or <code class="docutils literal notranslate"><span class="pre">torchreid.data.V
 <span class="p">)</span>
 </pre></div>
 </div>
-<dl class="method">
-<dt id="torchreid.engine.image.softmax.ImageSoftmaxEngine.train">
-<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">epoch</em>, <em class="sig-param">max_epoch</em>, <em class="sig-param">writer</em>, <em class="sig-param">print_freq=10</em>, <em class="sig-param">fixbase_epoch=0</em>, <em class="sig-param">open_layers=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/image/softmax.html#ImageSoftmaxEngine.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.image.softmax.ImageSoftmaxEngine.train" title="Permalink to this definition">¶</a></dt>
-<dd><p>Performs training on source datasets for one epoch.</p>
-<p>This will be called every epoch in <code class="docutils literal notranslate"><span class="pre">run()</span></code>, e.g.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_epoch</span><span class="p">,</span> <span class="n">max_epoch</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">some_arguments</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This must be implemented in subclasses.</p>
-</div>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="class">
@@ -393,21 +363,6 @@ or <code class="docutils literal notranslate"><span class="pre">torchreid.data.V
 <span class="p">)</span>
 </pre></div>
 </div>
-<dl class="method">
-<dt id="torchreid.engine.image.triplet.ImageTripletEngine.train">
-<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">epoch</em>, <em class="sig-param">max_epoch</em>, <em class="sig-param">writer</em>, <em class="sig-param">print_freq=10</em>, <em class="sig-param">fixbase_epoch=0</em>, <em class="sig-param">open_layers=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/engine/image/triplet.html#ImageTripletEngine.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.engine.image.triplet.ImageTripletEngine.train" title="Permalink to this definition">¶</a></dt>
-<dd><p>Performs training on source datasets for one epoch.</p>
-<p>This will be called every epoch in <code class="docutils literal notranslate"><span class="pre">run()</span></code>, e.g.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_epoch</span><span class="p">,</span> <span class="n">max_epoch</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">some_arguments</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This must be implemented in subclasses.</p>
-</div>
-</dd></dl>
-
 </dd></dl>
 
 </div>

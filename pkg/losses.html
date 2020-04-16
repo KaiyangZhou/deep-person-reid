@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.losses &mdash; torchreid 1.0.9 documentation</title>
+  <title>torchreid.losses &mdash; torchreid 1.2.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.0.9
+                1.2.0
               </div>
             
           
@@ -178,7 +178,7 @@
 <span id="softmax"></span><h2>Softmax<a class="headerlink" href="#module-torchreid.losses.cross_entropy_loss" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="torchreid.losses.cross_entropy_loss.CrossEntropyLoss">
-<em class="property">class </em><code class="sig-prename descclassname">torchreid.losses.cross_entropy_loss.</code><code class="sig-name descname">CrossEntropyLoss</code><span class="sig-paren">(</span><em class="sig-param">num_classes</em>, <em class="sig-param">epsilon=0.1</em>, <em class="sig-param">use_gpu=True</em>, <em class="sig-param">label_smooth=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/losses/cross_entropy_loss.html#CrossEntropyLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.losses.cross_entropy_loss.CrossEntropyLoss" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">torchreid.losses.cross_entropy_loss.</code><code class="sig-name descname">CrossEntropyLoss</code><span class="sig-paren">(</span><em class="sig-param">num_classes</em>, <em class="sig-param">eps=0.1</em>, <em class="sig-param">use_gpu=True</em>, <em class="sig-param">label_smooth=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/losses/cross_entropy_loss.html#CrossEntropyLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.losses.cross_entropy_loss.CrossEntropyLoss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cross entropy loss with label smoothing regularizer.</p>
 <dl class="simple">
 <dt>Reference:</dt><dd><p>Szegedy et al. Rethinking the Inception Architecture for Computer Vision. CVPR 2016.</p>
@@ -187,15 +187,15 @@
 <p>With label smoothing, the label <span class="math notranslate nohighlight">\(y\)</span> for a class is computed by</p>
 <div class="math notranslate nohighlight">
 \[\begin{equation}
-(1 - \epsilon) \times y + \frac{\epsilon}{K},
+(1 - \eps) \times y + \frac{\eps}{K},
 \end{equation}\]</div>
-<p>where <span class="math notranslate nohighlight">\(K\)</span> denotes the number of classes and <span class="math notranslate nohighlight">\(\epsilon\)</span> is a weight. When
-<span class="math notranslate nohighlight">\(\epsilon = 0\)</span>, the loss function reduces to the normal cross entropy.</p>
+<p>where <span class="math notranslate nohighlight">\(K\)</span> denotes the number of classes and <span class="math notranslate nohighlight">\(\eps\)</span> is a weight. When
+<span class="math notranslate nohighlight">\(\eps = 0\)</span>, the loss function reduces to the normal cross entropy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>num_classes</strong> (<em>int</em>) – number of classes.</p></li>
-<li><p><strong>epsilon</strong> (<em>float</em><em>, </em><em>optional</em>) – weight. Default is 0.1.</p></li>
+<li><p><strong>eps</strong> (<em>float</em><em>, </em><em>optional</em>) – weight. Default is 0.1.</p></li>
 <li><p><strong>use_gpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to use gpu devices. Default is True.</p></li>
 <li><p><strong>label_smooth</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to apply label smoothing. Default is True.</p></li>
 </ul>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>How-to &mdash; torchreid 1.0.9 documentation</title>
+  <title>How-to &mdash; torchreid 1.2.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.0.9
+                1.2.0
               </div>
             
           
@@ -483,7 +483,7 @@
 </div>
 <div class="section" id="design-your-own-engine">
 <h2><a class="toc-backref" href="#id19">Design your own Engine</a><a class="headerlink" href="#design-your-own-engine" title="Permalink to this headline">¶</a></h2>
-<p>A new Engine should be designed if you have your own loss function. The base Engine class <code class="docutils literal notranslate"><span class="pre">torchreid.engine.Engine</span></code> has implemented some generic methods which you can inherit to avoid re-writing. Please refer to the source code for more details. You are suggested to see how <code class="docutils literal notranslate"><span class="pre">ImageSoftmaxEngine</span></code> and <code class="docutils literal notranslate"><span class="pre">ImageTripletEngine</span></code> are constructed (also <code class="docutils literal notranslate"><span class="pre">VideoSoftmaxEngine</span></code> and <code class="docutils literal notranslate"><span class="pre">VideoTripletEngine</span></code>). All you need to implement might be just a <code class="docutils literal notranslate"><span class="pre">train()</span></code> function.</p>
+<p>A new Engine should be designed if you have your own loss function. The base Engine class <code class="docutils literal notranslate"><span class="pre">torchreid.engine.Engine</span></code> has implemented some generic methods which you can inherit to avoid re-writing. Please refer to the source code for more details. You are suggested to see how <code class="docutils literal notranslate"><span class="pre">ImageSoftmaxEngine</span></code> and <code class="docutils literal notranslate"><span class="pre">ImageTripletEngine</span></code> are constructed (also <code class="docutils literal notranslate"><span class="pre">VideoSoftmaxEngine</span></code> and <code class="docutils literal notranslate"><span class="pre">VideoTripletEngine</span></code>). All you need to implement might be just a <code class="docutils literal notranslate"><span class="pre">forward_backward()</span></code> function.</p>
 </div>
 </div>
 

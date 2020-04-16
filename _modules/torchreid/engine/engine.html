@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.engine.engine &mdash; torchreid 1.0.9 documentation</title>
+  <title>torchreid.engine.engine &mdash; torchreid 1.2.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.0.9
+                1.2.0
               </div>
             
           
@@ -170,13 +170,15 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
 <span class="kn">from</span> <span class="nn">torch.utils.tensorboard</span> <span class="k">import</span> <span class="n">SummaryWriter</span>
 
 <span class="kn">from</span> <span class="nn">torchreid</span> <span class="k">import</span> <span class="n">metrics</span>
 <span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="p">(</span>
-    <span class="n">AverageMeter</span><span class="p">,</span> <span class="n">re_ranking</span><span class="p">,</span> <span class="n">save_checkpoint</span><span class="p">,</span> <span class="n">visualize_ranked_results</span>
+    <span class="n">MetricMeter</span><span class="p">,</span> <span class="n">AverageMeter</span><span class="p">,</span> <span class="n">re_ranking</span><span class="p">,</span> <span class="n">open_all_layers</span><span class="p">,</span> <span class="n">save_checkpoint</span><span class="p">,</span>
+    <span class="n">open_specified_layers</span><span class="p">,</span> <span class="n">visualize_ranked_results</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">torchreid.losses</span> <span class="k">import</span> <span class="n">DeepSupervision</span>
 
@@ -193,22 +195,89 @@
 <span class="sd">        use_gpu (bool, optional): use gpu. Default is True.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">datamanager</span><span class="p">,</span>
-        <span class="n">model</span><span class="p">,</span>
-        <span class="n">optimizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">scheduler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span>
-    <span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datamanager</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span> <span class="o">=</span> <span class="n">datamanager</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizer</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scheduler</span> <span class="o">=</span> <span class="n">scheduler</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="ow">and</span> <span class="n">use_gpu</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">train_loader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span><span class="n">train_loader</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">test_loader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datamanager</span><span class="o">.</span><span class="n">test_loader</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="ow">and</span> <span class="n">use_gpu</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scheduler</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_models</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_optims</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scheds</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">register_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">optim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sched</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;_models&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+                <span class="s1">&#39;Cannot assign model before super().__init__() call&#39;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;_optims&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+                <span class="s1">&#39;Cannot assign optim before super().__init__() call&#39;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;_scheds&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+                <span class="s1">&#39;Cannot assign sched before super().__init__() call&#39;</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_models</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_optims</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">optim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scheds</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">sched</span>
+
+    <span class="k">def</span> <span class="nf">get_model_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">names_real</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_models</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">names</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names_real</span>
+            <span class="k">return</span> <span class="n">names</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">names_real</span>
+
+    <span class="k">def</span> <span class="nf">save_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">rank1</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">,</span> <span class="n">is_best</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model_names</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+            <span class="n">save_checkpoint</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s1">&#39;state_dict&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_models</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+                    <span class="s1">&#39;epoch&#39;</span><span class="p">:</span> <span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="s1">&#39;rank1&#39;</span><span class="p">:</span> <span class="n">rank1</span><span class="p">,</span>
+                    <span class="s1">&#39;optimizer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optims</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+                    <span class="s1">&#39;scheduler&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scheds</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()</span>
+                <span class="p">},</span>
+                <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span>
+                <span class="n">is_best</span><span class="o">=</span><span class="n">is_best</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set_model_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">mode</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;eval&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">]</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model_names</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;train&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_models</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_models</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">get_current_lr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model_names</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optims</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">param_groups</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;lr&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">update_lr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model_names</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scheds</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_scheds</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Engine.run"><a class="viewcode-back" href="../../../pkg/engine.html#torchreid.engine.engine.Engine.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -309,7 +378,7 @@
                     <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="n">use_metric_cuhk03</span><span class="p">,</span>
                     <span class="n">ranks</span><span class="o">=</span><span class="n">ranks</span>
                 <span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_save_checkpoint</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">rank1</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">rank1</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">max_epoch</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&gt; Final test&#39;</span><span class="p">)</span>
@@ -323,7 +392,7 @@
                 <span class="n">use_metric_cuhk03</span><span class="o">=</span><span class="n">use_metric_cuhk03</span><span class="p">,</span>
                 <span class="n">ranks</span><span class="o">=</span><span class="n">ranks</span>
             <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_save_checkpoint</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">rank1</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">rank1</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">)</span>
 
         <span class="n">elapsed</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">time_start</span><span class="p">)</span>
         <span class="n">elapsed</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">elapsed</span><span class="p">))</span>
@@ -331,21 +400,69 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Engine.train"><a class="viewcode-back" href="../../../pkg/engine.html#torchreid.engine.engine.Engine.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Performs training on source datasets for one epoch.</span>
+    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">epoch</span><span class="p">,</span>
+        <span class="n">max_epoch</span><span class="p">,</span>
+        <span class="n">writer</span><span class="p">,</span>
+        <span class="n">print_freq</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">fixbase_epoch</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">open_layers</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="n">losses</span> <span class="o">=</span> <span class="n">MetricMeter</span><span class="p">()</span>
+        <span class="n">batch_time</span> <span class="o">=</span> <span class="n">AverageMeter</span><span class="p">()</span>
+        <span class="n">data_time</span> <span class="o">=</span> <span class="n">AverageMeter</span><span class="p">()</span>
 
-<span class="sd">        This will be called every epoch in ``run()``, e.g.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_model_mode</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">)</span>
 
-<span class="sd">        .. code-block:: python</span>
-<span class="sd">            </span>
-<span class="sd">            for epoch in range(start_epoch, max_epoch):</span>
-<span class="sd">                self.train(some_arguments)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_two_stepped_transfer_learning</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">fixbase_epoch</span><span class="p">,</span> <span class="n">open_layers</span><span class="p">)</span>
 
-<span class="sd">        .. note::</span>
-<span class="sd">            </span>
-<span class="sd">            This must be implemented in subclasses.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+        <span class="n">num_batches</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_loader</span><span class="p">)</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_loader</span><span class="p">):</span>
+            <span class="n">data_time</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">end</span><span class="p">)</span>
+            <span class="n">loss_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward_backward</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">batch_time</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">end</span><span class="p">)</span>
+            <span class="n">losses</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">loss_dict</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">batch_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">print_freq</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">nb_this_epoch</span> <span class="o">=</span> <span class="n">num_batches</span> <span class="o">-</span> <span class="p">(</span><span class="n">batch_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">nb_future_epochs</span> <span class="o">=</span> <span class="p">(</span><span class="n">max_epoch</span> <span class="o">-</span> <span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">num_batches</span>
+                <span class="n">eta_seconds</span> <span class="o">=</span> <span class="n">batch_time</span><span class="o">.</span><span class="n">avg</span> <span class="o">*</span> <span class="p">(</span><span class="n">nb_this_epoch</span><span class="o">+</span><span class="n">nb_future_epochs</span><span class="p">)</span>
+                <span class="n">eta_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">eta_seconds</span><span class="p">)))</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s1">&#39;epoch: [</span><span class="si">{0}</span><span class="s1">/</span><span class="si">{1}</span><span class="s1">][</span><span class="si">{2}</span><span class="s1">/</span><span class="si">{3}</span><span class="s1">]</span><span class="se">\t</span><span class="s1">&#39;</span>
+                    <span class="s1">&#39;time </span><span class="si">{batch_time.val:.3f}</span><span class="s1"> (</span><span class="si">{batch_time.avg:.3f}</span><span class="s1">)</span><span class="se">\t</span><span class="s1">&#39;</span>
+                    <span class="s1">&#39;data </span><span class="si">{data_time.val:.3f}</span><span class="s1"> (</span><span class="si">{data_time.avg:.3f}</span><span class="s1">)</span><span class="se">\t</span><span class="s1">&#39;</span>
+                    <span class="s1">&#39;eta </span><span class="si">{eta}</span><span class="se">\t</span><span class="s1">&#39;</span>
+                    <span class="s1">&#39;</span><span class="si">{losses}</span><span class="se">\t</span><span class="s1">&#39;</span>
+                    <span class="s1">&#39;lr </span><span class="si">{lr:.6f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="n">max_epoch</span><span class="p">,</span>
+                        <span class="n">batch_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="n">num_batches</span><span class="p">,</span>
+                        <span class="n">batch_time</span><span class="o">=</span><span class="n">batch_time</span><span class="p">,</span>
+                        <span class="n">data_time</span><span class="o">=</span><span class="n">data_time</span><span class="p">,</span>
+                        <span class="n">eta</span><span class="o">=</span><span class="n">eta_str</span><span class="p">,</span>
+                        <span class="n">losses</span><span class="o">=</span><span class="n">losses</span><span class="p">,</span>
+                        <span class="n">lr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_current_lr</span><span class="p">()</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">writer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">n_iter</span> <span class="o">=</span> <span class="n">epoch</span><span class="o">*</span><span class="n">num_batches</span> <span class="o">+</span> <span class="n">batch_idx</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Train/time&#39;</span><span class="p">,</span> <span class="n">batch_time</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">)</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Train/data&#39;</span><span class="p">,</span> <span class="n">data_time</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">meter</span> <span class="ow">in</span> <span class="n">losses</span><span class="o">.</span><span class="n">meters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Train/&#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="n">meter</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">)</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">add_scalar</span><span class="p">(</span><span class="s1">&#39;Train/lr&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_current_lr</span><span class="p">(),</span> <span class="n">n_iter</span><span class="p">)</span>
+
+            <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_lr</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">forward_backward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
 <div class="viewcode-block" id="Engine.test"><a class="viewcode-back" href="../../../pkg/engine.html#torchreid.engine.engine.Engine.test">[docs]</a>    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -372,6 +489,7 @@
 <span class="sd">            ``_extract_features()`` and ``_parse_data_for_eval()`` (most of the time),</span>
 <span class="sd">            but not a must. Please refer to the source code for more details.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_model_mode</span><span class="p">(</span><span class="s1">&#39;eval&#39;</span><span class="p">)</span>
         <span class="n">targets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_loader</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
@@ -497,7 +615,6 @@
         <span class="k">return</span> <span class="n">loss</span>
 
     <span class="k">def</span> <span class="nf">_extract_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_parse_data_for_train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
@@ -511,18 +628,29 @@
         <span class="n">camids</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">imgs</span><span class="p">,</span> <span class="n">pids</span><span class="p">,</span> <span class="n">camids</span>
 
-    <span class="k">def</span> <span class="nf">_save_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">rank1</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">,</span> <span class="n">is_best</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="n">save_checkpoint</span><span class="p">(</span>
-            <span class="p">{</span>
-                <span class="s1">&#39;state_dict&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
-                <span class="s1">&#39;epoch&#39;</span><span class="p">:</span> <span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-                <span class="s1">&#39;rank1&#39;</span><span class="p">:</span> <span class="n">rank1</span><span class="p">,</span>
-                <span class="s1">&#39;optimizer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
-                <span class="s1">&#39;scheduler&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">scheduler</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
-            <span class="p">},</span>
-            <span class="n">save_dir</span><span class="p">,</span>
-            <span class="n">is_best</span><span class="o">=</span><span class="n">is_best</span>
-        <span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">_two_stepped_transfer_learning</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">fixbase_epoch</span><span class="p">,</span> <span class="n">open_layers</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Two stepped transfer learning.</span>
+
+<span class="sd">        The idea is to freeze base layers for a certain number of epochs</span>
+<span class="sd">        and then open all layers for training.</span>
+
+<span class="sd">        Reference: https://arxiv.org/abs/1611.05244</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">model</span>
+        <span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">fixbase_epoch</span> <span class="ow">and</span> <span class="n">open_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s1">&#39;* Only train </span><span class="si">{}</span><span class="s1"> (epoch: </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">open_layers</span><span class="p">,</span> <span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">fixbase_epoch</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">open_specified_layers</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">open_layers</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">open_all_layers</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

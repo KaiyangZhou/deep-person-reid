@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.utils &mdash; torchreid 1.0.9 documentation</title>
+  <title>torchreid.utils &mdash; torchreid 1.2.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.0.9
+                1.2.0
               </div>
             
           
@@ -188,6 +188,25 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">losses</span> <span class="o">=</span> <span class="n">AverageMeter</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Update meter after every minibatch update</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">losses</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">loss_value</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torchreid.utils.avgmeter.MetricMeter">
+<em class="property">class </em><code class="sig-prename descclassname">torchreid.utils.avgmeter.</code><code class="sig-name descname">MetricMeter</code><span class="sig-paren">(</span><em class="sig-param">delimiter='t'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/avgmeter.html#MetricMeter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.avgmeter.MetricMeter" title="Permalink to this definition">¶</a></dt>
+<dd><p>A collection of metrics.</p>
+<p>Source: <a class="reference external" href="https://github.com/KaiyangZhou/Dassl.pytorch">https://github.com/KaiyangZhou/Dassl.pytorch</a></p>
+<dl>
+<dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># 1. Create an instance of MetricMeter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metric</span> <span class="o">=</span> <span class="n">MetricMeter</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># 2. Update using a dictionary as input</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">input_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;loss_1&#39;</span><span class="p">:</span> <span class="n">value_1</span><span class="p">,</span> <span class="s1">&#39;loss_2&#39;</span><span class="p">:</span> <span class="n">value_2</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metric</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">input_dict</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># 3. Convert to string and print</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">metric</span><span class="p">))</span>
 </pre></div>
 </div>
 </dd>
