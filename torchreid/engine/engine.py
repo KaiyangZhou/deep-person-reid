@@ -3,13 +3,15 @@ import time
 import numpy as np
 import os.path as osp
 import datetime
+from collections import OrderedDict
 import torch
 from torch.nn import functional as F
 from torch.utils.tensorboard import SummaryWriter
 
 from torchreid import metrics
 from torchreid.utils import (
-    AverageMeter, re_ranking, save_checkpoint, visualize_ranked_results
+    MetricMeter, AverageMeter, re_ranking, open_all_layers, save_checkpoint,
+    open_specified_layers, visualize_ranked_results
 )
 from torchreid.losses import DeepSupervision
 
@@ -26,22 +28,89 @@ class Engine(object):
         use_gpu (bool, optional): use gpu. Default is True.
     """
 
-    def __init__(
-        self,
-        datamanager,
-        model,
-        optimizer=None,
-        scheduler=None,
-        use_gpu=True
-    ):
+    def __init__(self, datamanager, use_gpu=True):
         self.datamanager = datamanager
-        self.model = model
-        self.optimizer = optimizer
-        self.scheduler = scheduler
-        self.use_gpu = (torch.cuda.is_available() and use_gpu)
-        self.writer = None
         self.train_loader = self.datamanager.train_loader
         self.test_loader = self.datamanager.test_loader
+        self.use_gpu = (torch.cuda.is_available() and use_gpu)
+        self.writer = None
+
+        self.model = None
+        self.optimizer = None
+        self.scheduler = None
+
+        self._models = OrderedDict()
+        self._optims = OrderedDict()
+        self._scheds = OrderedDict()
+
+    def register_model(self, name='model', model=None, optim=None, sched=None):
+        if self.__dict__.get('_models') is None:
+            raise AttributeError(
+                'Cannot assign model before super().__init__() call'
+            )
+
+        if self.__dict__.get('_optims') is None:
+            raise AttributeError(
+                'Cannot assign optim before super().__init__() call'
+            )
+
+        if self.__dict__.get('_scheds') is None:
+            raise AttributeError(
+                'Cannot assign sched before super().__init__() call'
+            )
+
+        self._models[name] = model
+        self._optims[name] = optim
+        self._scheds[name] = sched
+
+    def get_model_names(self, names=None):
+        names_real = list(self._models.keys())
+        if names is not None:
+            if not isinstance(names, list):
+                names = [names]
+            for name in names:
+                assert name in names_real
+            return names
+        else:
+            return names_real
+
+    def save_model(self, epoch, rank1, save_dir, is_best=False):
+        names = self.get_model_names()
+
+        for name in names:
+            save_checkpoint(
+                {
+                    'state_dict': self._models[name].state_dict(),
+                    'epoch': epoch + 1,
+                    'rank1': rank1,
+                    'optimizer': self._optims[name].state_dict(),
+                    'scheduler': self._scheds[name].state_dict()
+                },
+                osp.join(save_dir, name),
+                is_best=is_best
+            )
+
+    def set_model_mode(self, mode='train', names=None):
+        assert mode in ['train', 'eval', 'test']
+        names = self.get_model_names(names)
+
+        for name in names:
+            if mode == 'train':
+                self._models[name].train()
+            else:
+                self._models[name].eval()
+
+    def get_current_lr(self, names=None):
+        names = self.get_model_names(names)
+        name = names[0]
+        return self._optims[name].param_groups[0]['lr']
+
+    def update_lr(self, names=None):
+        names = self.get_model_names(names)
+
+        for name in names:
+            if self._scheds[name] is not None:
+                self._scheds[name].step()
 
     def run(
         self,
@@ -142,7 +211,7 @@ class Engine(object):
                     use_metric_cuhk03=use_metric_cuhk03,
                     ranks=ranks
                 )
-                self._save_checkpoint(epoch, rank1, save_dir)
+                self.save_model(epoch, rank1, save_dir)
 
         if max_epoch > 0:
             print('=> Final test')
@@ -156,7 +225,7 @@ class Engine(object):
                 use_metric_cuhk03=use_metric_cuhk03,
                 ranks=ranks
             )
-            self._save_checkpoint(epoch, rank1, save_dir)
+            self.save_model(epoch, rank1, save_dir)
 
         elapsed = round(time.time() - time_start)
         elapsed = str(datetime.timedelta(seconds=elapsed))
@@ -164,20 +233,68 @@ class Engine(object):
         if self.writer is not None:
             self.writer.close()
 
-    def train(self):
-        r"""Performs training on source datasets for one epoch.
+    def train(
+        self,
+        epoch,
+        max_epoch,
+        writer,
+        print_freq=10,
+        fixbase_epoch=0,
+        open_layers=None
+    ):
+        losses = MetricMeter()
+        batch_time = AverageMeter()
+        data_time = AverageMeter()
 
-        This will be called every epoch in ``run()``, e.g.
+        self.set_model_mode('train')
 
-        .. code-block:: python
-            
-            for epoch in range(start_epoch, max_epoch):
-                self.train(some_arguments)
+        self._two_stepped_transfer_learning(epoch, fixbase_epoch, open_layers)
 
-        .. note::
-            
-            This must be implemented in subclasses.
-        """
+        num_batches = len(self.train_loader)
+        end = time.time()
+        for batch_idx, data in enumerate(self.train_loader):
+            data_time.update(time.time() - end)
+            loss_dict = self.forward_backward(data)
+            batch_time.update(time.time() - end)
+            losses.update(loss_dict)
+
+            if (batch_idx+1) % print_freq == 0:
+                nb_this_epoch = num_batches - (batch_idx+1)
+                nb_future_epochs = (max_epoch - (epoch+1)) * num_batches
+                eta_seconds = batch_time.avg * (nb_this_epoch+nb_future_epochs)
+                eta_str = str(datetime.timedelta(seconds=int(eta_seconds)))
+                print(
+                    'epoch: [{0}/{1}][{2}/{3}]\t'
+                    'time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
+                    'data {data_time.val:.3f} ({data_time.avg:.3f})\t'
+                    'eta {eta}\t'
+                    '{losses}\t'
+                    'lr {lr:.6f}'.format(
+                        epoch + 1,
+                        max_epoch,
+                        batch_idx + 1,
+                        num_batches,
+                        batch_time=batch_time,
+                        data_time=data_time,
+                        eta=eta_str,
+                        losses=losses,
+                        lr=self.get_current_lr()
+                    )
+                )
+
+            if writer is not None:
+                n_iter = epoch*num_batches + batch_idx
+                writer.add_scalar('Train/time', batch_time.avg, n_iter)
+                writer.add_scalar('Train/data', data_time.avg, n_iter)
+                for name, meter in losses.meters.items():
+                    writer.add_scalar('Train/' + name, meter.avg, n_iter)
+                writer.add_scalar('Train/lr', self.get_current_lr(), n_iter)
+
+            end = time.time()
+
+        self.update_lr()
+
+    def forward_backward(self, data):
         raise NotImplementedError
 
     def test(
@@ -205,6 +322,7 @@ class Engine(object):
             ``_extract_features()`` and ``_parse_data_for_eval()`` (most of the time),
             but not a must. Please refer to the source code for more details.
         """
+        self.set_model_mode('eval')
         targets = list(self.test_loader.keys())
 
         for name in targets:
@@ -330,7 +448,6 @@ class Engine(object):
         return loss
 
     def _extract_features(self, input):
-        self.model.eval()
         return self.model(input)
 
     def _parse_data_for_train(self, data):
@@ -344,15 +461,26 @@ class Engine(object):
         camids = data[2]
         return imgs, pids, camids
 
-    def _save_checkpoint(self, epoch, rank1, save_dir, is_best=False):
-        save_checkpoint(
-            {
-                'state_dict': self.model.state_dict(),
-                'epoch': epoch + 1,
-                'rank1': rank1,
-                'optimizer': self.optimizer.state_dict(),
-                'scheduler': self.scheduler.state_dict(),
-            },
-            save_dir,
-            is_best=is_best
-        )
+    def _two_stepped_transfer_learning(
+        self, epoch, fixbase_epoch, open_layers, model=None
+    ):
+        """Two stepped transfer learning.
+
+        The idea is to freeze base layers for a certain number of epochs
+        and then open all layers for training.
+
+        Reference: https://arxiv.org/abs/1611.05244
+        """
+        model = self.model if model is None else model
+        if model is None:
+            return
+
+        if (epoch + 1) <= fixbase_epoch and open_layers is not None:
+            print(
+                '* Only train {} (epoch: {}/{})'.format(
+                    open_layers, epoch + 1, fixbase_epoch
+                )
+            )
+            open_specified_layers(model, open_layers)
+        else:
+            open_all_layers(model)
