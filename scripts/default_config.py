@@ -101,7 +101,6 @@ def get_default_config():
     cfg.test.rerank = False # use person re-ranking
     cfg.test.visrank = False # visualize ranked results (only available when cfg.test.evaluate=True)
     cfg.test.visrank_topk = 10 # top-k ranks to visualize
-    cfg.test.visactmap = False # visualize CNN activation maps
 
     return cfg
 
