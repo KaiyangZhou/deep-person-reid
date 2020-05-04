@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>How-to &mdash; torchreid 1.2.0 documentation</title>
+  <title>How-to &mdash; torchreid 1.2.1 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.2.0
+                1.2.1
               </div>
             
           
@@ -106,6 +106,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#visualize-activation-maps">Visualize activation maps</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#use-your-own-dataset">Use your own dataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#design-your-own-engine">Design your own Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#use-torchreid-as-a-feature-extractor-in-your-projects">Use Torchreid as a feature extractor in your projects</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
@@ -212,6 +213,7 @@
 <li><p><a class="reference internal" href="#visualize-activation-maps" id="id17">Visualize activation maps</a></p></li>
 <li><p><a class="reference internal" href="#use-your-own-dataset" id="id18">Use your own dataset</a></p></li>
 <li><p><a class="reference internal" href="#design-your-own-engine" id="id19">Design your own Engine</a></p></li>
+<li><p><a class="reference internal" href="#use-torchreid-as-a-feature-extractor-in-your-projects" id="id20">Use Torchreid as a feature extractor in your projects</a></p></li>
 </ul>
 </div>
 <div class="section" id="prepare-datasets">
@@ -484,6 +486,30 @@
 <div class="section" id="design-your-own-engine">
 <h2><a class="toc-backref" href="#id19">Design your own Engine</a><a class="headerlink" href="#design-your-own-engine" title="Permalink to this headline">¶</a></h2>
 <p>A new Engine should be designed if you have your own loss function. The base Engine class <code class="docutils literal notranslate"><span class="pre">torchreid.engine.Engine</span></code> has implemented some generic methods which you can inherit to avoid re-writing. Please refer to the source code for more details. You are suggested to see how <code class="docutils literal notranslate"><span class="pre">ImageSoftmaxEngine</span></code> and <code class="docutils literal notranslate"><span class="pre">ImageTripletEngine</span></code> are constructed (also <code class="docutils literal notranslate"><span class="pre">VideoSoftmaxEngine</span></code> and <code class="docutils literal notranslate"><span class="pre">VideoTripletEngine</span></code>). All you need to implement might be just a <code class="docutils literal notranslate"><span class="pre">forward_backward()</span></code> function.</p>
+</div>
+<div class="section" id="use-torchreid-as-a-feature-extractor-in-your-projects">
+<h2><a class="toc-backref" href="#id20">Use Torchreid as a feature extractor in your projects</a><a class="headerlink" href="#use-torchreid-as-a-feature-extractor-in-your-projects" title="Permalink to this headline">¶</a></h2>
+<p>We have provided a simple API for feature extraction, given input of various types such as a list of image paths or numpy arrays. More details can be found in the code at <code class="docutils literal notranslate"><span class="pre">torchreid/utils/feature_extractor.py</span></code>. Here we show a simple example of how to extract features given a list of image paths.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="kn">import</span> <span class="n">FeatureExtractor</span>
+
+<span class="n">extractor</span> <span class="o">=</span> <span class="n">FeatureExtractor</span><span class="p">(</span>
+    <span class="n">model_name</span><span class="o">=</span><span class="s1">&#39;osnet_x1_0&#39;</span><span class="p">,</span>
+    <span class="n">model_path</span><span class="o">=</span><span class="s1">&#39;a/b/c/model.pth.tar&#39;</span><span class="p">,</span>
+    <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda&#39;</span>
+<span class="p">)</span>
+
+<span class="n">image_list</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;a/b/c/image001.jpg&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;a/b/c/image002.jpg&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;a/b/c/image003.jpg&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;a/b/c/image004.jpg&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;a/b/c/image005.jpg&#39;</span>
+<span class="p">]</span>
+
+<span class="n">features</span> <span class="o">=</span> <span class="n">extractor</span><span class="p">(</span><span class="n">image_list</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="c1"># output (5, 512)</span>
+</pre></div>
+</div>
 </div>
 </div>
 

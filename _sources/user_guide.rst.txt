@@ -323,3 +323,29 @@ Use your own dataset
 Design your own Engine
 ------------------------
 A new Engine should be designed if you have your own loss function. The base Engine class ``torchreid.engine.Engine`` has implemented some generic methods which you can inherit to avoid re-writing. Please refer to the source code for more details. You are suggested to see how ``ImageSoftmaxEngine`` and ``ImageTripletEngine`` are constructed (also ``VideoSoftmaxEngine`` and ``VideoTripletEngine``). All you need to implement might be just a ``forward_backward()`` function.
+
+
+Use Torchreid as a feature extractor in your projects
+-------------------------------------------------------
+We have provided a simple API for feature extraction, given input of various types such as a list of image paths or numpy arrays. More details can be found in the code at ``torchreid/utils/feature_extractor.py``. Here we show a simple example of how to extract features given a list of image paths.
+
+.. code-block:: python
+
+    from torchreid.utils import FeatureExtractor
+
+    extractor = FeatureExtractor(
+        model_name='osnet_x1_0',
+        model_path='a/b/c/model.pth.tar',
+        device='cuda'
+    )
+
+    image_list = [
+        'a/b/c/image001.jpg',
+        'a/b/c/image002.jpg',
+        'a/b/c/image003.jpg',
+        'a/b/c/image004.jpg',
+        'a/b/c/image005.jpg'
+    ]
+
+    features = extractor(image_list)
+    print(features.shape) # output (5, 512)

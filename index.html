@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Torchreid &mdash; torchreid 1.2.0 documentation</title>
+  <title>Torchreid &mdash; torchreid 1.2.1 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                1.2.0
+                1.2.1
               </div>
             
           
@@ -169,7 +169,7 @@
             
   <div class="section" id="torchreid">
 <h1>Torchreid<a class="headerlink" href="#torchreid" title="Permalink to this headline">¶</a></h1>
-<p>Torchreid is a library for deep-learning person re-identification in <a class="reference external" href="https://pytorch.org/">PyTorch</a>.</p>
+<p>Torchreid is a library for deep-learning person re-identification, written in <a class="reference external" href="https://pytorch.org/">PyTorch</a>.</p>
 <p>It features:</p>
 <ul class="simple">
 <li><p>multi-GPU training</p></li>
@@ -194,6 +194,7 @@
 <div class="section" id="what-s-new">
 <h2>What’s new<a class="headerlink" href="#what-s-new" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
+<li><p>[May 2020] <code class="docutils literal notranslate"><span class="pre">1.2.1</span></code>: Added a simple API for feature extraction (<code class="docutils literal notranslate"><span class="pre">torchreid/utils/feature_extractor.py</span></code>). See the <a class="reference external" href="https://kaiyangzhou.github.io/deep-person-reid/user_guide.html">documentation</a> for the instruction.</p></li>
 <li><p>[Apr 2020] Code for reproducing the experiments of <a class="reference external" href="https://zpascal.net/cvpr2018/Zhang_Deep_Mutual_Learning_CVPR_2018_paper.pdf">deep mutual learning</a> in the <a class="reference external" href="https://arxiv.org/pdf/1905.00953v6.pdf">OSNet paper</a> (Supp. B) has been released at <code class="docutils literal notranslate"><span class="pre">projects/DML</span></code>.</p></li>
 <li><p>[Apr 2020] Upgraded to <code class="docutils literal notranslate"><span class="pre">1.2.0</span></code>. The engine class has been made more model-agnostic to improve extensibility. See <a class="reference external" href="torchreid/engine/engine.py">Engine</a> and <a class="reference external" href="torchreid/engine/image/softmax.py">ImageSoftmaxEngine</a> for more details. Credit to <a class="reference external" href="https://github.com/KaiyangZhou/Dassl.pytorch">Dassl.pytorch</a>.</p></li>
 <li><p>[Dec 2019] Our <a class="reference external" href="https://arxiv.org/pdf/1905.00953v6.pdf">OSNet paper</a> has been updated, with additional experiments (in section B of the supplementary) showing some useful techniques for improving OSNet’s performance in practice.</p></li>
