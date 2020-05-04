@@ -327,7 +327,7 @@ A new Engine should be designed if you have your own loss function. The base Eng
 
 Use Torchreid as a feature extractor in your projects
 -------------------------------------------------------
-We have provided a simple API for feature extraction, given input of various types such as a list of image paths or numpy arrays. More details can be found in the code at ``torchreid/utils/feature_extractor.py``. Here we show a simple example of how to extract features given a list of image paths.
+We have provided a simple API for feature extraction, which accepts input of various types such as a list of image paths or numpy arrays. More details can be found in the code at ``torchreid/utils/feature_extractor.py``. Here we show a simple example of how to extract features given a list of image paths.
 
 .. code-block:: python
 
