@@ -111,6 +111,7 @@ class ImageDataManager(DataManager):
         num_instances (int, optional): number of instances per identity in a batch.
             Default is 4.
         train_sampler (str, optional): sampler. Default is RandomSampler.
+        train_sampler_t (str, optional): sampler for target train loader. Default is RandomSampler.
         cuhk03_labeled (bool, optional): use cuhk03 labeled images.
             Default is False (defaul is to use detected images).
         cuhk03_classic_split (bool, optional): use the classic split in cuhk03.
@@ -159,6 +160,7 @@ class ImageDataManager(DataManager):
         workers=4,
         num_instances=4,
         train_sampler='RandomSampler',
+        train_sampler_t='RandomSampler',
         cuhk03_labeled=False,
         cuhk03_classic_split=False,
         market1501_500k=False
@@ -237,7 +239,7 @@ class ImageDataManager(DataManager):
                 trainset_t,
                 sampler=build_train_sampler(
                     trainset_t.train,
-                    train_sampler,
+                    train_sampler_t,
                     batch_size=batch_size_train,
                     num_instances=num_instances
                 ),

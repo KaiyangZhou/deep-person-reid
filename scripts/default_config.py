@@ -38,7 +38,8 @@ def get_default_config():
 
     # sampler
     cfg.sampler = CN()
-    cfg.sampler.train_sampler = 'RandomSampler'
+    cfg.sampler.train_sampler = 'RandomSampler' # sampler for source train loader
+    cfg.sampler.train_sampler_t = 'RandomSampler' # sampler for target train loader
     cfg.sampler.num_instances = 4 # number of instances per identity for RandomIdentitySampler
 
     # video reid setting
@@ -124,6 +125,7 @@ def imagedata_kwargs(cfg):
         'workers': cfg.data.workers,
         'num_instances': cfg.sampler.num_instances,
         'train_sampler': cfg.sampler.train_sampler,
+        'train_sampler_t': cfg.sampler.train_sampler_t,
         # image
         'cuhk03_labeled': cfg.cuhk03.labeled_images,
         'cuhk03_classic_split': cfg.cuhk03.classic_split,
