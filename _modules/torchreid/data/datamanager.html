@@ -237,15 +237,16 @@
         <span class="sd">&quot;&quot;&quot;Returns the number of training cameras.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_train_cams</span>
 
-<div class="viewcode-block" id="DataManager.fetch_qg"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.datamanager.DataManager.fetch_qg">[docs]</a>    <span class="k">def</span> <span class="nf">fetch_qg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="DataManager.fetch_test_loaders"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.datamanager.DataManager.fetch_test_loaders">[docs]</a>    <span class="k">def</span> <span class="nf">fetch_test_loaders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns query and gallery of a test dataset, each containing</span>
 <span class="sd">        tuples of (img_path(s), pid, camid).</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            name (str): dataset name.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;query&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span><span class="p">[</span><span class="n">name</span><span class="p">][</span>
-            <span class="s1">&#39;gallery&#39;</span><span class="p">]</span></div>
+        <span class="n">query_loader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;query&#39;</span><span class="p">]</span>
+        <span class="n">gallery_loader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_dataset</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;gallery&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">query_loader</span><span class="p">,</span> <span class="n">gallery_loader</span></div>
 
 <div class="viewcode-block" id="DataManager.preprocess_pil_img"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.datamanager.DataManager.preprocess_pil_img">[docs]</a>    <span class="k">def</span> <span class="nf">preprocess_pil_img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Transforms a PIL image to torch tensor for testing.&quot;&quot;&quot;</span>
