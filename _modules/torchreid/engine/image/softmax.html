@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.engine.image.softmax &mdash; torchreid 1.2.1 documentation</title>
+  <title>torchreid.engine.image.softmax &mdash; torchreid 1.2.2 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.2.1
+                1.2.2
               </div>
             
           
@@ -245,7 +245,7 @@
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">forward_backward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="n">imgs</span><span class="p">,</span> <span class="n">pids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_data_for_train</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">imgs</span><span class="p">,</span> <span class="n">pids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_data_for_train</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">:</span>
             <span class="n">imgs</span> <span class="o">=</span> <span class="n">imgs</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
@@ -253,7 +253,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
         <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span>
-        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_loss</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">criterion</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">pids</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_loss</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">criterion</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">pids</span><span class="p">)</span>
         <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 

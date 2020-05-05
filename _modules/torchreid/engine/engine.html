@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.engine.engine &mdash; torchreid 1.2.1 documentation</title>
+  <title>torchreid.engine.engine &mdash; torchreid 1.2.2 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.2.1
+                1.2.2
               </div>
             
           
@@ -408,7 +408,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_model_mode</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_two_stepped_transfer_learning</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">two_stepped_transfer_learning</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span><span class="p">,</span> <span class="n">fixbase_epoch</span><span class="p">,</span> <span class="n">open_layers</span>
         <span class="p">)</span>
 
@@ -485,7 +485,7 @@
 
 <span class="sd">            The test pipeline implemented in this function suits both image- and</span>
 <span class="sd">            video-reid. In general, a subclass of Engine only needs to re-implement</span>
-<span class="sd">            ``_extract_features()`` and ``_parse_data_for_eval()`` (most of the time),</span>
+<span class="sd">            ``extract_features()`` and ``parse_data_for_eval()`` (most of the time),</span>
 <span class="sd">            but not a must. Please refer to the source code for more details.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_model_mode</span><span class="p">(</span><span class="s1">&#39;eval&#39;</span><span class="p">)</span>
@@ -534,11 +534,11 @@
         <span class="k">def</span> <span class="nf">_feature_extraction</span><span class="p">(</span><span class="n">data_loader</span><span class="p">):</span>
             <span class="n">f_</span><span class="p">,</span> <span class="n">pids_</span><span class="p">,</span> <span class="n">camids_</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data_loader</span><span class="p">):</span>
-                <span class="n">imgs</span><span class="p">,</span> <span class="n">pids</span><span class="p">,</span> <span class="n">camids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_data_for_eval</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                <span class="n">imgs</span><span class="p">,</span> <span class="n">pids</span><span class="p">,</span> <span class="n">camids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_data_for_eval</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">:</span>
                     <span class="n">imgs</span> <span class="o">=</span> <span class="n">imgs</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
                 <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-                <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_features</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span>
+                <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_features</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span>
                 <span class="n">batch_time</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">end</span><span class="p">)</span>
                 <span class="n">features</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
                 <span class="n">f_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
@@ -606,28 +606,28 @@
 
         <span class="k">return</span> <span class="n">cmc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">_compute_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">compute_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
             <span class="n">loss</span> <span class="o">=</span> <span class="n">DeepSupervision</span><span class="p">(</span><span class="n">criterion</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">targets</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">targets</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">loss</span>
 
-    <span class="k">def</span> <span class="nf">_extract_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">extract_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_parse_data_for_train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">parse_data_for_train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="n">imgs</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">pids</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">imgs</span><span class="p">,</span> <span class="n">pids</span>
 
-    <span class="k">def</span> <span class="nf">_parse_data_for_eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">parse_data_for_eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="n">imgs</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">pids</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">camids</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">imgs</span><span class="p">,</span> <span class="n">pids</span><span class="p">,</span> <span class="n">camids</span>
 
-    <span class="k">def</span> <span class="nf">_two_stepped_transfer_learning</span><span class="p">(</span>
+<div class="viewcode-block" id="Engine.two_stepped_transfer_learning"><a class="viewcode-back" href="../../../pkg/engine.html#torchreid.engine.engine.Engine.two_stepped_transfer_learning">[docs]</a>    <span class="k">def</span> <span class="nf">two_stepped_transfer_learning</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">fixbase_epoch</span><span class="p">,</span> <span class="n">open_layers</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Two-stepped transfer learning.</span>
@@ -649,7 +649,7 @@
             <span class="p">)</span>
             <span class="n">open_specified_layers</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">open_layers</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">open_all_layers</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></div>
+            <span class="n">open_all_layers</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>
