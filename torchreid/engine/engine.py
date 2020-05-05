@@ -428,7 +428,7 @@ class Engine(object):
         if visrank:
             visualize_ranked_results(
                 distmat,
-                self.datamanager.fetch_qg(dataset_name),
+                self.datamanager.fetch_test_loaders(dataset_name),
                 self.datamanager.data_type,
                 width=self.datamanager.width,
                 height=self.datamanager.height,

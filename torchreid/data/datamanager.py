@@ -70,15 +70,16 @@ class DataManager(object):
         """Returns the number of training cameras."""
         return self._num_train_cams
 
-    def fetch_qg(self, name):
+    def fetch_test_loaders(self, name):
         """Returns query and gallery of a test dataset, each containing
         tuples of (img_path(s), pid, camid).
 
         Args:
             name (str): dataset name.
         """
-        return self.test_dataset[name]['query'], self.test_dataset[name][
-            'gallery']
+        query_loader = self.test_dataset[name]['query']
+        gallery_loader = self.test_dataset[name]['gallery']
+        return query_loader, gallery_loader
 
     def preprocess_pil_img(self, img):
         """Transforms a PIL image to torch tensor for testing."""
