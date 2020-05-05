@@ -56,19 +56,19 @@ class ImageDMLEngine(Engine):
         )
 
     def forward_backward(self, data):
-        imgs, pids = self._parse_data_for_train(data)
+        imgs, pids = self.parse_data_for_train(data)
 
         if self.use_gpu:
             imgs = imgs.cuda()
             pids = pids.cuda()
 
         outputs1, features1 = self.model1(imgs)
-        loss1_x = self._compute_loss(self.criterion_x, outputs1, pids)
-        loss1_t = self._compute_loss(self.criterion_t, features1, pids)
+        loss1_x = self.compute_loss(self.criterion_x, outputs1, pids)
+        loss1_t = self.compute_loss(self.criterion_t, features1, pids)
 
         outputs2, features2 = self.model2(imgs)
-        loss2_x = self._compute_loss(self.criterion_x, outputs2, pids)
-        loss2_t = self._compute_loss(self.criterion_t, features2, pids)
+        loss2_x = self.compute_loss(self.criterion_x, outputs2, pids)
+        loss2_t = self.compute_loss(self.criterion_t, features2, pids)
 
         loss1_ml = self.compute_kl_div(
             outputs2.detach(), outputs1, is_logit=True
@@ -113,7 +113,7 @@ class ImageDMLEngine(Engine):
             q = F.softmax(q, dim=1)
         return -(p * torch.log(q + 1e-8)).sum(1).mean()
 
-    def _two_stepped_transfer_learning(
+    def two_stepped_transfer_learning(
         self, epoch, fixbase_epoch, open_layers, model=None
     ):
         """Two stepped transfer learning.
@@ -138,7 +138,7 @@ class ImageDMLEngine(Engine):
             open_all_layers(model1)
             open_all_layers(model2)
 
-    def _extract_features(self, input):
+    def extract_features(self, input):
         if self.deploy == 'model1':
             return self.model1(input)
 
