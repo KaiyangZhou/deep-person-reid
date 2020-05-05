@@ -264,11 +264,12 @@
             <span class="n">imgs</span> <span class="o">=</span> <span class="n">imgs</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
             <span class="n">pids</span> <span class="o">=</span> <span class="n">pids</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
         <span class="n">outputs</span><span class="p">,</span> <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span>
         <span class="n">loss_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_loss</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">criterion_t</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">pids</span><span class="p">)</span>
         <span class="n">loss_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_loss</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">criterion_x</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">pids</span><span class="p">)</span>
         <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_t</span> <span class="o">*</span> <span class="n">loss_t</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_x</span> <span class="o">*</span> <span class="n">loss_x</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
         <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 
