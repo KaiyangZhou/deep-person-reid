@@ -91,7 +91,7 @@ class ImageTripletEngine(Engine):
         )
 
     def forward_backward(self, data):
-        imgs, pids = self._parse_data_for_train(data)
+        imgs, pids = self.parse_data_for_train(data)
 
         if self.use_gpu:
             imgs = imgs.cuda()
@@ -99,8 +99,8 @@ class ImageTripletEngine(Engine):
 
         self.optimizer.zero_grad()
         outputs, features = self.model(imgs)
-        loss_t = self._compute_loss(self.criterion_t, features, pids)
-        loss_x = self._compute_loss(self.criterion_x, outputs, pids)
+        loss_t = self.compute_loss(self.criterion_t, features, pids)
+        loss_x = self.compute_loss(self.criterion_x, outputs, pids)
         loss = self.weight_t * loss_t + self.weight_x * loss_x
         loss.backward()
         self.optimizer.step()

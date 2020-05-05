@@ -77,7 +77,7 @@ class VideoSoftmaxEngine(ImageSoftmaxEngine):
         )
         self.pooling_method = pooling_method
 
-    def _parse_data_for_train(self, data):
+    def parse_data_for_train(self, data):
         imgs = data[0]
         pids = data[1]
         if imgs.dim() == 5:
@@ -92,7 +92,7 @@ class VideoSoftmaxEngine(ImageSoftmaxEngine):
             pids = pids.contiguous().view(b * s)
         return imgs, pids
 
-    def _extract_features(self, input):
+    def extract_features(self, input):
         # b: batch size
         # s: sqeuence length
         # c: channel depth

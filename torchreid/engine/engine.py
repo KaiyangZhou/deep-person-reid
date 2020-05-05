@@ -241,7 +241,7 @@ class Engine(object):
 
         self.set_model_mode('train')
 
-        self._two_stepped_transfer_learning(
+        self.two_stepped_transfer_learning(
             self.epoch, fixbase_epoch, open_layers
         )
 
@@ -318,7 +318,7 @@ class Engine(object):
 
             The test pipeline implemented in this function suits both image- and
             video-reid. In general, a subclass of Engine only needs to re-implement
-            ``_extract_features()`` and ``_parse_data_for_eval()`` (most of the time),
+            ``extract_features()`` and ``parse_data_for_eval()`` (most of the time),
             but not a must. Please refer to the source code for more details.
         """
         self.set_model_mode('eval')
@@ -367,11 +367,11 @@ class Engine(object):
         def _feature_extraction(data_loader):
             f_, pids_, camids_ = [], [], []
             for batch_idx, data in enumerate(data_loader):
-                imgs, pids, camids = self._parse_data_for_eval(data)
+                imgs, pids, camids = self.parse_data_for_eval(data)
                 if self.use_gpu:
                     imgs = imgs.cuda()
                 end = time.time()
-                features = self._extract_features(imgs)
+                features = self.extract_features(imgs)
                 batch_time.update(time.time() - end)
                 features = features.data.cpu()
                 f_.append(features)
@@ -439,28 +439,28 @@ class Engine(object):
 
         return cmc[0]
 
-    def _compute_loss(self, criterion, outputs, targets):
+    def compute_loss(self, criterion, outputs, targets):
         if isinstance(outputs, (tuple, list)):
             loss = DeepSupervision(criterion, outputs, targets)
         else:
             loss = criterion(outputs, targets)
         return loss
 
-    def _extract_features(self, input):
+    def extract_features(self, input):
         return self.model(input)
 
-    def _parse_data_for_train(self, data):
+    def parse_data_for_train(self, data):
         imgs = data[0]
         pids = data[1]
         return imgs, pids
 
-    def _parse_data_for_eval(self, data):
+    def parse_data_for_eval(self, data):
         imgs = data[0]
         pids = data[1]
         camids = data[2]
         return imgs, pids, camids
 
-    def _two_stepped_transfer_learning(
+    def two_stepped_transfer_learning(
         self, epoch, fixbase_epoch, open_layers, model=None
     ):
         """Two-stepped transfer learning.
