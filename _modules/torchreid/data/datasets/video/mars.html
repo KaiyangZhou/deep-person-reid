@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.data.datasets.video.mars &mdash; torchreid 1.2.2 documentation</title>
+  <title>torchreid.data.datasets.video.mars &mdash; torchreid 1.2.3 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.2.2
+                1.2.3
               </div>
             
           
@@ -265,7 +265,8 @@
             <span class="k">if</span> <span class="n">pid</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
                 <span class="k">continue</span> <span class="c1"># junk images are just ignored</span>
             <span class="k">assert</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">camid</span> <span class="o">&lt;=</span> <span class="mi">6</span>
-            <span class="k">if</span> <span class="n">relabel</span><span class="p">:</span> <span class="n">pid</span> <span class="o">=</span> <span class="n">pid2label</span><span class="p">[</span><span class="n">pid</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">relabel</span><span class="p">:</span>
+                <span class="n">pid</span> <span class="o">=</span> <span class="n">pid2label</span><span class="p">[</span><span class="n">pid</span><span class="p">]</span>
             <span class="n">camid</span> <span class="o">-=</span> <span class="mi">1</span> <span class="c1"># index starts from 0</span>
             <span class="n">img_names</span> <span class="o">=</span> <span class="n">names</span><span class="p">[</span><span class="n">start_index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span><span class="n">end_index</span><span class="p">]</span>
 

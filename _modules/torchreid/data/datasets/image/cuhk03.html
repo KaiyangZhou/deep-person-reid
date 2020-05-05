@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.data.datasets.image.cuhk03 &mdash; torchreid 1.2.2 documentation</title>
+  <title>torchreid.data.datasets.image.cuhk03 &mdash; torchreid 1.2.3 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.2.2
+                1.2.3
               </div>
             
           
@@ -318,10 +318,8 @@
                     <span class="n">img_paths</span> <span class="o">=</span> <span class="n">_process_images</span><span class="p">(</span>
                         <span class="n">camp</span><span class="p">[</span><span class="n">pid</span><span class="p">,</span> <span class="p">:],</span> <span class="n">campid</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">imgs_dir</span>
                     <span class="p">)</span>
-                    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">img_paths</span>
-                               <span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;campid</span><span class="si">{}</span><span class="s1">-pid</span><span class="si">{}</span><span class="s1"> has no images&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                                   <span class="n">campid</span><span class="p">,</span> <span class="n">pid</span>
-                               <span class="p">)</span>
+                    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">img_paths</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> \
+                        <span class="s1">&#39;campid</span><span class="si">{}</span><span class="s1">-pid</span><span class="si">{}</span><span class="s1"> has no images&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">campid</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span>
                     <span class="n">meta_data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">campid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">pid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">img_paths</span><span class="p">))</span>
                 <span class="nb">print</span><span class="p">(</span>
                     <span class="s1">&#39;- done camera pair </span><span class="si">{}</span><span class="s1"> with </span><span class="si">{}</span><span class="s1"> identities&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>

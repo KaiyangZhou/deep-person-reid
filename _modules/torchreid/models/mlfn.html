@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.models.mlfn &mdash; torchreid 1.2.2 documentation</title>
+  <title>torchreid.models.mlfn &mdash; torchreid 1.2.3 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.2.2
+                1.2.3
               </div>
             
           
@@ -427,7 +427,7 @@
 <span class="k">def</span> <span class="nf">mlfn</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">MLFN</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">pretrained</span><span class="p">:</span>
-        <span class="c1">#init_pretrained_weights(model, model_urls[&#39;imagenet&#39;])</span>
+        <span class="c1"># init_pretrained_weights(model, model_urls[&#39;imagenet&#39;])</span>
         <span class="kn">import</span> <span class="nn">warnings</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
             <span class="s1">&#39;The imagenet pretrained weights need to be manually downloaded from </span><span class="si">{}</span><span class="s1">&#39;</span>

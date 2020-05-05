@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.data.transforms &mdash; torchreid 1.2.2 documentation</title>
+  <title>torchreid.data.transforms &mdash; torchreid 1.2.3 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.2.2
+                1.2.3
               </div>
             
           
@@ -171,7 +171,9 @@
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">deque</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="k">import</span> <span class="n">Image</span>
-<span class="kn">from</span> <span class="nn">torchvision.transforms</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">torchvision.transforms</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Resize</span><span class="p">,</span> <span class="n">Compose</span><span class="p">,</span> <span class="n">ToTensor</span><span class="p">,</span> <span class="n">Normalize</span><span class="p">,</span> <span class="n">ColorJitter</span><span class="p">,</span> <span class="n">RandomHorizontalFlip</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="Random2DTranslation"><a class="viewcode-back" href="../../../pkg/data.html#torchreid.data.transforms.Random2DTranslation">[docs]</a><span class="k">class</span> <span class="nc">Random2DTranslation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -446,8 +448,13 @@
         <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">RandomHorizontalFlip</span><span class="p">()]</span>
 
     <span class="k">if</span> <span class="s1">&#39;random_crop&#39;</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+ random crop (enlarge to </span><span class="si">{}</span><span class="s1">x</span><span class="si">{}</span><span class="s1"> and &#39;</span> \
-              <span class="s1">&#39;crop </span><span class="si">{}</span><span class="s1">x</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">height</span><span class="o">*</span><span class="mf">1.125</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">width</span><span class="o">*</span><span class="mf">1.125</span><span class="p">)),</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s1">&#39;+ random crop (enlarge to </span><span class="si">{}</span><span class="s1">x</span><span class="si">{}</span><span class="s1"> and &#39;</span>
+            <span class="s1">&#39;crop </span><span class="si">{}</span><span class="s1">x</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">height</span> <span class="o">*</span> <span class="mf">1.125</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="mf">1.125</span><span class="p">)),</span> <span class="n">height</span><span class="p">,</span>
+                <span class="n">width</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
         <span class="n">transform_tr</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Random2DTranslation</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)]</span>
 
     <span class="k">if</span> <span class="s1">&#39;random_patch&#39;</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">:</span>
