@@ -45,8 +45,7 @@ def get_requirements(filename='requirements.txt'):
 setup(
     name='torchreid',
     version=find_version(),
-    description=
-    'A library for deep learning person re-identification in PyTorch',
+    description='A library for deep learning person re-ID in PyTorch',
     author='Kaiyang Zhou',
     license='MIT',
     long_description=readme(),

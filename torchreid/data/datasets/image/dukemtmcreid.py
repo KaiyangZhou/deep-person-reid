@@ -61,7 +61,8 @@ class DukeMTMCreID(ImageDataset):
             pid, camid = map(int, pattern.search(img_path).groups())
             assert 1 <= camid <= 8
             camid -= 1 # index starts from 0
-            if relabel: pid = pid2label[pid]
+            if relabel:
+                pid = pid2label[pid]
             data.append((img_path, pid, camid))
 
         return data

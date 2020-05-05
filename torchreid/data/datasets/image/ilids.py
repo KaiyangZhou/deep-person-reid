@@ -18,7 +18,7 @@ class iLIDS(ImageDataset):
     
     Dataset statistics:
         - identities: 119.
-        - images: 476. 
+        - images: 476.
         - cameras: 8 (not explicitly provided).
     """
     dataset_dir = 'ilids'

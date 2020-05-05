@@ -428,8 +428,7 @@ class Engine(object):
         if visrank:
             visualize_ranked_results(
                 distmat,
-                self.datamanager.
-                return_query_and_gallery_by_name(dataset_name),
+                self.datamanager.fetch_qg(dataset_name),
                 self.datamanager.data_type,
                 width=self.datamanager.width,
                 height=self.datamanager.height,

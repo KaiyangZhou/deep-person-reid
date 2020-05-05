@@ -238,9 +238,9 @@ class Dataset(object):
               '  gallery  | {:5d} | {:7d} | {:9d}\n' \
               '  ----------------------------------------\n' \
               '  items: images/tracklets for image/video dataset\n'.format(
-              num_train_pids, len(self.train), num_train_cams,
-              num_query_pids, len(self.query), num_query_cams,
-              num_gallery_pids, len(self.gallery), num_gallery_cams
+                  num_train_pids, len(self.train), num_train_cams,
+                  num_query_pids, len(self.query), num_query_cams,
+                  num_gallery_pids, len(self.gallery), num_gallery_cams
               )
 
         return msg

@@ -70,7 +70,7 @@ class DataManager(object):
         """Returns the number of training cameras."""
         return self._num_train_cams
 
-    def return_query_and_gallery_by_name(self, name):
+    def fetch_qg(self, name):
         """Returns query and gallery of a test dataset, each containing
         tuples of (img_path(s), pid, camid).
 

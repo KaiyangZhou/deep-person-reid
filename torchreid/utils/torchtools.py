@@ -70,7 +70,7 @@ def load_checkpoint(fpath):
     Returns:
         dict
 
-    Examples::  
+    Examples::
         >>> from torchreid.utils import load_checkpoint
         >>> fpath = 'log/my_model/model.pth.tar-10'
         >>> checkpoint = load_checkpoint(fpath)

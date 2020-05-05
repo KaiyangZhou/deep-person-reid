@@ -1,11 +1,6 @@
 from __future__ import division, print_function, absolute_import
-import time
-import datetime
 
 from torchreid import metrics
-from torchreid.utils import (
-    AverageMeter, open_all_layers, open_specified_layers
-)
 from torchreid.engine import Engine
 from torchreid.losses import CrossEntropyLoss
 
@@ -58,7 +53,7 @@ class ImageSoftmaxNASEngine(Engine):
             lmda = self.init_lmda
         else:
             lmda = self.init_lmda * self.lmda_decay_rate**(
-                epoch // self.lmda_decay_step
+                self.epoch // self.lmda_decay_step
             )
             if lmda < self.min_lmda:
                 lmda = self.min_lmda

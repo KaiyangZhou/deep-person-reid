@@ -32,7 +32,7 @@ Convolution
 def hook_convNd(m, x, y):
     k = torch.prod(torch.Tensor(m.kernel_size)).item()
     cin = m.in_channels
-    flops_per_ele = k * cin #+ (k*cin-1)
+    flops_per_ele = k * cin # + (k*cin-1)
     if m.bias is not None:
         flops_per_ele += 1
     flops = flops_per_ele * y.numel() / m.groups
@@ -200,7 +200,7 @@ Linear
 
 
 def hook_linear(m, x, y):
-    flops_per_ele = m.in_features #+ (m.in_features-1)
+    flops_per_ele = m.in_features # + (m.in_features-1)
     if m.bias is not None:
         flops_per_ele += 1
     flops = flops_per_ele * y.numel()

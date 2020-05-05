@@ -1,10 +1,7 @@
 from __future__ import division, print_function, absolute_import
-import time
-import datetime
 import torch
 from torch.nn import functional as F
 
-from torchreid import metrics
 from torchreid.utils import open_all_layers, open_specified_layers
 from torchreid.engine import Engine
 from torchreid.losses import TripletLoss, CrossEntropyLoss

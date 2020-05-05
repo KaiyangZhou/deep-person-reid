@@ -260,7 +260,7 @@ def init_pretrained_weights(model, model_url):
 def mlfn(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = MLFN(num_classes, loss, **kwargs)
     if pretrained:
-        #init_pretrained_weights(model, model_urls['imagenet'])
+        # init_pretrained_weights(model, model_urls['imagenet'])
         import warnings
         warnings.warn(
             'The imagenet pretrained weights need to be manually downloaded from {}'

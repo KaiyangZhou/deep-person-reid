@@ -249,9 +249,9 @@ class Block8(nn.Module):
         return out
 
 
-##################### Model Definition #########################
-
-
+# ----------------
+# Model Definition
+# ----------------
 class InceptionResNetV2(nn.Module):
     """Inception-ResNet-V2.
 

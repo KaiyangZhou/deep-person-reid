@@ -3,7 +3,7 @@ import os.path as osp
 
 from ..dataset import ImageDataset
 
-##### Log #####
+# Log
 # 22.01.2019
 # - add v2
 # - v1 and v2 differ in dir names

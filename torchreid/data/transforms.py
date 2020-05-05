@@ -4,7 +4,9 @@ import random
 from collections import deque
 import torch
 from PIL import Image
-from torchvision.transforms import *
+from torchvision.transforms import (
+    Resize, Compose, ToTensor, Normalize, ColorJitter, RandomHorizontalFlip
+)
 
 
 class Random2DTranslation(object):
@@ -279,8 +281,13 @@ def build_transforms(
         transform_tr += [RandomHorizontalFlip()]
 
     if 'random_crop' in transforms:
-        print('+ random crop (enlarge to {}x{} and ' \
-              'crop {}x{})'.format(int(round(height*1.125)), int(round(width*1.125)), height, width))
+        print(
+            '+ random crop (enlarge to {}x{} and '
+            'crop {}x{})'.format(
+                int(round(height * 1.125)), int(round(width * 1.125)), height,
+                width
+            )
+        )
         transform_tr += [Random2DTranslation(height, width)]
 
     if 'random_patch' in transforms:

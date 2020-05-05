@@ -151,10 +151,8 @@ class CUHK03(ImageDataset):
                     img_paths = _process_images(
                         camp[pid, :], campid, pid, imgs_dir
                     )
-                    assert len(img_paths
-                               ) > 0, 'campid{}-pid{} has no images'.format(
-                                   campid, pid
-                               )
+                    assert len(img_paths) > 0, \
+                        'campid{}-pid{} has no images'.format(campid, pid)
                     meta_data.append((campid + 1, pid + 1, img_paths))
                 print(
                     '- done camera pair {} with {} identities'.format(

@@ -22,11 +22,11 @@ class VideoTripletEngine(ImageTripletEngine, VideoSoftmaxEngine):
             Default is "avg" (average). Choices are ["avg", "max"].
 
     Examples::
-        
+
         import torch
         import torchreid
         # Each batch contains batch_size*seq_len images
-        # Each identity is sampled with num_instances tracklets 
+        # Each identity is sampled with num_instances tracklets
         datamanager = torchreid.data.VideoDataManager(
             root='path/to/reid-data',
             sources='mars',

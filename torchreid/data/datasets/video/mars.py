@@ -98,7 +98,8 @@ class Mars(VideoDataset):
             if pid == -1:
                 continue # junk images are just ignored
             assert 1 <= camid <= 6
-            if relabel: pid = pid2label[pid]
+            if relabel:
+                pid = pid2label[pid]
             camid -= 1 # index starts from 0
             img_names = names[start_index - 1:end_index]
 

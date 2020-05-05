@@ -1,4 +1,3 @@
-import os
 import sys
 import copy
 import time
@@ -15,8 +14,8 @@ from torchreid.utils import (
 
 from dml import ImageDMLEngine
 from default_config import (
-    imagedata_kwargs, optimizer_kwargs, videodata_kwargs, engine_run_kwargs,
-    get_default_config, lr_scheduler_kwargs
+    imagedata_kwargs, optimizer_kwargs, engine_run_kwargs, get_default_config,
+    lr_scheduler_kwargs
 )
 
 

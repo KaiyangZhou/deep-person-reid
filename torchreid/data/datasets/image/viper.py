@@ -83,10 +83,8 @@ class VIPeR(ImageDataset):
                 np.random.shuffle(order)
                 train_idxs = order[:num_train_pids]
                 test_idxs = order[num_train_pids:]
-                assert not bool(
-                    set(train_idxs)
-                    & set(test_idxs)
-                ), 'Error: train and test overlap'
+                assert not bool(set(train_idxs) & set(test_idxs)), \
+                    'Error: train and test overlap'
 
                 train = []
                 for pid, idx in enumerate(train_idxs):

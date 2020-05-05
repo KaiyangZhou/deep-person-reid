@@ -57,8 +57,9 @@ def euclidean_squared_distance(input1, input2):
         torch.Tensor: distance matrix.
     """
     m, n = input1.size(0), input2.size(0)
-    distmat = torch.pow(input1, 2).sum(dim=1, keepdim=True).expand(m, n) + \
-              torch.pow(input2, 2).sum(dim=1, keepdim=True).expand(n, m).t()
+    mat1 = torch.pow(input1, 2).sum(dim=1, keepdim=True).expand(m, n)
+    mat2 = torch.pow(input2, 2).sum(dim=1, keepdim=True).expand(n, m).t()
+    distmat = mat1 + mat2
     distmat.addmm_(1, -2, input1, input2.t())
     return distmat
 

@@ -300,7 +300,8 @@ class HACNN(nn.Module):
         theta = torch.zeros(theta_i.size(0), 2, 3)
         theta[:, :, :2] = scale_factors
         theta[:, :, -1] = theta_i
-        if self.use_gpu: theta = theta.cuda()
+        if self.use_gpu:
+            theta = theta.cuda()
         return theta
 
     def forward(self, x):

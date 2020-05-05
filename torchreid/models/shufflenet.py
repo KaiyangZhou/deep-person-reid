@@ -45,7 +45,8 @@ class Bottleneck(nn.Module):
         assert stride in [1, 2], 'Warning: stride must be either 1 or 2'
         self.stride = stride
         mid_channels = out_channels // 4
-        if stride == 2: out_channels -= in_channels
+        if stride == 2:
+            out_channels -= in_channels
         # group conv is not applied to first conv1x1 at stage 2
         num_groups_conv1x1 = num_groups if group_conv1x1 else 1
         self.conv1 = nn.Conv2d(
@@ -71,7 +72,8 @@ class Bottleneck(nn.Module):
             mid_channels, out_channels, 1, groups=num_groups, bias=False
         )
         self.bn3 = nn.BatchNorm2d(out_channels)
-        if stride == 2: self.shortcut = nn.AvgPool2d(3, stride=2, padding=1)
+        if stride == 2:
+            self.shortcut = nn.AvgPool2d(3, stride=2, padding=1)
 
     def forward(self, x):
         out = F.relu(self.bn1(self.conv1(x)))
@@ -187,7 +189,7 @@ def init_pretrained_weights(model, model_url):
 def shufflenet(num_classes, loss='softmax', pretrained=True, **kwargs):
     model = ShuffleNet(num_classes, loss, **kwargs)
     if pretrained:
-        #init_pretrained_weights(model, model_urls['imagenet'])
+        # init_pretrained_weights(model, model_urls['imagenet'])
         import warnings
         warnings.warn(
             'The imagenet pretrained weights need to be manually downloaded from {}'

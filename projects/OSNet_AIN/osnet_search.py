@@ -10,6 +10,24 @@ NORM_AFFINE = False # enable affine transformations for normalization layer
 ##########
 # Basic layers
 ##########
+class IBN(nn.Module):
+    """Instance + Batch Normalization."""
+
+    def __init__(self, num_channels):
+        super(IBN, self).__init__()
+        half1 = int(num_channels / 2)
+        self.half = half1
+        half2 = num_channels - half1
+        self.IN = nn.InstanceNorm2d(half1, affine=NORM_AFFINE)
+        self.BN = nn.BatchNorm2d(half2, affine=NORM_AFFINE)
+
+    def forward(self, x):
+        split = torch.split(x, self.half, 1)
+        out1 = self.IN(split[0].contiguous())
+        out2 = self.BN(split[1].contiguous())
+        return torch.cat((out1, out2), 1)
+
+
 class ConvLayer(nn.Module):
     """Convolution layer (conv + bn + relu)."""
 
