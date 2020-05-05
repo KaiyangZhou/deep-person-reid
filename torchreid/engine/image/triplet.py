@@ -97,11 +97,12 @@ class ImageTripletEngine(Engine):
             imgs = imgs.cuda()
             pids = pids.cuda()
 
-        self.optimizer.zero_grad()
         outputs, features = self.model(imgs)
         loss_t = self.compute_loss(self.criterion_t, features, pids)
         loss_x = self.compute_loss(self.criterion_x, outputs, pids)
         loss = self.weight_t * loss_t + self.weight_x * loss_x
+
+        self.optimizer.zero_grad()
         loss.backward()
         self.optimizer.step()
 
