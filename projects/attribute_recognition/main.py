@@ -42,7 +42,7 @@ def init_dataset(use_gpu):
     )
 
     transform_te = Compose(
-        [Resize(args.height, args.width),
+        [Resize([args.height, args.width]),
          ToTensor(), normalize]
     )
 
