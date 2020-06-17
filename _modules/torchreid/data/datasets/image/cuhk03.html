@@ -270,7 +270,7 @@
             <span class="k">return</span>
 
         <span class="kn">import</span> <span class="nn">h5py</span>
-        <span class="kn">from</span> <span class="nn">scipy.misc</span> <span class="k">import</span> <span class="n">imsave</span>
+        <span class="kn">import</span> <span class="nn">imageio</span>
         <span class="kn">from</span> <span class="nn">scipy.io</span> <span class="k">import</span> <span class="n">loadmat</span>
 
         <span class="n">mkdir_if_missing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">imgs_detected_dir</span><span class="p">)</span>
@@ -303,7 +303,7 @@
                 <span class="p">)</span>
                 <span class="n">img_path</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">img_name</span><span class="p">)</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">osp</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">img_path</span><span class="p">):</span>
-                    <span class="n">imsave</span><span class="p">(</span><span class="n">img_path</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
+                    <span class="n">imageio</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">img_path</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
                 <span class="n">img_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">img_paths</span>
 
