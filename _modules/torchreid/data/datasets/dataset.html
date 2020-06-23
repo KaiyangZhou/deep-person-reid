@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.data.datasets.dataset &mdash; torchreid 1.2.3 documentation</title>
+  <title>torchreid.data.datasets.dataset &mdash; torchreid 1.2.4 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.2.3
+                1.2.4
               </div>
             
           
@@ -432,7 +432,8 @@
         <span class="n">img</span> <span class="o">=</span> <span class="n">read_image</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">img</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">camid</span><span class="p">,</span> <span class="n">img_path</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;img&#39;</span><span class="p">:</span> <span class="n">img</span><span class="p">,</span> <span class="s1">&#39;pid&#39;</span><span class="p">:</span> <span class="n">pid</span><span class="p">,</span> <span class="s1">&#39;camid&#39;</span><span class="p">:</span> <span class="n">camid</span><span class="p">,</span> <span class="s1">&#39;impath&#39;</span><span class="p">:</span> <span class="n">img_path</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">item</span>
 
 <div class="viewcode-block" id="ImageDataset.show_summary"><a class="viewcode-back" href="../../../../pkg/data.html#torchreid.data.datasets.dataset.ImageDataset.show_summary">[docs]</a>    <span class="k">def</span> <span class="nf">show_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">num_train_pids</span><span class="p">,</span> <span class="n">num_train_cams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">)</span>
@@ -540,7 +541,9 @@
             <span class="n">imgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
         <span class="n">imgs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">imgs</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">camid</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;img&#39;</span><span class="p">:</span> <span class="n">imgs</span><span class="p">,</span> <span class="s1">&#39;pid&#39;</span><span class="p">:</span> <span class="n">pid</span><span class="p">,</span> <span class="s1">&#39;camid&#39;</span><span class="p">:</span> <span class="n">camid</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">item</span>
 
 <div class="viewcode-block" id="VideoDataset.show_summary"><a class="viewcode-back" href="../../../../pkg/data.html#torchreid.data.datasets.dataset.VideoDataset.show_summary">[docs]</a>    <span class="k">def</span> <span class="nf">show_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">num_train_pids</span><span class="p">,</span> <span class="n">num_train_cams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">)</span>

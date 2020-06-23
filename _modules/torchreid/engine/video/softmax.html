@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.engine.video.softmax &mdash; torchreid 1.2.3 documentation</title>
+  <title>torchreid.engine.video.softmax &mdash; torchreid 1.2.4 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.2.3
+                1.2.4
               </div>
             
           
@@ -245,8 +245,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pooling_method</span> <span class="o">=</span> <span class="n">pooling_method</span>
 
     <span class="k">def</span> <span class="nf">parse_data_for_train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="n">imgs</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">pids</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">imgs</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;img&#39;</span><span class="p">]</span>
+        <span class="n">pids</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;pid&#39;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">imgs</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
             <span class="c1"># b: batch size</span>
             <span class="c1"># s: sqeuence length</span>
