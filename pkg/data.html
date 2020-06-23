@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.data &mdash; torchreid 1.2.4 documentation</title>
+  <title>torchreid.data &mdash; torchreid 1.2.5 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.2.4
+                1.2.5
               </div>
             
           
@@ -234,7 +234,7 @@ tuples of (img_path(s), pid, camid).</p>
 
 <dl class="class">
 <dt id="torchreid.data.datamanager.ImageDataManager">
-<em class="property">class </em><code class="sig-prename descclassname">torchreid.data.datamanager.</code><code class="sig-name descname">ImageDataManager</code><span class="sig-paren">(</span><em class="sig-param">root=''</em>, <em class="sig-param">sources=None</em>, <em class="sig-param">targets=None</em>, <em class="sig-param">height=256</em>, <em class="sig-param">width=128</em>, <em class="sig-param">transforms='random_flip'</em>, <em class="sig-param">norm_mean=None</em>, <em class="sig-param">norm_std=None</em>, <em class="sig-param">use_gpu=True</em>, <em class="sig-param">split_id=0</em>, <em class="sig-param">combineall=False</em>, <em class="sig-param">load_train_targets=False</em>, <em class="sig-param">batch_size_train=32</em>, <em class="sig-param">batch_size_test=32</em>, <em class="sig-param">workers=4</em>, <em class="sig-param">num_instances=4</em>, <em class="sig-param">train_sampler='RandomSampler'</em>, <em class="sig-param">train_sampler_t='RandomSampler'</em>, <em class="sig-param">cuhk03_labeled=False</em>, <em class="sig-param">cuhk03_classic_split=False</em>, <em class="sig-param">market1501_500k=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#ImageDataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.ImageDataManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">torchreid.data.datamanager.</code><code class="sig-name descname">ImageDataManager</code><span class="sig-paren">(</span><em class="sig-param">root=''</em>, <em class="sig-param">sources=None</em>, <em class="sig-param">targets=None</em>, <em class="sig-param">height=256</em>, <em class="sig-param">width=128</em>, <em class="sig-param">transforms='random_flip'</em>, <em class="sig-param">k_tfm=1</em>, <em class="sig-param">norm_mean=None</em>, <em class="sig-param">norm_std=None</em>, <em class="sig-param">use_gpu=True</em>, <em class="sig-param">split_id=0</em>, <em class="sig-param">combineall=False</em>, <em class="sig-param">load_train_targets=False</em>, <em class="sig-param">batch_size_train=32</em>, <em class="sig-param">batch_size_test=32</em>, <em class="sig-param">workers=4</em>, <em class="sig-param">num_instances=4</em>, <em class="sig-param">train_sampler='RandomSampler'</em>, <em class="sig-param">train_sampler_t='RandomSampler'</em>, <em class="sig-param">cuhk03_labeled=False</em>, <em class="sig-param">cuhk03_classic_split=False</em>, <em class="sig-param">market1501_500k=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#ImageDataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.ImageDataManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Image data manager.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -247,6 +247,10 @@ it equals to <code class="docutils literal notranslate"><span class="pre">source
 <li><p><strong>width</strong> (<em>int</em><em>, </em><em>optional</em>) – target image width. Default is 128.</p></li>
 <li><p><strong>transforms</strong> (<em>str</em><em> or </em><em>list of str</em><em>, </em><em>optional</em>) – transformations applied to model training.
 Default is ‘random_flip’.</p></li>
+<li><p><strong>k_tfm</strong> (<em>int</em>) – number of times to apply augmentation to an image
+independently. If k_tfm &gt; 1, the transform function will be
+applied k_tfm times to an image. This variable will only be
+useful for training and is currently valid for image datasets only.</p></li>
 <li><p><strong>norm_mean</strong> (<em>list</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – data mean. Default is None (use imagenet mean).</p></li>
 <li><p><strong>norm_std</strong> (<em>list</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – data std. Default is None (use imagenet std).</p></li>
 <li><p><strong>use_gpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – use gpu. Default is True.</p></li>
@@ -500,7 +504,7 @@ ImageNet standard deviation values.</p></li>
 <span id="dataset"></span><h2>Dataset<a class="headerlink" href="#module-torchreid.data.datasets.dataset" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="torchreid.data.datasets.dataset.Dataset">
-<em class="property">class </em><code class="sig-prename descclassname">torchreid.data.datasets.dataset.</code><code class="sig-name descname">Dataset</code><span class="sig-paren">(</span><em class="sig-param">train</em>, <em class="sig-param">query</em>, <em class="sig-param">gallery</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">mode='train'</em>, <em class="sig-param">combineall=False</em>, <em class="sig-param">verbose=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/dataset.html#Dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.dataset.Dataset" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">torchreid.data.datasets.dataset.</code><code class="sig-name descname">Dataset</code><span class="sig-paren">(</span><em class="sig-param">train</em>, <em class="sig-param">query</em>, <em class="sig-param">gallery</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">k_tfm=1</em>, <em class="sig-param">mode='train'</em>, <em class="sig-param">combineall=False</em>, <em class="sig-param">verbose=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/dataset.html#Dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.dataset.Dataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>An abstract class representing a Dataset.</p>
 <p>This is the base class for <code class="docutils literal notranslate"><span class="pre">ImageDataset</span></code> and <code class="docutils literal notranslate"><span class="pre">VideoDataset</span></code>.</p>
 <dl class="field-list simple">
@@ -510,6 +514,10 @@ ImageNet standard deviation values.</p></li>
 <li><p><strong>query</strong> (<em>list</em>) – contains tuples of (img_path(s), pid, camid).</p></li>
 <li><p><strong>gallery</strong> (<em>list</em>) – contains tuples of (img_path(s), pid, camid).</p></li>
 <li><p><strong>transform</strong> – transform function.</p></li>
+<li><p><strong>k_tfm</strong> (<em>int</em>) – number of times to apply augmentation to an image
+independently. If k_tfm &gt; 1, the transform function will be
+applied k_tfm times to an image. This variable will only be
+useful for training and is currently valid for image datasets only.</p></li>
 <li><p><strong>mode</strong> (<em>str</em>) – ‘train’, ‘query’ or ‘gallery’.</p></li>
 <li><p><strong>combineall</strong> (<em>bool</em>) – combines train, query and gallery in a
 dataset for training.</p></li>

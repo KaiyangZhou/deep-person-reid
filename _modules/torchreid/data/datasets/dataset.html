@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.data.datasets.dataset &mdash; torchreid 1.2.4 documentation</title>
+  <title>torchreid.data.datasets.dataset &mdash; torchreid 1.2.5 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.2.4
+                1.2.5
               </div>
             
           
@@ -186,6 +186,10 @@
 <span class="sd">        query (list): contains tuples of (img_path(s), pid, camid).</span>
 <span class="sd">        gallery (list): contains tuples of (img_path(s), pid, camid).</span>
 <span class="sd">        transform: transform function.</span>
+<span class="sd">        k_tfm (int): number of times to apply augmentation to an image</span>
+<span class="sd">            independently. If k_tfm &gt; 1, the transform function will be</span>
+<span class="sd">            applied k_tfm times to an image. This variable will only be</span>
+<span class="sd">            useful for training and is currently valid for image datasets only.</span>
 <span class="sd">        mode (str): &#39;train&#39;, &#39;query&#39; or &#39;gallery&#39;.</span>
 <span class="sd">        combineall (bool): combines train, query and gallery in a</span>
 <span class="sd">            dataset for training.</span>
@@ -200,6 +204,7 @@
         <span class="n">query</span><span class="p">,</span>
         <span class="n">gallery</span><span class="p">,</span>
         <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">k_tfm</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;train&#39;</span><span class="p">,</span>
         <span class="n">combineall</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -209,6 +214,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="n">query</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gallery</span> <span class="o">=</span> <span class="n">gallery</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">transform</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k_tfm</span> <span class="o">=</span> <span class="n">k_tfm</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">combineall</span> <span class="o">=</span> <span class="n">combineall</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
@@ -410,7 +416,20 @@
                   <span class="n">num_gallery_pids</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gallery</span><span class="p">),</span> <span class="n">num_gallery_cams</span>
               <span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">msg</span></div>
+        <span class="k">return</span> <span class="n">msg</span>
+
+    <span class="k">def</span> <span class="nf">_transform_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tfm</span><span class="p">,</span> <span class="n">k_tfm</span><span class="p">,</span> <span class="n">img0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Transform a raw image (img0) k_tfm times.&quot;&quot;&quot;</span>
+        <span class="n">img_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k_tfm</span><span class="p">):</span>
+            <span class="n">img_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tfm</span><span class="p">(</span><span class="n">img0</span><span class="p">))</span>
+
+        <span class="n">img</span> <span class="o">=</span> <span class="n">img_list</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">img</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">img</span></div>
 
 
 <div class="viewcode-block" id="ImageDataset"><a class="viewcode-back" href="../../../../pkg/data.html#torchreid.data.datasets.dataset.ImageDataset">[docs]</a><span class="k">class</span> <span class="nc">ImageDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
@@ -431,7 +450,7 @@
         <span class="n">img_path</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">camid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
         <span class="n">img</span> <span class="o">=</span> <span class="n">read_image</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform_image</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">k_tfm</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
         <span class="n">item</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;img&#39;</span><span class="p">:</span> <span class="n">img</span><span class="p">,</span> <span class="s1">&#39;pid&#39;</span><span class="p">:</span> <span class="n">pid</span><span class="p">,</span> <span class="s1">&#39;camid&#39;</span><span class="p">:</span> <span class="n">camid</span><span class="p">,</span> <span class="s1">&#39;impath&#39;</span><span class="p">:</span> <span class="n">img_path</span><span class="p">}</span>
         <span class="k">return</span> <span class="n">item</span>
 
