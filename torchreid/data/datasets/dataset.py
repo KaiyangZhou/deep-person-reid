@@ -19,6 +19,10 @@ class Dataset(object):
         query (list): contains tuples of (img_path(s), pid, camid).
         gallery (list): contains tuples of (img_path(s), pid, camid).
         transform: transform function.
+        k_tfm (int): number of times to apply augmentation to an image
+            independently. If k_tfm > 1, the transform function will be
+            applied k_tfm times to an image. This variable will only be
+            useful for training and is currently valid for image datasets only.
         mode (str): 'train', 'query' or 'gallery'.
         combineall (bool): combines train, query and gallery in a
             dataset for training.
@@ -33,6 +37,7 @@ class Dataset(object):
         query,
         gallery,
         transform=None,
+        k_tfm=1,
         mode='train',
         combineall=False,
         verbose=True,
@@ -42,6 +47,7 @@ class Dataset(object):
         self.query = query
         self.gallery = gallery
         self.transform = transform
+        self.k_tfm = k_tfm
         self.mode = mode
         self.combineall = combineall
         self.verbose = verbose
@@ -245,6 +251,19 @@ class Dataset(object):
 
         return msg
 
+    def _transform_image(self, tfm, k_tfm, img0):
+        """Transform a raw image (img0) k_tfm times."""
+        img_list = []
+
+        for k in range(k_tfm):
+            img_list.append(tfm(img0))
+
+        img = img_list
+        if len(img) == 1:
+            img = img[0]
+
+        return img
+
 
 class ImageDataset(Dataset):
     """A base class representing ImageDataset.
@@ -264,7 +283,7 @@ class ImageDataset(Dataset):
         img_path, pid, camid = self.data[index]
         img = read_image(img_path)
         if self.transform is not None:
-            img = self.transform(img)
+            img = self._transform_image(self.transform, self.k_tfm, img)
         item = {'img': img, 'pid': pid, 'camid': camid, 'impath': img_path}
         return item
 

@@ -98,6 +98,10 @@ class ImageDataManager(DataManager):
         width (int, optional): target image width. Default is 128.
         transforms (str or list of str, optional): transformations applied to model training.
             Default is 'random_flip'.
+        k_tfm (int): number of times to apply augmentation to an image
+            independently. If k_tfm > 1, the transform function will be
+            applied k_tfm times to an image. This variable will only be
+            useful for training and is currently valid for image datasets only.
         norm_mean (list or None, optional): data mean. Default is None (use imagenet mean).
         norm_std (list or None, optional): data std. Default is None (use imagenet std).
         use_gpu (bool, optional): use gpu. Default is True.
@@ -150,6 +154,7 @@ class ImageDataManager(DataManager):
         height=256,
         width=128,
         transforms='random_flip',
+        k_tfm=1,
         norm_mean=None,
         norm_std=None,
         use_gpu=True,
@@ -184,6 +189,7 @@ class ImageDataManager(DataManager):
             trainset_ = init_image_dataset(
                 name,
                 transform=self.transform_tr,
+                k_tfm=k_tfm,
                 mode='train',
                 combineall=combineall,
                 root=root,
@@ -225,6 +231,7 @@ class ImageDataManager(DataManager):
                 trainset_t_ = init_image_dataset(
                     name,
                     transform=self.transform_tr,
+                    k_tfm=k_tfm,
                     mode='train',
                     combineall=False, # only use the training data
                     root=root,
