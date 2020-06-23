@@ -449,14 +449,14 @@ class Engine(object):
         return self.model(input)
 
     def parse_data_for_train(self, data):
-        imgs = data[0]
-        pids = data[1]
+        imgs = data['img']
+        pids = data['pid']
         return imgs, pids
 
     def parse_data_for_eval(self, data):
-        imgs = data[0]
-        pids = data[1]
-        camids = data[2]
+        imgs = data['img']
+        pids = data['pid']
+        camids = data['camid']
         return imgs, pids, camids
 
     def two_stepped_transfer_learning(

@@ -78,8 +78,8 @@ class VideoSoftmaxEngine(ImageSoftmaxEngine):
         self.pooling_method = pooling_method
 
     def parse_data_for_train(self, data):
-        imgs = data[0]
-        pids = data[1]
+        imgs = data['img']
+        pids = data['pid']
         if imgs.dim() == 5:
             # b: batch size
             # s: sqeuence length
