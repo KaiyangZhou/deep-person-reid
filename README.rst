@@ -33,6 +33,7 @@ You can find some research projects that are built on top of Torchreid `here <ht
 
 What's new
 ------------
+- [Jun 2020] ``1.2.4``: Dataloader's output from ``__getitem__`` has been changed from ``list`` to ``dict``. Previously, an element, e.g. image tensor, was fetched with ``imgs=data[0]``. Now it should be obtained by ``imgs=data['img']``. See this `commit <https://github.com/KaiyangZhou/deep-person-reid/commit/aefe335d68f39a20160860e6d14c2d34f539b8a5>`_ for detailed changes.
 - [May 2020] Added the person attribute recognition code used in `Omni-Scale Feature Learning for Person Re-Identification (ICCV'19) <https://arxiv.org/abs/1905.00953>`_. See ``projects/attribute_recognition/``.
 - [May 2020] ``1.2.1``: Added a simple API for feature extraction (``torchreid/utils/feature_extractor.py``). See the `documentation <https://kaiyangzhou.github.io/deep-person-reid/user_guide.html>`_ for the instruction.
 - [Apr 2020] Code for reproducing the experiments of `deep mutual learning <https://zpascal.net/cvpr2018/Zhang_Deep_Mutual_Learning_CVPR_2018_paper.pdf>`_ in the `OSNet paper <https://arxiv.org/pdf/1905.00953v6.pdf>`__ (Supp. B) has been released at ``projects/DML``.

@@ -265,12 +265,7 @@ class ImageDataset(Dataset):
         img = read_image(img_path)
         if self.transform is not None:
             img = self.transform(img)
-        item = {
-            'img': img,
-            'pid': pid,
-            'camid': camid,
-            'impath': img_path
-        }
+        item = {'img': img, 'pid': pid, 'camid': camid, 'impath': img_path}
         return item
 
     def show_summary(self):
@@ -379,11 +374,7 @@ class VideoDataset(Dataset):
             imgs.append(img)
         imgs = torch.cat(imgs, dim=0)
 
-        item = {
-            'img': imgs,
-            'pid': pid,
-            'camid': camid
-        }
+        item = {'img': imgs, 'pid': pid, 'camid': camid}
 
         return item
 

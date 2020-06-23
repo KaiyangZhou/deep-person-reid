@@ -42,7 +42,7 @@ def main():
     std = 0.
     n_samples = 0.
     for data in train_loader:
-        data = data[0]
+        data = data['img']
         batch_size = data.size(0)
         data = data.view(batch_size, data.size(1), -1)
         mean += data.mean(2).sum(0)

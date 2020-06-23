@@ -48,7 +48,7 @@ def visactmap(
         print('Visualizing activation maps for {} ...'.format(target))
 
         for batch_idx, data in enumerate(data_loader):
-            imgs, paths = data[0], data[3]
+            imgs, paths = data['img'], data['impath']
             if use_gpu:
                 imgs = imgs.cuda()
 
