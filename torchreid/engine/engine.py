@@ -103,7 +103,7 @@ class Engine(object):
     def get_current_lr(self, names=None):
         names = self.get_model_names(names)
         name = names[0]
-        return self._optims[name].param_groups[0]['lr']
+        return self._optims[name].param_groups[-1]['lr']
 
     def update_lr(self, names=None):
         names = self.get_model_names(names)
