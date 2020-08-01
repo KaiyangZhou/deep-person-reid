@@ -42,6 +42,7 @@ def get_default_config():
     cfg.sampler.train_sampler = 'RandomSampler' # sampler for source train loader
     cfg.sampler.train_sampler_t = 'RandomSampler' # sampler for target train loader
     cfg.sampler.num_instances = 4 # number of instances per identity for RandomIdentitySampler
+    cfg.sampler.num_cams = 1 # number of cameras to sample in a batch (for RandomDomainSampler)
 
     # video reid setting
     cfg.video = CN()
@@ -126,6 +127,7 @@ def imagedata_kwargs(cfg):
         'batch_size_test': cfg.test.batch_size,
         'workers': cfg.data.workers,
         'num_instances': cfg.sampler.num_instances,
+        'num_cams': cfg.sampler.num_cams,
         'train_sampler': cfg.sampler.train_sampler,
         'train_sampler_t': cfg.sampler.train_sampler_t,
         # image
@@ -152,6 +154,7 @@ def videodata_kwargs(cfg):
         'batch_size_test': cfg.test.batch_size,
         'workers': cfg.data.workers,
         'num_instances': cfg.sampler.num_instances,
+        'num_cams': cfg.sampler.num_cams,
         'train_sampler': cfg.sampler.train_sampler,
         # video
         'seq_len': cfg.video.seq_len,

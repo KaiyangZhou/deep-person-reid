@@ -5,7 +5,10 @@ import random
 from collections import defaultdict
 from torch.utils.data.sampler import Sampler, RandomSampler, SequentialSampler
 
-AVAI_SAMPLERS = ['RandomIdentitySampler', 'SequentialSampler', 'RandomSampler']
+AVAI_SAMPLERS = [
+    'RandomIdentitySampler', 'SequentialSampler', 'RandomSampler',
+    'RandomDomainSampler'
+]
 
 
 class RandomIdentitySampler(Sampler):
@@ -77,8 +80,68 @@ class RandomIdentitySampler(Sampler):
         return self.length
 
 
+class RandomDomainSampler(Sampler):
+    """Random domain sampler.
+
+    Each camera is considered as a distinct domain.
+
+    1. Randomly sample N cameras.
+    2. From each camera, randomly sample K images.
+    """
+
+    def __init__(self, data_source, batch_size, n_domain):
+        self.data_source = data_source
+
+        # Keep track of image indices for each domain
+        self.domain_dict = defaultdict(list)
+        for i, (_, _, camid) in enumerate(data_source):
+            self.domain_dict[camid].append(i)
+        self.domains = list(self.domain_dict.keys())
+
+        # Make sure each domain has equal number of images
+        if n_domain is None or n_domain <= 0:
+            n_domain = len(self.domains)
+        assert batch_size % n_domain == 0
+        self.n_img_per_domain = batch_size // n_domain
+
+        self.batch_size = batch_size
+        # n_domain denotes number of domains sampled in a minibatch
+        self.n_domain = n_domain
+        self.length = len(list(self.__iter__()))
+
+    def __iter__(self):
+        domain_dict = copy.deepcopy(self.domain_dict)
+        final_idxs = []
+        stop_sampling = False
+
+        while not stop_sampling:
+            selected_domains = random.sample(self.domains, self.n_domain)
+
+            for domain in selected_domains:
+                idxs = domain_dict[domain]
+                selected_idxs = random.sample(idxs, self.n_img_per_domain)
+                final_idxs.extend(selected_idxs)
+
+                for idx in selected_idxs:
+                    domain_dict[domain].remove(idx)
+
+                remaining = len(domain_dict[domain])
+                if remaining < self.n_img_per_domain:
+                    stop_sampling = True
+
+        return iter(final_idxs)
+
+    def __len__(self):
+        return self.length
+
+
 def build_train_sampler(
-    data_source, train_sampler, batch_size=32, num_instances=4, **kwargs
+    data_source,
+    train_sampler,
+    batch_size=32,
+    num_instances=4,
+    num_cams=1,
+    **kwargs
 ):
     """Builds a training sampler.
 
@@ -88,12 +151,17 @@ def build_train_sampler(
         batch_size (int, optional): batch size. Default is 32.
         num_instances (int, optional): number of instances per identity in a
             batch (when using ``RandomIdentitySampler``). Default is 4.
+        num_cams (int, optional): number of cameras to sample in a batch (when using
+            ``RandomDomainSampler``). Default is 1.
     """
     assert train_sampler in AVAI_SAMPLERS, \
         'train_sampler must be one of {}, but got {}'.format(AVAI_SAMPLERS, train_sampler)
 
     if train_sampler == 'RandomIdentitySampler':
         sampler = RandomIdentitySampler(data_source, batch_size, num_instances)
+
+    elif train_sampler == 'RandomDomainSampler':
+        sampler = RandomDomainSampler(data_source, batch_size, num_cams)
 
     elif train_sampler == 'SequentialSampler':
         sampler = SequentialSampler(data_source)
