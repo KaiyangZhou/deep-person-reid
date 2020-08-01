@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.data &mdash; torchreid 1.2.5 documentation</title>
+  <title>torchreid.data &mdash; torchreid 1.2.6 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.2.5
+                1.2.6
               </div>
             
           
@@ -234,7 +234,7 @@ tuples of (img_path(s), pid, camid).</p>
 
 <dl class="class">
 <dt id="torchreid.data.datamanager.ImageDataManager">
-<em class="property">class </em><code class="sig-prename descclassname">torchreid.data.datamanager.</code><code class="sig-name descname">ImageDataManager</code><span class="sig-paren">(</span><em class="sig-param">root=''</em>, <em class="sig-param">sources=None</em>, <em class="sig-param">targets=None</em>, <em class="sig-param">height=256</em>, <em class="sig-param">width=128</em>, <em class="sig-param">transforms='random_flip'</em>, <em class="sig-param">k_tfm=1</em>, <em class="sig-param">norm_mean=None</em>, <em class="sig-param">norm_std=None</em>, <em class="sig-param">use_gpu=True</em>, <em class="sig-param">split_id=0</em>, <em class="sig-param">combineall=False</em>, <em class="sig-param">load_train_targets=False</em>, <em class="sig-param">batch_size_train=32</em>, <em class="sig-param">batch_size_test=32</em>, <em class="sig-param">workers=4</em>, <em class="sig-param">num_instances=4</em>, <em class="sig-param">train_sampler='RandomSampler'</em>, <em class="sig-param">train_sampler_t='RandomSampler'</em>, <em class="sig-param">cuhk03_labeled=False</em>, <em class="sig-param">cuhk03_classic_split=False</em>, <em class="sig-param">market1501_500k=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#ImageDataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.ImageDataManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">torchreid.data.datamanager.</code><code class="sig-name descname">ImageDataManager</code><span class="sig-paren">(</span><em class="sig-param">root=''</em>, <em class="sig-param">sources=None</em>, <em class="sig-param">targets=None</em>, <em class="sig-param">height=256</em>, <em class="sig-param">width=128</em>, <em class="sig-param">transforms='random_flip'</em>, <em class="sig-param">k_tfm=1</em>, <em class="sig-param">norm_mean=None</em>, <em class="sig-param">norm_std=None</em>, <em class="sig-param">use_gpu=True</em>, <em class="sig-param">split_id=0</em>, <em class="sig-param">combineall=False</em>, <em class="sig-param">load_train_targets=False</em>, <em class="sig-param">batch_size_train=32</em>, <em class="sig-param">batch_size_test=32</em>, <em class="sig-param">workers=4</em>, <em class="sig-param">num_instances=4</em>, <em class="sig-param">num_cams=1</em>, <em class="sig-param">train_sampler='RandomSampler'</em>, <em class="sig-param">train_sampler_t='RandomSampler'</em>, <em class="sig-param">cuhk03_labeled=False</em>, <em class="sig-param">cuhk03_classic_split=False</em>, <em class="sig-param">market1501_500k=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#ImageDataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.ImageDataManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Image data manager.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -264,6 +264,8 @@ Default is False. This is useful for domain adaptation research.</p></li>
 <li><p><strong>workers</strong> (<em>int</em><em>, </em><em>optional</em>) – number of workers. Default is 4.</p></li>
 <li><p><strong>num_instances</strong> (<em>int</em><em>, </em><em>optional</em>) – number of instances per identity in a batch.
 Default is 4.</p></li>
+<li><p><strong>num_cams</strong> (<em>int</em><em>, </em><em>optional</em>) – number of cameras to sample in a batch (when using
+<code class="docutils literal notranslate"><span class="pre">RandomDomainSampler</span></code>). Default is 1.</p></li>
 <li><p><strong>train_sampler</strong> (<em>str</em><em>, </em><em>optional</em>) – sampler. Default is RandomSampler.</p></li>
 <li><p><strong>train_sampler_t</strong> (<em>str</em><em>, </em><em>optional</em>) – sampler for target train loader. Default is RandomSampler.</p></li>
 <li><p><strong>cuhk03_labeled</strong> (<em>bool</em><em>, </em><em>optional</em>) – use cuhk03 labeled images.
@@ -299,7 +301,7 @@ set in market1501. Default is False.</p></li>
 
 <dl class="class">
 <dt id="torchreid.data.datamanager.VideoDataManager">
-<em class="property">class </em><code class="sig-prename descclassname">torchreid.data.datamanager.</code><code class="sig-name descname">VideoDataManager</code><span class="sig-paren">(</span><em class="sig-param">root=''</em>, <em class="sig-param">sources=None</em>, <em class="sig-param">targets=None</em>, <em class="sig-param">height=256</em>, <em class="sig-param">width=128</em>, <em class="sig-param">transforms='random_flip'</em>, <em class="sig-param">norm_mean=None</em>, <em class="sig-param">norm_std=None</em>, <em class="sig-param">use_gpu=True</em>, <em class="sig-param">split_id=0</em>, <em class="sig-param">combineall=False</em>, <em class="sig-param">batch_size_train=3</em>, <em class="sig-param">batch_size_test=3</em>, <em class="sig-param">workers=4</em>, <em class="sig-param">num_instances=4</em>, <em class="sig-param">train_sampler='RandomSampler'</em>, <em class="sig-param">seq_len=15</em>, <em class="sig-param">sample_method='evenly'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#VideoDataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.VideoDataManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">torchreid.data.datamanager.</code><code class="sig-name descname">VideoDataManager</code><span class="sig-paren">(</span><em class="sig-param">root=''</em>, <em class="sig-param">sources=None</em>, <em class="sig-param">targets=None</em>, <em class="sig-param">height=256</em>, <em class="sig-param">width=128</em>, <em class="sig-param">transforms='random_flip'</em>, <em class="sig-param">norm_mean=None</em>, <em class="sig-param">norm_std=None</em>, <em class="sig-param">use_gpu=True</em>, <em class="sig-param">split_id=0</em>, <em class="sig-param">combineall=False</em>, <em class="sig-param">batch_size_train=3</em>, <em class="sig-param">batch_size_test=3</em>, <em class="sig-param">workers=4</em>, <em class="sig-param">num_instances=4</em>, <em class="sig-param">num_cams=1</em>, <em class="sig-param">train_sampler='RandomSampler'</em>, <em class="sig-param">seq_len=15</em>, <em class="sig-param">sample_method='evenly'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datamanager.html#VideoDataManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datamanager.VideoDataManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Video data manager.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -323,6 +325,8 @@ training. Default is False.</p></li>
 <li><p><strong>workers</strong> (<em>int</em><em>, </em><em>optional</em>) – number of workers. Default is 4.</p></li>
 <li><p><strong>num_instances</strong> (<em>int</em><em>, </em><em>optional</em>) – number of instances per identity in a batch.
 Default is 4.</p></li>
+<li><p><strong>num_cams</strong> (<em>int</em><em>, </em><em>optional</em>) – number of cameras to sample in a batch (when using
+<code class="docutils literal notranslate"><span class="pre">RandomDomainSampler</span></code>). Default is 1.</p></li>
 <li><p><strong>train_sampler</strong> (<em>str</em><em>, </em><em>optional</em>) – sampler. Default is RandomSampler.</p></li>
 <li><p><strong>seq_len</strong> (<em>int</em><em>, </em><em>optional</em>) – how many images to sample in a tracklet. Default is 15.</p></li>
 <li><p><strong>sample_method</strong> (<em>str</em><em>, </em><em>optional</em>) – how to sample images in a tracklet. Default is “evenly”.
@@ -364,6 +368,17 @@ applies the same operation to all images in a tracklet to keep consistency.</p>
 <div class="section" id="module-torchreid.data.sampler">
 <span id="sampler"></span><h2>Sampler<a class="headerlink" href="#module-torchreid.data.sampler" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
+<dt id="torchreid.data.sampler.RandomDomainSampler">
+<em class="property">class </em><code class="sig-prename descclassname">torchreid.data.sampler.</code><code class="sig-name descname">RandomDomainSampler</code><span class="sig-paren">(</span><em class="sig-param">data_source</em>, <em class="sig-param">batch_size</em>, <em class="sig-param">n_domain</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/sampler.html#RandomDomainSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.sampler.RandomDomainSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Random domain sampler.</p>
+<p>Each camera is considered as a distinct domain.</p>
+<ol class="arabic simple">
+<li><p>Randomly sample N cameras.</p></li>
+<li><p>From each camera, randomly sample K images.</p></li>
+</ol>
+</dd></dl>
+
+<dl class="class">
 <dt id="torchreid.data.sampler.RandomIdentitySampler">
 <em class="property">class </em><code class="sig-prename descclassname">torchreid.data.sampler.</code><code class="sig-name descname">RandomIdentitySampler</code><span class="sig-paren">(</span><em class="sig-param">data_source</em>, <em class="sig-param">batch_size</em>, <em class="sig-param">num_instances</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/sampler.html#RandomIdentitySampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.sampler.RandomIdentitySampler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Randomly samples N identities each with K instances.</p>
@@ -380,7 +395,7 @@ applies the same operation to all images in a tracklet to keep consistency.</p>
 
 <dl class="function">
 <dt id="torchreid.data.sampler.build_train_sampler">
-<code class="sig-prename descclassname">torchreid.data.sampler.</code><code class="sig-name descname">build_train_sampler</code><span class="sig-paren">(</span><em class="sig-param">data_source</em>, <em class="sig-param">train_sampler</em>, <em class="sig-param">batch_size=32</em>, <em class="sig-param">num_instances=4</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/sampler.html#build_train_sampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.sampler.build_train_sampler" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">torchreid.data.sampler.</code><code class="sig-name descname">build_train_sampler</code><span class="sig-paren">(</span><em class="sig-param">data_source</em>, <em class="sig-param">train_sampler</em>, <em class="sig-param">batch_size=32</em>, <em class="sig-param">num_instances=4</em>, <em class="sig-param">num_cams=1</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/sampler.html#build_train_sampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.sampler.build_train_sampler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds a training sampler.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -390,6 +405,8 @@ applies the same operation to all images in a tracklet to keep consistency.</p>
 <li><p><strong>batch_size</strong> (<em>int</em><em>, </em><em>optional</em>) – batch size. Default is 32.</p></li>
 <li><p><strong>num_instances</strong> (<em>int</em><em>, </em><em>optional</em>) – number of instances per identity in a
 batch (when using <code class="docutils literal notranslate"><span class="pre">RandomIdentitySampler</span></code>). Default is 4.</p></li>
+<li><p><strong>num_cams</strong> (<em>int</em><em>, </em><em>optional</em>) – number of cameras to sample in a batch (when using
+<code class="docutils literal notranslate"><span class="pre">RandomDomainSampler</span></code>). Default is 1.</p></li>
 </ul>
 </dd>
 </dl>

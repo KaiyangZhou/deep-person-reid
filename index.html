@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Torchreid &mdash; torchreid 1.2.5 documentation</title>
+  <title>Torchreid &mdash; torchreid 1.2.6 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                1.2.5
+                1.2.6
               </div>
             
           
@@ -194,6 +194,7 @@
 <div class="section" id="what-s-new">
 <h2>What’s new<a class="headerlink" href="#what-s-new" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
+<li><p>[Aug 2020] <code class="docutils literal notranslate"><span class="pre">1.2.6</span></code>: Added <code class="docutils literal notranslate"><span class="pre">RandomDomainSampler</span></code> (it samples <code class="docutils literal notranslate"><span class="pre">num_cams</span></code> cameras each with <code class="docutils literal notranslate"><span class="pre">batch_size</span> <span class="pre">//</span> <span class="pre">num_cams</span></code> images to form a mini-batch).</p></li>
 <li><p>[Jun 2020] <code class="docutils literal notranslate"><span class="pre">1.2.5</span></code>: (1) Dataloader’s output from <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> has been changed from <code class="docutils literal notranslate"><span class="pre">list</span></code> to <code class="docutils literal notranslate"><span class="pre">dict</span></code>. Previously, an element, e.g. image tensor, was fetched with <code class="docutils literal notranslate"><span class="pre">imgs=data[0]</span></code>. Now it should be obtained by <code class="docutils literal notranslate"><span class="pre">imgs=data['img']</span></code>. See this <a class="reference external" href="https://github.com/KaiyangZhou/deep-person-reid/commit/aefe335d68f39a20160860e6d14c2d34f539b8a5">commit</a> for detailed changes. (2) Added <code class="docutils literal notranslate"><span class="pre">k_tfm</span></code> as an option to image data loader, which allows data augmentation to be applied <code class="docutils literal notranslate"><span class="pre">k_tfm</span></code> times <em>independently</em> to an image. If <code class="docutils literal notranslate"><span class="pre">k_tfm</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">imgs=data['img']</span></code> returns a list with <code class="docutils literal notranslate"><span class="pre">k_tfm</span></code> image tensors.</p></li>
 <li><p>[May 2020] Added the person attribute recognition code used in <a class="reference external" href="https://arxiv.org/abs/1905.00953">Omni-Scale Feature Learning for Person Re-Identification (ICCV’19)</a>. See <code class="docutils literal notranslate"><span class="pre">projects/attribute_recognition/</span></code>.</p></li>
 <li><p>[May 2020] <code class="docutils literal notranslate"><span class="pre">1.2.1</span></code>: Added a simple API for feature extraction (<code class="docutils literal notranslate"><span class="pre">torchreid/utils/feature_extractor.py</span></code>). See the <a class="reference external" href="https://kaiyangzhou.github.io/deep-person-reid/user_guide.html">documentation</a> for the instruction.</p></li>
