@@ -43,6 +43,7 @@ def get_default_config():
     cfg.sampler.train_sampler_t = 'RandomSampler' # sampler for target train loader
     cfg.sampler.num_instances = 4 # number of instances per identity for RandomIdentitySampler
     cfg.sampler.num_cams = 1 # number of cameras to sample in a batch (for RandomDomainSampler)
+    cfg.sampler.num_datasets = 1 # number of datasets to sample in a batch (for RandomDatasetSampler)
 
     # video reid setting
     cfg.video = CN()
@@ -128,9 +129,10 @@ def imagedata_kwargs(cfg):
         'workers': cfg.data.workers,
         'num_instances': cfg.sampler.num_instances,
         'num_cams': cfg.sampler.num_cams,
+        'num_datasets': cfg.sampler.num_datasets,
         'train_sampler': cfg.sampler.train_sampler,
         'train_sampler_t': cfg.sampler.train_sampler_t,
-        # image
+        # image dataset specific
         'cuhk03_labeled': cfg.cuhk03.labeled_images,
         'cuhk03_classic_split': cfg.cuhk03.classic_split,
         'market1501_500k': cfg.market1501.use_500k_distractors,
@@ -155,8 +157,9 @@ def videodata_kwargs(cfg):
         'workers': cfg.data.workers,
         'num_instances': cfg.sampler.num_instances,
         'num_cams': cfg.sampler.num_cams,
+        'num_datasets': cfg.sampler.num_datasets,
         'train_sampler': cfg.sampler.train_sampler,
-        # video
+        # video dataset specific
         'seq_len': cfg.video.seq_len,
         'sample_method': cfg.video.sample_method
     }
