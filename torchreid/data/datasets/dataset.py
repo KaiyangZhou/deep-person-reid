@@ -28,8 +28,12 @@ class Dataset(object):
             dataset for training.
         verbose (bool): show information.
     """
-    _junk_pids = [
-    ] # contains useless person IDs, e.g. background, false detections
+
+    # junk_pids contains useless person IDs, e.g. background,
+    # false detections, distractors. These IDs will be ignored
+    # when combining all images in a dataset for training, i.e.
+    # combineall=True
+    _junk_pids = []
 
     def __init__(
         self,

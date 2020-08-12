@@ -1,13 +1,14 @@
 # cython: boundscheck=False, wraparound=False, nonecheck=False, cdivision=True
 
 from __future__ import print_function
+import numpy as np
 
 import cython
-import numpy as np
-cimport numpy as np
-from collections import defaultdict
-import random
 
+cimport numpy as np
+
+import random
+from collections import defaultdict
 
 """
 Compiler directives:

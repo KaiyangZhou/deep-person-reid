@@ -12,5 +12,5 @@ yacs
 gdown
 flake8
 yapf
-isort
+isort==4.3.21
 imageio
