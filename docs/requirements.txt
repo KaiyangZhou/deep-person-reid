@@ -1,4 +1,4 @@
-sphinx
+sphinx==2.2.0
 sphinx-markdown-tables
 sphinx-rtd-theme
 sphinxcontrib-napoleon
