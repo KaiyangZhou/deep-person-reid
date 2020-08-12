@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.data &mdash; torchreid 1.3.1 documentation</title>
+  <title>torchreid.data &mdash; torchreid 1.3.2 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                1.3.1
+                1.3.2
               </div>
             
           
@@ -880,6 +880,7 @@ data in each batch has shape (batch_size, seq_len, channel, height, width).</p>
 </ul>
 </dd>
 </dl>
+<p>Note: CUHK01 and CUHK02 overlap.</p>
 <dl class="method">
 <dt id="torchreid.data.datasets.image.cuhk01.CUHK01.prepare_split">
 <code class="sig-name descname">prepare_split</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/data/datasets/image/cuhk01.html#CUHK01.prepare_split"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.data.datasets.image.cuhk01.CUHK01.prepare_split" title="Permalink to this definition">¶</a></dt>
@@ -940,7 +941,7 @@ Classification. SCIA 2011.</p>
 <li><p>Two views.</p></li>
 <li><p>View A captures 385 identities.</p></li>
 <li><p>View B captures 749 identities.</p></li>
-<li><p>200 identities appear in both views.</p></li>
+<li><p>200 identities appear in both views (index starts from 1 to 200).</p></li>
 </ul>
 </dd>
 </dl>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.data.datasets.dataset &mdash; torchreid 1.3.1 documentation</title>
+  <title>torchreid.data.datasets.dataset &mdash; torchreid 1.3.2 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                1.3.1
+                1.3.2
               </div>
             
           
@@ -198,8 +198,12 @@
 <span class="sd">            dataset for training.</span>
 <span class="sd">        verbose (bool): show information.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_junk_pids</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">]</span> <span class="c1"># contains useless person IDs, e.g. background, false detections</span>
+
+    <span class="c1"># junk_pids contains useless person IDs, e.g. background,</span>
+    <span class="c1"># false detections, distractors. These IDs will be ignored</span>
+    <span class="c1"># when combining all images in a dataset for training, i.e.</span>
+    <span class="c1"># combineall=True</span>
+    <span class="n">_junk_pids</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
