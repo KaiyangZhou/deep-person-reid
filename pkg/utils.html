@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,12 +11,18 @@
   
 
   
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -30,10 +35,6 @@
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Awesome-ReID" href="../AWESOME_REID.html" />
@@ -51,7 +52,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> torchreid
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> torchreid
           
 
           
@@ -78,6 +79,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -116,6 +118,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -154,7 +157,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>torchreid.utils</li>
     
@@ -230,7 +233,7 @@
 <dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">Logger</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="kn">import</span> <span class="n">Logger</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">save_dir</span> <span class="o">=</span> <span class="s1">&#39;log/resnet50-softmax-market1501&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">log_name</span> <span class="o">=</span> <span class="s1">&#39;train.log&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">log_name</span><span class="p">))</span>
@@ -255,7 +258,7 @@ to show the summarized results, which are convenient for analysis.</p>
 </dd>
 </dl>
 <dl>
-<dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">RankLogger</span>
+<dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="kn">import</span> <span class="n">RankLogger</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;market1501&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="s1">&#39;market1501&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ranklogger</span> <span class="o">=</span> <span class="n">RankLogger</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
@@ -461,7 +464,7 @@ python2-saved files can be read from python3.</p>
 </dd>
 </dl>
 <dl>
-<dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">load_checkpoint</span>
+<dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="kn">import</span> <span class="n">load_checkpoint</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fpath</span> <span class="o">=</span> <span class="s1">&#39;log/my_model/model.pth.tar-10&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">checkpoint</span> <span class="o">=</span> <span class="n">load_checkpoint</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
 </pre></div>
@@ -493,7 +496,7 @@ of optimizer if <code class="docutils literal notranslate"><span class="pre">opt
 </dd>
 </dl>
 <dl>
-<dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">resume_from_checkpoint</span>
+<dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="kn">import</span> <span class="n">resume_from_checkpoint</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fpath</span> <span class="o">=</span> <span class="s1">&#39;log/my_model/model.pth.tar-10&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">start_epoch</span> <span class="o">=</span> <span class="n">resume_from_checkpoint</span><span class="p">(</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">fpath</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">scheduler</span>
@@ -509,7 +512,7 @@ of optimizer if <code class="docutils literal notranslate"><span class="pre">opt
 <code class="sig-prename descclassname">torchreid.utils.torchtools.</code><code class="sig-name descname">open_all_layers</code><span class="sig-paren">(</span><em class="sig-param">model</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torchreid/utils/torchtools.html#open_all_layers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torchreid.utils.torchtools.open_all_layers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Opens all layers in model for training.</p>
 <dl>
-<dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">open_all_layers</span>
+<dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="kn">import</span> <span class="n">open_all_layers</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">open_all_layers</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -531,7 +534,7 @@ other layers frozen.</p>
 </dd>
 </dl>
 <dl>
-<dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">open_specified_layers</span>
+<dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="kn">import</span> <span class="n">open_specified_layers</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Only model.classifier will be updated.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">open_layers</span> <span class="o">=</span> <span class="s1">&#39;classifier&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">open_specified_layers</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">open_layers</span><span class="p">)</span>
@@ -554,7 +557,7 @@ other layers frozen.</p>
 </dd>
 </dl>
 <dl>
-<dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">count_num_param</span>
+<dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="kn">import</span> <span class="n">count_num_param</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">model_size</span> <span class="o">=</span> <span class="n">count_num_param</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -587,7 +590,7 @@ other layers frozen.</p>
 </dd>
 </dl>
 <dl>
-<dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="k">import</span> <span class="n">load_pretrained_weights</span>
+<dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid.utils</span> <span class="kn">import</span> <span class="n">load_pretrained_weights</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">weight_path</span> <span class="o">=</span> <span class="s1">&#39;log/my_model/model-best.pth.tar&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">load_pretrained_weights</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">weight_path</span><span class="p">)</span>
 </pre></div>
@@ -623,7 +626,7 @@ If set to False, flops of all layers will be counted.</p></li>
 </dd>
 </dl>
 <dl>
-<dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid</span> <span class="k">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">utils</span>
+<dt>Examples::</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchreid</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">utils</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">build_model</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;resnet50&#39;</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">num_params</span><span class="p">,</span> <span class="n">flops</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">compute_model_complexity</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
@@ -655,11 +658,19 @@ If set to False, flops of all layers will be counted.</p></li>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2019, Kaiyang Zhou
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -670,7 +681,6 @@ If set to False, flops of all layers will be counted.</p></li>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

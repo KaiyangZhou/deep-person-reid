@@ -11,7 +11,7 @@ Please refer to :ref:`torchreid_data` for details regarding the arguments.
 
 
 .. note::
-    Dataset with a :math:`\dagger` superscript means that the process is automated, so you can directly call the dataset in ``DataManager`` (which automatically downloads the dataset and organizes the data structure). However, we also provide a way below to help the manual setup in case the automation fails.
+    Dataset with a :math:`\dagger` symbol means that the process is automated, so you can directly call the dataset in ``DataManager`` (which automatically downloads the dataset and organizes the data structure). However, we also provide a way below to help the manual setup in case the automation fails.
 
 
 .. note::
