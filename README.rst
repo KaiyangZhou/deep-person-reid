@@ -33,6 +33,7 @@ You can find some research projects that are built on top of Torchreid `here <ht
 
 What's new
 ------------
+- [Aug 2020] ``1.3.3``: Fixed bug in ``visrank`` (caused by not unpacking ``dsetid``).
 - [Aug 2020] ``1.3.2``: Added ``_junk_pids`` to ``grid`` and ``prid``. This avoids using mislabeled gallery images for training when setting ``combineall=True``.
 - [Aug 2020] ``1.3.0``: (1) Added ``dsetid`` to the existing 3-tuple data source, resulting in ``(impath, pid, camid, dsetid)``. This variable denotes the dataset ID and is useful when combining multiple datasets for training (as a dataset indicator). E.g., when combining ``market1501`` and ``cuhk03``, the former will be assigned ``dsetid=0`` while the latter will be assigned ``dsetid=1``. (2) Added ``RandomDatasetSampler``. Analogous to ``RandomDomainSampler``, ``RandomDatasetSampler`` samples a certain number of images (``batch_size // num_datasets``) from each of specified datasets (the amount is determined by ``num_datasets``).
 - [Aug 2020] ``1.2.6``: Added ``RandomDomainSampler`` (it samples ``num_cams`` cameras each with ``batch_size // num_cams`` images to form a mini-batch).
