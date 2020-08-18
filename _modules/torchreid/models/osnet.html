@@ -474,6 +474,7 @@
         <span class="k">assert</span> <span class="n">num_blocks</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">num_blocks</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature_dim</span> <span class="o">=</span> <span class="n">feature_dim</span>
 
         <span class="c1"># convolutional backbone</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">ConvLayer</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">channels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">7</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">IN</span><span class="o">=</span><span class="n">IN</span><span class="p">)</span>
@@ -504,7 +505,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">global_avgpool</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">AdaptiveAvgPool2d</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="c1"># fully connected layer</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_construct_fc_layer</span><span class="p">(</span>
-            <span class="n">feature_dim</span><span class="p">,</span> <span class="n">channels</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">dropout_p</span><span class="o">=</span><span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">feature_dim</span><span class="p">,</span> <span class="n">channels</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">dropout_p</span><span class="o">=</span><span class="kc">None</span>
         <span class="p">)</span>
         <span class="c1"># identity classification layer</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feature_dim</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">)</span>
