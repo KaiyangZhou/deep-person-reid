@@ -367,7 +367,7 @@ class Engine(object):
                 end = time.time()
                 features = self.extract_features(imgs)
                 batch_time.update(time.time() - end)
-                features = features.data.cpu()
+                features = features.cpu().clone()
                 f_.append(features)
                 pids_.extend(pids)
                 camids_.extend(camids)
