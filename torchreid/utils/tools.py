@@ -43,6 +43,13 @@ def check_isfile(fpath):
     return isfile
 
 
+def read_jsonl(in_file_path):
+    with open(in_file_path) as f:
+        data = map(json.loads, f)
+        for datum in data:
+            yield datum
+
+
 def read_json(fpath):
     """Reads json file from a path."""
     with open(fpath, 'r') as f:
@@ -82,11 +89,11 @@ def download_url(url, dst):
             return
         duration = time.time() - start_time
         progress_size = int(count * block_size)
-        speed = int(progress_size / (1024*duration))
+        speed = int(progress_size / (1024 * duration))
         percent = int(count * block_size * 100 / total_size)
         sys.stdout.write(
             '\r...%d%%, %d MB, %d KB/s, %d seconds passed' %
-            (percent, progress_size / (1024*1024), speed, duration)
+            (percent, progress_size / (1024 * 1024), speed, duration)
         )
         sys.stdout.flush()
 
@@ -113,7 +120,7 @@ def read_image(path):
         except IOError:
             print(
                 'IOError incurred when reading "{}". Will redo. Don\'t worry. Just chill.'
-                .format(path)
+                    .format(path)
             )
     return img
 
