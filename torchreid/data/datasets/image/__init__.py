@@ -11,3 +11,4 @@ from .msmt17 import MSMT17
 from .sensereid import SenseReID
 from .market1501 import Market1501
 from .dukemtmcreid import DukeMTMCreID
+from .safex_simulation import SafeXCARLASimulation
