@@ -19,10 +19,10 @@ sh make.sh
 
 ## Demo
 
-The demo script `main.py` provides the gnn re-ranking  method using the prepared feature. 
+The demo script `evaluate_rerank_gpu.py` provides the gnn re-ranking  method using the prepared feature. 
 
 ```shell
-python main.py --data_path PATH_TO_DATA --k1 26 --k2 7
+python evaluate_rerank_gpu.py --data_path PATH_TO_DATA --k1 26 --k2 7
 ```
 
 ## Citation
