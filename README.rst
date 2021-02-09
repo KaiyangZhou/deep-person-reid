@@ -33,6 +33,7 @@ You can find some research projects that are built on top of Torchreid `here <ht
 
 What's new
 ------------
+- [Feb 2021] Add the GPU-Re-Ranking proposed by `Understanding Image Retrieval Re-Ranking: A Graph Neural Network Perspective]]<https://arxiv.org/abs/2012.07620v2>`, facilitating the real-time post-processing.The code can be found in [GPU-Re-Ranking](torchreid/utils/GPU-Re-Ranking/).
 - [Jan 2021] A new evaluation metric called `mean Inverse Negative Penalty (mINP)` for person re-ID has been introduced in `Deep Learning for Person Re-identification: A Survey and Outlook (TPAMI 2021) <https://arxiv.org/abs/2001.04193>`_. Their code can be accessed at `<https://github.com/mangye16/ReID-Survey>`_.
 - [Aug 2020] ``1.3.3``: Fixed bug in ``visrank`` (caused by not unpacking ``dsetid``).
 - [Aug 2020] ``1.3.2``: Added ``_junk_pids`` to ``grid`` and ``prid``. This avoids using mislabeled gallery images for training when setting ``combineall=True``.
