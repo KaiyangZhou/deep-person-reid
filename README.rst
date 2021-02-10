@@ -230,6 +230,10 @@ Image-reid datasets
 - `QMUL-iLIDS <http://www.eecs.qmul.ac.uk/~sgg/papers/ZhengGongXiang_BMVC09.pdf>`_
 - `PRID <https://pdfs.semanticscholar.org/4c1b/f0592be3e535faf256c95e27982db9b3d3d3.pdf>`_
 
+Geo-localization datasets
+^^^^^^^^^^^^^^^^^^^^^^^
+- `University-1652 <https://dl.acm.org/doi/abs/10.1145/3394171.3413896>`_
+
 Video-reid datasets
 ^^^^^^^^^^^^^^^^^^^^^^^
 - `MARS <http://www.liangzheng.org/1320.pdf>`_
