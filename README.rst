@@ -33,6 +33,7 @@ You can find some research projects that are built on top of Torchreid `here <ht
 
 What's new
 ------------
+- [Feb 2021] We support the new multi-view multi-source geo-localization dataset `University-1652 <https://dl.acm.org/doi/abs/10.1145/3394171.3413896>`_.
 - [Feb 2021] ``v1.3.5``: Now the `cython code <https://github.com/KaiyangZhou/deep-person-reid/pull/412>`_ works on Windows (credit to `lablabla <https://github.com/lablabla>`_).
 - [Jan 2021] Our recent work, `MixStyle <https://openreview.net/forum?id=6xHJ37MVxxp>`_ (mixing instance-level feature statistics of samples of different domains for improving domain generalization), has been accepted to ICLR'21. The code has been released at https://github.com/KaiyangZhou/mixstyle-release where the person re-ID part is based on Torchreid.
 - [Jan 2021] A new evaluation metric called `mean Inverse Negative Penalty (mINP)` for person re-ID has been introduced in `Deep Learning for Person Re-identification: A Survey and Outlook (TPAMI 2021) <https://arxiv.org/abs/2001.04193>`_. Their code can be accessed at `<https://github.com/mangye16/ReID-Survey>`_.
@@ -229,6 +230,10 @@ Image-reid datasets
 - `SenseReID <http://openaccess.thecvf.com/content_cvpr_2017/papers/Zhao_Spindle_Net_Person_CVPR_2017_paper.pdf>`_
 - `QMUL-iLIDS <http://www.eecs.qmul.ac.uk/~sgg/papers/ZhengGongXiang_BMVC09.pdf>`_
 - `PRID <https://pdfs.semanticscholar.org/4c1b/f0592be3e535faf256c95e27982db9b3d3d3.pdf>`_
+
+Geo-localization datasets
+^^^^^^^^^^^^^^^^^^^^^^^
+- `University-1652 <https://dl.acm.org/doi/abs/10.1145/3394171.3413896>`_
 
 Video-reid datasets
 ^^^^^^^^^^^^^^^^^^^^^^^
