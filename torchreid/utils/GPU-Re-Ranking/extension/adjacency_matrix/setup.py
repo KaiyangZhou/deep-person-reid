@@ -16,22 +16,21 @@
     with limited time cost.
 """
 
-from setuptools import setup, Extension
-
+from setuptools import Extension, setup
 import torch
 import torch.nn as nn
 from torch.autograd import Function
-from torch.utils.cpp_extension import BuildExtension, CUDAExtension
-
+from torch.utils.cpp_extension import CUDAExtension, BuildExtension
 
 setup(
     name='build_adjacency_matrix',
     ext_modules=[
-        CUDAExtension('build_adjacency_matrix', [
-            'build_adjacency_matrix.cpp',
-            'build_adjacency_matrix_kernel.cu',
-        ]),
+        CUDAExtension(
+            'build_adjacency_matrix', [
+                'build_adjacency_matrix.cpp',
+                'build_adjacency_matrix_kernel.cu',
+            ]
+        ),
     ],
-    cmdclass={
-        'build_ext':BuildExtension  
-    })
+    cmdclass={'build_ext': BuildExtension}
+)
