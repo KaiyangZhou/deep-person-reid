@@ -33,6 +33,7 @@ You can find some research projects that are built on top of Torchreid `here <ht
 
 What's new
 ------------
+- [Mar 2021] `OSNet <https://arxiv.org/abs/1910.06827>`_ will appear in the TPAMI journal! Compared with the conference version, which focuses on discriminative feature learning using the omni-scale building block, this journal extension further considers generalizable feature learning by integrating `instance normalization layers <https://arxiv.org/abs/1607.08022>`_ with the OSNet architecture. We hope this journal paper can motivate more future work to taclke the generalization issue in cross-dataset re-ID.
 - [Mar 2021] Generalization across domains (datasets) in person re-ID is crucial in real-world applications, which is closely related to the topic of *domain generalization*. Interested in learning how the field of domain generalization has developed over the last decade? Check our recent survey in this topic at https://arxiv.org/abs/2103.02503, with coverage on the history, datasets, related problems, methodologies, potential directions, and so on (*methods designed for generalizable re-ID are also covered*!).
 - [Feb 2021] ``v1.3.6`` Added `University-1652 <https://dl.acm.org/doi/abs/10.1145/3394171.3413896>`_, a new dataset for multi-view multi-source geo-localization (credit to `Zhedong Zheng <https://github.com/layumi>`_).
 - [Feb 2021] ``v1.3.5``: Now the `cython code <https://github.com/KaiyangZhou/deep-person-reid/pull/412>`_ works on Windows (credit to `lablabla <https://github.com/lablabla>`_).
@@ -303,9 +304,9 @@ If you find this code useful to your research, please cite the following papers.
       year={2019}
     }
 
-    @article{zhou2019learning,
+    @article{zhou2021osnet,
       title={Learning Generalisable Omni-Scale Representations for Person Re-Identification},
       author={Zhou, Kaiyang and Yang, Yongxin and Cavallaro, Andrea and Xiang, Tao},
-      journal={arXiv preprint arXiv:1910.06827},
-      year={2019}
+      journal={TPAMI},
+      year={2021}
     }
