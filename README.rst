@@ -287,7 +287,7 @@ Useful links
 
 Citation
 ---------
-If you find this code useful to your research, please cite the following papers.
+If you find this code useful to your research, please consider giving credit to the following papers
 
 .. code-block:: bash
 
