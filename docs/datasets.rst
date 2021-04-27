@@ -189,6 +189,19 @@ CUHK02 (``cuhk02``)
             P4/
             P5/
 
+CUHKSYSU (``cuhksysu``)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Create a folder named "cuhksysu" under ``$REID``.
+- Download the data to "cuhksysu/" from this `google drive link <https://drive.google.com/file/d/1XmiNVrfK2ZmI0ZZ2HHT80HHbDrnE4l3W/view?usp=sharing>`_.
+- Extract the zip file under "cuhksysu/".
+- The data structure should look like
+
+.. code-block:: none
+    
+    cuhksysu/
+        cropped_images
+
+
 Video Datasets
 --------------
 
