@@ -1,6 +1,5 @@
 from __future__ import division, print_function, absolute_import
 import os
-import re
 import glob
 import os.path as osp
 import gdown
@@ -35,6 +34,7 @@ class University1652(ImageDataset):
     | Gallery_satellite |  951 | 951 | 39|
     | Gallery_ground | 2,921 | 793  | 39|
             - cameras: None.
+    
     datamanager = torchreid.data.ImageDataManager(
         root='reid-data',
         sources='university1652',
