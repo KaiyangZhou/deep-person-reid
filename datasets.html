@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Datasets &mdash; torchreid 1.3.6 documentation</title>
+  <title>Datasets &mdash; torchreid 1.4.0 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                1.3.6
+                1.4.0
               </div>
             
           
@@ -102,6 +102,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#qmul-ilids-dagger-ilids">QMUL-iLIDS <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">ilids</span></code>)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#prid-prid">PRID (<code class="docutils literal notranslate"><span class="pre">prid</span></code>)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#cuhk02-cuhk02">CUHK02 (<code class="docutils literal notranslate"><span class="pre">cuhk02</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cuhksysu-cuhksysu">CUHKSYSU (<code class="docutils literal notranslate"><span class="pre">cuhksysu</span></code>)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#video-datasets">Video Datasets</a><ul>
@@ -226,14 +227,15 @@
 <li><p><a class="reference internal" href="#qmul-ilids-dagger-ilids" id="id11">QMUL-iLIDS <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">ilids</span></code>)</a></p></li>
 <li><p><a class="reference internal" href="#prid-prid" id="id12">PRID (<code class="docutils literal notranslate"><span class="pre">prid</span></code>)</a></p></li>
 <li><p><a class="reference internal" href="#cuhk02-cuhk02" id="id13">CUHK02 (<code class="docutils literal notranslate"><span class="pre">cuhk02</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#cuhksysu-cuhksysu" id="id14">CUHKSYSU (<code class="docutils literal notranslate"><span class="pre">cuhksysu</span></code>)</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#video-datasets" id="id14">Video Datasets</a></p>
+<li><p><a class="reference internal" href="#video-datasets" id="id15">Video Datasets</a></p>
 <ul>
-<li><p><a class="reference internal" href="#mars-mars" id="id15">MARS (<code class="docutils literal notranslate"><span class="pre">mars</span></code>)</a></p></li>
-<li><p><a class="reference internal" href="#ilids-vid-dagger-ilidsvid" id="id16">iLIDS-VID <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">ilidsvid</span></code>)</a></p></li>
-<li><p><a class="reference internal" href="#prid2011-prid2011" id="id17">PRID2011 (<code class="docutils literal notranslate"><span class="pre">prid2011</span></code>)</a></p></li>
-<li><p><a class="reference internal" href="#dukemtmc-videoreid-dagger-dukemtmcvidreid" id="id18">DukeMTMC-VideoReID <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">dukemtmcvidreid</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#mars-mars" id="id16">MARS (<code class="docutils literal notranslate"><span class="pre">mars</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#ilids-vid-dagger-ilidsvid" id="id17">iLIDS-VID <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">ilidsvid</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#prid2011-prid2011" id="id18">PRID2011 (<code class="docutils literal notranslate"><span class="pre">prid2011</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#dukemtmc-videoreid-dagger-dukemtmcvidreid" id="id19">DukeMTMC-VideoReID <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">dukemtmcvidreid</span></code>)</a></p></li>
 </ul>
 </li>
 </ul>
@@ -411,11 +413,24 @@
 </pre></div>
 </div>
 </div>
+<div class="section" id="cuhksysu-cuhksysu">
+<h3><a class="toc-backref" href="#id14">CUHKSYSU (<code class="docutils literal notranslate"><span class="pre">cuhksysu</span></code>)</a><a class="headerlink" href="#cuhksysu-cuhksysu" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Create a folder named “cuhksysu” under <code class="docutils literal notranslate"><span class="pre">$REID</span></code>.</p></li>
+<li><p>Download the data to “cuhksysu/” from this <a class="reference external" href="https://drive.google.com/file/d/1XmiNVrfK2ZmI0ZZ2HHT80HHbDrnE4l3W/view?usp=sharing">google drive link</a>.</p></li>
+<li><p>Extract the zip file under “cuhksysu/”.</p></li>
+<li><p>The data structure should look like</p></li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cuhksysu/
+    cropped_images
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="video-datasets">
-<h2><a class="toc-backref" href="#id14">Video Datasets</a><a class="headerlink" href="#video-datasets" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id15">Video Datasets</a><a class="headerlink" href="#video-datasets" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="mars-mars">
-<h3><a class="toc-backref" href="#id15">MARS (<code class="docutils literal notranslate"><span class="pre">mars</span></code>)</a><a class="headerlink" href="#mars-mars" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id16">MARS (<code class="docutils literal notranslate"><span class="pre">mars</span></code>)</a><a class="headerlink" href="#mars-mars" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Create “mars/” under <code class="docutils literal notranslate"><span class="pre">$REID</span></code>.</p></li>
 <li><p>Download the dataset from <a class="reference external" href="http://www.liangzheng.com.cn/Project/project_mars.html">http://www.liangzheng.com.cn/Project/project_mars.html</a> and place it in “mars/”.</p></li>
@@ -431,7 +446,7 @@
 </div>
 </div>
 <div class="section" id="ilids-vid-dagger-ilidsvid">
-<h3><a class="toc-backref" href="#id16">iLIDS-VID <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">ilidsvid</span></code>)</a><a class="headerlink" href="#ilids-vid-dagger-ilidsvid" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id17">iLIDS-VID <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">ilidsvid</span></code>)</a><a class="headerlink" href="#ilids-vid-dagger-ilidsvid" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Create “ilids-vid” under <code class="docutils literal notranslate"><span class="pre">$REID</span></code>.</p></li>
 <li><p>Download the dataset from <a class="reference external" href="http://www.eecs.qmul.ac.uk/~xiatian/downloads_qmul_iLIDS-VID_ReID_dataset.html">http://www.eecs.qmul.ac.uk/~xiatian/downloads_qmul_iLIDS-VID_ReID_dataset.html</a> to “ilids-vid”.</p></li>
@@ -444,7 +459,7 @@
 </div>
 </div>
 <div class="section" id="prid2011-prid2011">
-<h3><a class="toc-backref" href="#id17">PRID2011 (<code class="docutils literal notranslate"><span class="pre">prid2011</span></code>)</a><a class="headerlink" href="#prid2011-prid2011" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id18">PRID2011 (<code class="docutils literal notranslate"><span class="pre">prid2011</span></code>)</a><a class="headerlink" href="#prid2011-prid2011" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Create a directory named “prid2011” under <code class="docutils literal notranslate"><span class="pre">$REID</span></code>.</p></li>
 <li><p>Download the dataset from <a class="reference external" href="https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/">https://www.tugraz.at/institute/icg/research/team-bischof/lrs/downloads/PRID11/</a> and extract it under “prid2011”.</p></li>
@@ -460,7 +475,7 @@
 </div>
 </div>
 <div class="section" id="dukemtmc-videoreid-dagger-dukemtmcvidreid">
-<h3><a class="toc-backref" href="#id18">DukeMTMC-VideoReID <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">dukemtmcvidreid</span></code>)</a><a class="headerlink" href="#dukemtmc-videoreid-dagger-dukemtmcvidreid" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id19">DukeMTMC-VideoReID <span class="math notranslate nohighlight">\(^\dagger\)</span> (<code class="docutils literal notranslate"><span class="pre">dukemtmcvidreid</span></code>)</a><a class="headerlink" href="#dukemtmc-videoreid-dagger-dukemtmcvidreid" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Create “dukemtmc-vidreid” under <code class="docutils literal notranslate"><span class="pre">$REID</span></code>.</p></li>
 <li><p>Download “DukeMTMC-VideoReID” from <a class="reference external" href="http://vision.cs.duke.edu/DukeMTMC/">http://vision.cs.duke.edu/DukeMTMC/</a> and unzip the file to “dukemtmc-vidreid/”.</p></li>

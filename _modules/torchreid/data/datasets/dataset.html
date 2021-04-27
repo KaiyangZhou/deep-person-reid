@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>torchreid.data.datasets.dataset &mdash; torchreid 1.3.6 documentation</title>
+  <title>torchreid.data.datasets.dataset &mdash; torchreid 1.4.0 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                1.3.6
+                1.4.0
               </div>
             
           
@@ -204,6 +204,10 @@
     <span class="c1"># when combining all images in a dataset for training, i.e.</span>
     <span class="c1"># combineall=True</span>
     <span class="n">_junk_pids</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Some datasets are only used for training, like CUHK-SYSU</span>
+    <span class="c1"># In this case, &quot;combineall=True&quot; is not used for them</span>
+    <span class="n">_train_only</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -350,6 +354,9 @@
 
 <div class="viewcode-block" id="Dataset.combine_all"><a class="viewcode-back" href="../../../../pkg/data.html#torchreid.data.datasets.dataset.Dataset.combine_all">[docs]</a>    <span class="k">def</span> <span class="nf">combine_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Combines train, query and gallery in a dataset for training.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_train_only</span><span class="p">:</span>
+            <span class="k">return</span>
+
         <span class="n">combined</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">)</span>
 
         <span class="c1"># relabel pids in gallery (query shares the same scope)</span>
