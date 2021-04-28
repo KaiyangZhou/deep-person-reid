@@ -184,7 +184,8 @@
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;mkdir_if_missing&#39;</span><span class="p">,</span> <span class="s1">&#39;check_isfile&#39;</span><span class="p">,</span> <span class="s1">&#39;read_json&#39;</span><span class="p">,</span> <span class="s1">&#39;write_json&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;set_random_seed&#39;</span><span class="p">,</span> <span class="s1">&#39;download_url&#39;</span><span class="p">,</span> <span class="s1">&#39;read_image&#39;</span><span class="p">,</span> <span class="s1">&#39;collect_env_info&#39;</span>
+    <span class="s1">&#39;set_random_seed&#39;</span><span class="p">,</span> <span class="s1">&#39;download_url&#39;</span><span class="p">,</span> <span class="s1">&#39;read_image&#39;</span><span class="p">,</span> <span class="s1">&#39;collect_env_info&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;listdir_nohidden&#39;</span>
 <span class="p">]</span>
 
 
@@ -297,6 +298,19 @@
     <span class="n">env_str</span> <span class="o">=</span> <span class="n">get_pretty_env_info</span><span class="p">()</span>
     <span class="n">env_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">        Pillow (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PIL</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">env_str</span></div>
+
+
+<div class="viewcode-block" id="listdir_nohidden"><a class="viewcode-back" href="../../../pkg/utils.html#torchreid.utils.tools.listdir_nohidden">[docs]</a><span class="k">def</span> <span class="nf">listdir_nohidden</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;List non-hidden items in a directory.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">         path (str): directory path.</span>
+<span class="sd">         sort (bool): sort the items.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">sort</span><span class="p">:</span>
+        <span class="n">items</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">items</span></div>
 </pre></div>
 
            </div>
