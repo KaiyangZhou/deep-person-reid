@@ -33,6 +33,7 @@ You can find some research projects that are built on top of Torchreid `here <ht
 
 What's new
 ------------
+- [Apr 2021] We have added a script to automate the process of calculating average results over multiple splits. For more details please see ``tools/parse_test_res.py``.
 - [Apr 2021] ``v1.4.0``: We added the person search dataset, `CUHK-SYSU <http://www.ee.cuhk.edu.hk/~xgwang/PS/dataset.html>`_.  Please see the `documentation <https://kaiyangzhou.github.io/deep-person-reid/>`_ regarding how to download the dataset (it contains cropped person images).
 - [Apr 2021] All models in the model zoo have been moved to google drive. Please raise an issue if any model's performance is inconsistent with the numbers shown in the model zoo page (could be caused by wrong links).
 - [Mar 2021] `OSNet <https://arxiv.org/abs/1910.06827>`_ will appear in the TPAMI journal! Compared with the conference version, which focuses on discriminative feature learning using the omni-scale building block, this journal extension further considers generalizable feature learning by integrating `instance normalization layers <https://arxiv.org/abs/1607.08022>`_ with the OSNet architecture. We hope this journal paper can motivate more future work to taclke the generalization issue in cross-dataset re-ID.
