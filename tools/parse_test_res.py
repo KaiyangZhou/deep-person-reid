@@ -81,13 +81,15 @@ def main(args):
         fullpath = os.path.join(args.directory, directory)
         filepath = glob.glob(os.path.join(fullpath, 'test.log*'))[0]
         check_isfile(filepath)
+        print(f'Parsing {filepath}')
         res = parse_file(
             filepath, regex_mAP, regex_r1, regex_r5, regex_r10, regex_r20
         )
         for key, value in res.items():
             final_res[key].append(value)
 
-    print(f'* Average results over {num_dirs} splits')
+    print('Finished parsing')
+    print(f'The average results over {num_dirs} splits are shown below')
 
     for key, values in final_res.items():
         mean_val = np.mean(values)
