@@ -73,3 +73,18 @@
 | osnet_x0_25 | 0.2 | 0.08 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 59.9 (31.0) | 61.5 (39.6) | [model](https://drive.google.com/file/d/1Kkx2zW89jq_NETu4u42CFZTMVD5Hwm6e/view?usp=sharing) |
 | osnet_ibn_x1_0 | 2.2 | 0.98 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 66.5 (37.2) | 67.4 (45.6) | [model](https://drive.google.com/file/d/1q3Sj2ii34NlfxA4LvmHdWO_75NDRmECJ/view?usp=sharing) |
 | osnet_ain_x1_0 | 2.2 | 0.98 | softmax | (256, 128) | `random_flip`, `color_jitter` | `cosine` | 70.1 (43.3) | 71.1 (52.7) | [model](https://drive.google.com/file/d/1SigwBE6mPdqiJMqhuIY4aqC7--5CsMal/view?usp=sharing) |
+
+
+#### Multi-source domain generalization
+
+The models below are trained using multiple source datasets, as described in [Zhou et al. TPAMI'21](https://arxiv.org/abs/1910.06827).
+
+Regarding the abbreviations, MS is MSMT17; M is Market1501; D is DukeMTMC-reID; and C is CUHK03.
+
+All models were trained with [im_osnet_ain_x1_0_softmax_256x128_amsgrad_cosine.yaml](https://github.com/KaiyangZhou/deep-person-reid/blob/master/configs/im_osnet_ain_x1_0_softmax_256x128_amsgrad_cosine.yaml) and `max_epoch=50`.
+
+| Model | # Param (10^6) | GFLOPs | Loss | Input | Transforms | Distance | MS+D+C->M | MS+M+C->D | MS+D+M->C |D+M+C->MS |
+| :--- | :---: | :---: | :---: | :---: |  :---: | :---: | :---: | :---: | :---: | :---: |
+| osnet_x1_0 | 2.2 | 0.98 | softmax | (256, 128) | `random_flip`, `color_jitter` | `cosine` | [72.5 (44.2)](https://drive.google.com/file/d/1tuYY1vQXReEd8N8_npUkc7npPDDmjNCV/view?usp=sharing) | [65.2 (47.0)](https://drive.google.com/file/d/1UxUI4NsE108UCvcy3O1Ufe73nIVPKCiu/view?usp=sharing) | [23.9 (23.3)](https://drive.google.com/file/d/1kAA6qHJvbaJtyh1b39ZyEqWROwUgWIhl/view?usp=sharing) | [33.2 (12.6)](https://drive.google.com/file/d/1wAHuYVTzj8suOwqCNcEmu6YdbVnHDvA2/view?usp=sharing) |
+| osnet_ibn_x1_0 | 2.2 | 0.98 | softmax | (256, 128) | `random_flip`, `color_jitter` | `cosine` | [73.0 (44.9)](https://drive.google.com/file/d/14sH6yZwuNHPTElVoEZ26zozOOZIej5Mf/view?usp=sharing) | [64.6 (45.7)](https://drive.google.com/file/d/1Sk-2SSwKAF8n1Z4p_Lm_pl0E6v2WlIBn/view?usp=sharing) | [25.7 (25.4)](https://drive.google.com/file/d/1actHP7byqWcK4eBE1ojnspSMdo7k2W4G/view?usp=sharing) | [39.8 (16.2)](https://drive.google.com/file/d/1BGOSdLdZgqHe2qFafatb-5sPY40JlYfp/view?usp=sharing) |
+| osnet_ain_x1_0 | 2.2 | 0.98 | softmax | (256, 128) | `random_flip`, `color_jitter` | `cosine` | [73.3 (45.8)](https://drive.google.com/file/d/1nIrszJVYSHf3Ej8-j6DTFdWz8EnO42PB/view?usp=sharing) | [65.6 (47.2)](https://drive.google.com/file/d/1YjJ1ZprCmaKG6MH2P9nScB9FL_Utf9t1/view?usp=sharing) | [27.4 (27.1)](https://drive.google.com/file/d/1IxIg5P0cei3KPOJQ9ZRWDE_Mdrz01ha2/view?usp=sharing) | [40.2 (16.2)](https://drive.google.com/file/d/1KcoUKzLmsUoGHI7B6as_Z2fXL50gzexS/view?usp=sharing) |

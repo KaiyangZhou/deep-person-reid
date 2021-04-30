@@ -111,6 +111,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#market1501-dukemtmc-reid">Market1501 -&gt; DukeMTMC-reID</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dukemtmc-reid-market1501">DukeMTMC-reID -&gt; Market1501</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#msmt17-combineall-true-market1501-dukemtmc-reid">MSMT17 (<code class="docutils literal notranslate"><span class="pre">combineall=True</span></code>) -&gt; Market1501 &amp; DukeMTMC-reID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multi-source-domain-generalization">Multi-source domain generalization</a></li>
 </ul>
 </li>
 </ul>
@@ -584,6 +585,69 @@
 <td align="center">70.1 (43.3)</td>
 <td align="center">71.1 (52.7)</td>
 <td align="center"><a href="https://drive.google.com/file/d/1SigwBE6mPdqiJMqhuIY4aqC7--5CsMal/view?usp=sharing">model</a></td>
+</tr>
+</tbody>
+</table></div>
+<div class="section" id="multi-source-domain-generalization">
+<h3>Multi-source domain generalization<a class="headerlink" href="#multi-source-domain-generalization" title="Permalink to this headline">¶</a></h3>
+<p>The models below are trained using multiple source datasets, as described in <a class="reference external" href="https://arxiv.org/abs/1910.06827">Zhou et al. TPAMI’21</a>.</p>
+<p>Regarding the abbreviations, MS is MSMT17; M is Market1501; D is DukeMTMC-reID; and C is CUHK03.</p>
+<p>All models were trained with <a class="reference external" href="https://github.com/KaiyangZhou/deep-person-reid/blob/master/configs/im_osnet_ain_x1_0_softmax_256x128_amsgrad_cosine.yaml">im_osnet_ain_x1_0_softmax_256x128_amsgrad_cosine.yaml</a> and <code class="docutils literal notranslate"><span class="pre">max_epoch=50</span></code>.</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="left">Model</th>
+<th align="center"># Param (10^6)</th>
+<th align="center">GFLOPs</th>
+<th align="center">Loss</th>
+<th align="center">Input</th>
+<th align="center">Transforms</th>
+<th align="center">Distance</th>
+<th align="center">MS+D+C-&gt;M</th>
+<th align="center">MS+M+C-&gt;D</th>
+<th align="center">MS+D+M-&gt;C</th>
+<th align="center">D+M+C-&gt;MS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">osnet_x1_0</td>
+<td align="center">2.2</td>
+<td align="center">0.98</td>
+<td align="center">softmax</td>
+<td align="center">(256, 128)</td>
+<td align="center"><code>random_flip</code>, <code>color_jitter</code></td>
+<td align="center"><code>cosine</code></td>
+<td align="center"><a href="https://drive.google.com/file/d/1tuYY1vQXReEd8N8_npUkc7npPDDmjNCV/view?usp=sharing">72.5 (44.2)</a></td>
+<td align="center"><a href="https://drive.google.com/file/d/1UxUI4NsE108UCvcy3O1Ufe73nIVPKCiu/view?usp=sharing">65.2 (47.0)</a></td>
+<td align="center"><a href="https://drive.google.com/file/d/1kAA6qHJvbaJtyh1b39ZyEqWROwUgWIhl/view?usp=sharing">23.9 (23.3)</a></td>
+<td align="center"><a href="https://drive.google.com/file/d/1wAHuYVTzj8suOwqCNcEmu6YdbVnHDvA2/view?usp=sharing">33.2 (12.6)</a></td>
+</tr>
+<tr>
+<td align="left">osnet_ibn_x1_0</td>
+<td align="center">2.2</td>
+<td align="center">0.98</td>
+<td align="center">softmax</td>
+<td align="center">(256, 128)</td>
+<td align="center"><code>random_flip</code>, <code>color_jitter</code></td>
+<td align="center"><code>cosine</code></td>
+<td align="center"><a href="https://drive.google.com/file/d/14sH6yZwuNHPTElVoEZ26zozOOZIej5Mf/view?usp=sharing">73.0 (44.9)</a></td>
+<td align="center"><a href="https://drive.google.com/file/d/1Sk-2SSwKAF8n1Z4p_Lm_pl0E6v2WlIBn/view?usp=sharing">64.6 (45.7)</a></td>
+<td align="center"><a href="https://drive.google.com/file/d/1actHP7byqWcK4eBE1ojnspSMdo7k2W4G/view?usp=sharing">25.7 (25.4)</a></td>
+<td align="center"><a href="https://drive.google.com/file/d/1BGOSdLdZgqHe2qFafatb-5sPY40JlYfp/view?usp=sharing">39.8 (16.2)</a></td>
+</tr>
+<tr>
+<td align="left">osnet_ain_x1_0</td>
+<td align="center">2.2</td>
+<td align="center">0.98</td>
+<td align="center">softmax</td>
+<td align="center">(256, 128)</td>
+<td align="center"><code>random_flip</code>, <code>color_jitter</code></td>
+<td align="center"><code>cosine</code></td>
+<td align="center"><a href="https://drive.google.com/file/d/1nIrszJVYSHf3Ej8-j6DTFdWz8EnO42PB/view?usp=sharing">73.3 (45.8)</a></td>
+<td align="center"><a href="https://drive.google.com/file/d/1YjJ1ZprCmaKG6MH2P9nScB9FL_Utf9t1/view?usp=sharing">65.6 (47.2)</a></td>
+<td align="center"><a href="https://drive.google.com/file/d/1IxIg5P0cei3KPOJQ9ZRWDE_Mdrz01ha2/view?usp=sharing">27.4 (27.1)</a></td>
+<td align="center"><a href="https://drive.google.com/file/d/1KcoUKzLmsUoGHI7B6as_Z2fXL50gzexS/view?usp=sharing">40.2 (16.2)</a></td>
 </tr>
 </tbody>
 </table></div>
