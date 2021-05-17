@@ -2,7 +2,7 @@ import copy
 import os
 import random
 from collections import defaultdict
-
+import shutil
 from ..dataset import ImageDataset
 
 import logging
@@ -93,7 +93,6 @@ class SafeXCARLASimulation(ImageDataset):
 
             splits = []
             for split_ix in range(10):
-                manifest_entries = read_jsonl(manifest_fp)
                 # randomly choose num_train_pids train IDs and the rest for test IDs
                 pids_copy = copy.deepcopy(pids)
                 random.shuffle(pids_copy)
@@ -106,25 +105,37 @@ class SafeXCARLASimulation(ImageDataset):
                 gallery = []
 
                 # for train IDs, all images are used in the train set.
+                seen_objects_counter = defaultdict(int)
                 for pid in train_pids:
                     entries = object_manifest_entries_mapping[pid]
                     random.shuffle(entries)
                     for entry in entries:
                         path, object_guid, camera_guid = entry[0], entry[1], entry[2]
+                        query_key = "_".join([str(object_guid), str(camera_guid)])
+                        seen_objects_counter[query_key] += 1
+                        if seen_objects_counter[query_key] > 100:
+                            continue
+
                         guid_label = train_pid2label[object_guid]
                         entry = (path, guid_label, camera_guid)
                         train.append(entry)
+                        #shutil.copyfile(path, os.path.join(self.train_dir, str(object_guid) + "_" + str(camera_guid) + ".jpg"))
 
                 # for each test ID, randomly choose two images, one for
                 # query and the other one for gallery.
 
                 for pid in test_pids:
                     entries = object_manifest_entries_mapping[pid]
-                    samples = random.sample(entries, 2)
+                    samples = random.sample(entries, min(20, len(entries)))
+
                     query_sample = samples[0]
-                    gallery_sample = samples[1]
+                    gallery_samples = samples[1:]
                     query.append(query_sample)
-                    gallery.append(gallery_sample)
+                    gallery.extend(gallery_samples)
+                    #shutil.copyfile(query_sample[0], os.path.join(self.query_dir, str(query_sample[1]) + "_" + str(query_sample[2]) + ".jpg"))
+                    for gallery_sample in gallery_samples:
+                        pass
+                        #shutil.copyfile(gallery_sample[0], os.path.join(self.gallery_dir, str(gallery_sample[1]) + "_" + str(gallery_sample[2]) + ".jpg"))
 
                 split = {'train': train, 'query': query, 'gallery': gallery}
                 splits.append(split)
