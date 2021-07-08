@@ -225,7 +225,7 @@ MARS (``mars``)
 iLIDS-VID :math:`^\dagger` (``ilidsvid``)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Create "ilids-vid" under ``$REID``.
-- Download the dataset from http://www.eecs.qmul.ac.uk/~xiatian/downloads_qmul_iLIDS-VID_ReID_dataset.html to "ilids-vid".
+- Download the dataset from https://xiatian-zhu.github.io/downloads_qmul_iLIDS-VID_ReID_dataset.html to "ilids-vid".
 - Organize the data structure to match
 
 .. code-block:: none
