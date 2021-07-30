@@ -40,7 +40,7 @@ class FeatureExtractor(object):
 
         extractor = FeatureExtractor(
             model_name='osnet_x1_0',
-            model_path='a/b/c/model.pth.tar',
+            model_fp='a/b/c/model.pth.tar',
             device='cuda'
         )
 

@@ -17,34 +17,22 @@ logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
-def main(data_dir, save_dir):
-    """
-    datamanager = torchreid.data.ImageDataManager(
-        root='reid-data',
-        sources='market1501',
-        targets='market1501',
-        height=256,
-        width=128,
-        batch_size_train=32,
-        batch_size_test=100,
-        transforms=['random_flip', 'random_crop']
-    )
-    """
+def main(data_dir, save_dir, model_fp):
     datamanager = torchreid.data.ImageDataManager(
         root=data_dir,
-        sources=['safex_carla_simulation'],
+        sources="market1501",
+        targets="market1501",
         height=256,
         width=128,
         batch_size_train=32,
         batch_size_test=100,
-        transforms=['random_flip'],
-        split_id=1
+        transforms=["random_flip", "random_crop"]
     )
 
     model = torchreid.models.build_model(
-        name='resnet50',
+        name="resnet18",
         num_classes=datamanager.num_train_pids,
-        loss='triplet',
+        loss="triplet",
         pretrained=True
     )
 
@@ -52,13 +40,13 @@ def main(data_dir, save_dir):
 
     optimizer = torchreid.optim.build_optimizer(
         model,
-        optim='adam',
+        optim="adam",
         lr=0.0003
     )
 
     scheduler = torchreid.optim.build_lr_scheduler(
         optimizer,
-        lr_scheduler='single_step',
+        lr_scheduler="single_step",
         stepsize=20
     )
 
@@ -71,7 +59,7 @@ def main(data_dir, save_dir):
     )
 
     start_epoch = torchreid.utils.resume_from_checkpoint(
-        '/home/ubuntu/deep-person-reid/reid_out/resnet/model/model.pth.tar-15',
+        model_fp,
         model,
         optimizer
     )
@@ -89,11 +77,13 @@ def main(data_dir, save_dir):
 
 if __name__ == "__main__":
     parser = ArgumentParser()
+    parser.add_argument("--model_fp", required=True)
     parser.add_argument("--data_dir", default="./reid_out/", required=False)
     parser.add_argument("--save_dir", default="./reid_out/", required=False)
 
     args = parser.parse_args()
     main(
+        model_fp=args.model_path,
         data_dir=args.data_dir,
         save_dir=args.save_dir
     )
