@@ -3,11 +3,9 @@ import logging
 import numpy as np
 
 from argparse import ArgumentParser
-
 from tqdm import tqdm
 
 from torchreid.utils import FeatureExtractor
-
 from torchreid.utils.tools import read_jsonl
 
 logging.basicConfig(level=logging.INFO)
@@ -28,12 +26,13 @@ class NumpyEncoder(json.JSONEncoder):
 
 def main(in_fp: str, model_fp: str, out_fp: str, device: str, max_objects: int):
     extractor = FeatureExtractor(
-        model_name="resnet50",
+        model_name="resnet18",
         model_path=model_fp,
         device=device
     )
 
     manifest_entries = read_jsonl(in_fp)
+    # Todo (Josh) speed this up my batching
     with open(out_fp, "w") as f:
         for ix, manifest_entry in tqdm(enumerate(manifest_entries), desc="objects"):
 

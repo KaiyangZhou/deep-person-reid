@@ -18,9 +18,8 @@ LOGGER = logging.getLogger(__name__)
 
 
 def main(data_dir, save_dir):
-    """
     datamanager = torchreid.data.ImageDataManager(
-        root='reid-data',
+        root=data_dir,
         sources='market1501',
         targets='market1501',
         height=256,
@@ -29,19 +28,6 @@ def main(data_dir, save_dir):
         batch_size_test=100,
         transforms=['random_flip', 'random_crop']
     )
-    """
-    datamanager = torchreid.data.ImageDataManager(
-        root=data_dir,
-        sources=['safex_carla_simulation'],
-        height=256,
-        width=128,
-        split_id=0,
-        batch_size_train=32,
-        batch_size_test=100,
-        transforms=['random_flip'],
-
-    )
-
     model = torchreid.models.build_model(
         name='osnet_ain_x1_0',
         num_classes=datamanager.num_train_pids,
