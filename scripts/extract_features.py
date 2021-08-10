@@ -32,7 +32,7 @@ def main(in_fp: str, model_fp: str, out_fp: str, device: str, max_objects: int):
     )
 
     manifest_entries = read_jsonl(in_fp)
-    # Todo (Josh) speed this up my batching
+    # Todo (Josh) speed this up by batching
     with open(out_fp, "w") as f:
         for ix, manifest_entry in tqdm(enumerate(manifest_entries), desc="objects"):
 
