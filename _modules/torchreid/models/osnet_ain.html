@@ -174,11 +174,17 @@
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
 <span class="kn">from</span> <span class="nn">torch.nn</span> <span class="kn">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;osnet_ain_x1_0&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;osnet_ain_x1_0&#39;</span><span class="p">,</span> <span class="s1">&#39;osnet_ain_x0_75&#39;</span><span class="p">,</span> <span class="s1">&#39;osnet_ain_x0_5&#39;</span><span class="p">,</span> <span class="s1">&#39;osnet_ain_x0_25&#39;</span><span class="p">]</span>
 
 <span class="n">pretrained_urls</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;osnet_ain_x1_0&#39;</span><span class="p">:</span>
-    <span class="s1">&#39;https://drive.google.com/uc?id=1-CaioD9NaqbHK_kzSMW8VE4_3KcsRjEo&#39;</span>
+    <span class="s1">&#39;https://drive.google.com/uc?id=1-CaioD9NaqbHK_kzSMW8VE4_3KcsRjEo&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;osnet_ain_x0_75&#39;</span><span class="p">:</span>
+    <span class="s1">&#39;https://drive.google.com/uc?id=1apy0hpsMypqstfencdH-jKIUEFOW4xoM&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;osnet_ain_x0_5&#39;</span><span class="p">:</span>
+    <span class="s1">&#39;https://drive.google.com/uc?id=1KusKvEYyKGDTUBVRxRiz55G31wkihB6l&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;osnet_ain_x0_25&#39;</span><span class="p">:</span>
+    <span class="s1">&#39;https://drive.google.com/uc?id=1SxQt2AvmEcgWNhaRb2xC4rP6ZwVDP0Wt&#39;</span>
 <span class="p">}</span>
 
 
@@ -708,6 +714,66 @@
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">pretrained</span><span class="p">:</span>
         <span class="n">init_pretrained_weights</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;osnet_ain_x1_0&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span>
+
+
+<span class="k">def</span> <span class="nf">osnet_ain_x0_75</span><span class="p">(</span>
+    <span class="n">num_classes</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">OSNet</span><span class="p">(</span>
+        <span class="n">num_classes</span><span class="p">,</span>
+        <span class="n">blocks</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">[</span><span class="n">OSBlockINin</span><span class="p">,</span> <span class="n">OSBlockINin</span><span class="p">],</span> <span class="p">[</span><span class="n">OSBlock</span><span class="p">,</span> <span class="n">OSBlockINin</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">OSBlockINin</span><span class="p">,</span> <span class="n">OSBlock</span><span class="p">]</span>
+        <span class="p">],</span>
+        <span class="n">layers</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+        <span class="n">channels</span><span class="o">=</span><span class="p">[</span><span class="mi">48</span><span class="p">,</span> <span class="mi">192</span><span class="p">,</span> <span class="mi">288</span><span class="p">,</span> <span class="mi">384</span><span class="p">],</span>
+        <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>
+        <span class="n">conv1_IN</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">pretrained</span><span class="p">:</span>
+        <span class="n">init_pretrained_weights</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;osnet_ain_x0_75&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span>
+
+
+<span class="k">def</span> <span class="nf">osnet_ain_x0_5</span><span class="p">(</span>
+    <span class="n">num_classes</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">OSNet</span><span class="p">(</span>
+        <span class="n">num_classes</span><span class="p">,</span>
+        <span class="n">blocks</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">[</span><span class="n">OSBlockINin</span><span class="p">,</span> <span class="n">OSBlockINin</span><span class="p">],</span> <span class="p">[</span><span class="n">OSBlock</span><span class="p">,</span> <span class="n">OSBlockINin</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">OSBlockINin</span><span class="p">,</span> <span class="n">OSBlock</span><span class="p">]</span>
+        <span class="p">],</span>
+        <span class="n">layers</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+        <span class="n">channels</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">192</span><span class="p">,</span> <span class="mi">256</span><span class="p">],</span>
+        <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>
+        <span class="n">conv1_IN</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">pretrained</span><span class="p">:</span>
+        <span class="n">init_pretrained_weights</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;osnet_ain_x0_5&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span>
+
+
+<span class="k">def</span> <span class="nf">osnet_ain_x0_25</span><span class="p">(</span>
+    <span class="n">num_classes</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">OSNet</span><span class="p">(</span>
+        <span class="n">num_classes</span><span class="p">,</span>
+        <span class="n">blocks</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">[</span><span class="n">OSBlockINin</span><span class="p">,</span> <span class="n">OSBlockINin</span><span class="p">],</span> <span class="p">[</span><span class="n">OSBlock</span><span class="p">,</span> <span class="n">OSBlockINin</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">OSBlockINin</span><span class="p">,</span> <span class="n">OSBlock</span><span class="p">]</span>
+        <span class="p">],</span>
+        <span class="n">layers</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+        <span class="n">channels</span><span class="o">=</span><span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">96</span><span class="p">,</span> <span class="mi">128</span><span class="p">],</span>
+        <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>
+        <span class="n">conv1_IN</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">pretrained</span><span class="p">:</span>
+        <span class="n">init_pretrained_weights</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;osnet_ain_x0_25&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">model</span>
 </pre></div>
 
