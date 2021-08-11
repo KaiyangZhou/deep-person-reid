@@ -22,6 +22,9 @@
 | osnet_x0_25 | [model](https://drive.google.com/file/d/1rb8UN5ZzPKRc_xvtHlyDh-cSz88YX9hs/view?usp=sharing) |
 | osnet_ibn_x1_0 | [model](https://drive.google.com/file/d/1sr90V6irlYYDd4_4ISU2iruoRG8J__6l/view?usp=sharing) |
 | osnet_ain_x1_0 | [model](https://drive.google.com/file/d/1-CaioD9NaqbHK_kzSMW8VE4_3KcsRjEo/view?usp=sharing) |
+| osnet_ain_x0_75 | [model](https://drive.google.com/file/d/1apy0hpsMypqstfencdH-jKIUEFOW4xoM/view?usp=sharing) |
+| osnet_ain_x0_5 | [model](https://drive.google.com/file/d/1KusKvEYyKGDTUBVRxRiz55G31wkihB6l/view?usp=sharing) |
+| osnet_ain_x0_25 | [model](https://drive.google.com/file/d/1SxQt2AvmEcgWNhaRb2xC4rP6ZwVDP0Wt/view?usp=sharing) |
 
 
 ## Same-domain ReID
