@@ -4,11 +4,17 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-__all__ = ['osnet_ain_x1_0']
+__all__ = ['osnet_ain_x1_0', 'osnet_ain_x0_75', 'osnet_ain_x0_5', 'osnet_ain_x0_25']
 
 pretrained_urls = {
     'osnet_ain_x1_0':
-    'https://drive.google.com/uc?id=1-CaioD9NaqbHK_kzSMW8VE4_3KcsRjEo'
+    'https://drive.google.com/uc?id=1-CaioD9NaqbHK_kzSMW8VE4_3KcsRjEo',
+    'osnet_ain_x0_75':
+    'https://drive.google.com/uc?id=1apy0hpsMypqstfencdH-jKIUEFOW4xoM',
+    'osnet_ain_x0_5':
+    'https://drive.google.com/uc?id=1KusKvEYyKGDTUBVRxRiz55G31wkihB6l',
+    'osnet_ain_x0_25':
+    'https://drive.google.com/uc?id=1SxQt2AvmEcgWNhaRb2xC4rP6ZwVDP0Wt'
 }
 
 
@@ -538,4 +544,64 @@ def osnet_ain_x1_0(
     )
     if pretrained:
         init_pretrained_weights(model, key='osnet_ain_x1_0')
+    return model
+
+
+def osnet_ain_x0_75(
+    num_classes=1000, pretrained=True, loss='softmax', **kwargs
+):
+    model = OSNet(
+        num_classes,
+        blocks=[
+            [OSBlockINin, OSBlockINin], [OSBlock, OSBlockINin],
+            [OSBlockINin, OSBlock]
+        ],
+        layers=[2, 2, 2],
+        channels=[48, 192, 288, 384],
+        loss=loss,
+        conv1_IN=True,
+        **kwargs
+    )
+    if pretrained:
+        init_pretrained_weights(model, key='osnet_ain_x0_75')
+    return model
+
+
+def osnet_ain_x0_5(
+    num_classes=1000, pretrained=True, loss='softmax', **kwargs
+):
+    model = OSNet(
+        num_classes,
+        blocks=[
+            [OSBlockINin, OSBlockINin], [OSBlock, OSBlockINin],
+            [OSBlockINin, OSBlock]
+        ],
+        layers=[2, 2, 2],
+        channels=[32, 128, 192, 256],
+        loss=loss,
+        conv1_IN=True,
+        **kwargs
+    )
+    if pretrained:
+        init_pretrained_weights(model, key='osnet_ain_x0_5')
+    return model
+
+
+def osnet_ain_x0_25(
+    num_classes=1000, pretrained=True, loss='softmax', **kwargs
+):
+    model = OSNet(
+        num_classes,
+        blocks=[
+            [OSBlockINin, OSBlockINin], [OSBlock, OSBlockINin],
+            [OSBlockINin, OSBlock]
+        ],
+        layers=[2, 2, 2],
+        channels=[16, 64, 96, 128],
+        loss=loss,
+        conv1_IN=True,
+        **kwargs
+    )
+    if pretrained:
+        init_pretrained_weights(model, key='osnet_ain_x0_25')
     return model
