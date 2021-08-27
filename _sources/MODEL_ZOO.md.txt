@@ -69,7 +69,7 @@
 
 | Model | # Param (10^6) | GFLOPs | Loss | Input | Transforms | Distance | msmt17 -> market1501 | msmt17 -> dukemtmcreid | Download |
 | :--- | :---: | :---: | :---: | :---: |  :---: | :---: | :---: | :---: | :---: |
-| resnet50 | 23.5 | 2.7 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 46.3 (22.8) | 52.3 (32.1) | [model]() |
+| resnet50 | 23.5 | 2.7 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 46.3 (22.8) | 52.3 (32.1) | [model](https://drive.google.com/file/d/1yiBteqgIZoOeywE8AhGmEQl7FTVwrQmf/view?usp=sharing) |
 | osnet_x1_0 | 2.2 | 0.98 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 66.6 (37.5) | 66.0 (45.3) | [model](https://drive.google.com/file/d/1IosIFlLiulGIjwW3H8uMRmx3MzPwf86x/view?usp=sharing) |
 | osnet_x0_75 | 1.3 | 0.57 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 63.6 (35.5) | 65.3 (44.5) | [model](https://drive.google.com/file/d/1fhjSS_7SUGCioIf2SWXaRGPqIY9j7-uw/view?usp=sharing) |
 | osnet_x0_5 | 0.6 | 0.27 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 64.3 (34.9) | 65.2 (43.3) | [model](https://drive.google.com/file/d/1DHgmb6XV4fwG3n-CnCM0zdL9nMsZ9_RF/view?usp=sharing) |
