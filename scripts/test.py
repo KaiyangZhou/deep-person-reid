@@ -1,89 +1,74 @@
 from argparse import ArgumentParser
+from build_engine import build_engine
 
 import torchreid
 
 import json
 import logging
-
-
-def read_jsonl(in_file_path):
-    with open(in_file_path) as f:
-        data = map(json.loads, f)
-        for datum in data:
-            yield datum
-
+import os
 
 logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
-def main(data_dir, save_dir, model_fp):
-    datamanager = torchreid.data.ImageDataManager(
-        root=data_dir,
-        sources="market1501",
-        targets="market1501",
-        height=256,
-        width=128,
-        batch_size_train=32,
-        batch_size_test=100,
-        transforms=["random_flip", "random_crop"]
-    )
+def main(targets: list, data_dir: str, model_dir: str, eval_dir: str, cuda: bool):
+    param_file = os.path.join(model_dir, "params.json")
 
-    model = torchreid.models.build_model(
-        name="resnet18",
-        num_classes=datamanager.num_train_pids,
-        loss="triplet",
-        pretrained=True
-    )
+    with open(param_file) as json_file:
+        params = json.load(json_file)
+        model_path = os.path.join(model_dir, params["model"])
 
-    model = model.cpu()
+        if not targets:
+            targets = params["sources"]
 
-    optimizer = torchreid.optim.build_optimizer(
-        model,
-        optim="adam",
-        lr=0.0003
-    )
+        if not eval_dir:
+            eval_dir = os.path.join("eval", os.path.basename(os.path.normpath(model_dir)))
 
-    scheduler = torchreid.optim.build_lr_scheduler(
-        optimizer,
-        lr_scheduler="single_step",
-        stepsize=20
-    )
+        datamanager = torchreid.data.ImageDataManager(
+            root=data_dir,
+            sources=params["sources"],
+            targets=targets,
+            height=params["height"],
+            width=params["width"],
+            batch_size_train=32,
+            batch_size_test=100,
+            transforms=['random_flip', 'random_crop']
+        )
 
-    engine = torchreid.engine.ImageTripletEngine(
-        datamanager,
-        model,
-        optimizer=optimizer,
-        scheduler=scheduler,
-        label_smooth=True
-    )
+        engine, model, optimizer = build_engine(datamanager, params, cuda)
 
-    start_epoch = torchreid.utils.resume_from_checkpoint(
-        model_fp,
-        model,
-        optimizer
-    )
+        start_epoch = torchreid.utils.resume_from_checkpoint(
+            model_path,
+            model,
+            optimizer
+        )
 
-    engine.run(
-        start_epoch=start_epoch,
-        save_dir=save_dir,
-        max_epoch=60,
-        eval_freq=1,
-        print_freq=2,
-        test_only=True,
-        visrank=True
-    )
+        engine.run(
+            start_epoch=start_epoch,
+            save_dir=eval_dir,
+            max_epoch=params["max_epochs"],
+            fixbase_epoch=2,
+            dist_metric=params["scheduler_name"],
+            eval_freq=1,
+            print_freq=2,
+            test_only=True,
+            visrank=True
+        )
 
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument("--model_fp", required=True)
-    parser.add_argument("--data_dir", default="./reid_out/", required=False)
-    parser.add_argument("--save_dir", default="./reid_out/", required=False)
+    parser.add_argument("--model_dir", type=str, required=True)
+    parser.add_argument("--targets", nargs='+', type=str, default="", required=False)
+    parser.add_argument("--cuda", action='store_true')
+    parser.add_argument("--data_dir", default="data", required=False)
+    parser.add_argument("--eval_dir", default="", required=False)
 
     args = parser.parse_args()
     main(
-        model_fp=args.model_path,
-        data_dir=args.data_dir,
-        save_dir=args.save_dir
+        args.targets,
+        args.data_dir,
+        args.model_dir,
+        args.eval_dir,
+        args.cuda
     )

@@ -7,37 +7,20 @@ You will want to run training/inference on a GPU
 poetry install -vvv 
 ```
 
+### Prepare dataset
 
-## Run
-#### Training on REID Dataset
-Pick from available datasets: https://kaiyangzhou.github.io/deep-person-reid/pkg/data.html#module-torchreid.data.datasets.image.market1501
+Pick from available datasets.  Currently, we have:
+['sensereid', 'prid', 'ward', 'rpifield', 'miim_simulation', 'sarc3d', 'pes3d', 'miim_recorded']
 
-Change the source and targets on the DataManager in [train.py](scripts/train.py)
-By default we use the market1501 dataset. 
+Make sure that any dataset you use is commercially viable:
+https://safexai.atlassian.net/wiki/spaces/MIME/pages/2518745112/Object+signature+data+sources
 
-You can also use multiple datasets for training.
+You can pick as many datasets as you would like, but each needs to be prepared before using.  
+For PRID and SenseReID, follow the instructions here:
 
-Within the [train.py](scripts/train.py) you can change the usual Deep Learning config including:
-* epochs 
-* image size
-* batch size
-* transforms
-* optimizer
-* loss function
-* learning rate
-* etc
+https://kaiyangzhou.github.io/deep-person-reid/datasets.html#datasets
 
-The defaults are what we have had the most success with. 
-
-To train run the following:
-
-```shell script
-poetry run scripts/train.py 
-```
-
-The training script will produce a model file and a TensorBoard file which you can view during training.
-
-#### Training on Simulation Dataset
+#### Prepare Simulation Dataset (miim_simulation)
 Follow the README https://github.com/AICradle/intel-data-converter/tree/develop/data_converter/simulation) to generate a
 REID dataset from our simulation data.
 
@@ -51,27 +34,6 @@ For the time being those names are hardcoded, so please name accordingly.
  
 You can find the logic for the dataset preparation [here](torchreid/data/datasets/image/miim_simulation.py)
 
-The training script is at (scripts/train_simulation.py)
-
-Within the [train.py](scripts/train_simulation.py) you can change the usual Deep Learning config including:
-* epochs 
-* image size
-* batch size
-* transforms
-* optimizer
-* loss function
-* learning rate
-* etc
-
-The defaults are what we have had the most success with.
-
-Note that you can also train/test on both the simulation data and one of the REID datasets. 
-
-To train run the following:
-```shell script
-poetry run scripts/train.py --data_dir $PATH_TO_DATA_DIRECTORY
-```
-
 Note that if the representation_dataset.jsonl file has relative paths to the crops then you will need
 to configure PyCharm to set your working directory to the data folder. 
 
@@ -82,19 +44,68 @@ The training script will produce a model file and a TensorBoard file which you c
 You can find an example dataset here (s3://simulated-data-sandbox/simulated-object-signature/simulated_test.tar.gz) though
 the files need to be renamed.
 
-#### Training on Shop Dataset
-TODO FINISH DOCUMENTING
+#### Prepare recorded data from shop  (miim_recorded)
+Create the data structure as follows:
+parent_directory
+└── person_name
+    └── scenario_name
+        └── resolution_name
+            ├── camera_name
+            │   ├── cropped_image.jpg
 
 
-#### Testing Model
-You also can test the model on a dataset via the [test.py](scripts/test.py) script.
+run the following command
+```shell script
+poetry run python tools/data_preparation/select_recorded.py --input_dir input_dir --output_dir selected_miim_recorded
+```
 
-This script is very similar to the training scripts. The only difference is that you also need to supply a model file path,
-which is the output of a training run. This should be a PyTorch model file
+This will create a directory with crops with following structure:
+
+<person_id>_<camera_id>_<scenario_id>_<resolution_id>_<image_id>.jpg
+
+There will also be id_dict which will have the mapping to the ids.
+
+## Train
+
+Make sure that all training and testing data is appropriately prepared and in DATA_DIR (data by default)
+To train run the following:
 
 ```shell script
-poetry run scripts/test.py --model_fp $PATH_TO_MODEL_FILE --data_dir $DATA_DIR --save_dir ./test_out
+poetry run python scripts/train.py 
 ```
+
+By default, this will train on miim_simulation and test on miim_recorded. You can change most of the training options
+at the command line.  If you are running on GPU, you will need the cuda option.
+
+The options are as follows:
+
+train.py [-h] [--sources SOURCES [SOURCES ...]] [--targets TARGETS [TARGETS ...]] [--model_type MODEL_TYPE] [--max_epochs MAX_EPOCHS] [--optimizer_name OPTIMIZER_NAME]
+                [--optimizer_lr OPTIMIZER_LR] [--scheduler_name SCHEDULER_NAME] [--scheduler_stepsize SCHEDULER_STEPSIZE] [--loss_type LOSS_TYPE] [--height HEIGHT] [--width WIDTH]
+                [--data_dir DATA_DIR] [--model_dir MODEL_DIR] [--cuda]
+
+We have had the most success with this command:
+
+```shell script
+poetry run python scripts/train.py --cuda --max_epochs 30 --sources miim_simulation prid ward pes3d rpifield > log.out
+```
+
+The training script will produce a model file and a TensorBoard file which you can view during training in the model_dir,
+which by default is output/<sources>-<model_type>.  By default, it will run with the last model trained.  To change
+which model to use, update param.json.  To see which epoch had the best mean average precision, run this command on the output:
+
+grep mAP: log.out
+
+#### Testing Model
+You can test the model on a dataset via the [test.py](scripts/test.py) script.
+
+This script is very similar to the training scripts. You need to provide the directory that contains the param.json file.
+By default, it will test on the testing portion of the datasets used to train.
+
+```shell script
+poetry run scripts/test.py --model_dir $PATH_TO_MODEL_FILE
+```
+
+usage: test.py [-h] --model_dir MODEL_DIR [--targets TARGETS [TARGETS ...]] [--cuda] [--data_dir DATA_DIR] [--eval_dir EVAL_DIR]
 
 #### Extract Feature Vectors
 You can extract feature vectors via the  [extract_features.py](scripts/extract_features.py.py) script.

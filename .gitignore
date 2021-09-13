@@ -141,4 +141,8 @@ reid-data/
 log/
 saved-models/
 model-zoo/
+eval/
+data/
+!torchreid/data
+output/
 debug*
