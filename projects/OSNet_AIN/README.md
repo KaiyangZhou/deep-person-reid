@@ -22,11 +22,11 @@ The default config was designed for 8 Tesla V100 32GB GPUs. You can modify the b
 ## Citation
 If you find this code useful to your research, please consider citing the following papers.
 ```
-@article{zhou2019learning,
+@article{zhou2021osnet,
   title={Learning Generalisable Omni-Scale Representations for Person Re-Identification},
   author={Zhou, Kaiyang and Yang, Yongxin and Cavallaro, Andrea and Xiang, Tao},
-  journal={arXiv preprint arXiv:1910.06827},
-  year={2019}
+  journal={TPAMI},
+  year={2021}
 }
 
 @inproceedings{zhou2019osnet,

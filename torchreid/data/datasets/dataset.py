@@ -35,6 +35,10 @@ class Dataset(object):
     # combineall=True
     _junk_pids = []
 
+    # Some datasets are only used for training, like CUHK-SYSU
+    # In this case, "combineall=True" is not used for them
+    _train_only = False
+
     def __init__(
         self,
         train,
@@ -180,6 +184,9 @@ class Dataset(object):
 
     def combine_all(self):
         """Combines train, query and gallery in a dataset for training."""
+        if self._train_only:
+            return
+
         combined = copy.deepcopy(self.train)
 
         # relabel pids in gallery (query shares the same scope)

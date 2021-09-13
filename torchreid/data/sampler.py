@@ -36,6 +36,7 @@ class RandomIdentitySampler(Sampler):
             pid = items[1]
             self.index_dic[pid].append(index)
         self.pids = list(self.index_dic.keys())
+        assert len(self.pids) >= self.num_pids_per_batch
 
         # estimate number of examples in an epoch
         # TODO: improve precision

@@ -1,6 +1,6 @@
 Torchreid
 ===========
-Torchreid is a library for deep-learning person re-identification, written in `PyTorch <https://pytorch.org/>`_.
+Torchreid is a library for deep-learning person re-identification, written in `PyTorch <https://pytorch.org/>`_ and developed for our ICCV'19 project, `Omni-Scale Feature Learning for Person Re-Identification <https://arxiv.org/abs/1905.00953>`_.
 
 It features:
 
@@ -33,17 +33,26 @@ You can find some research projects that are built on top of Torchreid `here <ht
 
 What's new
 ------------
-- [Jan 2021] Our recent work, `MixStyle <https://openreview.net/forum?id=6xHJ37MVxxp>`_ (mixing instance-level feature statistics of samples of different domains for improving domain generalization), has been accepted to ICLR'21. The code has been released at https://github.com/KaiyangZhou/mixstyle-release where the experiments on person re-ID are based on Torchreid.
+- [Aug 2021] We have released the ImageNet-pretrained models of ``osnet_ain_x0_75``, ``osnet_ain_x0_5`` and ``osnet_ain_x0_25``. The pretraining setup follows `pycls <https://github.com/facebookresearch/pycls/blob/master/configs/archive/imagenet/resnet/R-50-1x64d_step_8gpu.yaml>`_.
+- [Apr 2021] We have updated the appendix in the `TPAMI version of OSNet <https://arxiv.org/abs/1910.06827v5>`_ to include results in the multi-source domain generalization setting. The trained models can be found in the `Model Zoo <https://kaiyangzhou.github.io/deep-person-reid/MODEL_ZOO.html>`_.
+- [Apr 2021] We have added a script to automate the process of calculating average results over multiple splits. For more details please see ``tools/parse_test_res.py``.
+- [Apr 2021] ``v1.4.0``: We added the person search dataset, `CUHK-SYSU <http://www.ee.cuhk.edu.hk/~xgwang/PS/dataset.html>`_.  Please see the `documentation <https://kaiyangzhou.github.io/deep-person-reid/>`_ regarding how to download the dataset (it contains cropped person images).
+- [Apr 2021] All models in the model zoo have been moved to google drive. Please raise an issue if any model's performance is inconsistent with the numbers shown in the model zoo page (could be caused by wrong links).
+- [Mar 2021] `OSNet <https://arxiv.org/abs/1910.06827>`_ will appear in the TPAMI journal! Compared with the conference version, which focuses on discriminative feature learning using the omni-scale building block, this journal extension further considers generalizable feature learning by integrating `instance normalization layers <https://arxiv.org/abs/1607.08022>`_ with the OSNet architecture. We hope this journal paper can motivate more future work to taclke the generalization issue in cross-dataset re-ID.
+- [Mar 2021] Generalization across domains (datasets) in person re-ID is crucial in real-world applications, which is closely related to the topic of *domain generalization*. Interested in learning how the field of domain generalization has developed over the last decade? Check our recent survey in this topic at https://arxiv.org/abs/2103.02503, with coverage on the history, datasets, related problems, methodologies, potential directions, and so on (*methods designed for generalizable re-ID are also covered*!).
+- [Feb 2021] ``v1.3.6`` Added `University-1652 <https://dl.acm.org/doi/abs/10.1145/3394171.3413896>`_, a new dataset for multi-view multi-source geo-localization (credit to `Zhedong Zheng <https://github.com/layumi>`_).
+- [Feb 2021] ``v1.3.5``: Now the `cython code <https://github.com/KaiyangZhou/deep-person-reid/pull/412>`_ works on Windows (credit to `lablabla <https://github.com/lablabla>`_).
+- [Jan 2021] Our recent work, `MixStyle <https://openreview.net/forum?id=6xHJ37MVxxp>`_ (mixing instance-level feature statistics of samples of different domains for improving domain generalization), has been accepted to ICLR'21. The code has been released at https://github.com/KaiyangZhou/mixstyle-release where the person re-ID part is based on Torchreid.
 - [Jan 2021] A new evaluation metric called `mean Inverse Negative Penalty (mINP)` for person re-ID has been introduced in `Deep Learning for Person Re-identification: A Survey and Outlook (TPAMI 2021) <https://arxiv.org/abs/2001.04193>`_. Their code can be accessed at `<https://github.com/mangye16/ReID-Survey>`_.
-- [Aug 2020] ``1.3.3``: Fixed bug in ``visrank`` (caused by not unpacking ``dsetid``).
-- [Aug 2020] ``1.3.2``: Added ``_junk_pids`` to ``grid`` and ``prid``. This avoids using mislabeled gallery images for training when setting ``combineall=True``.
-- [Aug 2020] ``1.3.0``: (1) Added ``dsetid`` to the existing 3-tuple data source, resulting in ``(impath, pid, camid, dsetid)``. This variable denotes the dataset ID and is useful when combining multiple datasets for training (as a dataset indicator). E.g., when combining ``market1501`` and ``cuhk03``, the former will be assigned ``dsetid=0`` while the latter will be assigned ``dsetid=1``. (2) Added ``RandomDatasetSampler``. Analogous to ``RandomDomainSampler``, ``RandomDatasetSampler`` samples a certain number of images (``batch_size // num_datasets``) from each of specified datasets (the amount is determined by ``num_datasets``).
-- [Aug 2020] ``1.2.6``: Added ``RandomDomainSampler`` (it samples ``num_cams`` cameras each with ``batch_size // num_cams`` images to form a mini-batch).
-- [Jun 2020] ``1.2.5``: (1) Dataloader's output from ``__getitem__`` has been changed from ``list`` to ``dict``. Previously, an element, e.g. image tensor, was fetched with ``imgs=data[0]``. Now it should be obtained by ``imgs=data['img']``. See this `commit <https://github.com/KaiyangZhou/deep-person-reid/commit/aefe335d68f39a20160860e6d14c2d34f539b8a5>`_ for detailed changes. (2) Added ``k_tfm`` as an option to image data loader, which allows data augmentation to be applied ``k_tfm`` times *independently* to an image. If ``k_tfm > 1``, ``imgs=data['img']`` returns a list with ``k_tfm`` image tensors.
+- [Aug 2020] ``v1.3.3``: Fixed bug in ``visrank`` (caused by not unpacking ``dsetid``).
+- [Aug 2020] ``v1.3.2``: Added ``_junk_pids`` to ``grid`` and ``prid``. This avoids using mislabeled gallery images for training when setting ``combineall=True``.
+- [Aug 2020] ``v1.3.0``: (1) Added ``dsetid`` to the existing 3-tuple data source, resulting in ``(impath, pid, camid, dsetid)``. This variable denotes the dataset ID and is useful when combining multiple datasets for training (as a dataset indicator). E.g., when combining ``market1501`` and ``cuhk03``, the former will be assigned ``dsetid=0`` while the latter will be assigned ``dsetid=1``. (2) Added ``RandomDatasetSampler``. Analogous to ``RandomDomainSampler``, ``RandomDatasetSampler`` samples a certain number of images (``batch_size // num_datasets``) from each of specified datasets (the amount is determined by ``num_datasets``).
+- [Aug 2020] ``v1.2.6``: Added ``RandomDomainSampler`` (it samples ``num_cams`` cameras each with ``batch_size // num_cams`` images to form a mini-batch).
+- [Jun 2020] ``v1.2.5``: (1) Dataloader's output from ``__getitem__`` has been changed from ``list`` to ``dict``. Previously, an element, e.g. image tensor, was fetched with ``imgs=data[0]``. Now it should be obtained by ``imgs=data['img']``. See this `commit <https://github.com/KaiyangZhou/deep-person-reid/commit/aefe335d68f39a20160860e6d14c2d34f539b8a5>`_ for detailed changes. (2) Added ``k_tfm`` as an option to image data loader, which allows data augmentation to be applied ``k_tfm`` times *independently* to an image. If ``k_tfm > 1``, ``imgs=data['img']`` returns a list with ``k_tfm`` image tensors.
 - [May 2020] Added the person attribute recognition code used in `Omni-Scale Feature Learning for Person Re-Identification (ICCV'19) <https://arxiv.org/abs/1905.00953>`_. See ``projects/attribute_recognition/``.
-- [May 2020] ``1.2.1``: Added a simple API for feature extraction (``torchreid/utils/feature_extractor.py``). See the `documentation <https://kaiyangzhou.github.io/deep-person-reid/user_guide.html>`_ for the instruction.
+- [May 2020] ``v1.2.1``: Added a simple API for feature extraction (``torchreid/utils/feature_extractor.py``). See the `documentation <https://kaiyangzhou.github.io/deep-person-reid/user_guide.html>`_ for the instruction.
 - [Apr 2020] Code for reproducing the experiments of `deep mutual learning <https://zpascal.net/cvpr2018/Zhang_Deep_Mutual_Learning_CVPR_2018_paper.pdf>`_ in the `OSNet paper <https://arxiv.org/pdf/1905.00953v6.pdf>`__ (Supp. B) has been released at ``projects/DML``.
-- [Apr 2020] Upgraded to ``1.2.0``. The engine class has been made more model-agnostic to improve extensibility. See `Engine <torchreid/engine/engine.py>`_ and `ImageSoftmaxEngine <torchreid/engine/image/softmax.py>`_ for more details. Credit to `Dassl.pytorch <https://github.com/KaiyangZhou/Dassl.pytorch>`_.
+- [Apr 2020] Upgraded to ``v1.2.0``. The engine class has been made more model-agnostic to improve extensibility. See `Engine <torchreid/engine/engine.py>`_ and `ImageSoftmaxEngine <torchreid/engine/image/softmax.py>`_ for more details. Credit to `Dassl.pytorch <https://github.com/KaiyangZhou/Dassl.pytorch>`_.
 - [Dec 2019] Our `OSNet paper <https://arxiv.org/pdf/1905.00953v6.pdf>`_ has been updated, with additional experiments (in section B of the supplementary) showing some useful techniques for improving OSNet's performance in practice.
 - [Nov 2019] ``ImageDataManager`` can load training data from target datasets by setting ``load_train_targets=True``, and the train-loader can be accessed with ``train_loader_t = datamanager.train_loader_t``. This feature is useful for domain adaptation research.
 
@@ -229,6 +238,10 @@ Image-reid datasets
 - `QMUL-iLIDS <http://www.eecs.qmul.ac.uk/~sgg/papers/ZhengGongXiang_BMVC09.pdf>`_
 - `PRID <https://pdfs.semanticscholar.org/4c1b/f0592be3e535faf256c95e27982db9b3d3d3.pdf>`_
 
+Geo-localization datasets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- `University-1652 <https://dl.acm.org/doi/abs/10.1145/3394171.3413896>`_
+
 Video-reid datasets
 ^^^^^^^^^^^^^^^^^^^^^^^
 - `MARS <http://www.liangzheng.org/1320.pdf>`_
@@ -278,7 +291,7 @@ Useful links
 
 Citation
 ---------
-If you find this code useful to your research, please cite the following papers.
+If you use this code or the models in your research, please give credit to the following papers:
 
 .. code-block:: bash
 
@@ -296,9 +309,9 @@ If you find this code useful to your research, please cite the following papers.
       year={2019}
     }
 
-    @article{zhou2019learning,
+    @article{zhou2021osnet,
       title={Learning Generalisable Omni-Scale Representations for Person Re-Identification},
       author={Zhou, Kaiyang and Yang, Yongxin and Cavallaro, Andrea and Xiang, Tao},
-      journal={arXiv preprint arXiv:1910.06827},
-      year={2019}
+      journal={TPAMI},
+      year={2021}
     }

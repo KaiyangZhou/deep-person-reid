@@ -2,9 +2,9 @@
 Here is a collection of ReID-related research with links to papers and code. You are welcome to submit [PR](https://help.github.com/articles/creating-a-pull-request/)s if you find something missing.
 
 
-- [ArXiv20] Deep Learning for Person Re-identification: A Survey and Outlook [[paper](https://arxiv.org/abs/2001.04193)] [[code](https://github.com/mangye16/ReID-Survey)]
+- [TPAMI21] Learning Generalisable Omni-Scale Representations for Person Re-Identification [[paper](https://arxiv.org/abs/1910.06827)][[code](https://github.com/KaiyangZhou/deep-person-reid)]
 
-- [ArXiv19] Learning Generalisable Omni-Scale Representations for Person Re-Identification [[paper](https://arxiv.org/abs/1910.06827)][[code](https://github.com/KaiyangZhou/deep-person-reid)]
+- [TPAMI21] Deep Learning for Person Re-identification: A Survey and Outlook [[paper](https://arxiv.org/abs/2001.04193)] [[code](https://github.com/mangye16/ReID-Survey)]
 
 - [ICCV19] RGB-Infrared Cross-Modality Person Re-Identification via Joint Pixel and Feature Alignment. [[paper](http://openaccess.thecvf.com/content_ICCV_2019/papers/Wang_RGB-Infrared_Cross-Modality_Person_Re-Identification_via_Joint_Pixel_and_Feature_Alignment_ICCV_2019_paper.pdf)] [[code](https://github.com/wangguanan/AlignGAN)]
 
