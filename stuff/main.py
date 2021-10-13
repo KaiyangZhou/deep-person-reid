@@ -25,23 +25,25 @@ if __name__ == '__main__':
 
     optimizer = torchreid.optim.build_optimizer(model, optim='adam', lr=0.0003)
 
-    scheduler = torchreid.optim.build_lr_scheduler(
-        optimizer, lr_scheduler='single_step', stepsize=20
-    )
+    
+    # scheduler = torchreid.optim.build_lr_scheduler(
+    #  optimizer, lr_scheduler='single_step', stepsize=20
+    # )
+    
 
     engine = torchreid.engine.ImageSoftmaxEngine(
         datamanager,
         model,
         optimizer=optimizer,
-        scheduler=scheduler,
+        # scheduler=scheduler,
         label_smooth=True
     )
 
     engine.run(
         save_dir='log/osnet_ibn_x1_0',
-        max_epoch=60,
-        eval_freq=10,
-        print_freq=10,
+        # max_epoch=60,
+        # eval_freq=10,
+        # print_freq=10,
         test_only=True,
         visrank=True
     )
