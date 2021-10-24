@@ -54,8 +54,8 @@ class Dataset(object):
         # extend 3-tuple (img_path(s), pid, camid) to
         # 4-tuple (img_path(s), pid, camid, dsetid) by
         # adding a dataset indicator "dsetid"
-        if len(train[0]) == 3:
-            train = [(*items, 0) for items in train]
+        # if len(train[0]) == 3:
+        #     train = [(*items, 0) for items in train]
         if len(query[0]) == 3:
             query = [(*items, 0) for items in query]
         if len(gallery[0]) == 3:
