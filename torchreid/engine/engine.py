@@ -27,7 +27,7 @@ class Engine(object):
 
     def __init__(self, datamanager, use_gpu=True):
         self.datamanager = datamanager
-        self.train_loader = self.datamanager.train_loader
+        # self.train_loader = self.datamanager.train_loader
         self.test_loader = self.datamanager.test_loader
         self.use_gpu = (torch.cuda.is_available() and use_gpu)
         self.writer = None
