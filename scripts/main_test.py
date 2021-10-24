@@ -6,8 +6,8 @@ if __name__ == '__main__':
 
     datamanager = torchreid.data.ImageDataManager(
         root='reid-data',
-        sources='newdataset',
-        # targets='newdataset',
+        sources='market1501',
+        targets='market1501',
         height=256,
         width=128,
         transforms=['random_flip', 'color_jitter']
@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     model = torchreid.models.build_model(
         name='osnet_x1_0',
-        num_classes=0,
+        num_classes=datamanager._num_train_pids,
         # loss='softmax',
         pretrained=True
     )
@@ -39,12 +39,12 @@ if __name__ == '__main__':
     )
 
     engine.run(
-        save_dir='log/newdataset_visrank',
+        save_dir='log/market_visrank',
         test_only=True,
         # max_epoch=60,
         # eval_freq=10,
         # print_freq=10,
-        visrank=True,
-        visrank_topk=20,
+        # visrank=True,
+        # visrank_topk=20,
         # rerank=True
     )
