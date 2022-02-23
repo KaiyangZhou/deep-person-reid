@@ -204,7 +204,7 @@ class ImageDataManager(DataManager):
                 cuhk03_labeled=cuhk03_labeled,
                 cuhk03_classic_split=cuhk03_classic_split,
                 market1501_500k=market1501_500k,
-                **kwargs
+                **kwargs 
             )
             trainset.append(trainset_)
         trainset = sum(trainset)
