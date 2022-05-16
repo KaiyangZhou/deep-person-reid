@@ -97,14 +97,14 @@ Get started: 30 seconds to Torchreid
 .. code-block:: python
     
     datamanager = torchreid.data.ImageDataManager(
-        root='reid-data',
-        sources='market1501',
-        targets='market1501',
+        root="reid-data",
+        sources="market1501",
+        targets="market1501",
         height=256,
         width=128,
         batch_size_train=32,
         batch_size_test=100,
-        transforms=['random_flip', 'random_crop']
+        transforms=["random_flip", "random_crop"]
     )
 
 3 Build model, optimizer and lr_scheduler
@@ -112,9 +112,9 @@ Get started: 30 seconds to Torchreid
 .. code-block:: python
     
     model = torchreid.models.build_model(
-        name='resnet50',
+        name="resnet50",
         num_classes=datamanager.num_train_pids,
-        loss='softmax',
+        loss="softmax",
         pretrained=True
     )
 
@@ -122,13 +122,13 @@ Get started: 30 seconds to Torchreid
 
     optimizer = torchreid.optim.build_optimizer(
         model,
-        optim='adam',
+        optim="adam",
         lr=0.0003
     )
 
     scheduler = torchreid.optim.build_lr_scheduler(
         optimizer,
-        lr_scheduler='single_step',
+        lr_scheduler="single_step",
         stepsize=20
     )
 
@@ -149,7 +149,7 @@ Get started: 30 seconds to Torchreid
 .. code-block:: python
     
     engine.run(
-        save_dir='log/resnet50',
+        save_dir="log/resnet50",
         max_epoch=60,
         eval_freq=10,
         print_freq=10,
