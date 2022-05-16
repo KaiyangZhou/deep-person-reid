@@ -256,22 +256,22 @@ python setup.py develop
 <li><p>Load data manager</p></li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">datamanager</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ImageDataManager</span><span class="p">(</span>
-    <span class="n">root</span><span class="o">=</span><span class="s1">&#39;reid-data&#39;</span><span class="p">,</span>
-    <span class="n">sources</span><span class="o">=</span><span class="s1">&#39;market1501&#39;</span><span class="p">,</span>
-    <span class="n">targets</span><span class="o">=</span><span class="s1">&#39;market1501&#39;</span><span class="p">,</span>
+    <span class="n">root</span><span class="o">=</span><span class="s2">&quot;reid-data&quot;</span><span class="p">,</span>
+    <span class="n">sources</span><span class="o">=</span><span class="s2">&quot;market1501&quot;</span><span class="p">,</span>
+    <span class="n">targets</span><span class="o">=</span><span class="s2">&quot;market1501&quot;</span><span class="p">,</span>
     <span class="n">height</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
     <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
     <span class="n">batch_size_train</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
     <span class="n">batch_size_test</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="n">transforms</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;random_flip&#39;</span><span class="p">,</span> <span class="s1">&#39;random_crop&#39;</span><span class="p">]</span>
+    <span class="n">transforms</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;random_flip&quot;</span><span class="p">,</span> <span class="s2">&quot;random_crop&quot;</span><span class="p">]</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <p>3 Build model, optimizer and lr_scheduler</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">build_model</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;resnet50&#39;</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;resnet50&quot;</span><span class="p">,</span>
     <span class="n">num_classes</span><span class="o">=</span><span class="n">datamanager</span><span class="o">.</span><span class="n">num_train_pids</span><span class="p">,</span>
-    <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span>
+    <span class="n">loss</span><span class="o">=</span><span class="s2">&quot;softmax&quot;</span><span class="p">,</span>
     <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 
@@ -279,13 +279,13 @@ python setup.py develop
 
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">build_optimizer</span><span class="p">(</span>
     <span class="n">model</span><span class="p">,</span>
-    <span class="n">optim</span><span class="o">=</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span>
+    <span class="n">optim</span><span class="o">=</span><span class="s2">&quot;adam&quot;</span><span class="p">,</span>
     <span class="n">lr</span><span class="o">=</span><span class="mf">0.0003</span>
 <span class="p">)</span>
 
 <span class="n">scheduler</span> <span class="o">=</span> <span class="n">torchreid</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">build_lr_scheduler</span><span class="p">(</span>
     <span class="n">optimizer</span><span class="p">,</span>
-    <span class="n">lr_scheduler</span><span class="o">=</span><span class="s1">&#39;single_step&#39;</span><span class="p">,</span>
+    <span class="n">lr_scheduler</span><span class="o">=</span><span class="s2">&quot;single_step&quot;</span><span class="p">,</span>
     <span class="n">stepsize</span><span class="o">=</span><span class="mi">20</span>
 <span class="p">)</span>
 </pre></div>
@@ -306,7 +306,7 @@ python setup.py develop
 <li><p>Run training and test</p></li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-    <span class="n">save_dir</span><span class="o">=</span><span class="s1">&#39;log/resnet50&#39;</span><span class="p">,</span>
+    <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;log/resnet50&quot;</span><span class="p">,</span>
     <span class="n">max_epoch</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
     <span class="n">eval_freq</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
     <span class="n">print_freq</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
