@@ -7,9 +7,6 @@ import torch
 import pandas as pd
 import subprocess
 
-
-import torchreid
-
 from torchreid.utils.feature_extractor import FeatureExtractor
 from torchreid.models import build_model
 
