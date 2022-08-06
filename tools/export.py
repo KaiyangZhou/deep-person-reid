@@ -1,42 +1,22 @@
 import argparse
-
 import os
-# limit the number of cpus used by high performance libraries
-os.environ["OMP_NUM_THREADS"] = "1"
-os.environ["OPENBLAS_NUM_THREADS"] = "1"
-os.environ["MKL_NUM_THREADS"] = "1"
-os.environ["VECLIB_MAXIMUM_THREADS"] = "1"
-os.environ["NUMEXPR_NUM_THREADS"] = "1"
-
 import sys
 import numpy as np
 from pathlib import Path
 import torch
 import pandas as pd
 import subprocess
-import torch.backends.cudnn as cudnn
 
-FILE = Path(__file__).resolve()
-ROOT = FILE.parents[0]  # yolov5 strongsort root directory
-WEIGHTS = ROOT / 'weights'
 
-if str(ROOT) not in sys.path:
-    sys.path.append(str(ROOT))  # add ROOT to PATH
-if str(ROOT / 'yolov5') not in sys.path:
-    sys.path.append(str(ROOT / 'yolov5'))  # add yolov5 ROOT to PATH
-if str(ROOT / 'strong_sort') not in sys.path:
-    sys.path.append(str(ROOT / 'strong_sort'))  # add strong_sort ROOT to PATH
-ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
+import torchreid
 
-import logging
-from yolov5.models.common import DetectMultiBackend
-from yolov5.utils.general import LOGGER, colorstr, check_requirements
-from strong_sort.deep.reid.torchreid.utils.feature_extractor import FeatureExtractor
-from strong_sort.deep.reid.torchreid.models import build_model
-from strong_sort.deep.reid_model_factory import get_model_name
+from torchreid.utils.feature_extractor import FeatureExtractor
+from torchreid.models import build_model
 
-# remove duplicated stream handler to avoid duplicated logging
-logging.getLogger().removeHandler(logging.getLogger().handlers[0])
+__model_types = [
+    'resnet50', 'mlfn', 'hacnn', 'mobilenetv2_x1_0', 'mobilenetv2_x1_4',
+    'osnet_x1_0', 'osnet_x0_75', 'osnet_x0_5', 'osnet_x0_25',
+    'osnet_ibn_x1_0', 'osnet_ain_x1_0']
 
 def file_size(path):
     # Return file/dir size (MB)
@@ -48,6 +28,13 @@ def file_size(path):
     else:
         return 0.0
 
+
+def get_model_name(model):
+    model = str(model).rsplit('/', 1)[-1].split('.')[0]
+    for x in __model_types:
+        if x in model:
+            return x
+    return None
 
 def export_formats():
     # YOLOv5 export formats
@@ -63,11 +50,10 @@ def export_formats():
 def export_onnx(model, im, file, opset, train=False, dynamic=True, simplify=False):
     # ONNX export
     try:
-        check_requirements(('onnx',))
         import onnx
 
         f = file.with_suffix('.onnx')
-        LOGGER.info(f'\nstarting export with onnx {onnx.__version__}...')
+        print(f'\nStarting export with onnx {onnx.__version__}...')
 
         torch.onnx.export(
             model.cpu() if dynamic else model,  # --dynamic only compatible with cpu
@@ -97,10 +83,9 @@ def export_onnx(model, im, file, opset, train=False, dynamic=True, simplify=Fals
         if simplify:
             try:
                 cuda = torch.cuda.is_available()
-                check_requirements(('onnxruntime-gpu' if cuda else 'onnxruntime', 'onnx-simplifier>=0.4.1'))
                 import onnxsim
 
-                LOGGER.info(f'simplifying with onnx-simplifier {onnxsim.__version__}...')
+                print(f'simplifying with onnx-simplifier {onnxsim.__version__}...')
                 model_onnx, check = onnxsim.simplify(
                     model_onnx,
                     dynamic_input_shape=dynamic,
@@ -108,22 +93,21 @@ def export_onnx(model, im, file, opset, train=False, dynamic=True, simplify=Fals
                 assert check, 'assert check failed'
                 onnx.save(model_onnx, f)
             except Exception as e:
-                LOGGER.info(f'simplifier failure: {e}')
-        LOGGER.info(f'export success, saved as {f} ({file_size(f):.1f} MB)')
-        LOGGER.info(f"run --dynamic ONNX model inference with: 'python detect.py --weights {f}'")
+                print(f'simplifier failure: {e}')
+        print(f'export success, saved as {f} ({file_size(f):.1f} MB)')
+        print(f"run --dynamic ONNX model inference with: 'python detect.py --weights {f}'")
     except Exception as e:
-        LOGGER.info(f'export failure: {e}')
+        print(f'export failure: {e}')
     return f
         
         
-def export_openvino(file, dynamic, half, prefix=colorstr('OpenVINO:')):
+def export_openvino(file, dynamic, half):
     f = str(file).replace('.onnx', f'_openvino_model{os.sep}')
     # YOLOv5 OpenVINO export
     try:
-        check_requirements(('openvino-dev',))  # requires openvino-dev: https://pypi.org/project/openvino-dev/
         import openvino.inference_engine as ie
 
-        LOGGER.info(f'\n{prefix} starting export with openvino {ie.__version__}...')
+        print(f'\nStarting export with openvino {ie.__version__}...')
         f = str(file).replace('.onnx', f'_openvino_model{os.sep}')
         dyn_shape = [-1,3,256,128] if dynamic else None
         cmd = f"mo \
@@ -136,19 +120,18 @@ def export_openvino(file, dynamic, half, prefix=colorstr('OpenVINO:')):
 
         subprocess.check_output(cmd.split())  # export
 
-        LOGGER.info(f'{prefix} export success, saved as {f} ({file_size(f):.1f} MB)')
+        print(f'Export success, saved as {f} ({file_size(f):.1f} MB)')
         return f
     except Exception as e:
-        LOGGER.info(f'\n{prefix} export failure: {e}')
+        print(f'\nExport failure: {e}')
     return f
         
 
-def export_tflite(file, half, prefix=colorstr('TFLite:')):
+def export_tflite(file, half):
     # YOLOv5 OpenVINO export
     try:
-        check_requirements(('openvino2tensorflow', 'tensorflow', 'tensorflow_datasets'))  # requires openvino-dev: https://pypi.org/project/openvino-dev/
         import openvino.inference_engine as ie
-        LOGGER.info(f'\n{prefix} starting export with openvino {ie.__version__}...')
+        print(f'\nStarting export with openvino {ie.__version__}...')
         output = Path(str(file).replace(f'_openvino_model{os.sep}', f'_tflite_model{os.sep}'))
         modelxml = list(Path(file).glob('*.xml'))[0]
         cmd = f"openvino2tensorflow \
@@ -160,10 +143,10 @@ def export_tflite(file, half, prefix=colorstr('TFLite:')):
             --output_dynamic_range_quant_tflite"
         subprocess.check_output(cmd.split())  # export
 
-        LOGGER.info(f'{prefix} export success, results saved in {output} ({file_size(f):.1f} MB)')
+        print(f'Export success, results saved in {output} ({file_size(f):.1f} MB)')
         return f
     except Exception as e:
-        LOGGER.info(f'\n{prefix} export failure: {e}')
+        print(f'\nExport failure: {e}')
         
         
 if __name__ == "__main__":
@@ -179,7 +162,7 @@ if __name__ == "__main__":
         "-p",
         "--weights",
         type=Path,
-        default="./weight/mobilenetv2_x1_0_msmt17.pt",
+        default="./mobilenetv2_x1_0_msmt17.pt",
         help="Path to weights",
     )
     parser.add_argument(
