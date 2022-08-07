@@ -14,3 +14,11 @@ flake8
 yapf
 isort==4.3.21
 imageio
+
+# Export --------------------------------------
+# onnx
+# onnx-simplified
+# openvino-dev
+# openvino2tensorflow
+# tensorflow
+# tensorflow_datasets
