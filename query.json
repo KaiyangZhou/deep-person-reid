@@ -1,0 +1,117 @@
+{
+  "size": 500,
+  "sort": [
+    {
+      "inferenced_timestamp": {
+        "order": "desc",
+        "unmapped_type": "boolean"
+      }
+    }
+  ],
+  "version": true,
+  "fields": [
+    {
+      "field": "*",
+      "include_unmapped": "true"
+    },
+    {
+      "field": "absolute_pts",
+      "format": "strict_date_optional_time"
+    },
+    {
+      "field": "inferenced_timestamp",
+      "format": "strict_date_optional_time"
+    },
+    {
+      "field": "producer_epoch_millis",
+      "format": "strict_date_optional_time"
+    },
+    {
+      "field": "producer_timestamp",
+      "format": "strict_date_optional_time"
+    }
+  ],
+  "aggs": {
+    "2": {
+      "date_histogram": {
+        "field": "inferenced_timestamp",
+        "fixed_interval": "30m",
+        "time_zone": "America/Vancouver",
+        "min_doc_count": 1
+      }
+    }
+  },
+  "script_fields": {},
+  "stored_fields": [
+    "*"
+  ],
+  "runtime_mappings": {
+    "weekday": {
+      "type": "keyword",
+      "script": {
+        "source": "emit(doc['inferenced_timestamp'].value.dayOfWeekEnum.getDisplayName(TextStyle.SHORT, Locale.ROOT))"
+      }
+    }
+  },
+  "_source": false,
+  "query": {
+    "bool": {
+      "must": [],
+      "filter": [
+        {
+          "bool": {
+            "filter": [
+              {
+                "bool": {
+                  "should": [
+                    {
+                      "match_phrase": {
+                        "sensor_id": "prod_flkeys_hollywood_beach"
+                      }
+                    }
+                  ],
+                  "minimum_should_match": 1
+                }
+              },
+              {
+                "bool": {
+                  "should": [
+                    {
+                      "match": {
+                        "classification": "person"
+                      }
+                    }
+                  ],
+                  "minimum_should_match": 1
+                }
+              }
+            ]
+          }
+        },
+        {
+          "range": {
+            "inferenced_timestamp": {
+              "gte": "2022-10-13T07:00:00.000Z",
+              "lte": "2022-10-14T06:59:59.999Z",
+              "format": "strict_date_optional_time"
+            }
+          }
+        }
+      ],
+      "should": [],
+      "must_not": []
+    }
+  },
+  "highlight": {
+    "pre_tags": [
+      "@kibana-highlighted-field@"
+    ],
+    "post_tags": [
+      "@/kibana-highlighted-field@"
+    ],
+    "fields": {
+      "*": {}
+    },
+    "fragment_size": 2147483647
+  }
+}
