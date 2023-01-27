@@ -10,10 +10,10 @@ tb-nightly
 future
 yacs
 gdown
-flake8
 yapf
-isort==4.3.21
 imageio
+torch
+torchvision
 
 # Export --------------------------------------
 # onnx
