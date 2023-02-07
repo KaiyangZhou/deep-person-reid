@@ -84,6 +84,10 @@ Make sure `conda <https://www.anaconda.com/distribution/>`_ is installed.
     # install torchreid (don't need to re-build it if you modify the source code)
     python setup.py develop
 
+Another way to install is to run everything inside docker container:
+
+- build: `make build-image`
+- run: `make run`
 
 Get started: 30 seconds to Torchreid
 -------------------------------------
