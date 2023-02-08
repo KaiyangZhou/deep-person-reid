@@ -14,7 +14,7 @@ flake8
 yapf
 isort==4.3.21
 imageio
-
+chardet
 # Export --------------------------------------
 # onnx
 # onnx-simplified
