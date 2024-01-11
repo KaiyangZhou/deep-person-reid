@@ -112,7 +112,7 @@ class Engine(object):
 
     def run(
         self,
-        save_dir='log',
+        save_dir='log/FRIDA',  # 'log'
         max_epoch=0,
         start_epoch=0,
         print_freq=10,
@@ -367,7 +367,7 @@ class Engine(object):
                 end = time.time()
                 features = self.extract_features(imgs)
                 batch_time.update(time.time() - end)
-                features = features.cpu()
+                features = features.cpu().clone()
                 f_.append(features)
                 pids_.extend(pids.tolist())
                 camids_.extend(camids.tolist())
