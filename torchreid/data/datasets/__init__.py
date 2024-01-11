@@ -2,9 +2,9 @@ from __future__ import print_function, absolute_import
 
 from .image import (
     GRID, PRID, CUHK01, CUHK02, CUHK03, MSMT17, CUHKSYSU, VIPeR, SenseReID,
-    Market1501, DukeMTMCreID, University1652, iLIDS
+    Market1501, DukeMTMCreID, University1652, iLIDS, FRIDAimg
 )
-from .video import PRID2011, Mars, DukeMTMCVidReID, iLIDSVID
+from .video import PRID2011, Mars, DukeMTMCVidReID, iLIDSVID, FRIDA
 from .dataset import Dataset, ImageDataset, VideoDataset
 
 __image_datasets = {
@@ -20,14 +20,16 @@ __image_datasets = {
     'prid': PRID,
     'cuhk02': CUHK02,
     'university1652': University1652,
-    'cuhksysu': CUHKSYSU
+    'cuhksysu': CUHKSYSU,
+    'FRIDAimg':FRIDAimg
 }
 
 __video_datasets = {
     'mars': Mars,
     'ilidsvid': iLIDSVID,
     'prid2011': PRID2011,
-    'dukemtmcvidreid': DukeMTMCVidReID
+    'dukemtmcvidreid': DukeMTMCVidReID, 
+    'FRIDA':FRIDA
 }
 
 
@@ -37,7 +39,7 @@ def init_image_dataset(name, **kwargs):
     if name not in avai_datasets:
         raise ValueError(
             'Invalid dataset name. Received "{}", '
-            'but expected to be one of {}'.format(name, avai_datasets)
+            'but expected to be one of image datasets: {}'.format(name, avai_datasets)
         )
     return __image_datasets[name](**kwargs)
 
@@ -48,7 +50,7 @@ def init_video_dataset(name, **kwargs):
     if name not in avai_datasets:
         raise ValueError(
             'Invalid dataset name. Received "{}", '
-            'but expected to be one of {}'.format(name, avai_datasets)
+            'but expected to be one of video datasets: {}'.format(name, avai_datasets)
         )
     return __video_datasets[name](**kwargs)
 

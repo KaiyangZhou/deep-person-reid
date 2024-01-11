@@ -8,7 +8,7 @@ def get_default_config():
     cfg.model = CN()
     cfg.model.name = 'resnet50'
     cfg.model.pretrained = True # automatically load pretrained model weights if available
-    cfg.model.load_weights = '' # path to model weights
+    cfg.model.load_weights = 'log/osnet_x1_0_market1501_softmax_cosinelr/model.pth.tar-250' # path to model weights
     cfg.model.resume = '' # path to checkpoint for resume training
 
     # data
@@ -47,7 +47,7 @@ def get_default_config():
 
     # video reid setting
     cfg.video = CN()
-    cfg.video.seq_len = 15 # number of images to sample in a tracklet
+    cfg.video.seq_len = 15  # 15 # number of images to sample in a tracklet
     cfg.video.sample_method = 'evenly' # how to sample images from a tracklet
     cfg.video.pooling_method = 'avg' # how to pool features over a tracklet
 
@@ -56,7 +56,7 @@ def get_default_config():
     cfg.train.optim = 'adam'
     cfg.train.lr = 0.0003
     cfg.train.weight_decay = 5e-4
-    cfg.train.max_epoch = 60
+    cfg.train.max_epoch =  60
     cfg.train.start_epoch = 0
     cfg.train.batch_size = 32
     cfg.train.fixbase_epoch = 0 # number of epochs to fix base layers
@@ -99,11 +99,11 @@ def get_default_config():
     cfg.test.dist_metric = 'euclidean' # distance metric, ['euclidean', 'cosine']
     cfg.test.normalize_feature = False # normalize feature vectors before computing distance
     cfg.test.ranks = [1, 5, 10, 20] # cmc ranks
-    cfg.test.evaluate = True # True: test only --   False: train and test     f
-    cfg.test.eval_freq = -1 # evaluation frequency (-1 means to only test after training)
+    cfg.test.evaluate = False # True: test only --   False: train and test  
+    cfg.test.eval_freq = 1 # -1   # evaluation frequency (-1 means to only test after training)
     cfg.test.start_eval = 0 # start to evaluate after a specific epoch
     cfg.test.rerank = False # use person re-ranking
-    cfg.test.visrank = True # visualize ranked results (only available when cfg.test.evaluate=True)
+    cfg.test.visrank = False # visualize ranked results (only available when cfg.test.evaluate=True)
     cfg.test.visrank_topk = 10 # top-k ranks to visualize
 
     return cfg
