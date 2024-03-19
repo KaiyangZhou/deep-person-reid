@@ -258,7 +258,7 @@ Use your own dataset
     import os
     import os.path as osp
 
-    from torchreid.data import ImageDataset
+    from torchreid.reid.data import ImageDataset
 
 
     class NewDataset(ImageDataset):
