@@ -1,0 +1,42 @@
+[project]
+name = "torchreid"
+authors = [
+    {name = "Kaiyang Zhou"},
+]
+license = {file = "LICENSE"}
+requires-python = ">=3.11"
+version="1.4.0"
+dependencies = [
+    "numpy==1.26.4",
+    "opencv-python==4.9.0.80",
+    "torch==2.3.1",
+    "scipy==1.14.0",
+    "pillow==10.4.0",
+    "torchvision==0.18.1",
+    "gdown==5.2.0",
+    "tensorboard==2.17.0",
+]
+readme = "README.rst"
+description = "A library for deep learning person re-ID in PyTorch"
+keywords = [
+    'Person Re-Identification',
+    'Deep Learning',
+    'Computer Vision'
+]
+
+[build-system]
+requires = [
+    "cython==3.0.10",
+    "numpy==1.26.4",
+    "setuptools>=45",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[project.urls]
+"Homepage" = "https://kaiyangzhou.github.io"
+"Bug Reports" = "https://github.com/KaiyangZhou/deep-person-reid/issues"
+"Source" = "https://github.com/KaiyangZhou/deep-person-reid"
+
