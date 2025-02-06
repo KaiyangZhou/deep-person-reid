@@ -11,9 +11,15 @@ from torch.utils.tensorboard import SummaryWriter
 from torchreid import metrics
 from torchreid.utils import (
     MetricMeter, AverageMeter, re_ranking, open_all_layers, save_checkpoint,
-    open_specified_layers, visualize_ranked_results
+    open_specified_layers, visualize_ranked_results,  tools
 )
 from torchreid.losses import DeepSupervision
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 class Engine(object):
@@ -412,6 +418,9 @@ class Engine(object):
             g_camids,
             use_metric_cuhk03=use_metric_cuhk03
         )
+        
+        print('Plotting CMC ...')
+        tools.plot_cmc(cmc, max_rank=max(ranks), save_path=f"{save_dir}/cmc_curve.png")
 
         print('** Results **')
         print('mAP: {:.1%}'.format(mAP))
