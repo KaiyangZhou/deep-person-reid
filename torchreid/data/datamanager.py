@@ -19,7 +19,7 @@ class DataManager(object):
             Default is 'random_flip'.
         norm_mean (list or None, optional): data mean. Default is None (use imagenet mean).
         norm_std (list or None, optional): data std. Default is None (use imagenet std).
-        use_gpu (bool, optional): use gpu. Default is True.
+        device (str, optional): device to use. Default is 'cuda'.
     """
 
     def __init__(
@@ -31,7 +31,7 @@ class DataManager(object):
         transforms='random_flip',
         norm_mean=None,
         norm_std=None,
-        use_gpu=False
+        device='cuda'
     ):
         self.sources = sources
         self.targets = targets
@@ -58,7 +58,8 @@ class DataManager(object):
             norm_std=norm_std
         )
 
-        self.use_gpu = (torch.cuda.is_available() and use_gpu)
+        self.device = device
+        self.use_gpu = (torch.cuda.is_available() and device.startswith('cuda'))
 
     @property
     def num_train_pids(self):
@@ -104,7 +105,7 @@ class ImageDataManager(DataManager):
             useful for training and is currently valid for image datasets only.
         norm_mean (list or None, optional): data mean. Default is None (use imagenet mean).
         norm_std (list or None, optional): data std. Default is None (use imagenet std).
-        use_gpu (bool, optional): use gpu. Default is True.
+        device (str, optional): device to use. Default is 'cuda'.
         split_id (int, optional): split id (*0-based*). Default is 0.
         combineall (bool, optional): combine train, query and gallery in a dataset for
             training. Default is False.
@@ -161,7 +162,7 @@ class ImageDataManager(DataManager):
         k_tfm=1,
         norm_mean=None,
         norm_std=None,
-        use_gpu=True,
+        device='cuda',
         split_id=0,
         combineall=False,
         load_train_targets=False,
@@ -186,7 +187,7 @@ class ImageDataManager(DataManager):
             transforms=transforms,
             norm_mean=norm_mean,
             norm_std=norm_std,
-            use_gpu=use_gpu
+            device=device
         )
 
         print('=> Loading train (source) dataset')
@@ -361,7 +362,7 @@ class VideoDataManager(DataManager):
             Default is 'random_flip'.
         norm_mean (list or None, optional): data mean. Default is None (use imagenet mean).
         norm_std (list or None, optional): data std. Default is None (use imagenet std).
-        use_gpu (bool, optional): use gpu. Default is True.
+        device (str, optional): device to use. Default is 'cuda'.
         split_id (int, optional): split id (*0-based*). Default is 0.
         combineall (bool, optional): combine train, query and gallery in a dataset for
             training. Default is False.
@@ -418,7 +419,7 @@ class VideoDataManager(DataManager):
         transforms='random_flip',
         norm_mean=None,
         norm_std=None,
-        use_gpu=True,
+        device='cuda',
         split_id=0,
         combineall=False,
         batch_size_train=3,
@@ -440,7 +441,7 @@ class VideoDataManager(DataManager):
             transforms=transforms,
             norm_mean=norm_mean,
             norm_std=norm_std,
-            use_gpu=use_gpu
+            device=device
         )
 
         print('=> Loading train (source) dataset')

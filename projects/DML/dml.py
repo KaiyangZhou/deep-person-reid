@@ -22,11 +22,11 @@ class ImageDMLEngine(Engine):
         weight_t=0.5,
         weight_x=1.,
         weight_ml=1.,
-        use_gpu=True,
+        device='cuda',
         label_smooth=True,
         deploy='model1'
     ):
-        super(ImageDMLEngine, self).__init__(datamanager, use_gpu)
+        super(ImageDMLEngine, self).__init__(datamanager, device)
 
         self.model1 = model1
         self.optimizer1 = optimizer1
@@ -48,16 +48,15 @@ class ImageDMLEngine(Engine):
         self.criterion_t = TripletLoss(margin=margin)
         self.criterion_x = CrossEntropyLoss(
             num_classes=self.datamanager.num_train_pids,
-            use_gpu=self.use_gpu,
+            device=self.device,
             label_smooth=label_smooth
         )
 
     def forward_backward(self, data):
         imgs, pids = self.parse_data_for_train(data)
 
-        if self.use_gpu:
-            imgs = imgs.cuda()
-            pids = pids.cuda()
+        imgs = imgs.to(self.device)
+        pids = pids.to(self.device)
 
         outputs1, features1 = self.model1(imgs)
         loss1_x = self.compute_loss(self.criterion_x, outputs1, pids)

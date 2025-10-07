@@ -89,7 +89,7 @@ def show_avai_models():
 
 
 def build_model(
-    name, num_classes, loss='softmax', pretrained=True, use_gpu=True
+    name, num_classes, loss='softmax', pretrained=True, device='cuda'
 ):
     """A function wrapper for building a model.
 
@@ -100,7 +100,7 @@ def build_model(
             supports "softmax" and "triplet". Default is "softmax".
         pretrained (bool, optional): whether to load ImageNet-pretrained weights.
             Default is True.
-        use_gpu (bool, optional): whether to use gpu. Default is True.
+        device (str, optional): device to use. Default is 'cuda'.
 
     Returns:
         nn.Module
@@ -118,5 +118,5 @@ def build_model(
         num_classes=num_classes,
         loss=loss,
         pretrained=pretrained,
-        use_gpu=use_gpu
+        use_gpu=device.startswith('cuda')
     )

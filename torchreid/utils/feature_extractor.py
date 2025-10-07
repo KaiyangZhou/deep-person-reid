@@ -72,7 +72,7 @@ class FeatureExtractor(object):
             model_name,
             num_classes=1,
             pretrained=not (model_path and check_isfile(model_path)),
-            use_gpu=device.startswith('cuda')
+            device=device
         )
         model.eval()
 

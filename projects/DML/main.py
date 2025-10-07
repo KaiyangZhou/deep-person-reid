@@ -92,7 +92,7 @@ def main():
         num_classes=datamanager.num_train_pids,
         loss=cfg.loss.name,
         pretrained=cfg.model.pretrained,
-        use_gpu=cfg.use_gpu
+        device='cuda' if cfg.use_gpu else 'cpu'
     )
     num_params, flops = compute_model_complexity(
         model1, (1, 3, cfg.data.height, cfg.data.width)
@@ -155,7 +155,7 @@ def main():
         weight_t=cfg.loss.triplet.weight_t,
         weight_x=cfg.loss.triplet.weight_x,
         weight_ml=cfg.loss.dml.weight_ml,
-        use_gpu=cfg.use_gpu,
+        device='cuda' if cfg.use_gpu else 'cpu',
         label_smooth=cfg.loss.softmax.label_smooth,
         deploy=cfg.model.deploy
     )
