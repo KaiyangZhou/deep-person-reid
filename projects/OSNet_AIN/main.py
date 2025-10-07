@@ -123,7 +123,7 @@ def main():
         model,
         optimizer,
         scheduler=scheduler,
-        use_gpu=cfg.use_gpu,
+        device='cuda' if cfg.use_gpu else 'cpu',
         label_smooth=cfg.loss.softmax.label_smooth,
         mc_iter=cfg.nas.mc_iter,
         init_lmda=cfg.nas.init_lmda,

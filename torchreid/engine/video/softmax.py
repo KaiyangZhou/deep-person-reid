@@ -13,7 +13,7 @@ class VideoSoftmaxEngine(ImageSoftmaxEngine):
         model (nn.Module): model instance.
         optimizer (Optimizer): an Optimizer.
         scheduler (LRScheduler, optional): if None, no learning rate decay will be performed.
-        use_gpu (bool, optional): use gpu. Default is True.
+        device (str, optional): device to use. Default is 'cuda'.
         label_smooth (bool, optional): use label smoothing regularizer. Default is True.
         pooling_method (str, optional): how to pool features for a tracklet.
             Default is "avg" (average). Choices are ["avg", "max"].
@@ -63,7 +63,7 @@ class VideoSoftmaxEngine(ImageSoftmaxEngine):
         model,
         optimizer,
         scheduler=None,
-        use_gpu=True,
+        device="cuda",
         label_smooth=True,
         pooling_method='avg'
     ):
@@ -72,7 +72,7 @@ class VideoSoftmaxEngine(ImageSoftmaxEngine):
             model,
             optimizer,
             scheduler=scheduler,
-            use_gpu=use_gpu,
+            device=device,
             label_smooth=label_smooth
         )
         self.pooling_method = pooling_method

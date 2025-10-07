@@ -155,7 +155,7 @@ def main():
     model = torchreid.models.build_model(
         name=args.model,
         num_classes=datamanager.num_train_pids,
-        use_gpu=use_gpu
+        device='cuda' if use_gpu else 'cpu'
     )
 
     if use_gpu:
