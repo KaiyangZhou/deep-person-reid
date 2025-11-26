@@ -65,7 +65,8 @@ class FeatureExtractor(object):
         pixel_std=[0.229, 0.224, 0.225],
         pixel_norm=True,
         device='cuda',
-        verbose=True
+        verbose=True,
+        use_half=False,
     ):
         # Build model
         model = build_model(
@@ -75,6 +76,9 @@ class FeatureExtractor(object):
             use_gpu=device.startswith('cuda')
         )
         model.eval()
+
+        if use_half:
+            model.half()
 
         if verbose:
             num_params, flops = compute_model_complexity(
@@ -102,6 +106,7 @@ class FeatureExtractor(object):
 
         # Class attributes
         self.model = model
+        self.use_half = use_half
         self.preprocess = preprocess
         self.to_pil = to_pil
         self.device = device
@@ -145,6 +150,9 @@ class FeatureExtractor(object):
 
         else:
             raise NotImplementedError
+
+        if self.use_half:
+            images = images.half()
 
         with torch.no_grad():
             features = self.model(images)
