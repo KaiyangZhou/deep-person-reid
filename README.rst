@@ -30,6 +30,8 @@ Tech report: https://arxiv.org/abs/1910.10093.
 
 You can find some research projects that are built on top of Torchreid `here <https://github.com/KaiyangZhou/deep-person-reid/tree/master/projects>`_.
 
+The model weights are also available on Huggingface: https://huggingface.co/kaiyangzhou/osnet.
+
 
 What's new
 ------------
