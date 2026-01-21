@@ -104,7 +104,7 @@ class FeatureExtractor(object):
         self.model = model
         self.preprocess = preprocess
         self.to_pil = to_pil
-        self.device = device
+        self.device = next(self.model.parameters()).device
 
     def __call__(self, input):
         if isinstance(input, list):
