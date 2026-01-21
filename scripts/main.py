@@ -16,8 +16,8 @@ from default_config import (
     get_default_config, lr_scheduler_kwargs
 )
 
-
 def build_datamanager(cfg):
+    print(f"HIIIIIIIIIIIIIII  cfg.data.type {cfg.data.type} BYEEEEEEEE")
     if cfg.data.type == 'image':
         return torchreid.data.ImageDataManager(**imagedata_kwargs(cfg))
     else:
@@ -121,6 +121,11 @@ def main():
     parser.add_argument(
         '--root', type=str, default='', help='path to data root'
     )
+
+    parser.add_argument(
+        '--data-type', type=str, help='data type'
+    )
+
     parser.add_argument(
         'opts',
         default=None,
@@ -131,9 +136,14 @@ def main():
 
     cfg = get_default_config()
     cfg.use_gpu = torch.cuda.is_available()
+
     if args.config_file:
         cfg.merge_from_file(args.config_file)
     reset_config(cfg, args)
+    
+    if args.data_type:
+        cfg.data.type = args.data_type
+
     cfg.merge_from_list(args.opts)
     set_random_seed(cfg.train.seed)
     check_cfg(cfg)

@@ -65,6 +65,7 @@ def set_random_seed(seed):
     torch.cuda.manual_seed_all(seed)
 
 
+
 def download_url(url, dst):
     """Downloads file from a url to a destination.
 
@@ -104,19 +105,18 @@ def read_image(path):
     Returns:
         PIL image
     """
+    
     got_img = False
-    if not osp.exists(path):
-        raise IOError('"{}" does not exist'.format(path))
     while not got_img:
         try:
             img = Image.open(path).convert('RGB')
             got_img = True
+            return img  # Return the image if successfully loaded
         except IOError:
-            print(
-                'IOError incurred when reading "{}". Will redo. Don\'t worry. Just chill.'
-                .format(path)
-            )
-    return img
+            return None
+    
+   
+    
 
 
 def collect_env_info():
