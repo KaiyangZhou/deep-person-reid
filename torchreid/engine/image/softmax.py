@@ -15,7 +15,7 @@ class ImageSoftmaxEngine(Engine):
         model (nn.Module): model instance.
         optimizer (Optimizer): an Optimizer.
         scheduler (LRScheduler, optional): if None, no learning rate decay will be performed.
-        use_gpu (bool, optional): use gpu. Default is True.
+        device (str, optional): device to use. Default is 'cuda'.
         label_smooth (bool, optional): use label smoothing regularizer. Default is True.
 
     Examples::
@@ -59,10 +59,10 @@ class ImageSoftmaxEngine(Engine):
         model,
         optimizer,
         scheduler=None,
-        use_gpu=True,
+        device="cuda",
         label_smooth=True
     ):
-        super(ImageSoftmaxEngine, self).__init__(datamanager, use_gpu)
+        super(ImageSoftmaxEngine, self).__init__(datamanager, device)
 
         self.model = model
         self.optimizer = optimizer
@@ -71,16 +71,15 @@ class ImageSoftmaxEngine(Engine):
 
         self.criterion = CrossEntropyLoss(
             num_classes=self.datamanager.num_train_pids,
-            use_gpu=self.use_gpu,
+            device=self.device,
             label_smooth=label_smooth
         )
 
     def forward_backward(self, data):
         imgs, pids = self.parse_data_for_train(data)
 
-        if self.use_gpu:
-            imgs = imgs.cuda()
-            pids = pids.cuda()
+        imgs = imgs.to(self.device)
+        pids = pids.to(self.device)
 
         outputs = self.model(imgs)
         loss = self.compute_loss(self.criterion, outputs, pids)

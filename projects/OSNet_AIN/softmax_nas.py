@@ -13,7 +13,7 @@ class ImageSoftmaxNASEngine(Engine):
         model,
         optimizer,
         scheduler=None,
-        use_gpu=False,
+        device='cuda',
         label_smooth=True,
         mc_iter=1,
         init_lmda=1.,
@@ -22,7 +22,7 @@ class ImageSoftmaxNASEngine(Engine):
         lmda_decay_rate=0.5,
         fixed_lmda=False
     ):
-        super(ImageSoftmaxNASEngine, self).__init__(datamanager, use_gpu)
+        super(ImageSoftmaxNASEngine, self).__init__(datamanager, device)
         self.mc_iter = mc_iter
         self.init_lmda = init_lmda
         self.min_lmda = min_lmda
@@ -37,16 +37,15 @@ class ImageSoftmaxNASEngine(Engine):
 
         self.criterion = CrossEntropyLoss(
             num_classes=self.datamanager.num_train_pids,
-            use_gpu=self.use_gpu,
+            device=self.device,
             label_smooth=label_smooth
         )
 
     def forward_backward(self, data):
         imgs, pids = self.parse_data_for_train(data)
 
-        if self.use_gpu:
-            imgs = imgs.cuda()
-            pids = pids.cuda()
+        imgs = imgs.to(self.device)
+        pids = pids.to(self.device)
 
         # softmax temporature
         if self.fixed_lmda or self.lmda_decay_step == -1:

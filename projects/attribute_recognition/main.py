@@ -152,7 +152,7 @@ def main():
         args.arch,
         num_attrs,
         pretrained=not args.no_pretrained,
-        use_gpu=use_gpu
+        device='cuda' if use_gpu else 'cpu'
     )
     num_params, flops = compute_model_complexity(
         model, (1, 3, args.height, args.width)

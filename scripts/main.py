@@ -32,7 +32,7 @@ def build_engine(cfg, datamanager, model, optimizer, scheduler):
                 model,
                 optimizer=optimizer,
                 scheduler=scheduler,
-                use_gpu=cfg.use_gpu,
+                device='cuda' if cfg.use_gpu else 'cpu',
                 label_smooth=cfg.loss.softmax.label_smooth
             )
 
@@ -45,7 +45,7 @@ def build_engine(cfg, datamanager, model, optimizer, scheduler):
                 weight_t=cfg.loss.triplet.weight_t,
                 weight_x=cfg.loss.triplet.weight_x,
                 scheduler=scheduler,
-                use_gpu=cfg.use_gpu,
+                device='cuda' if cfg.use_gpu else 'cpu',
                 label_smooth=cfg.loss.softmax.label_smooth
             )
 
@@ -56,7 +56,7 @@ def build_engine(cfg, datamanager, model, optimizer, scheduler):
                 model,
                 optimizer=optimizer,
                 scheduler=scheduler,
-                use_gpu=cfg.use_gpu,
+                device='cuda' if cfg.use_gpu else 'cpu',
                 label_smooth=cfg.loss.softmax.label_smooth,
                 pooling_method=cfg.video.pooling_method
             )
@@ -70,7 +70,7 @@ def build_engine(cfg, datamanager, model, optimizer, scheduler):
                 weight_t=cfg.loss.triplet.weight_t,
                 weight_x=cfg.loss.triplet.weight_x,
                 scheduler=scheduler,
-                use_gpu=cfg.use_gpu,
+                device='cuda' if cfg.use_gpu else 'cpu',
                 label_smooth=cfg.loss.softmax.label_smooth
             )
 
@@ -157,7 +157,7 @@ def main():
         num_classes=datamanager.num_train_pids,
         loss=cfg.loss.name,
         pretrained=cfg.model.pretrained,
-        use_gpu=cfg.use_gpu
+        device='cuda' if cfg.use_gpu else 'cpu'
     )
     num_params, flops = compute_model_complexity(
         model, (1, 3, cfg.data.height, cfg.data.width)

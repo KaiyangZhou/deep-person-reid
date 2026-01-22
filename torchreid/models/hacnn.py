@@ -220,7 +220,7 @@ class HACNN(nn.Module):
         super(HACNN, self).__init__()
         self.loss = loss
         self.learn_region = learn_region
-        self.use_gpu = use_gpu
+        self.device = 'cuda' if use_gpu else 'cpu'
 
         self.conv = ConvBlock(3, 32, 3, s=2, p=1)
 
@@ -300,8 +300,7 @@ class HACNN(nn.Module):
         theta = torch.zeros(theta_i.size(0), 2, 3)
         theta[:, :, :2] = scale_factors
         theta[:, :, -1] = theta_i
-        if self.use_gpu:
-            theta = theta.cuda()
+        theta = theta.to(self.device)
         return theta
 
     def forward(self, x):
