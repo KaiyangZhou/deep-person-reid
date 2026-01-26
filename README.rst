@@ -1,5 +1,20 @@
-Torchreid
+Pi-Torchreid
 ===========
+
+Forked from https://github.com/KaiyangZhou/deep-person-reid.
+
+This fork is intended to:
+- update the code to be compatible with modern Python/NumPy/PyTorch
+- add a proper test suite with pytest
+- use uv for dependency management
+- use ruff for linting
+- add hf transformers library for training and evaluation with vision transformers
+- add github actions for CI/CD
+- use agentic code assistants to help with maintenance and development
+- maybe add llm based code review to the github actions 
+
+
+
 Torchreid is a library for deep-learning person re-identification, written in `PyTorch <https://pytorch.org/>`_ and developed for our ICCV'19 project, `Omni-Scale Feature Learning for Person Re-Identification <https://arxiv.org/abs/1905.00953>`_.
 
 It features:
