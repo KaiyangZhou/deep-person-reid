@@ -105,6 +105,9 @@ ENV/
 env.bak/
 venv.bak/
 
+# uv
+# Note: uv.lock should be committed for reproducible builds
+
 # Spyder project settings
 .spyderproject
 .spyproject

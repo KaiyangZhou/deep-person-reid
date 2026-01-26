@@ -82,33 +82,66 @@ The model weights are also available on Huggingface: https://huggingface.co/kaiy
 
 ## Installation
 
-Make sure [conda](https://www.anaconda.com/distribution/) is installed.
+### Using uv (Recommended)
 
+This project uses [uv](https://github.com/astral-sh/uv) for fast dependency management. Make sure you have Python 3.10 or higher.
 
 ```bash
-# cd to your preferred directory and clone this repo
-git clone https://github.com/KaiyangZhou/deep-person-reid.git
+# Install uv (if not already installed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# create environment
+# Clone the repository
+git clone https://github.com/KaiyangZhou/deep-person-reid.git
 cd deep-person-reid/
-conda create --name torchreid python=3.7
+
+# Install dependencies and create virtual environment
+uv sync
+
+# The virtual environment is automatically created at .venv/
+# Activate it (optional, uv run handles this automatically):
+source .venv/bin/activate  # On Linux/Mac
+# or
+.venv\Scripts\activate     # On Windows
+
+# Verify installation
+uv run python -c "import torchreid; print(torchreid.__version__)"
+```
+
+### Using pip (Alternative)
+
+```bash
+# Create conda environment (Python 3.10+)
+conda create --name torchreid python=3.10
 conda activate torchreid
 
-# install dependencies
-# make sure `which python` and `which pip` point to the correct path
-pip install -r requirements.txt
+# Install dependencies
+pip install -e .
 
-# install torch and torchvision (select the proper cuda version to suit your machine)
-conda install pytorch torchvision cudatoolkit=9.0 -c pytorch
-
-# install torchreid (don't need to re-build it if you modify the source code)
-python setup.py develop
+# Install PyTorch (adjust cudatoolkit version as needed)
+conda install pytorch torchvision cudatoolkit=11.8 -c pytorch
 ```
+
+### Docker
 
 Another way to install is to run everything inside docker container:
 
 - build: ``make build-image``
 - run: ``make run``
+
+### Linting
+
+This project uses [ruff](https://github.com/astral-sh/ruff) for fast linting and formatting:
+
+```bash
+# Check for linting issues
+uv run ruff check .
+
+# Auto-fix linting issues (where possible)
+uv run ruff check . --fix
+
+# Format code
+uv run ruff format .
+```
 
 ## Get started: 30 seconds to Torchreid
 
@@ -194,23 +227,23 @@ Below we provide an example to train and test [OSNet (Zhou et al. ICCV'19)](http
 To train OSNet on Market1501, do
 
 ```bash
-python scripts/main.py \
---config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad_cosine.yaml \
---transforms random_flip random_erase \
---root $PATH_TO_DATA
+uv run python scripts/main.py \
+  --config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad_cosine.yaml \
+  --transforms random_flip random_erase \
+  --root $PATH_TO_DATA
 ```
 
 
 The config file sets Market1501 as the default dataset. If you wanna use DukeMTMC-reID, do
 
 ```bash
-python scripts/main.py \
---config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad_cosine.yaml \
--s dukemtmcreid \
--t dukemtmcreid \
---transforms random_flip random_erase \
---root $PATH_TO_DATA \
-data.save_dir log/osnet_x1_0_dukemtmcreid_softmax_cosinelr
+uv run python scripts/main.py \
+  --config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad_cosine.yaml \
+  -s dukemtmcreid \
+  -t dukemtmcreid \
+  --transforms random_flip random_erase \
+  --root $PATH_TO_DATA \
+  data.save_dir log/osnet_x1_0_dukemtmcreid_softmax_cosinelr
 ```
 
 The code will automatically (download and) load the ImageNet pretrained weights. After the training is done, the model will be saved as "log/osnet_x1_0_market1501_softmax_cosinelr/model.pth.tar-250". Under the same folder, you can find the [tensorboard](https://pytorch.org/docs/stable/tensorboard.html) file. To visualize the learning curves using tensorboard, you can run `tensorboard --logdir=log/osnet_x1_0_market1501_softmax_cosinelr` in the terminal and visit `http://localhost:6006/` in your web browser.
@@ -218,11 +251,11 @@ The code will automatically (download and) load the ImageNet pretrained weights.
 Evaluation is automatically performed at the end of training. To run the test again using the trained model, do
 
 ```bash
-python scripts/main.py \
---config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad_cosine.yaml \
---root $PATH_TO_DATA \
-model.load_weights log/osnet_x1_0_market1501_softmax_cosinelr/model.pth.tar-250 \
-test.evaluate True
+uv run python scripts/main.py \
+  --config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad_cosine.yaml \
+  --root $PATH_TO_DATA \
+  model.load_weights log/osnet_x1_0_market1501_softmax_cosinelr/model.pth.tar-250 \
+  test.evaluate True
 ```
 
 
@@ -231,12 +264,12 @@ test.evaluate True
 Suppose you wanna train OSNet on DukeMTMC-reID and test its performance on Market1501, you can do
 
 ```bash
-python scripts/main.py \
---config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad.yaml \
--s dukemtmcreid \
--t market1501 \
---transforms random_flip color_jitter \
---root $PATH_TO_DATA
+uv run python scripts/main.py \
+  --config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad.yaml \
+  -s dukemtmcreid \
+  -t market1501 \
+  --transforms random_flip color_jitter \
+  --root $PATH_TO_DATA
 ```
 
 Here we only test the cross-domain performance. However, if you also want to test the performance on the source dataset, i.e. DukeMTMC-reID, you can set `-t dukemtmcreid market1501`, which will evaluate the model on the two datasets separately.

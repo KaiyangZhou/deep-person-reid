@@ -11,19 +11,30 @@ Torchreid is a PyTorch library for deep learning person re-identification (re-ID
 ## Common Commands
 
 ### Installation
+
+**Using uv (Recommended):**
 ```bash
-# Create conda environment
-conda create --name torchreid python=3.7
+# Install uv (if not already installed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Install dependencies and create virtual environment
+uv sync
+
+# Verify installation
+uv run python -c "import torchreid; print(torchreid.__version__)"
+```
+
+**Using pip (Alternative):**
+```bash
+# Create conda environment (Python 3.10+)
+conda create --name torchreid python=3.10
 conda activate torchreid
 
 # Install dependencies
-pip install -r requirements.txt
+pip install -e .
 
 # Install PyTorch (adjust cudatoolkit version as needed)
-conda install pytorch torchvision cudatoolkit=9.0 -c pytorch
-
-# Install torchreid in development mode (allows code changes without rebuilding)
-python setup.py develop
+conda install pytorch torchvision cudatoolkit=11.8 -c pytorch
 ```
 
 ### Docker
@@ -34,19 +45,26 @@ make run          # Run container with GPU support
 
 ### Linting
 ```bash
-bash linter.sh  # Runs isort, yapf, then flake8
+# Check for linting issues
+uv run ruff check .
+
+# Auto-fix linting issues (where possible)
+uv run ruff check . --fix
+
+# Format code
+uv run ruff format .
 ```
 
 ### Training
 ```bash
 # Train OSNet on Market1501
-python scripts/main.py \
+uv run python scripts/main.py \
   --config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad_cosine.yaml \
   --transforms random_flip random_erase \
   --root $PATH_TO_DATA
 
 # Cross-domain: train on DukeMTMC, test on Market1501
-python scripts/main.py \
+uv run python scripts/main.py \
   --config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad.yaml \
   -s dukemtmcreid -t market1501 \
   --transforms random_flip color_jitter \
@@ -55,7 +73,7 @@ python scripts/main.py \
 
 ### Evaluation
 ```bash
-python scripts/main.py \
+uv run python scripts/main.py \
   --config-file configs/im_osnet_x1_0_softmax_256x128_amsgrad_cosine.yaml \
   --root $PATH_TO_DATA \
   model.load_weights log/osnet_x1_0_market1501_softmax_cosinelr/model.pth.tar-250 \
@@ -64,12 +82,12 @@ python scripts/main.py \
 
 ### Testing Cython Build
 ```bash
-python torchreid/metrics/rank_cylib/test_cython.py
+uv run python torchreid/metrics/rank_cylib/test_cython.py
 ```
 
 ### Multi-Split Results Aggregation
 ```bash
-python tools/parse_test_res.py log/eval_viper
+uv run python tools/parse_test_res.py log/eval_viper
 ```
 
 ## Architecture
@@ -115,7 +133,7 @@ python tools/parse_test_res.py log/eval_viper
 
 Uses YACS for hierarchical YAML configs. Override via command-line:
 ```bash
-python scripts/main.py --config-file config.yaml train.lr 0.001 train.max_epoch 100
+uv run python scripts/main.py --config-file config.yaml train.lr 0.001 train.max_epoch 100
 ```
 
 Key config groups: `model`, `data`, `train`, `loss`, `test`, `sampler`
